@@ -231,7 +231,7 @@ export default function ConsignDetail({ consignID }) {
       onOk: async () => {
         try {
           let updatedFields
-          if (field === 'Status' || field === 'Price') {
+          if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
           else {
