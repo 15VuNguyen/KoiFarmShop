@@ -66,13 +66,19 @@ class ChatService {
 
     async sendMessage(userID, payload, reqParams) {
         let chat = await databaseService.chats.findOne({
-            Participants: { $all: [userID, reqParams.receiverID] }
+            Participants: { $all: [
+                new ObjectId(userID), 
+                new ObjectId(reqParams.receiverID)
+            ] }
         })
 
         if (!chat) {
             chat = {
                 _id: new ObjectId(),
-                Participants: [userID, reqParams.receiverID]
+                Participants: [
+                    new ObjectId(userID), 
+                    new ObjectId(reqParams.receiverID)
+                ]
             }
             const newChat = await databaseService.chats.insertOne(chat)
             chat._id = newChat.insertedId
@@ -87,9 +93,12 @@ class ChatService {
 
         const insertedMessage = await databaseService.messages.insertOne(newMessage)
 
-        await databaseService.chats.updateOne(
-            { _id: chat._id },
-            { $push: { Messages: insertedMessage.insertedId } }
+        console.log("first")
+
+        await databaseService.chats.findOneAndUpdate(
+            { _id: new ObjectId(chat._id) },
+            { $push: { Messages: insertedMessage.insertedId } },
+            {new: true}
         );
 
         // SOCKET IO function

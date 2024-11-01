@@ -72,10 +72,14 @@ const BoxChat = (props) => {
   }
 
   useEffect(() => {
-    if (selectedChat?._id && receiver && receiver._id) {
-      fetchMessages()
-    }
-  }, [selectedChat?._id, receiver])
+    const loadMessages = async () => {
+        if (selectedChat?._id && receiver && receiver._id) {
+            await fetchMessages();
+        }
+    };
+    loadMessages();
+}, [selectedChat?._id, receiver]);
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -102,7 +106,10 @@ const BoxChat = (props) => {
     <div className={`box-chat ${show ? '' : 'hide'}`}>
       <div className='header'>
         <div className='userInfo'>
-          <i className="avatar fa-solid fa-user"></i>
+          {receiver && receiver.Image
+          ?<img className='avatar' src={receiver.Image} alt='avatar'/>
+          :<i className="avatar fa-solid fa-user"></i>
+          }
           {receiver && receiver.roleid == 3
             ? <p>Support Service</p>
             : <p>{!receiver ? "Guest" : receiver.name}</p>}
@@ -112,7 +119,6 @@ const BoxChat = (props) => {
             className="minimize fa-solid fa-minus"
             onClick={() => setShow(false)}
           ></i>
-          <i className="close fa-solid fa-xmark"></i>
         </div>
       </div>
       <div className='body'>
