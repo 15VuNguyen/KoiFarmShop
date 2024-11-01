@@ -31,7 +31,7 @@ const zaloPayment = async (req, res) => {
     amount: req.body.total,
     description: `KOI Shop - Payment for the order + ${Math.floor(100000 + Math.random() * 900000)}`,
     bank_code: '',
-    callback_url: 'https://c8e3-2402-800-63a9-9055-fc5b-17aa-56bd-bdf7.ngrok-free.app/payment/callback'
+    callback_url: 'https://koi-farm-shop.onrender.com/payment/callback'
   }
 
   // Tạo MAC cho yêu cầu
