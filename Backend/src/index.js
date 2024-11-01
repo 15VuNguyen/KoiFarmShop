@@ -29,6 +29,8 @@ import orderRouter from './routes/order.routes.js'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser';
 import { app, server } from './Socket/socket.js'
+import { removeAllItemsDetailController } from './controllers/orderDetailController.js'
+import chatRouter from './routes/chat.routes.js'
 
 config()
 // const app = express()
@@ -61,6 +63,7 @@ app.get('/koi/:KoiID', wrapAsync(getKoiByIDController))
 app.use('/kois/:CategoryID', wrapAsync(getKoiByCategoryIDController))
 app.use('/getAllKoi', wrapAsync(wrapAsync(getAllKoiController)))
 app.use('/order', orderRouter)
+app.use('/chat', chatRouter)
 
 app.post('/authorization', accessTokenValidator, wrapAsync(authorizationController))
 
@@ -71,7 +74,7 @@ app.get('/supplierDetail/:_id', wrapAsync(guestGetSupplierController))
 app.get('/get-kois-groupKoiID',wrapAsync(getKoiGroupIDController))
 
 app.use('/payment', paymentRouter)
-
+app.post('/clear-coookies',  wrapAsync(removeAllItemsDetailController))
 app.get('/getManagerInfoForChat', wrapAsync(getManagerInfoForChatController))
 app.get('/getUserInfoForChat/:userID', wrapAsync(getUserInfoForChatController))
 

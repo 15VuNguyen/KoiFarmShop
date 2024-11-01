@@ -45,6 +45,7 @@ export const createNewChatController = async (req, res) => {
       })
     }
     const result = await chatService.createNewChat(user_id, req.params)
+    console.log("chat: ", result)
     return res.json({
     //   message: USERS_MESSAGES.CREATE_ORDER_SUCCESS,
       result

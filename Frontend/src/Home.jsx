@@ -8,14 +8,17 @@ import Slideshow from "./Components/Slideshow";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Carousel } from "antd";
+import { Carousel, message } from "antd";
 import { Link } from "react-router-dom";
 import "./Components/Css/homeStyle.css";
 import { Typography } from "antd";
 import { Button, Container } from "react-bootstrap";
 const { Paragraph } = Typography;
-import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap CSS is imported
 import axiosInstance from "./An/Utils/axiosJS";
+import ChatButton from './Components/Chat/ChatButton'
+import BoxChat from './Components/Chat/BoxChat'
+import ChatList from './Components/Chat/ChatList'
+import { fetchLoginUserData, getManager } from "./services/userService";
 
 export default function Home() {
   const location = useLocation();
@@ -23,6 +26,12 @@ export default function Home() {
   const [suppliers, setSuppliers] = useState([]);
   const [koidata, setKoiData] = useState([]);
   const navigate = useNavigate();
+  const [isShow, setIsShow] = useState(false);
+  // const [isShowStaffChat, setIsShowStaffChat] = useState(false);
+  // const [showListChat, setShowListChat] = useState(false);
+  // const [customer, setCustomer] = useState({});
+  const [manager, setManager] = useState({});
+  const [user, setUser] = useState({});
   useEffect(() => {
     const { message } = location.state || {};
     const storedMessage = localStorage.getItem("toastMessage");
@@ -93,6 +102,8 @@ export default function Home() {
     };
   }, []);
 
+
+
   // Dữ liệu cá koi
   const koiData = [
     {
@@ -156,6 +167,66 @@ export default function Home() {
     },
   ];
 
+  /// chat
+
+
+
+  // const handleLogout = () => {
+  //     try {
+  //         localStorage.removeItem('userInfo')
+  //         localStorage.removeItem('selectedChat')
+  //         toast.success('Logout successfully!')
+  //         navigate('/login')
+  //     } catch (error) {
+  //         toast.error('Logout fail!')
+  //     }
+  // }
+
+  // const getStaff = async () => {
+  //     const {data} = await fetchStaff(config)
+  //     if(data){
+  //         console.log("staff: ", data)
+  //         setStaff(data[0])
+  //     }
+  // }
+
+  // useEffect(() => {
+  //     getStaff()
+  // }, [authUser._id])
+
+  const fetchManager = async () => {
+    try {
+      const { data } = await getManager()
+      if (data) {
+        console.log("manager: ", data)
+        setManager(data.result)
+      }
+    } catch (error) {
+      console.error({ message: error.message })
+    }
+  }
+
+  const fetchUser = async () => {
+    try {
+      const { data } = await fetchLoginUserData()
+      if (data) {
+        console.log("user: ", data.result)
+        setUser(data.result)
+      }
+    } catch (error) {
+      console.error({ message: error.message })
+    }
+  }
+
+  useEffect(() => {
+    fetchUser()
+  }, [user._id])
+
+  useEffect(() => {
+    fetchManager()
+  }, [])
+
+
   return (
     <>
       <div>
@@ -206,7 +277,7 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-          </div>
+            </div>
           )
         )}
       </Carousel>
@@ -459,6 +530,24 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <div className="home-body">
+        <div className='chat-container'>
+          <BoxChat
+            show={isShow}
+            setShow={setIsShow}
+            receiver={manager}
+            user={user}
+          />
+          <ChatButton
+            show={isShow}
+            setShow={setIsShow}
+            receiver={manager}
+          />
+
+        </div>
+      </div>
+
       <Footer style={{ paddingTop: "20px" }} />
     </>
   );

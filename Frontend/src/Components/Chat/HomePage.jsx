@@ -6,11 +6,7 @@ import ChatButton from './ChatButton'
 import BoxChat from './BoxChat'
 import { useAuth } from '../context/AuthContext'
 import ChatList from './ChatList'
-// import { getExistedChats } from '../services/chatService'
-// import { useChat } from '../context/ChatContext'
-import { fetchStaff } from '../services/userService'
-// import { getExistedChats } from '../services/chatService'
-// import { useNortification } from '../context/NortificationContext'
+
 
 const HomePage = () => {
     const navigate = useNavigate()

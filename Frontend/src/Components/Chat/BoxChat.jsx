@@ -4,13 +4,12 @@ import { useChat } from '../../Context/ChatContext'
 import { useSocketContext } from '../../Context/SocketContext'
 import { useMessage } from '../../Context/MessageContext'
 import { getMessages, sendMessages } from '../../services/messageService'
-import { useAuth } from '../../Context/AuthContext'
 import { fetchLoginUserData } from '../../services/userService'
 
 
 
 const BoxChat = (props) => {
-  const { show, setShow, receiver } = props
+  const { show, setShow, receiver, user } = props
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   const [showMessageTime, setShowMessageTime] = useState(null)
@@ -19,22 +18,23 @@ const BoxChat = (props) => {
   const { selectedChat } = useChat()
   const lastMessageRef = useRef()
   const [isFirstLoad, setIsFirstLoad] = useState(true)
-  const {user, setUser} = useState({})
 
   console.log("message list: ", messageList)
+  console.log("receiver: ", receiver)
+  console.log("user: ", user)
 
-  useEffect(async()=>{
-    const storedUser = JSON.parse(localStorage.getItem("userInfo"))
-    if(storedUser){
-      console.log("current user: ", storedUser) 
-      setUser(storedUser)
-    }else{
-      const {data} = await fetchLoginUserData()
-      console.log("currentUser: ", data.result)
-      localStorage.setItem('userInfo', JSON.stringify(data.result))
-      setUser(data.result)
-    }
-  },[])
+  // useEffect(async()=>{
+  //   const storedUser = JSON.parse(localStorage.getItem("userInfo"))
+  //   if(storedUser){
+  //     console.log("current user: ", storedUser) 
+  //     setUser(storedUser)
+  //   }else{
+  //     const {data} = await fetchLoginUserData()
+  //     console.log("currentUser: ", data.result)
+  //     localStorage.setItem('userInfo', JSON.stringify(data.result))
+  //     setUser(data.result)
+  //   }
+  // },[])
 
   const sendMessage = async () => {
     try {
@@ -87,7 +87,7 @@ const BoxChat = (props) => {
     socket?.on("newMessage", (newMessage) => {
       console.log("new message.chatID: ", newMessage.chatId)
       console.log("selected chat ID: ", selectedChat?._id)
-      if (newMessage.chatId === selectedChat?._id) {
+      if (newMessage.ChatId === selectedChat?._id) {
         setMessageList([...messageList, newMessage])
       } else {
         console.log("message from another box")
@@ -134,7 +134,6 @@ const BoxChat = (props) => {
             ref={lastMessageRef}
             className='mess-container'
           >
-            <p>{user?._id}, {m.SenderId}</p>
             {user?._id === m.ReceiverId
               ? <i className="avatar fa-solid fa-user"></i>
               : <></>}
