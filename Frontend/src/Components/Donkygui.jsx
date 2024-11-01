@@ -12,6 +12,7 @@ import {
   Col,
   Tooltip,
   message,
+  Modal,
 } from "antd";
 import { HomeOutlined, CopyOutlined } from "@ant-design/icons";
 import axiosInstance from "../An/Utils/axiosJS";
@@ -24,6 +25,11 @@ export default function DonKyGui() {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +71,17 @@ export default function DonKyGui() {
   useEffect(() => {
     fetchUserData();
   }, []);
+  const handleOk = () => {
+    // Thực hiện hành động xóa
+    navigate(`/xoa`, {
+      state: { consign },
+    });
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleCopy = (id) => {
     navigator.clipboard.writeText(id);
@@ -216,7 +233,13 @@ export default function DonKyGui() {
                             TotalPrice:{" "}
                             {consign.TotalPrice || "Chờ bên shop định giá"}
                           </Text>
-                          <Button type="primary" style={{ marginLeft: "10px" }}>
+                          <Button
+                            type="primary"
+                            style={{ marginLeft: "10px" }}
+                            onClick={() => {
+                              navigate(`/`);
+                            }}
+                          >
                             Chat ngay
                           </Button>
 
@@ -231,6 +254,23 @@ export default function DonKyGui() {
                           >
                             Chi tiết
                           </Button>
+                          <Button
+                            style={{ marginLeft: "10px", color: "red" }}
+                            type="danger" // This should apply the red color
+                            onClick={showModal}
+                          >
+                            Xóa đơn ký gửi
+                          </Button>
+                          <Modal
+                            title="Xác nhận xóa"
+                            visible={isModalVisible}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                          >
+                            <p>
+                              Bạn có chắc chắn muốn xóa đơn ký gửi này không?
+                            </p>
+                          </Modal>
                         </div>
                       </div>
 
