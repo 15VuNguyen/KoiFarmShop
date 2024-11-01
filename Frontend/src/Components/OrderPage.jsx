@@ -205,9 +205,15 @@ const OrderPage = () => {
         console.log(result);
         if (
           typeof result === "string" &&
-          result.includes("available in stock")
+          result.includes("0 available in stock")
         ) {
           setError(result); // Hiển thị thông điệp từ phản hồi
+          return;
+        } else if (
+          typeof result === "string" &&
+          result.includes("available in stock")
+        ) {
+          toast.success(result); // Hiển thị thông điệp từ phản hồi nếu có lỗi số lượng
           return;
         }
         console.log("Add to cart successful: " + response.data.message);
