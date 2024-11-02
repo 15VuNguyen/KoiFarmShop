@@ -5,7 +5,7 @@ import NguonGocCuaIKoi from "../../NguonGocCuaIKoi";
 import GioiThieuVeKoiNhat from "../../GioiThieuVeKoiNhat";
 import GioiThieuVeKoiF1 from "../../GioitThieuVeKoiF1";
 import GioiThieuVeKoiViet from "../../GioiThieuVeKoiViet";
-
+import CustomerChatButton from "../../Chat/CustomerChat";
 export default function Gioithieupage() {
   return (
     <>
@@ -17,6 +17,7 @@ export default function Gioithieupage() {
           <GioiThieuVeKoiF1 />
           <GioiThieuVeKoiViet />
         </div>
+        <CustomerChatButton />
         <Footer />
       </div>
     </>

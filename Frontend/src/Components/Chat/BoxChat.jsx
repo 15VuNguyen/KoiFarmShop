@@ -1,66 +1,64 @@
-import React, { useRef, useState } from 'react'
-import { useEffect } from 'react'
-import { useChat } from '../../Context/ChatContext'
-import { useSocketContext } from '../../Context/SocketContext'
-import { useMessage } from '../../Context/MessageContext'
-import { getMessages, sendMessages } from '../../services/messageService'
+import React, { useRef, useState } from "react";
+import { useEffect } from "react";
+import { useChat } from "../../Context/ChatContext";
+import { useSocketContext } from "../../Context/SocketContext";
+import { useMessage } from "../../Context/MessageContext";
+import { getMessages, sendMessages } from "../../services/messageService";
 // import { fetchLoginUserData } from '../../services/userService'
 
-
-
 const BoxChat = (props) => {
-  const { show, setShow, receiver, user } = props
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [showMessageTime, setShowMessageTime] = useState(null)
-  const { messageList, setMessageList } = useMessage()
+  const { show, setShow, receiver, user } = props;
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showMessageTime, setShowMessageTime] = useState(null);
+  const { messageList, setMessageList } = useMessage();
   const { socket } = useSocketContext();
-  const { selectedChat } = useChat()
-  const lastMessageRef = useRef()
-  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  const { selectedChat } = useChat();
+  const lastMessageRef = useRef();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  console.log("message list: ", messageList)
-  console.log("receiver: ", receiver)
-  console.log("selectedChat: ", selectedChat)
-  console.log("user: ", user)
-  console.log("socket: ", socket)
+  console.log("message list: ", messageList);
+  console.log("receiver: ", receiver);
+  console.log("selectedChat: ", selectedChat);
+  console.log("user: ", user);
+  console.log("socket: ", socket);
 
   const sendMessage = async () => {
     try {
-      setLoading(true)
-      setMessage("")
-      const { data } = await sendMessages(receiver._id, message)
+      setLoading(true);
+      setMessage("");
+      const { data } = await sendMessages(receiver._id, message);
       if (data) {
-        console.log("send message: ", data.result)
-        setLoading(false)
-        setMessageList([...messageList, data.result])
+        console.log("send message: ", data.result);
+        setLoading(false);
+        setMessageList([...messageList, data.result]);
       }
     } catch (error) {
-      setLoading(false)
-      console.error({ message: error.message })
+      setLoading(false);
+      console.error({ message: error.message });
     }
-  }
+  };
 
   const fetchMessages = async () => {
     try {
       if (!selectedChat || !receiver || !receiver._id) return;
-      setLoading(true)
-      const { data } = await getMessages(receiver._id)
+      setLoading(true);
+      const { data } = await getMessages(receiver._id);
       if (data) {
-        setLoading(false)
-        console.log("get message: ", data.result)
-        setMessageList(data.result)
-        setIsFirstLoad(false)
+        setLoading(false);
+        console.log("get message: ", data.result);
+        setMessageList(data.result);
+        setIsFirstLoad(false);
       }
     } catch (error) {
-      setLoading(false)
-      console.error({ message: error.message })
+      setLoading(false);
+      console.error({ message: error.message });
     }
-  }
+  };
 
   const toggleMessageTime = (id) => {
-    setShowMessageTime(showMessageTime === id ? null : id)
-  }
+    setShowMessageTime(showMessageTime === id ? null : id);
+  };
 
   useEffect(() => {
     if (selectedChat?._id && receiver._id) {
@@ -68,51 +66,55 @@ const BoxChat = (props) => {
     }
   }, [selectedChat?._id, receiver._id]);
 
-
   useEffect(() => {
     setTimeout(() => {
-      lastMessageRef?.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+      lastMessageRef?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }, 100);
-  }, [messageList])
+  }, [messageList]);
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
-      console.log("new message.chatID: ", newMessage.ChatId)
-      console.log("selected chat ID: ", selectedChat?._id)
+      console.log("new message.chatID: ", newMessage.ChatId);
+      console.log("selected chat ID: ", selectedChat?._id);
       if (newMessage.ChatId === selectedChat?._id) {
-        setMessageList([...messageList, newMessage])
+        setMessageList([...messageList, newMessage]);
       } else {
-        console.log("message from another box")
+        console.log("message from another box");
       }
-    })
+    });
 
-    return () => socket?.off("newMessage")
-  }, [socket, selectedChat?._id, messageList])
-
+    return () => socket?.off("newMessage");
+  }, [socket, selectedChat?._id, messageList]);
 
   return (
-    <div className={`box-chat ${show ? '' : 'hide'}`}>
-      <div className='header'>
-        <div className='userInfo'>
-          {receiver && receiver.Image
-            ? <img className='avatar' src={receiver.Image} alt='avatar' />
-            : <i className="avatar fa-solid fa-user"></i>
-          }
-          {receiver && receiver.roleid == 3
-            ? <p>Support Service</p>
-            : <p className='name'>{!receiver ? "Guest" : receiver.name}</p>}
+    <div className={`box-chat ${show ? "" : "hide"}`}>
+      <div className="header">
+        <div className="userInfo">
+          {receiver && receiver.Image ? (
+            <img className="avatar" src={receiver.Image} alt="avatar" />
+          ) : (
+            <i className="avatar fa-solid fa-user"></i>
+          )}
+          {receiver && receiver.roleid == 3 ? (
+            <p>Support Service</p>
+          ) : (
+            <p className="name">{!receiver ? "Guest" : receiver.name}</p>
+          )}
         </div>
-        <div className='feature'>
+        <div className="feature">
           <i
             className="minimize fa-solid fa-minus"
             onClick={() => setShow(false)}
           ></i>
         </div>
       </div>
-      <div className='body'>
+      <div className="body">
         {loading && (
-          <div className='flex w-full h-full flex-col items-center justify-center gap-4 bg-transparent'>
-            <div className='loading loading-spinner'></div>
+          <div className="flex w-full h-full flex-col items-center justify-center gap-4 bg-transparent">
+            <div className="loading loading-spinner"></div>
           </div>
         )}
         {/* {authUser.role!== "staff" && isFirstLoad && (
@@ -122,50 +124,85 @@ const BoxChat = (props) => {
             <p>Hi, can I help you?</p>
           </div>
         </div>)} */}
-        {!loading && messageList?.map((m) => (
-          <div
-            key={m?._id}
-            ref={lastMessageRef}
-            className='mess-container'
-          >
-            {user?._id === m.ReceiverId
-              ? <i className="avatar fa-solid fa-user"></i>
-              : <></>}
-            <div className={user?._id === m.SenderId ? 'me' : 'you'}>
-              <p onClick={() => toggleMessageTime(m._id)}>{m.Content}</p>
-              <div className={`date ${showMessageTime === m._id ? 'showTime' : ''}`}>
-                {new Date(m?.createdAt).toLocaleDateString('en-IN', { hour: 'numeric', minute: 'numeric' })}
+        {!loading &&
+          messageList?.map((m) => (
+            <div key={m?._id} ref={lastMessageRef} className="mess-container">
+              {user?._id === m.ReceiverId ? (
+                <i className="avatar fa-solid fa-user"></i>
+              ) : (
+                <></>
+              )}
+              <div className={user?._id === m.SenderId ? "me" : "you"}>
+                <p onClick={() => toggleMessageTime(m._id)}>{m.Content}</p>
+                <div
+                  className={`date ${
+                    showMessageTime === m._id ? "showTime" : ""
+                  }`}
+                >
+                  {new Date(m?.createdAt).toLocaleDateString("en-IN", {
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
         {/* {lastMessage? <p>{lastMessage.content}</p> : <></>} */}
       </div>
-      <div className='footer'>
-        <div className='input-box'>
+      <div>
+        <div
+          className="input-box"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "9px",
+            paddingRight: "15px",
+          }}
+        >
           <input
             type="text"
-            className={message ? "input-expand" : ""}
+            className={`input ${message ? "input-expand" : ""}`}
             value={message}
-            placeholder='Enter something...'
+            placeholder="Enter something..."
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => {
               if (message.trim() !== "" && e.key === "Enter") {
-                sendMessage()
+                sendMessage();
               }
+            }}
+            style={{
+              flex: 1,
+              padding: "10px",
+              border: "none", // Không hiển thị viền
+              borderBottom: "1px solid #ccc", // Chỉ hiển thị viền dưới
+              borderRadius: "0", // Để bỏ bo góc
+              marginRight: "10px",
+              fontSize: "16px",
+              outline: "none", // Bỏ viền khi chọn
+              transition: "border-color 0.3s",
             }}
           />
 
-          {loading ? <span class="loader"></span>
-            : <i
+          {loading ? (
+            <span className="loader" style={{ fontSize: "20px" }}></span>
+          ) : (
+            <i
               className="send-btn fa-solid fa-paper-plane"
               onClick={() => sendMessage()}
-            ></i>}
+              style={{
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#007bff", // Màu cho nút gửi
+                transition: "color 0.3s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#0056b3")} // Màu khi hover
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#007bff")} // Màu trở lại
+            ></i>
+          )}
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default BoxChat
+export default BoxChat;

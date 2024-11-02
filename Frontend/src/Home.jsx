@@ -15,11 +15,8 @@ import { Typography } from "antd";
 import { Button, Container } from "react-bootstrap";
 const { Paragraph } = Typography;
 import axiosInstance from "./An/Utils/axiosJS";
-import ChatButton from "./Components/Chat/ChatButton";
-import BoxChat from "./Components/Chat/BoxChat";
-import ChatList from "./Components/Chat/ChatList";
-import Footer from "./Components/Footer";
 import { fetchLoginUserData, getManager } from "./services/userService";
+import CustomerChatButton from "./Components/Chat/CustomerChat";
 
 export default function Home() {
   const location = useLocation();
@@ -27,11 +24,6 @@ export default function Home() {
   const [suppliers, setSuppliers] = useState([]);
   const [koidata, setKoiData] = useState([]);
   const navigate = useNavigate();
-  const [isShow, setIsShow] = useState(false);
-  // const [isShowStaffChat, setIsShowStaffChat] = useState(false);
-  // const [showListChat, setShowListChat] = useState(false);
-  // const [customer, setCustomer] = useState({});
-  const [manager, setManager] = useState({});
   const [user, setUser] = useState({});
   useEffect(() => {
     const { message } = location.state || {};
@@ -527,18 +519,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="home-body">
-        <div className="chat-container">
-          <BoxChat
-            show={isShow}
-            setShow={setIsShow}
-            receiver={manager}
-            user={user}
-          />
-          <ChatButton show={isShow} setShow={setIsShow} receiver={manager} />
-        </div>
-      </div>
-
+      <CustomerChatButton />
       <FooterComponent style={{ paddingTop: "20px" }} />
     </>
   );

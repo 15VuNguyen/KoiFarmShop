@@ -4,6 +4,7 @@ import { Layout } from "antd";
 import Tancho from "../ThongTinCaKoi/Tancho";
 
 import "../Css/koiStyle.css";
+import CustomerChatButton from "../Chat/CustomerChat";
 export default function Koitancho() {
   return (
     <>
@@ -12,6 +13,7 @@ export default function Koitancho() {
         <div style={{ paddingTop: "100px" }}>
           <Tancho />
         </div>
+        <CustomerChatButton />
         <Footer />
       </Layout>
     </>
