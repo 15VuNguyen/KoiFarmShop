@@ -237,20 +237,48 @@ export default function Chitietconsignpage() {
         videoUrl = await getDownloadURL(videoRef); // Nhận URL mới
       }
       const shippedDateObj = formData.shippedDate
-        ? new Date(formData.shippedDate)
+        ? new Date(Date.UTC(...formData.shippedDate.split("-"))) // Assuming shippedDate is in 'YYYY-MM-DD' format
         : null;
-      const receiptDateObj = formData.receiptDate
-        ? new Date(formData.receiptDate)
-        : null;
-      const currentDate = new Date();
 
-      if (
-        shippedDateObj &&
-        (shippedDateObj < currentDate ||
-          (receiptDateObj && shippedDateObj > receiptDateObj))
-      ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
+      const receiptDateObj = formData.receiptDate
+        ? new Date(Date.UTC(...formData.receiptDate.split("-"))) // Assuming receiptDate is in 'YYYY-MM-DD' format
+        : null;
+
+      const currentDate = new Date(
+        Date.UTC(
+          currentDate.getUTCFullYear(),
+          currentDate.getUTCMonth(),
+          currentDate.getUTCDate()
+        )
+      );
+
+      // Check for shippedDate validity
+      if (shippedDateObj) {
+        if (shippedDateObj < currentDate) {
+          toast.error("Ngày gửi không được ở quá khứ!");
+          return;
+        }
+        if (receiptDateObj && shippedDateObj > receiptDateObj) {
+          toast.error("Ngày gửi không được sau ngày nhận!");
+          return;
+        }
+      }
+
+      // Check for receiptDate validity
+      if (receiptDateObj && receiptDateObj < currentDate) {
+        toast.error("Ngày nhận không được ở quá khứ!");
         return;
+      }
+      if (shippedDateObj && receiptDateObj) {
+        // Create a new date object for one month after the shipped date
+        const oneMonthAfterShippedDate = new Date(shippedDateObj);
+        oneMonthAfterShippedDate.setMonth(shippedDateObj.getMonth() + 1);
+
+        // Check if the receipt date is before the one-month mark
+        if (receiptDateObj < oneMonthAfterShippedDate) {
+          toast.error("Ngày nhận phải lớn hơn ngày gửi ít nhất 1 tháng!");
+          return;
+        }
       }
       // Cập nhật formData với URL
       const updatedFormData = {
@@ -824,18 +852,40 @@ export default function Chitietconsignpage() {
                     style={{ height: "150px", resize: "none" }}
                   />
                 </Form.Item>
-
-                <div style={{ textAlign: "center", marginTop: "50px" }}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    loading={loading}
-                    disabled={loading}
-                    style={{ marginBottom: "100px" }}
-                  >
-                    Update
-                  </Button>
-                </div>
+                {consignData.State === 1 && (
+                  <div>
+                    {" "}
+                    <div style={{ textAlign: "center", marginTop: "50px" }}>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={loading}
+                        disabled={loading}
+                        style={{ marginBottom: "100px" }}
+                      >
+                        Update
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                {consignData.State === 2 ||
+                  consignData.State === 3 ||
+                  (consignData.State === 4 && (
+                    <div>
+                      <div style={{ textAlign: "center", marginTop: "50px" }}>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          loading={loading}
+                          disabled={loading} // Keep this line to disable based on loading state
+                          style={{ marginBottom: "100px" }}
+                        >
+                          Update
+                        </Button>
+                        <span>Đơn này không thể Update được</span>
+                      </div>
+                    </div>
+                  ))}
               </Form>
             ) : (
               <div>No consign data available.</div>

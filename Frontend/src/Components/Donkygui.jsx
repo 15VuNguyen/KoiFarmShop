@@ -242,7 +242,6 @@ export default function DonKyGui() {
                           >
                             Chat ngay
                           </Button>
-
                           <Button
                             style={{ marginLeft: "10px" }}
                             type="default"
@@ -271,6 +270,11 @@ export default function DonKyGui() {
                               Bạn có chắc chắn muốn xóa đơn ký gửi này không?
                             </p>
                           </Modal>
+                          {consign.Status === -1 && (
+                            <div>
+                              <h3>Đơn ký gửi nãy đã hủy</h3>
+                            </div>
+                          )}
                         </div>
                       </div>
 

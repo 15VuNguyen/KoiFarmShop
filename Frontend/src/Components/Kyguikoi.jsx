@@ -99,20 +99,48 @@ export default function Kyguikoi() {
 
     try {
       const shippedDateObj = formData.shippedDate
-        ? new Date(formData.shippedDate)
+        ? new Date(Date.UTC(...formData.shippedDate.split("-"))) // Assuming shippedDate is in 'YYYY-MM-DD' format
         : null;
-      const receiptDateObj = formData.receiptDate
-        ? new Date(formData.receiptDate)
-        : null;
-      const currentDate = new Date();
 
-      if (
-        shippedDateObj &&
-        (shippedDateObj < currentDate ||
-          (receiptDateObj && shippedDateObj > receiptDateObj))
-      ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
+      const receiptDateObj = formData.receiptDate
+        ? new Date(Date.UTC(...formData.receiptDate.split("-"))) // Assuming receiptDate is in 'YYYY-MM-DD' format
+        : null;
+
+      const currentDate = new Date(
+        Date.UTC(
+          currentDate.getUTCFullYear(),
+          currentDate.getUTCMonth(),
+          currentDate.getUTCDate()
+        )
+      );
+
+      // Check for shippedDate validity
+      if (shippedDateObj) {
+        if (shippedDateObj < currentDate) {
+          toast.error("Ngày gửi không được ở quá khứ!");
+          return;
+        }
+        if (receiptDateObj && shippedDateObj > receiptDateObj) {
+          toast.error("Ngày gửi không được sau ngày nhận!");
+          return;
+        }
+      }
+
+      // Check for receiptDate validity
+      if (receiptDateObj && receiptDateObj < currentDate) {
+        toast.error("Ngày nhận không được ở quá khứ!");
         return;
+      }
+      if (shippedDateObj && receiptDateObj) {
+        // Create a new date object for one month after the shipped date
+        const oneMonthAfterShippedDate = new Date(shippedDateObj);
+        oneMonthAfterShippedDate.setMonth(shippedDateObj.getMonth() + 1);
+
+        // Check if the receipt date is before the one-month mark
+        if (receiptDateObj < oneMonthAfterShippedDate) {
+          toast.error("Ngày nhận phải lớn hơn ngày gửi ít nhất 1 tháng!");
+          return;
+        }
       }
       // Parse Size and Age as integers, DailyFoodAmount and FilteringRatio as floats
       const dataToSend = {

@@ -5,7 +5,7 @@ export default function NguongoccuaikoiPage() {
   return (
     <div>
       <Navbar />
-      <NguonGocCuaIKoi />
+    <NguonGocCuaIKoi />
       <Footer />
     </div>
   );

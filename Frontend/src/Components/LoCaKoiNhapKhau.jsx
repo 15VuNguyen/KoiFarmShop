@@ -38,7 +38,7 @@ export default function Locakoinhapkhau() {
     <>
       <Layout>
         <Navbar />
-        {/* <Container>
+        <Container>
           <div style={{ paddingTop: "100px" }}>
             <h2>Lô Cá Koi Nhập Khẩu</h2>
             <div style={{ textAlign: "center" }}>
@@ -107,10 +107,7 @@ export default function Locakoinhapkhau() {
               Xem thêm
             </Button>
           </div>
-        </Container> */}
-        <div>
-          <CustomFooter />
-        </div>
+        </Container>
       </Layout>
     </>
   );
