@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload } from 'antd';
+import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker } from 'antd';
 import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import InvoiceTable from '../Components/Table/InvoiceTable';
 import '../Css/GeneralPurpose.css';
@@ -9,7 +9,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import { sizeValidator, priceValidator, quantityValidator, discountValidator } from '../Utils/Validator';
 import { func } from 'prop-types';
-
+import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 export default function Invoices() {
   const [imageLoading, setImageLoading] = React.useState(false);
   const [videoLoading, setVideoLoading] = React.useState(false);
@@ -81,6 +84,9 @@ export default function Invoices() {
       const LeALLData = { ...record, ...rest };
       console.log(LeALLData);
       form.setFieldsValue(LeALLData);
+      form.setFieldsValue({ InvoiceDate:dayjs(record.InvoiceDate).utc()});
+   
+     
       setIsModalVisible(true);
     } catch (error) {
       console.error(error);
@@ -339,7 +345,20 @@ export default function Invoices() {
               ))}
             </Select>
           </Form.Item>
-
+          {isUpdate && (
+            <Form.Item label="Ngày tạo hóa đơn" name="InvoiceDate"
+           
+            >
+              <DatePicker
+                 
+                style={{ width: '100%' }}
+                
+                onChange={(date) => form.setFieldsValue({ InvoiceDate: date })}
+                form='YYYY-MM-DD'
+                disabledDate={(current) => current && current > moment().endOf('day')}
+              />
+            </Form.Item>
+          )}
           <Form.Item
             label="Kích thước"
             name="Dimension"

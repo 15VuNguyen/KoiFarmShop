@@ -35,7 +35,7 @@ export default function InvoiceTable({ data,actions }) {
       dataIndex: 'InvoiceDate',
       key: 'InvoiceDate',
       sorter: (a, b) => moment(a.InvoiceDate).unix() - moment(b.InvoiceDate).unix(),
-      render: (date) => moment(date).format('YYYY-MM-DD HH:mm:ss'),
+      render: (date) => moment(date).utc().format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'Status',
