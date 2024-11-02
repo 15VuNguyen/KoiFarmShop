@@ -391,14 +391,24 @@ class OrderDetailService {
     }
     async filterKoiId(payload) {
         let koiList
-        if (payload.CategoryID && payload.Price) {
+        if (payload.CategoryID && payload.Status) {
             koiList = await databaseService.kois
                 .find(
                     {
                         CategoryID: payload.CategoryID,
                         Breed: payload.Breed,
                         Size: Number(payload.Size),
-                        Price: payload.Price
+                        Status: Number(payload.Status)
+                    })
+                .toArray()
+        } else if (payload.CategoryID && payload.Price) {
+            koiList = await databaseService.kois
+                .find(
+                    {
+                        CategoryID: payload.CategoryID,
+                        Breed: payload.Breed,
+                        Size: Number(payload.Size),
+                        Price: Number(payload.Price),
                     })
                 .toArray()
         } else if (payload.Price) {
@@ -407,7 +417,7 @@ class OrderDetailService {
                     {
                         Breed: payload.Breed,
                         Size: Number(payload.Size),
-                        Price: payload.Price
+                        Price: Number(payload.Price)
                     })
                 .toArray()
         } else {

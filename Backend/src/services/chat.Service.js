@@ -1,4 +1,4 @@
-import { getReceiverSocketId } from '../Socket/socket.js'
+import { getReceiverSocketId, io } from '../Socket/socket.js'
 import databaseService from './database.service.js'
 import { ObjectId } from 'mongodb'
 
@@ -14,16 +14,17 @@ class ChatService {
 
         const populateChat = await Promise.all(chats.map(async (chat) => {
             const otherParticipant = chat.Participants.find(participant => participant.toString() !== userID.toString())
-            // const participants = await databaseService.users.find({
-            //     _id: { $in: chat.Participants}
-            // }).toArray()
+            console.log("other: ", otherParticipant)
+            const participant = await databaseService.users.findOne({
+                _id: otherParticipant
+            })
             const messages = await databaseService.messages.find({
-                ChatId: chat._id
+                ChatId: new ObjectId(chat._id)
             }).toArray()
 
             return {
                 _id: chat._id,
-                OtherUser: otherParticipant,
+                OtherUser: participant,
                 Messages: messages
             }
         }))
@@ -66,13 +67,19 @@ class ChatService {
 
     async sendMessage(userID, payload, reqParams) {
         let chat = await databaseService.chats.findOne({
-            Participants: { $all: [userID, reqParams.receiverID] }
+            Participants: { $all: [
+                new ObjectId(userID), 
+                new ObjectId(reqParams.receiverID)
+            ] }
         })
 
         if (!chat) {
             chat = {
                 _id: new ObjectId(),
-                Participants: [userID, reqParams.receiverID]
+                Participants: [
+                    new ObjectId(userID), 
+                    new ObjectId(reqParams.receiverID)
+                ]
             }
             const newChat = await databaseService.chats.insertOne(chat)
             chat._id = newChat.insertedId
@@ -87,9 +94,14 @@ class ChatService {
 
         const insertedMessage = await databaseService.messages.insertOne(newMessage)
 
-        await databaseService.chats.updateOne(
+        console.log("first")
+        const foundChat = await databaseService.chats.findOne({_id: new ObjectId(chat._id)})
+        console.log("found chat: ", foundChat)
+
+        await databaseService.chats.findOneAndUpdate(
             { _id: chat._id },
-            { $push: { Messages: insertedMessage.insertedId } }
+            { $push: { Messages: insertedMessage.insertedId } },
+            {new: true}
         );
 
         // SOCKET IO function
@@ -102,7 +114,10 @@ class ChatService {
 
     async fetchMessage(userID, reqParams) {
         const chat = await databaseService.chats.findOne({
-            Participants: { $all: [userID, reqParams.receiverID] }
+            Participants: { $all: [
+                new ObjectId(userID), 
+                new ObjectId(reqParams.receiverID)
+            ] }
         })
 
         if (!chat) {
@@ -110,7 +125,7 @@ class ChatService {
         }
 
         const message = await databaseService.messages.find({
-            ChatId: chat._id
+            ChatId: new ObjectId(chat._id)
         }).toArray()
         return message
     }

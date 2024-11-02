@@ -4,9 +4,10 @@ import { useChat } from '../../Context/ChatContext'
 import { useSocketContext } from '../../Context/SocketContext'
 import { getExistedChats } from '../../services/chatService'
 import { fetchUser } from '../../services/userService'
+import "./ManagerChat.css"
 
 const ChatList = (props) => {
-    const { show, setIsShowStaffChat, setCustomer } = props
+    const { show, setIsShowStaffChat, setCustomer, customer } = props
     const [listChat, setListChat] = useState([])
     const { messageList, setMessageList } = useMessage()
     const { setSelectedChat } = useChat()
@@ -23,22 +24,22 @@ const ChatList = (props) => {
     const showBoxChat = (c) => {
         setIsShowStaffChat(true)
         setSelectedChat(c)
-        setCustomer(c.otherUser)
-        setMessageList(c.messages)
+        setCustomer(c.OtherUser)
+        setMessageList(c.Messages)
     }
 
     useEffect(() => {
         fetchExistedChats()
-    }, [messageList])
+    }, [messageList], customer)
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
             setListChat(prevChats => {
-                const chatExists = prevChats.some(chat => chat._id === newMessage.ChatId)
+                const chatExists = prevChats.some(chat => chat._id == newMessage.ChatId)
 
                 if (chatExists) {
                     return prevChats.map(chat => {
-                        if (chat._id === newMessage.ChatId) {
+                        if (chat._id.toString() == newMessage.ChatId.toString()) {
                             return {
                                 ...chat,
                                 Messages: [...chat.Messages, newMessage]
@@ -74,17 +75,23 @@ const ChatList = (props) => {
     }, [socket, listChat])
 
     return (
-        <div className={`list-chat ${show ? "" : "hide"}`}>
+        <div
+            className={`list-chat ${show ? "" : "hide"}`}
+        >
             {listChat && listChat.length > 0 ?
                 listChat.map(c => (
                     <div
                         key={c._id}
-                        className='chat-container'
+                        className='mchat-container'
                         onClick={() => showBoxChat(c)}
                     >
-                        <i className="avatar fa-solid fa-user"></i>
+                        {((c.OtherUser?.picture && c.OtherUser?.picture.trim()) || (c.OtherUser?.Image && c.OtherUser?.Image.trim()))
+                            ? <img className='avatar' src={c.OtherUser?.picture ? c.OtherUser.picture : c.OtherUser.Image} alt='avatar' />
+                            : <i className="avatar fa-solid fa-user"></i>
+                        }
+
                         <div className='content'>
-                            <p className='name'>{c.OtherUser.username}</p>
+                            <p className='name'>{c.OtherUser.name}</p>
                             <p className='lastMess'>{c.Messages.length > 0
                                 ? c.Messages[c.Messages.length - 1].Content
                                 : "No messages yet"}</p>

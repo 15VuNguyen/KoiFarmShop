@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Table, Tag, Dropdown, Button, Checkbox, Menu,Upload  } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Table, Tag, Dropdown, Button, Checkbox, Menu,Upload, message  } from 'antd';
+import { DownOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import useFetchInvoices from '../../Hooks/useFetchInvoices';
 
-export default function InvoiceTable({ data }) {
+export default function InvoiceTable({ data,actions }) {
   const invoices = useFetchInvoices();
-  const [visibleColumns, setVisibleColumns] = useState(['_id', 'GroupKoiIDInvoice', 'InvoiceDate', 'Status', 'Discount', 'TotalPrice']);
+  const [visibleColumns, setVisibleColumns] = useState(['_id', 'GroupKoiIDInvoice', 'InvoiceDate', 'Status', 'Discount', 'TotalPrice,', 'action']);
   const [activeFilters, setActiveFilters] = useState([]);
   const [filteredData, setFilteredData] = useState(data);
 
@@ -35,7 +35,7 @@ export default function InvoiceTable({ data }) {
       dataIndex: 'InvoiceDate',
       key: 'InvoiceDate',
       sorter: (a, b) => moment(a.InvoiceDate).unix() - moment(b.InvoiceDate).unix(),
-      render: (date) => moment(date).format('YYYY-MM-DD HH:mm:ss'),
+      render: (date) => moment(date).utc().format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'Status',
@@ -68,6 +68,15 @@ export default function InvoiceTable({ data }) {
       sorter: (a, b) => a.TotalPrice - b.TotalPrice,
       render: (price) => formatCurrency(price),
     },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+      
+          <Button icon={<EditOutlined />} type="primary" onClick={() => actions(record)}>Edit</Button>
+ 
+      ),
+    }
   ];
 
   const columnSelectionMenu = (

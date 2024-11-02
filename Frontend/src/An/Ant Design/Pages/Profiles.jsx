@@ -8,6 +8,7 @@ import ProfileTable from '../Components/Table/ProfileTable';
 import { SearchOutlined } from '@ant-design/icons';
 import ProfileModal from '../Components/Modal/ProfileModal';
 import axiosInstance from '../../Utils/axiosJS';
+import ManagerChat from '../../../Components/Chat/ManagerChat.jsx';
 
 export default function Profiles() {
   const { Header, Content } = Layout;
@@ -134,13 +135,10 @@ export default function Profiles() {
 
   return (
     <Layout >
-
       <ProfileModal actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
       <Header style={{ background: '#f5f5f5' }}>
         <Typography.Title style={{ textAlign: 'center' }} level={1}>Profile Dashboard</Typography.Title>
       </Header>
-
-
       <Content style={{ padding: '24px' }}>
 
         <Row gutter={24}>
@@ -216,11 +214,11 @@ export default function Profiles() {
         <Layout style={{ background: '#f0f0f0', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 12px 8px rgba(0, 0, 0, 0.1)' }}>
 
           <Header style={{ background: '#f5f5f5', borderBottom: '1px solid #d9d9d9', padding: '20px', borderRadius: '12px 12px 0 0', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', border: '1px #bfbfbf solid ' }}>
+
           </Header>
 
 
           <Content className='fix-Table' style={{ border: '1px #bfbfbf solid ', padding: '20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
-
 
             <ProfileTable data={filteredProfiles} handleActionClick={handleActionClick} Search={searchTerm} />
           </Content>

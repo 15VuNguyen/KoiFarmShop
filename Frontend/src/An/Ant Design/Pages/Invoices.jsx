@@ -1,16 +1,25 @@
 import React from 'react';
-import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload } from 'antd';
-import { UploadOutlined,VideoCameraOutlined } from '@ant-design/icons';
+import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker, Tooltip } from 'antd';
+import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import InvoiceTable from '../Components/Table/InvoiceTable';
 import '../Css/GeneralPurpose.css';
 import useFetchInvoices from "../Hooks/useFetchInvoices";
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
+import { sizeValidator, priceValidator, quantityValidator, discountValidator } from '../Utils/Validator';
+import { func } from 'prop-types';
+import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 export default function Invoices() {
+  const [imageLoading, setImageLoading] = React.useState(false);
+  const [videoLoading, setVideoLoading] = React.useState(false);
+
   const { Header, Content } = Layout;
   const [activeTab, setActiveTab] = React.useState('1');
-
+  const [isUpdate, setIsUpdate] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [form] = Form.useForm();
   const [Catagory, setCatagory] = React.useState([]);
@@ -18,11 +27,17 @@ export default function Invoices() {
   const [loading, setLoading] = React.useState(false);
   const [invoices, setInvoices] = React.useState([]);
   const [imageList, setImageList] = React.useState([]);
+  const [videoList, setVideoList] = React.useState([]);
   const [video, setVideo] = React.useState(null);
   const [imageUrl, setImageUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
   const [videoUrl, setVideoUrl] = React.useState('');
-  ; 
+
+
+  ;
+  React.useEffect(() => {
+    console.log(isUpdate);
+  }, [isUpdate]);
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
     authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -58,7 +73,25 @@ export default function Invoices() {
     }
     fetchCatagory();
   }, [refreshData]);
+  const handleAction = async (record) => {
+    try {
+      setIsUpdate(true);
+      console.log(record);
+      const response = await axiosInstance.get(`manager/manage-group-koi/${record.GroupKoiIDInvoice}`);
+      const groupKOIDATA = response.data.result;
+      const { _id, ...rest } = groupKOIDATA;
+      //    console.log(groupKOIDATA);
+      const LeALLData = { ...record, ...rest };
+      console.log(LeALLData);
+      form.setFieldsValue(LeALLData);
+      form.setFieldsValue({ InvoiceDate: dayjs(record.InvoiceDate).utc() });
 
+
+      setIsModalVisible(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   const getFilteredInvoices = () => {
     switch (activeTab) {
       case '1':
@@ -100,46 +133,111 @@ export default function Invoices() {
       ),
     },
   ];
+  async function handleUpdating() {
+    try {
+      let THEREALDATA = {}
+
+      const values = await form.validateFields();
+
+      setLoading(true);
+
+      // const invoiceData = {
+      //   ...values,
+      //   GroupKoiImage: imageUrl,
+      //   GroupKoiVideo: videoUrl
+      // };      
+
+      const { SupplierImage, SupplierVideo, ...restValues } = values;
+      THEREALDATA = { ...restValues };
+      if (imageUrl != '') {
+        console.log(imageUrl);
+        THEREALDATA = {
+          ...restValues,
+          GroupKoiImage: imageUrl,
+
+        }
+
+      }
+      else if (videoUrl !== '') {
+
+        THEREALDATA = {
+          ...restValues,
+          GroupKoiVideo: videoUrl
+        }
+
+
+      }
+
+      console.log(THEREALDATA);
+
+
+      await axiosInstance.put(`manager/manage-invoice/${THEREALDATA._id}`, THEREALDATA);
+      message.success('Hóa đơn đã được cập nhật thành công!');
+      setIsModalVisible(false);
+      setLoading(false);
+      setRefreshData(!refreshData);
+      setImageUrl('');
+      form.resetFields();
+    } catch (error) {
+      console.error('Error:', error);
+      message.error('Vui lòng kiểm tra lại các trường!');
+      setLoading(false);
+    }
+  }
 
   function handleAddInvoice() {
+    setIsUpdate(false);
+    form.resetFields();
     setIsModalVisible(true);
   }
 
   function handleCancel() {
     setIsModalVisible(false);
+    setImageUrl('');
+    setVideoUrl('');
   }
   const handleImageUpload = async ({ file, onSuccess, onError }) => {
+    setImageLoading(true);
     try {
       const imageRef = ref(storage, `images/${file.name}`);
       await uploadBytes(imageRef, file);
       const downloadURL = await getDownloadURL(imageRef);
       setImageUrl(downloadURL);
-      onSuccess(null, file); 
+      onSuccess(null, file);
+      setImageList([...imageList, downloadURL]);
+      form.setFieldsValue({ GroupKoiImage: downloadURL });
       message.success(`${file.name} uploaded successfully`);
     } catch (error) {
       console.error('Error uploading image:', error);
-      onError(error); 
+      onError(error);
       message.error('Image upload failed');
+    } finally {
+      setImageLoading(false);
     }
   };
-  
 
   const handleVideoUpload = async ({ file, onSuccess, onError }) => {
+    setVideoLoading(true);
     try {
       const videoRef = ref(storage, `videos/${file.name}`);
       await uploadBytes(videoRef, file);
       const downloadURL = await getDownloadURL(videoRef);
       setVideoUrl(downloadURL);
+      setVideoList([...videoList, downloadURL]);
       onSuccess(null, file);
       message.success(`${file.name} uploaded successfully`);
+
     } catch (error) {
       console.error('Error uploading video:', error);
-      onError(error); 
+      onError(error);
       message.error('Video upload failed');
+    } finally {
+      setVideoLoading(false);
     }
   };
   const handleOk = async () => {
     try {
+
       const values = await form.validateFields();
       setLoading(true);
       const invoiceData = {
@@ -154,13 +252,14 @@ export default function Invoices() {
         GroupKoiVideo: videoUrl
       }
       console.log(THEREALDATA);
-      await axiosInstance.post('manager/manage-invoice/create-new-invoice-group-koi',THEREALDATA );
+      await axiosInstance.post('manager/manage-invoice/create-new-invoice-group-koi', THEREALDATA);
       message.success('Hóa đơn đã được tạo thành công!');
       setIsModalVisible(false);
       setLoading(false);
       setRefreshData(!refreshData);
       form.resetFields();
     } catch (error) {
+
       message.error('Vui lòng kiểm tra lại các trường!');
       setLoading(false);
     }
@@ -169,9 +268,9 @@ export default function Invoices() {
   //   try {
   //     const values = await form.validateFields();
   //     setLoading(true);
-  
+
   //     const updatedData = { ...values };
-  
+
   //     if (values.SupplierImage && values.SupplierImage.file && values.SupplierImage.file.originFileObj) {
   //       const imageFile = values.SupplierImage.file.originFileObj;
   //       const imageRef = ref(storage, `images/${imageFile.name}`);
@@ -179,8 +278,8 @@ export default function Invoices() {
   //       const downloadURL = await getDownloadURL(imageRef);
   //       updatedData.SupplierImage = downloadURL;  
   //     }
-  
-      
+
+
   //     if (values.SupplierVideo && values.SupplierVideo.file && values.SupplierVideo.file.originFileObj) {
   //       const videoFile = values.SupplierVideo.file.originFileObj;
   //       const videoRef = ref(storage, `videos/${videoFile.name}`);
@@ -188,8 +287,8 @@ export default function Invoices() {
   //       const videoURL = await getDownloadURL(videoRef);
   //       updatedData.SupplierVideo = videoURL;  // Add Firebase video URL to form data
   //     }
-  
-     
+
+
   //     const response = await axiosInstance.post('manager/manage-invoice/create-new-invoice-group-koi', updatedData);
   //     message.success('Hóa đơn đã được tạo thành công!');
   //     setIsModalVisible(false);
@@ -202,18 +301,23 @@ export default function Invoices() {
   //     setLoading(false);
   //   }
   // }
-  
+
 
   return (
     <Layout>
       <Modal
-        title="Tạo Hóa Đơn"
+        title={
+          isUpdate ? 'Cập nhật hóa đơn' : 'Tạo hóa đơn'
+        }
         open={isModalVisible}
-        onOk={handleOk}
+        onOk={
+          isUpdate ? handleUpdating : handleOk
+        }
         confirmLoading={loading}
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
+          <Form.Item hidden name={'_id'} ></Form.Item>
           <Form.Item
             label="Nhà cung cấp"
             name="SupplierID"
@@ -241,24 +345,51 @@ export default function Invoices() {
               ))}
             </Select>
           </Form.Item>
+          {isUpdate && (
+            <Form.Item  name="InvoiceDate"
+              label={
+                <Tooltip title="Ngày hóa đơn phải là hiện tại hoặc quá khứ">
+                  Ngày tạo hóa đơn
+                </Tooltip>
+              }
+            >
+              <DatePicker
 
+                style={{ width: '100%' }}
+
+                onChange={(date) => form.setFieldsValue({ InvoiceDate: date })}
+                form='YYYY-MM-DD'
+                disabledDate={(current) => current && current > moment().endOf('day')}
+              />
+            </Form.Item>
+          )}
           <Form.Item
             label="Kích thước"
             name="Dimension"
             rules={[
-              { required: true, message: 'Vui lòng nhập kích thước!' },
-              { type: 'number', min: 1, message: 'Kích thước phải lớn hơn 1!' }
+              { validator: sizeValidator }
             ]}
+            hasFeedback
           >
-            <InputNumber min={1} placeholder="Nhập kích thước" style={{ width: '100%' }} />
+            <InputNumber
+              placeholder="Nhập kích thước"
+              style={{ width: '100%' }}
+
+            />
           </Form.Item>
+
 
           <Form.Item
             label="Giống"
             name="BreedGroupKoi"
+            initialValue={'F1'}
             rules={[{ required: true, message: 'Vui lòng nhập giống koi!' }]}
           >
-            <Input placeholder="Nhập giống koi" />
+            <Select placeholder="Chọn giống koi">
+              <Select.Option value="F1">F1</Select.Option>
+              <Select.Option value="Việt">Việt</Select.Option>
+              <Select.Option value="Nhật">Showa</Select.Option>
+            </Select>
           </Form.Item>
 
           <Form.Item
@@ -266,7 +397,8 @@ export default function Invoices() {
             name="PriceOneKoi"
             rules={[
               { required: true, message: 'Vui lòng nhập giá!' },
-              { type: 'number', min: 1, max: 10000000, message: 'Giá phải lớn hơn 1!' }
+              { type: 'number', min: 1000, message: 'Giá phải lớn hơn 1000 VND!' },
+              { validator: priceValidator }
             ]}
           >
             <InputNumber min={1000} placeholder="Nhập Giá" style={{ width: '100%' }} />
@@ -275,9 +407,11 @@ export default function Invoices() {
           <Form.Item
             label="Số lượng"
             name="Quantity"
+            initialValue={1}
             rules={[
               { required: true, message: 'Vui lòng nhập số lượng!' },
-              { type: 'number', min: 1, message: 'Số lượng phải lớn hơn 1!' }
+              { type: 'number', min: 1, message: 'Số lượng phải lớn hơn 1!' },
+              { validator: quantityValidator }
             ]}
           >
             <InputNumber min={1} placeholder="Nhập số lượng" style={{ width: '100%' }} />
@@ -286,25 +420,55 @@ export default function Invoices() {
           <Form.Item
             label="Giảm giá (%)"
             name="Discount"
+            initialValue={0}
             rules={[
               { required: true, message: 'Vui lòng nhập giảm giá!' },
-              { type: 'number', min: 0, max: 100, message: 'Giảm giá phải nằm trong khoảng 0 đến 100!' }
+
+              { validator: discountValidator }
             ]}
           >
             <InputNumber min={0} max={100} placeholder="Nhập giảm giá" style={{ width: '100%' }} suffix={'%'} />
           </Form.Item>
+
+
           <Form.Item
             label="Supplier Image"
             name="SupplierImage"
-            
-            rules={[{ required: true, message: 'Vui lòng chọn ảnh!' }]}
+          // rules={[
+          //   {
+          //     validator: (_, value) => {
+          //       // Check if there is a file in the fileList
+          //       if (value && value.fileList.length > 0) {
+          //         // Get the file type
+          //         const fileType = value.fileList[0].type;
+
+          //         if (!['image/jpeg', 'image/png'].includes(fileType)) {
+          //           return Promise.reject(new Error('Vui lòng tải lên hình ảnh định dạng JPEG hoặc PNG!'));
+          //         }
+          //         return Promise.resolve();
+          //       }
+          //       return Promise.reject(new Error('Vui lòng tải lên hình ảnh!'));
+          //     },
+          //   },
+          // ]} 
           >
             <Upload
-              customRequest={handleImageUpload}
               listType="picture"
+              customRequest={handleImageUpload}
+              {...(isUpdate && {
+                fileList: imageUrl
+                  ? [{ url: imageUrl, thumbUrl: imageUrl, name: 'Group Koi Image' }]
+                  : [
+                    {
+                      url: form.getFieldValue('GroupKoiImage'),
+                      thumbUrl: form.getFieldValue('GroupKoiImage'),
+                      name: 'Group Koi Image',
+                    },
+                  ],
+              })}
             >
-              <Button type="primary" icon={<UploadOutlined />}>
-                Upload Image
+              <Button type="primary" icon={<UploadOutlined />} loading={imageLoading}>
+                {imageLoading ? 'Uploading...' : 'Upload Image'}
               </Button>
             </Upload>
           </Form.Item>
@@ -312,16 +476,29 @@ export default function Invoices() {
           <Form.Item
             label="Video"
             name="SupplierVideo"
-            rules={[{ required: true, message: 'Vui lòng chọn video!' }]}
+            rules={[]}
           >
             <Upload
               customRequest={handleVideoUpload}
+              {...(isUpdate && {
+                fileList: videoUrl
+                  ? [{ url: videoUrl, thumbUrl: videoUrl, name: 'Group Koi Video' }]
+                  : [
+                    {
+                      url: form.getFieldValue('GroupKoiVideo'),
+                      thumbUrl: form.getFieldValue('GroupKoiVideo'),
+                      name: 'Group Koi Video',
+                    },
+                  ],
+              })}
             >
-              <Button type="primary" icon={<VideoCameraOutlined />}>
-                Upload Video
+              <Button type="primary" icon={<VideoCameraOutlined />} loading={videoLoading}>
+                {videoLoading ? 'Uploading...' : 'Upload Video'}
               </Button>
             </Upload>
           </Form.Item>
+
+
         </Form>
       </Modal>
 
@@ -389,7 +566,7 @@ export default function Invoices() {
           />
         </div>
 
-        <InvoiceTable data={getFilteredInvoices()} />
+        <InvoiceTable data={getFilteredInvoices()} actions={handleAction} />
       </Content>
     </Layout>
   );

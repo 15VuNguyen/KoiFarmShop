@@ -1,16 +1,21 @@
 import React from 'react';
-import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber } from 'antd';
-import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined } from '@ant-design/icons';
+import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker,Tooltip } from 'antd';
+import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined,QuestionCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
+import utc from 'dayjs/plugin/utc';
+import dayjs from 'dayjs';
+dayjs.extend(utc);
+import moment from 'moment';
+import FormItem from 'antd/es/form/FormItem';
 
 export default function ConsignDetail({ consignID }) {
   const [consignData, setConsignData] = React.useState({});
   const [imageList, setImageList] = React.useState([]);
   const [video, setVideo] = React.useState(null);
- 
-  const [isLoading, setIsLoading] = React.useState(false); 
+
+  const [isLoading, setIsLoading] = React.useState(false);
   const [catagoryList, setCatagoryList] = React.useState([]);
   const [validFieldForUpdate, setValidFieldForUpdate] = React.useState({
     name: "",
@@ -33,7 +38,7 @@ export default function ConsignDetail({ consignID }) {
     Image: "",
     Video: "",
     State: 0,
-    Detail:''
+    Detail: ''
 
   });
   React.useEffect(() => {
@@ -107,10 +112,10 @@ export default function ConsignDetail({ consignID }) {
     }
   };
   // const handleImageUpload = async ({ file }) => {
-    
+
   //   const files = Array.isArray(file) ? file : [file];
   //   const uploadedImages = [];
-  
+
   //   for (const fileItem of files) {
   //     try {
   //       const imgRef = ref(storage, `images/${fileItem.name}`);
@@ -123,11 +128,11 @@ export default function ConsignDetail({ consignID }) {
   //       message.error('Image upload failed');
   //     }
   //   }
-  
+
 
   //   setImageList((prev) => [...prev, ...uploadedImages]);
   //   console.log(uploadedImages);
-    
+
   //   const updatedFields = { ...validFieldForUpdate, Images: [...uploadedImages] }; // Send all uploaded images
   //   try {
   //     console.log(updatedFields +"YOYOY ");
@@ -138,7 +143,7 @@ export default function ConsignDetail({ consignID }) {
   //     message.error('Image update failed');
   //   }
   // };
-  
+
   const handleVideoUpload = async ({ file }) => {
     try {
       const videoRef = ref(storage, `videos/${file.name}`);
@@ -231,7 +236,7 @@ export default function ConsignDetail({ consignID }) {
       onOk: async () => {
         try {
           let updatedFields
-          if (field === 'Status' || field === 'Price') {
+          if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
           else {
@@ -316,37 +321,73 @@ export default function ConsignDetail({ consignID }) {
               ) : inputType === 'selectAge' ? (
                 <InputNumber min={1} max={50} required value={editValue} onChange={(value) => setEditValue(value)} />
 
+              ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
+                <Form.Item label={
+                  <Space>
+                    <span>Shipped Date</span>
+                    <Tooltip title="Ngày ship phải ở hiện tại hoặc tương lai">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Space>
+                }>
+                <DatePicker
+                  getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
+                  onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                  disabledDate={(current) => current && current < dayjs().startOf('day')}
+                  format={'YYYY-MM-DD'}
+                />
+                </Form.Item>
               ) :
 
-                inputType === 'setGender' ? (
-                  <Select value={editValue} onChange={(value) => setEditValue(value)} >
-                    <Select.Option value={'Male'} >Male</Select.Option>
-                    <Select.Option value={'Female'} > Female</Select.Option>
-                  </Select>) :
-                  inputType === 'SelectPositionCare' ? (
-                    <Select value={editValue} onChange={(value) => setEditValue(value)} style={{ width: '10rem' }}>
-                      <Select.Option value={'IKOI FARM'} >IKOI FARM</Select.Option>
-                      <Select.Option value={'Home'} >Home</Select.Option>
+                inputType === 'selectReceiptDate' && field === 'ReceiptDate' ? (
+                  <Form.Item label={
+                    <Space>
+                      <span>Receipt Date</span>
+                      <Tooltip title="Receipt Date must be at least 30 days after Shipped Date">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </Space>
+                  } >
+                  <DatePicker
+
+                    getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
+                    onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                    disabledDate={(current) =>
+                      current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
+                    }
+                  />
+                </Form.Item>
+                ) :
+
+                  inputType === 'setGender' ? (
+                    <Select value={editValue} onChange={(value) => setEditValue(value)} >
+                      <Select.Option value={'Male'} >Male</Select.Option>
+                      <Select.Option value={'Female'} > Female</Select.Option>
                     </Select>) :
+                    inputType === 'SelectPositionCare' ? (
+                      <Select value={editValue} onChange={(value) => setEditValue(value)} style={{ width: '10rem' }}>
+                        <Select.Option value={'IKOI FARM'} >IKOI FARM</Select.Option>
+                        <Select.Option value={'Home'} >Home</Select.Option>
+                      </Select>) :
 
-                    inputType === 'selectBreed' ? (
-                      <Select value={editValue} onChange={(value) => setEditValue(value)}>
-                        <Select.Option value={'Nhập Khẩu Nhật'} >Nhập Khẩu Nhật</Select.Option>
-                        <Select.Option value={'Nhập Khẩu Việt'} >Nhập Khẩu Việt</Select.Option>
-                        <Select.Option value={'Nhập Khẩu Trung'} >Nhập Khẩu Trung</Select.Option>
-                        <Select.Option value={'Nhập Khẩu F1'} >Nhập Khẩu F1</Select.Option>
-                      </Select>
-                    ) : inputType === 'selectFood' ? (
-                      <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                    ) : inputType === 'selectFilter' ? (
-                      <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                    ) :
+                      inputType === 'selectBreed' ? (
+                        <Select value={editValue} onChange={(value) => setEditValue(value)}>
+                          <Select.Option value={'Nhập Khẩu Nhật'} >Nhập Khẩu Nhật</Select.Option>
+                          <Select.Option value={'Nhập Khẩu Việt'} >Nhập Khẩu Việt</Select.Option>
+                          <Select.Option value={'Nhập Khẩu Trung'} >Nhập Khẩu Trung</Select.Option>
+                          <Select.Option value={'Nhập Khẩu F1'} >Nhập Khẩu F1</Select.Option>
+                        </Select>
+                      ) : inputType === 'selectFood' ? (
+                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                      ) : inputType === 'selectFilter' ? (
+                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                      ) :
 
 
 
-                      (
-                        <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-                      )}
+                        (
+                          <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                        )}
           <Button icon={<CheckOutlined />} type="link" onClick={() => saveEdit(field)} />
           <Button icon={<CloseOutlined />} type="link" onClick={cancelEdit} />
         </>
@@ -382,9 +423,10 @@ export default function ConsignDetail({ consignID }) {
           {renderEditableItem("Method", consign.Method, "Method", "selectMethod")}
           {renderEditableItem("Position Care", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
           {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
-          <Descriptions.Item label="Shipped Date">{consign.ShippedDate
-            ? new Date(consign.ShippedDate).toLocaleDateString() : <Tag color="red">Not Provided</Tag>}</Descriptions.Item>
-          <Descriptions.Item label="Received Date">{consign.ReceivedDate ? new Date(consign.ReceivedDate).toLocaleDateString() : <Tag color="red">Not Provided</Tag>}</Descriptions.Item>
+          {renderEditableItem("Shipped Date", moment.utc(consign.ShippedDate).format('YYYY-MM-DD'), "ShippedDate", "selectReceivedDate")}
+          {renderEditableItem("Receipt Date", moment.utc(consign.ReceiptDate).format('YYYY-MM-DD'), "ReceiptDate", "selectReceiptDate")}
+
+
           {renderEditableItem("Hoa Hồng", consign.Commission, "Commission", "selectCommission")}
           {renderEditableItem("Chi tiết kí gửi", consign.Detail, "Detail")}
           <Descriptions.Item label="Total Price">
@@ -417,11 +459,11 @@ export default function ConsignDetail({ consignID }) {
         <Row justify="center" align="middle" gutter={[16, 16]}>
           <Col xs={24} md={12} lg={8}>
             <Upload
-        
+
               customRequest={handleImageUpload}
               showUploadList={false}
               accept="image/*"
-              
+
             >
               <Button loading={isLoading} icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
@@ -442,13 +484,13 @@ export default function ConsignDetail({ consignID }) {
               customRequest={handleVideoUpload}
               showUploadList={false}
               accept="video/*"
-              
+
             >
               <Button loading={isLoading} icon={<UploadOutlined />}>Upload Video</Button>
             </Upload>
             {video && (
-              <video  style={{ display: 'block' }} width="480px" height='360px' controls >
-                <source  src={video} type="video/mp4"  />
+              <video style={{ display: 'block' }} width="480px" height='360px' controls >
+                <source src={video} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             )}

@@ -215,12 +215,13 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchUser();
-  }, [user._id]);
+    fetchUser()
+  }, [user._id])
 
   useEffect(() => {
-    fetchManager();
-  }, []);
+    fetchManager()
+  }, [])
+
 
   return (
     <>
@@ -525,22 +526,25 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* 
+
       <div className="home-body">
-        <div className="chat-container">
+        <div className='chat-container'>
           <BoxChat
             show={isShow}
             setShow={setIsShow}
             receiver={manager}
             user={user}
           />
-          <ChatButton show={isShow} setShow={setIsShow} receiver={manager} />
-        </div>
-      </div> */}
+          <ChatButton
+            show={isShow}
+            setShow={setIsShow}
+            receiver={manager}
+          />
 
-      <div>
-        <FooterComponent />
+        </div>
       </div>
+
+      <Footer style={{ paddingTop: "20px" }} />
     </>
   );
 }
