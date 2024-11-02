@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker } from 'antd';
+import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker, Tooltip } from 'antd';
 import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import InvoiceTable from '../Components/Table/InvoiceTable';
 import '../Css/GeneralPurpose.css';
@@ -84,9 +84,9 @@ export default function Invoices() {
       const LeALLData = { ...record, ...rest };
       console.log(LeALLData);
       form.setFieldsValue(LeALLData);
-      form.setFieldsValue({ InvoiceDate:dayjs(record.InvoiceDate).utc()});
-   
-     
+      form.setFieldsValue({ InvoiceDate: dayjs(record.InvoiceDate).utc() });
+
+
       setIsModalVisible(true);
     } catch (error) {
       console.error(error);
@@ -346,13 +346,17 @@ export default function Invoices() {
             </Select>
           </Form.Item>
           {isUpdate && (
-            <Form.Item label="Ngày tạo hóa đơn" name="InvoiceDate"
-           
+            <Form.Item  name="InvoiceDate"
+              label={
+                <Tooltip title="Ngày hóa đơn phải là hiện tại hoặc quá khứ">
+                  Ngày tạo hóa đơn
+                </Tooltip>
+              }
             >
               <DatePicker
-                 
+
                 style={{ width: '100%' }}
-                
+
                 onChange={(date) => form.setFieldsValue({ InvoiceDate: date })}
                 form='YYYY-MM-DD'
                 disabledDate={(current) => current && current > moment().endOf('day')}

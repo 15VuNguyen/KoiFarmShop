@@ -1,6 +1,6 @@
 import React from 'react';
-import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker } from 'antd';
-import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined } from '@ant-design/icons';
+import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker,Tooltip } from 'antd';
+import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined,QuestionCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
@@ -8,6 +8,7 @@ import utc from 'dayjs/plugin/utc';
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 import moment from 'moment';
+import FormItem from 'antd/es/form/FormItem';
 
 export default function ConsignDetail({ consignID }) {
   const [consignData, setConsignData] = React.useState({});
@@ -321,22 +322,41 @@ export default function ConsignDetail({ consignID }) {
                 <InputNumber min={1} max={50} required value={editValue} onChange={(value) => setEditValue(value)} />
 
               ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
+                <Form.Item label={
+                  <Space>
+                    <span>Shipped Date</span>
+                    <Tooltip title="Ngày ship phải ở hiện tại hoặc tương lai">
+                      <QuestionCircleOutlined />
+                    </Tooltip>
+                  </Space>
+                }>
                 <DatePicker
                   getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
                   onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                   disabledDate={(current) => current && current < dayjs().startOf('day')}
                   format={'YYYY-MM-DD'}
                 />
+                </Form.Item>
               ) :
 
                 inputType === 'selectReceiptDate' && field === 'ReceiptDate' ? (
+                  <Form.Item label={
+                    <Space>
+                      <span>Receipt Date</span>
+                      <Tooltip title="Receipt Date must be at least 30 days after Shipped Date">
+                        <QuestionCircleOutlined />
+                      </Tooltip>
+                    </Space>
+                  } >
                   <DatePicker
+
                     getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
                     onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                     disabledDate={(current) =>
                       current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
                     }
                   />
+                </Form.Item>
                 ) :
 
                   inputType === 'setGender' ? (
