@@ -250,8 +250,8 @@ export default function ConsignDetail({ consignID }) {
       content: `Are you sure you want to save changes to ${field}?`,
       onOk: async () => {
         try {
-          let updatedFields
-          if (field === 'State' && editValue === 4 && !validFieldForUpdate.Price) {
+          let updatedFields 
+          if (field === 'State' && editValue === 4 && consign.Price === 0 || consign.Price === null) {
             message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
             return;
           }
@@ -356,6 +356,9 @@ export default function ConsignDetail({ consignID }) {
                     onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                     disabledDate={(current) => current && current < dayjs().startOf('day')}
                     format={'YYYY-MM-DD'}
+                    {
+                      ...consign.State === 4 ? { disabled: true } : {}
+                    }
                   />
                 </Form.Item>
               ) :
@@ -417,7 +420,14 @@ export default function ConsignDetail({ consignID }) {
           {field === 'State' ? StateMapping(value) : field === 'Status' ? KoiStatusMapping(value) : field === 'CategoryID' ? catagoryList.find((category) => category._id === value)?.CategoryName : value
 
           }
-          <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} />
+          {/* <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} /> */}
+          {
+            (field === 'ShippedDate' && consign.State == 4)? (
+              <></>
+            ) : (
+              <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} />
+            )
+          }
         </>
       )}
     </Descriptions.Item>
