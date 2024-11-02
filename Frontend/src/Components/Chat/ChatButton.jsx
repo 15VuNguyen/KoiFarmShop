@@ -12,17 +12,10 @@ const ChatButton = (props) => {
         setShow(!show)
     }
 
-    // let config = {
-    //     headers: {
-    //       Authorization: `Bearer ${currentUser.token}`
-    //     }
-    //   }
-
     const findChat = async() => {
         try {
             const {data} = await createNewChats(receiver._id)
             if(data){
-                console.log("data: ", data)
                 setSelectedChat(data.result)
                 setMessageList(data.result.messages)
                 localStorage.setItem('selectedChat', JSON.stringify(data.result))

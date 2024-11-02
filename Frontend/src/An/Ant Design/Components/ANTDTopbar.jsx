@@ -5,6 +5,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 
 import 'antd/dist/reset.css'; 
+import ManagerChat from "../../../Components/Chat/ManagerChat";
 const { Header, Content } = Layout;
  const SelfCheckContext = React.createContext();
 export default function AnTopBar({ children, name, role }) {
@@ -57,6 +58,7 @@ export default function AnTopBar({ children, name, role }) {
             <div className="logo" style={{ float: "left", color: "white", fontSize: "1.5rem" }}>
               IKOI
             </div>
+            
             <Dropdown overlay={menu} trigger={['click']} className="menu-dropdown">
               <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{color:'white'}}>
                 Menu Quản Lý
@@ -78,6 +80,7 @@ export default function AnTopBar({ children, name, role }) {
             <Outlet />
           </Content>
         </Layout>
+        <ManagerChat/>
       </SelfCheckContext.Provider>
     );
 }
