@@ -16,7 +16,6 @@ const ChatList = (props) => {
     const fetchExistedChats = async () => {
         const { data } = await getExistedChats()
         if (data) {
-            console.log("list chat: ", data.result)
             setListChat(data.result)
         }
     }
@@ -24,8 +23,8 @@ const ChatList = (props) => {
     const showBoxChat = (c) => {
         setIsShowStaffChat(true)
         setSelectedChat(c)
-        setCustomer(c.otherUser)
-        setMessageList(c.messages)
+        setCustomer(c.OtherUser)
+        setMessageList(c.Messages)
     }
 
     useEffect(() => {
@@ -35,11 +34,11 @@ const ChatList = (props) => {
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
             setListChat(prevChats => {
-                const chatExists = prevChats.some(chat => chat._id === newMessage.ChatId)
+                const chatExists = prevChats.some(chat => chat._id == newMessage.ChatId)
 
                 if (chatExists) {
                     return prevChats.map(chat => {
-                        if (chat._id === newMessage.ChatId) {
+                        if (chat._id.toString() == newMessage.ChatId.toString()) {
                             return {
                                 ...chat,
                                 Messages: [...chat.Messages, newMessage]
@@ -55,7 +54,6 @@ const ChatList = (props) => {
             if (!existingChat) {
                 const { data: userData } = await fetchUser(newMessage.SenderId)
                 if (userData) {
-                    console.log("user data: ", userData)
                     setListChat(prevChats => [
                         ...prevChats,
                         {
@@ -88,7 +86,7 @@ const ChatList = (props) => {
                     >
                         <i className="avatar fa-solid fa-user"></i>
                         <div className='content'>
-                            <p className='name'>{c.OtherUser.name}</p>
+                            <p className='name'>{(c.OtherUser.name).slice(0,10)}</p>
                             <p className='name'>{console.log("c: ", c)}</p>
                             <p className='lastMess'>{c.Messages.length > 0
                                 ? c.Messages[c.Messages.length - 1].Content

@@ -128,14 +128,14 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             dataIndex: 'ShippedDate',
             key: 'ShippedDate',
             sorter: (a, b) => moment(a.ShippedDate) - moment(b.ShippedDate),
-            render: text => text || <Tag color="red">Not Provided</Tag>, 
+            render: text => text ? moment(text).format('YYYY/MM/DD') : <Tag color="red">Not Provided</Tag>,
         },
         {
             title: 'Receipt Date',
             dataIndex: 'ReceiptDate',
             key: 'ReceiptDate',
             sorter: (a, b) => moment(a.ReceiptDate) - moment(b.ReceiptDate),
-            render: text => text || <Tag color="red">Not Provided</Tag>,
+            render: text => text ? moment(text).format('YYYY/MM/DD') : <Tag color="red">Not Provided</Tag>
         },
         {
             title: 'Description',
