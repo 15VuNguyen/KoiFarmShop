@@ -236,6 +236,10 @@ export default function ConsignDetail({ consignID }) {
       onOk: async () => {
         try {
           let updatedFields
+          if (field === 'State' && editValue === 4 && !validFieldForUpdate.Price) {
+            message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
+            return; 
+          }
           if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
