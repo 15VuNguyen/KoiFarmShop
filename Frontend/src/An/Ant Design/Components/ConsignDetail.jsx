@@ -1,6 +1,6 @@
 import React from 'react';
-import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker,Tooltip } from 'antd';
-import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined,QuestionCircleOutlined } from '@ant-design/icons';
+import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker, Tooltip } from 'antd';
+import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
@@ -183,8 +183,23 @@ export default function ConsignDetail({ consignID }) {
   const { user, consign, koi } = consignData;
 
   const toggleEdit = (field, initialValue) => {
-    setEditField(field);
-    setEditValue(initialValue);
+    if (field === 'ShippedDate' || field === 'ReceiptDate') {
+      if (field === 'ShippedDate') {
+        initialValue = dayjs(consign.ShippedDate).utc(true);
+        setEditField(field);
+        setEditValue(initialValue);
+      }
+      else if (field === 'ReceiptDate') {
+        initialValue = dayjs(consign.ReceiptDate).utc(true);
+        setEditField(field);
+        setEditValue(initialValue);
+      }
+    }
+    else {
+
+      setEditField(field);
+      setEditValue(initialValue);
+    }
   };
 
   function StateMapping(State) {
@@ -236,6 +251,10 @@ export default function ConsignDetail({ consignID }) {
       onOk: async () => {
         try {
           let updatedFields
+          if (field === 'State' && editValue === 4 && !validFieldForUpdate.Price) {
+            message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
+            return;
+          }
           if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
@@ -330,12 +349,14 @@ export default function ConsignDetail({ consignID }) {
                     </Tooltip>
                   </Space>
                 }>
-                <DatePicker
-                  getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
-                  onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                  disabledDate={(current) => current && current < dayjs().startOf('day')}
-                  format={'YYYY-MM-DD'}
-                />
+                  <DatePicker
+                    // getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
+                    // onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                    value={editValue}
+                    onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                    disabledDate={(current) => current && current < dayjs().startOf('day')}
+                    format={'YYYY-MM-DD'}
+                  />
                 </Form.Item>
               ) :
 
@@ -348,15 +369,15 @@ export default function ConsignDetail({ consignID }) {
                       </Tooltip>
                     </Space>
                   } >
-                  <DatePicker
+                    <DatePicker
 
-                    getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
-                    onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                    disabledDate={(current) =>
-                      current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
-                    }
-                  />
-                </Form.Item>
+                      value={editValue}
+                      onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                      disabledDate={(current) =>
+                        current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
+                      }
+                    />
+                  </Form.Item>
                 ) :
 
                   inputType === 'setGender' ? (
@@ -423,7 +444,7 @@ export default function ConsignDetail({ consignID }) {
           {renderEditableItem("Method", consign.Method, "Method", "selectMethod")}
           {renderEditableItem("Position Care", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
           {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
-          {renderEditableItem("Shipped Date", moment.utc(consign.ShippedDate).format('YYYY-MM-DD'), "ShippedDate", "selectReceivedDate")}
+          {renderEditableItem("Shipped Date", dayjs(consign.ShippedDate).utc().format('YYYY-MM-DD'), "ShippedDate", "selectReceivedDate")}
           {renderEditableItem("Receipt Date", moment.utc(consign.ReceiptDate).format('YYYY-MM-DD'), "ReceiptDate", "selectReceiptDate")}
 
 
