@@ -192,6 +192,15 @@ export default function DonKyGui() {
                                   ).toLocaleDateString()
                                 : "Không yêu cầu"}
                             </Text>
+                            <br />
+                            <Text strong style={{ color: "red" }}>
+                              Ngày nhận hàng:{" "}
+                              {consign.ReceiptDate
+                                ? new Date(
+                                    consign.ReceiptDate
+                                  ).toLocaleDateString()
+                                : "Không yêu cầu"}
+                            </Text>
                           </div>
                         </div>
                       </div>

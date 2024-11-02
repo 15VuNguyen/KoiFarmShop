@@ -18,6 +18,7 @@ import axiosInstance from "./An/Utils/axiosJS";
 import ChatButton from "./Components/Chat/ChatButton";
 import BoxChat from "./Components/Chat/BoxChat";
 import ChatList from "./Components/Chat/ChatList";
+import Footer from "./Components/Footer";
 import { fetchLoginUserData, getManager } from "./services/userService";
 
 export default function Home() {
@@ -215,13 +216,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchUser()
-  }, [user._id])
+    fetchUser();
+  }, [user._id]);
 
   useEffect(() => {
-    fetchManager()
-  }, [])
-
+    fetchManager();
+  }, []);
 
   return (
     <>
@@ -528,23 +528,18 @@ export default function Home() {
       </div>
 
       <div className="home-body">
-        <div className='chat-container'>
+        <div className="chat-container">
           <BoxChat
             show={isShow}
             setShow={setIsShow}
             receiver={manager}
             user={user}
           />
-          <ChatButton
-            show={isShow}
-            setShow={setIsShow}
-            receiver={manager}
-          />
-
+          <ChatButton show={isShow} setShow={setIsShow} receiver={manager} />
         </div>
       </div>
 
-      <Footer style={{ paddingTop: "20px" }} />
+      <FooterComponent style={{ paddingTop: "20px" }} />
     </>
   );
 }

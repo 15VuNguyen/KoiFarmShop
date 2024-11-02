@@ -17,13 +17,12 @@ import {
   Typography,
   Spin,
   Select,
-  Descriptions,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Footer from "../../Footer";
 import Navbar from "../../Navbar/Navbar";
 import dayjs from "dayjs";
-import { CgKey } from "react-icons/cg";
+import moment from "moment";
 
 const { Title } = Typography;
 const firebaseConfig = {
@@ -62,8 +61,8 @@ export default function Chitietconsignpage() {
     ShipAddress: "",
     PositionCare: "",
     Method: "",
-    shippedDate: null,
-    receiptDate: null,
+    ShippedDate: null,
+    ReceiptDate: null,
     Description: "",
     Detail: "",
     CategoryID: "",
@@ -103,7 +102,13 @@ export default function Chitietconsignpage() {
     setFormData((prevData) => ({ ...prevData, [type]: fileList }));
   };
   const handleDateChange = (key, date) => {
-    setFormData((prevData) => ({ ...prevData, [key]: date }));
+    // Kiểm tra nếu date không phải là null
+    const formattedDate = date ? date.format("DD/MM/YYYY") : null;
+
+    // In ra giá trị formattedDate để kiểm tra
+    console.log(`${key} date:`, formattedDate);
+
+    setFormData((prevData) => ({ ...prevData, [key]: formattedDate }));
   };
 
   const imageFileList1 = koiData?.Image
@@ -236,49 +241,32 @@ export default function Chitietconsignpage() {
         await uploadBytes(videoRef, videoFile.originFileObj);
         videoUrl = await getDownloadURL(videoRef); // Nhận URL mới
       }
-      const shippedDateObj = formData.shippedDate
-        ? new Date(Date.UTC(...formData.shippedDate.split("-"))) // Assuming shippedDate is in 'YYYY-MM-DD' format
+      const formatDateToISO = (dateString) => {
+        const [day, month, year] = dateString.split("/");
+        return `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+      };
+
+      const shippedDateObj = formData.ShippedDate
+        ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
         : null;
 
-      const receiptDateObj = formData.receiptDate
-        ? new Date(Date.UTC(...formData.receiptDate.split("-"))) // Assuming receiptDate is in 'YYYY-MM-DD' format
+      const receiptDateObj = formData.ReceiptDate
+        ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
         : null;
 
-      const currentDate = new Date(
-        Date.UTC(
-          currentDate.getUTCFullYear(),
-          currentDate.getUTCMonth(),
-          currentDate.getUTCDate()
-        )
-      );
+      const currentDate = new Date();
+      currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
 
-      // Check for shippedDate validity
-      if (shippedDateObj) {
-        if (shippedDateObj < currentDate) {
-          toast.error("Ngày gửi không được ở quá khứ!");
-          return;
-        }
-        if (receiptDateObj && shippedDateObj > receiptDateObj) {
-          toast.error("Ngày gửi không được sau ngày nhận!");
-          return;
-        }
-      }
-
-      // Check for receiptDate validity
-      if (receiptDateObj && receiptDateObj < currentDate) {
-        toast.error("Ngày nhận không được ở quá khứ!");
-        return;
-      }
-      if (shippedDateObj && receiptDateObj) {
-        // Create a new date object for one month after the shipped date
-        const oneMonthAfterShippedDate = new Date(shippedDateObj);
-        oneMonthAfterShippedDate.setMonth(shippedDateObj.getMonth() + 1);
-
-        // Check if the receipt date is before the one-month mark
-        if (receiptDateObj < oneMonthAfterShippedDate) {
-          toast.error("Ngày nhận phải lớn hơn ngày gửi ít nhất 1 tháng!");
-          return;
-        }
+      // Kiểm tra ngày tháng trước khi gửi
+      if (
+        shippedDateObj &&
+        (shippedDateObj < currentDate ||
+          (receiptDateObj && shippedDateObj > receiptDateObj))
+      ) {
+        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
+        return; // Dừng lại nếu ngày không hợp lệ
       }
       // Cập nhật formData với URL
       const updatedFormData = {
@@ -498,8 +486,9 @@ export default function Chitietconsignpage() {
                           style={{ width: "100%" }}
                           value={initialValues.ShippedDate}
                           onChange={(date) =>
-                            handleDateChange("shippedDate", date)
+                            handleDateChange("ShippedDate", date)
                           }
+                          format="DD/MM/YYYY" // Thay đổi format ở đây
                         />
                       </Form.Item>
                       <Form.Item label="Ngày Nhận" name="ReceiptDate">
@@ -507,8 +496,12 @@ export default function Chitietconsignpage() {
                           style={{ width: "100%" }}
                           value={initialValues.ReceiptDate}
                           onChange={(date) =>
-                            handleDateChange("receiptDate", date)
+                            handleDateChange("ReceiptDate", date)
                           }
+                          disabledDate={(current) =>
+                            current && current < moment().startOf("day")
+                          }
+                          format="DD/MM/YYYY" // Thay đổi format ở đây
                         />
                       </Form.Item>
                     </div>
