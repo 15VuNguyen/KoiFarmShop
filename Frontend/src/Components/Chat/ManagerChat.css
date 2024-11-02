@@ -5,7 +5,8 @@
 }
 
 .chat-btn-container{
-  position: relative;
+  position: fixed;
+  bottom: 0;
   width: fit-content;
 }
 
@@ -75,8 +76,8 @@
     opacity: 0;
     max-height: 0;
   }
-  /* .staffBox{
-    position: absolute;
+  .mbox-chat{
+    position: fixed;
     bottom: 0;
     right: 0;
-  } */
+  }

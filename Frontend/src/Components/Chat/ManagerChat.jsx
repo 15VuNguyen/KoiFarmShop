@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 // import BoxChat from './BoxChat'
 import ChatList from './ChatList'
 import "./ManagerChat.css"
+import BoxChat from './BoxChat'
+import { fetchLoginUserData } from '../../services/userService'
 
 const ManagerChat = () => {
 
@@ -15,6 +17,7 @@ const ManagerChat = () => {
             const { data } = await fetchLoginUserData()
             if (data) {
                 console.log("user: ", data.result)
+                localStorage.setItem("userInfo", JSON.stringify(data.result))
                 setUser(data.result)
             }
         } catch (error) {
@@ -24,9 +27,11 @@ const ManagerChat = () => {
 
     useEffect(() => {
         fetchUser()
-    }, [user._id])
+    }, [])
 
     return (
+            
+<div className='manager-screen'>
             <div className="chat-btn-container">
                 <div className='list-container'>
                     <i
@@ -40,7 +45,16 @@ const ManagerChat = () => {
                     />
                 </div>
             </div>
-
+            <div className='mbox-chat'>
+            <BoxChat
+                show={isShowStaffChat}
+                receiver={customer}
+                setShow={setIsShowStaffChat}
+                user = {user}
+            />
+            </div>
+            
+</div>
 
 
     )

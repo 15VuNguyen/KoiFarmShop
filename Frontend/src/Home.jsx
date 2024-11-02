@@ -220,11 +220,11 @@ export default function Home() {
 
   useEffect(() => {
     fetchUser()
-  }, [user._id])
+  }, [])
 
   useEffect(() => {
     fetchManager()
-  }, [])
+  }, [user._id])
 
 
   return (
@@ -531,7 +531,6 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="home-body">
         <div className='chat-container'>
           <BoxChat
             show={isShow}
@@ -546,7 +545,6 @@ export default function Home() {
           />
 
         </div>
-      </div>
 
       <Footer style={{ paddingTop: "20px" }} />
     </>

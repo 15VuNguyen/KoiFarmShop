@@ -4,7 +4,7 @@ import { useChat } from '../../Context/ChatContext'
 import { useSocketContext } from '../../Context/SocketContext'
 import { useMessage } from '../../Context/MessageContext'
 import { getMessages, sendMessages } from '../../services/messageService'
-import { fetchLoginUserData } from '../../services/userService'
+// import { fetchLoginUserData } from '../../services/userService'
 
 
 
@@ -21,20 +21,9 @@ const BoxChat = (props) => {
 
   console.log("message list: ", messageList)
   console.log("receiver: ", receiver)
+  console.log("selectedChat: ", selectedChat)
   console.log("user: ", user)
-
-  // useEffect(async()=>{
-  //   const storedUser = JSON.parse(localStorage.getItem("userInfo"))
-  //   if(storedUser){
-  //     console.log("current user: ", storedUser) 
-  //     setUser(storedUser)
-  //   }else{
-  //     const {data} = await fetchLoginUserData()
-  //     console.log("currentUser: ", data.result)
-  //     localStorage.setItem('userInfo', JSON.stringify(data.result))
-  //     setUser(data.result)
-  //   }
-  // },[])
+  console.log("socket: ", socket)
 
   const sendMessage = async () => {
     try {
@@ -42,6 +31,7 @@ const BoxChat = (props) => {
       setMessage("")
       const { data } = await sendMessages(receiver._id, message)
       if (data) {
+        console.log("send message: ", data.result)
         setLoading(false)
         setMessageList([...messageList, data.result])
       }
@@ -58,6 +48,7 @@ const BoxChat = (props) => {
       const { data } = await getMessages(receiver._id)
       if (data) {
         setLoading(false)
+        console.log("get message: ", data.result)
         setMessageList(data.result)
         setIsFirstLoad(false)
       }
@@ -72,13 +63,10 @@ const BoxChat = (props) => {
   }
 
   useEffect(() => {
-    const loadMessages = async () => {
-        if (selectedChat?._id && receiver && receiver._id) {
-            await fetchMessages();
-        }
-    };
-    loadMessages();
-}, [selectedChat?._id, receiver]);
+    if (selectedChat?._id && receiver._id) {
+      fetchMessages();
+    }
+  }, [selectedChat?._id, receiver._id]);
 
 
   useEffect(() => {
@@ -89,7 +77,7 @@ const BoxChat = (props) => {
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
-      console.log("new message.chatID: ", newMessage.chatId)
+      console.log("new message.chatID: ", newMessage.ChatId)
       console.log("selected chat ID: ", selectedChat?._id)
       if (newMessage.ChatId === selectedChat?._id) {
         setMessageList([...messageList, newMessage])
@@ -107,8 +95,8 @@ const BoxChat = (props) => {
       <div className='header'>
         <div className='userInfo'>
           {receiver && receiver.Image
-          ?<img className='avatar' src={receiver.Image} alt='avatar'/>
-          :<i className="avatar fa-solid fa-user"></i>
+            ? <img className='avatar' src={receiver.Image} alt='avatar' />
+            : <i className="avatar fa-solid fa-user"></i>
           }
           {receiver && receiver.roleid == 3
             ? <p>Support Service</p>
@@ -144,7 +132,6 @@ const BoxChat = (props) => {
               ? <i className="avatar fa-solid fa-user"></i>
               : <></>}
             <div className={user?._id === m.SenderId ? 'me' : 'you'}>
-
               <p onClick={() => toggleMessageTime(m._id)}>{m.Content}</p>
               <div className={`date ${showMessageTime === m._id ? 'showTime' : ''}`}>
                 {new Date(m?.createdAt).toLocaleDateString('en-IN', { hour: 'numeric', minute: 'numeric' })}
