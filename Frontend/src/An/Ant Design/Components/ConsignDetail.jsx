@@ -250,7 +250,7 @@ export default function ConsignDetail({ consignID }) {
       content: `Are you sure you want to save changes to ${field}?`,
       onOk: async () => {
         try {
-          let updatedFields
+          let updatedFields 
           if (field === 'State' && editValue === 4 && !validFieldForUpdate.Price) {
             message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
             return;
@@ -356,6 +356,9 @@ export default function ConsignDetail({ consignID }) {
                     onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                     disabledDate={(current) => current && current < dayjs().startOf('day')}
                     format={'YYYY-MM-DD'}
+                    {
+                      ...consign.State === 4 ? { disabled: true } : {}
+                    }
                   />
                 </Form.Item>
               ) :
