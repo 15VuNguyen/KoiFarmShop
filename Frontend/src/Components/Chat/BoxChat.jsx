@@ -100,7 +100,7 @@ const BoxChat = (props) => {
           }
           {receiver && receiver.roleid == 3
             ? <p>Support Service</p>
-            : <p>{!receiver ? "Guest" : receiver.name}</p>}
+            : <p className='name'>{!receiver ? "Guest" : receiver.name}</p>}
         </div>
         <div className='feature'>
           <i

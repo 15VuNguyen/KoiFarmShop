@@ -7,7 +7,7 @@ import { fetchUser } from '../../services/userService'
 import "./ManagerChat.css"
 
 const ChatList = (props) => {
-    const { show, setIsShowStaffChat, setCustomer } = props
+    const { show, setIsShowStaffChat, setCustomer, customer } = props
     const [listChat, setListChat] = useState([])
     const { messageList, setMessageList } = useMessage()
     const { setSelectedChat } = useChat()
@@ -16,6 +16,7 @@ const ChatList = (props) => {
     const fetchExistedChats = async () => {
         const { data } = await getExistedChats()
         if (data) {
+            console.log("list chat: ", data.result)
             setListChat(data.result)
         }
     }
@@ -29,7 +30,7 @@ const ChatList = (props) => {
 
     useEffect(() => {
         fetchExistedChats()
-    }, [messageList])
+    }, [messageList], customer)
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
@@ -74,7 +75,7 @@ const ChatList = (props) => {
     }, [socket, listChat])
 
     return (
-        <div 
+        <div
             className={`list-chat ${show ? "" : "hide"}`}
         >
             {listChat && listChat.length > 0 ?
@@ -84,10 +85,13 @@ const ChatList = (props) => {
                         className='mchat-container'
                         onClick={() => showBoxChat(c)}
                     >
-                        <i className="avatar fa-solid fa-user"></i>
+                        {((c.OtherUser?.picture && c.OtherUser?.picture.trim()) || (c.OtherUser?.Image && c.OtherUser?.Image.trim()))
+                            ? <img className='avatar' src={c.OtherUser?.picture ? c.OtherUser.picture : c.OtherUser.Image} alt='avatar' />
+                            : <i className="avatar fa-solid fa-user"></i>
+                        }
+
                         <div className='content'>
-                            <p className='name'>{(c.OtherUser.name).slice(0,10)}</p>
-                            <p className='name'>{console.log("c: ", c)}</p>
+                            <p className='name'>{c.OtherUser.name}</p>
                             <p className='lastMess'>{c.Messages.length > 0
                                 ? c.Messages[c.Messages.length - 1].Content
                                 : "No messages yet"}</p>

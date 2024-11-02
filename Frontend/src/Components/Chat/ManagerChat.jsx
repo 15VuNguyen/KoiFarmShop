@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-// import BoxChat from './BoxChat'
 import ChatList from './ChatList'
 import "./ManagerChat.css"
 import BoxChat from './BoxChat'
@@ -42,6 +41,7 @@ const ManagerChat = () => {
                         show={showListChat}
                         setIsShowStaffChat={setIsShowStaffChat}
                         setCustomer={setCustomer}
+                        customer={customer}
                     />
                 </div>
             </div>
