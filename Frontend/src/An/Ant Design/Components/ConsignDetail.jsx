@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 dayjs.extend(utc);
 import moment from 'moment';
 import FormItem from 'antd/es/form/FormItem';
+import { func } from 'prop-types';
 
 export default function ConsignDetail({ consignID }) {
   const [consignData, setConsignData] = React.useState({});
@@ -243,7 +244,16 @@ export default function ConsignDetail({ consignID }) {
     };
     return KoiStatusMap[Status];
   }
+  function isAtLeast30Days(date1, date2) {
+    return dayjs(date1).utc().diff(dayjs(date2), 'days') >= 30;
+  }
+  
+  function add30Days(date) {
+    const targetDate = dayjs(date).add(30, 'days');
+    return targetDate.format('YYYY-MM-DD');
+  }
 
+  
   const saveEdit = (field) => {
     Modal.confirm({
       title: 'Are you sure?',
@@ -255,14 +265,19 @@ export default function ConsignDetail({ consignID }) {
             message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
             return;
           }
-          if (field === 'Status') {
+          if (field === 'ShippedDate' && !isAtLeast30Days(editValue, consign.ReceiptDate)) {
+            const newReceiptDate = add30Days(editValue);
+            console.log(newReceiptDate);
+            updatedFields = { ...validFieldForUpdate, [field]: editValue, ReceiptDate: newReceiptDate };
+          } 
+          else if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
           else {
             updatedFields = { ...validFieldForUpdate, [field]: editValue };
           }
           // const updatedFields = { ...validFieldForUpdate, [field]: editValue };
-          setValidFieldForUpdate(updatedFields);
+          await setValidFieldForUpdate(updatedFields);
           console.log(updatedFields)
           setEditField(null);
           const reponse = await axiosInstance.put(`manager/manage-ki-gui/${consignID}`, updatedFields);
@@ -344,7 +359,7 @@ export default function ConsignDetail({ consignID }) {
                 <Form.Item label={
                   <Space>
                     <span>Shipped Date</span>
-                    <Tooltip title="Ngày ship phải ở hiện tại hoặc tương lai">
+                    <Tooltip title="Ngày ship phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng"> 
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </Space>
@@ -354,7 +369,7 @@ export default function ConsignDetail({ consignID }) {
                     // onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                     value={editValue}
                     onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                    disabledDate={(current) => current && current < dayjs().startOf('day')}
+                    disabledDate={(current) => current && current > dayjs(consign.ReceiptDate).startOf('day')}
                     format={'YYYY-MM-DD'}
                     {
                       ...consign.State === 4 ? { disabled: true } : {}
@@ -422,7 +437,7 @@ export default function ConsignDetail({ consignID }) {
           }
           {/* <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} /> */}
           {
-            (field === 'ShippedDate' && consign.State == 4)? (
+            (consign.State == 5)? (
               <></>
             ) : (
               <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} />
@@ -480,7 +495,7 @@ export default function ConsignDetail({ consignID }) {
           {renderEditableItem("Breed", koi.Breed, "Breed", 'selectBreed')}
           {renderEditableItem("Certificate ID", koi.CertificateID, "CertificateID")}
           {renderEditableItem("Price", formatCurrency(koi.Price), "Price", "selectPrice")}
-          {renderEditableItem("đơn vị kg/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
+          {renderEditableItem("đơn vị g/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
           {renderEditableItem("Filtering Ratio (%)", koi.FilteringRatio, "FilteringRatio", 'selectFilter')}
           {renderEditableItem("Status", koi.Status, "Status", "SelectStatus")}
           {renderEditableItem("Category ID", koi.CategoryID, "CategoryID", 'selectCategory')}
