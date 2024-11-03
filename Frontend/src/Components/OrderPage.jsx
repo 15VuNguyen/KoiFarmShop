@@ -36,10 +36,7 @@ const OrderPage = () => {
   const [quantityInCart, setQuantityInCart] = useState(0); // Track quantity in cart
   const [cardData, setCardData] = useState([]);
   const [error, setError] = useState(null);
-  const [idKohaku, setIdKohaku] = useState(null);
-  const [filteredCards, setFilteredCards] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
-  const [id, setID] = useState();
   const [categoryName, setCategoryName] = useState();
   const [comboQuantity, setComboQuantity] = useState(1); // Track combo quantity
   console.log(selectedItem);
@@ -456,11 +453,25 @@ const OrderPage = () => {
                               width: "48%",
                             }}
                             value={selectedQuantity}
-                            onChange={(e) =>
-                              setSelectedQuantity(e.target.value)
-                            }
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Kiểm tra xem giá trị có phải là số hợp lệ không
+                              if (
+                                !isNaN(value) &&
+                                value >= 1 &&
+                                value <= maxQuantity
+                              ) {
+                                setSelectedQuantity(value);
+                              }
+                            }}
                             min="1"
                             max={maxQuantity}
+                            onKeyPress={(e) => {
+                              // Ngăn nhập ký tự "e"
+                              if (e.key === "e" || e.key === "E") {
+                                e.preventDefault();
+                              }
+                            }}
                           />
                         </label>
                       )}
@@ -475,12 +486,25 @@ const OrderPage = () => {
                               width: "48%",
                             }}
                             value={selectedQuantity}
-                            onChange={(e) =>
-                              setSelectedQuantity(e.target.value)
-                            }
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Kiểm tra xem giá trị có phải là số hợp lệ không
+                              if (
+                                !isNaN(value) &&
+                                value >= 1 &&
+                                value <= maxQuantity
+                              ) {
+                                setSelectedQuantity(value);
+                              }
+                            }}
                             min="1"
                             max={maxQuantity}
-                            disabled
+                            onKeyPress={(e) => {
+                              // Ngăn nhập ký tự "e"
+                              if (e.key === "e" || e.key === "E") {
+                                e.preventDefault();
+                              }
+                            }}
                           />
                         </label>
                       )}

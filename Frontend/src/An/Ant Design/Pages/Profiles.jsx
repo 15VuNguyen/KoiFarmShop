@@ -8,7 +8,6 @@ import ProfileTable from '../Components/Table/ProfileTable';
 import { SearchOutlined } from '@ant-design/icons';
 import ProfileModal from '../Components/Modal/ProfileModal';
 import axiosInstance from '../../Utils/axiosJS';
-import ManagerChat from '../../../Components/Chat/ManagerChat.jsx';
 
 export default function Profiles() {
   const { Header, Content } = Layout;
@@ -50,9 +49,7 @@ export default function Profiles() {
       case '2':
         return profiles.filter(profile => profile.verify); // Verified profiles
       case '3':
-        return profiles.filter(profile => profile.roleid == '2'); // Staff profiles
-      case '4':
-        return profiles.filter(profile => profile.roleid == '3'); // Manager profiles
+        return profiles.filter(profile => profile.roleid == '3'); // Staff profiles
       default:
         return profiles;
     }
@@ -68,7 +65,7 @@ export default function Profiles() {
       label: (
         <>
           Toàn Bộ Hồ Sơ
-          <Badge count={profiles.length} style={{ marginLeft: 8 }} color='green'  />
+          <Badge count={profiles.length} showZero style={{ marginLeft: 8 }} color='green'  />
         </>
       ),
     },
@@ -77,21 +74,12 @@ export default function Profiles() {
       label: (
         <>
           Người Dùng Đã Xác Minh
-          <Badge count={totalVerified()} style={{ marginLeft: 8 }} color='green' />
+          <Badge count={totalVerified()} showZero style={{ marginLeft: 8 }} color='green' />
         </>
       ),
     },
     {
       key: '3',
-      label: (
-        <>
-          Nhân Viên
-          <Badge count={0} style={{ marginLeft: 8 }} color='green' />
-        </>
-      ),
-    },
-    {
-      key: '4',
       label: (
         <>
           Quản Lý
@@ -128,7 +116,7 @@ export default function Profiles() {
     }
     else if (actionType === 'close') {
       setIsModalVisible(false);
-      setIsCheckingSelf(false);
+
 
     }
   }
@@ -165,7 +153,7 @@ export default function Profiles() {
           </Col>
 
 
-          <Col span={6}>
+          {/* <Col span={6}>
             <Card hoverable>
               <Statistic
                 title={<Typography.Title level={4}>Total Staff</Typography.Title>}
@@ -173,7 +161,7 @@ export default function Profiles() {
                 precision={0}
               />
             </Card>
-          </Col>
+          </Col> */}
 
 
           <Col span={6}>
@@ -226,4 +214,4 @@ export default function Profiles() {
       </Content>
     </Layout>
   )
-}
+} 
