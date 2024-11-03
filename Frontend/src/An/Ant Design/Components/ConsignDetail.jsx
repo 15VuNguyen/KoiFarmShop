@@ -495,7 +495,7 @@ export default function ConsignDetail({ consignID }) {
           {renderEditableItem("Breed", koi.Breed, "Breed", 'selectBreed')}
           {renderEditableItem("Certificate ID", koi.CertificateID, "CertificateID")}
           {renderEditableItem("Price", formatCurrency(koi.Price), "Price", "selectPrice")}
-          {renderEditableItem("đơn vị kg/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
+          {renderEditableItem("đơn vị g/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
           {renderEditableItem("Filtering Ratio (%)", koi.FilteringRatio, "FilteringRatio", 'selectFilter')}
           {renderEditableItem("Status", koi.Status, "Status", "SelectStatus")}
           {renderEditableItem("Category ID", koi.CategoryID, "CategoryID", 'selectCategory')}
