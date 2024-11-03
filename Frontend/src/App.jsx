@@ -173,7 +173,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/donkygui",
-    element: <DonKyGuiPage />, // Home component
+    element: <DonKyGuiPage />, // Home gcomponent
   },
   {
     path: "/nguongocIKoi",

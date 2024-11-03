@@ -189,6 +189,46 @@ export default function Chitietconsignpage() {
   const handleSubmit = async (values) => {
     console.log("Submitting form with values:", values); // Log the form values being submitted
     try {
+      const formatDateToISO = (dateString) => {
+        const [day, month, year] = dateString.split("/");
+        return `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+      };
+
+      const shippedDateObj = formData.ShippedDate
+        ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
+        : null;
+
+      const receiptDateObj = formData.ReceiptDate
+        ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
+        : null;
+
+      const currentDate = new Date();
+      currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
+
+      // Kiểm tra ngày tháng trước khi gửi
+      if (
+        shippedDateObj &&
+        (shippedDateObj < currentDate ||
+          (receiptDateObj && shippedDateObj > receiptDateObj))
+      ) {
+        toast.error("Ngày gửi không được ở sau ngày nhận!");
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
+      if (
+        shippedDateObj &&
+        (shippedDateObj < currentDate ||
+          (receiptDateObj &&
+            (shippedDateObj > receiptDateObj ||
+              receiptDateObj <
+                new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000)))) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
+      ) {
+        toast.error(
+          "Ngày gửi không được ở quá khứ, trước ngày nhận, hoặc ngày nhận phải cách ngày gửi ít nhất 1 tháng!"
+        );
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
       const originalImageFile = koiData.Image; // Giá trị ban đầu
       console.log(originalImageFile);
       const originalVideoFile = koiData.Video; // Giá trị ban đầu
@@ -241,33 +281,7 @@ export default function Chitietconsignpage() {
         await uploadBytes(videoRef, videoFile.originFileObj);
         videoUrl = await getDownloadURL(videoRef); // Nhận URL mới
       }
-      const formatDateToISO = (dateString) => {
-        const [day, month, year] = dateString.split("/");
-        return `${year}-${String(month).padStart(2, "0")}-${String(
-          day
-        ).padStart(2, "0")}`;
-      };
 
-      const shippedDateObj = formData.ShippedDate
-        ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
-        : null;
-
-      const receiptDateObj = formData.ReceiptDate
-        ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
-        : null;
-
-      const currentDate = new Date();
-      currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
-
-      // Kiểm tra ngày tháng trước khi gửi
-      if (
-        shippedDateObj &&
-        (shippedDateObj < currentDate ||
-          (receiptDateObj && shippedDateObj > receiptDateObj))
-      ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
-        return; // Dừng lại nếu ngày không hợp lệ
-      }
       // Cập nhật formData với URL
       const updatedFormData = {
         ...values,
@@ -284,7 +298,6 @@ export default function Chitietconsignpage() {
       const response = await updateConsign(updatedFormData);
       console.log(response);
       console.log("Update response from updateConsign:", response.data); // Log response from API
-      toast.success("Cập nhật thành công.");
     } catch (error) {
       console.error("Error updating consign:", error); // Log the error object
       toast.error("Cập nhật thất bại.");
@@ -304,7 +317,7 @@ export default function Chitietconsignpage() {
         }
       );
       console.log("Update response:", response.data);
-      alert(response.data.message);
+      toast.success(response.data.message);
       return response;
     } catch (error) {
       console.error("Error during upload or API update:", error);
