@@ -20,25 +20,12 @@ import Platinum from "./ThongTinCaKoi/Platinum";
 import Showa from "./ThongTinCaKoi/Showa";
 import Shusui from "./ThongTinCaKoi/Shusui";
 import Tancho from "./ThongTinCaKoi/Tancho";
-import {
-  Button,
-  Typography,
-  Spin,
-  Alert,
-  Layout,
-  Divider,
-  Row,
-  Col,
-  Breadcrumb,
-  Tooltip,
-  Card,
-} from "antd";
+import { Button, Typography, Spin, Layout, Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { Container } from "react-bootstrap";
 const { Title, Text, Paragraph } = Typography;
 
 const OrderPage = () => {
-  const { setOrderId, addKoiToCart } = useOrder();
   const location = useLocation();
   const { selectedItem } = location.state || {};
   const [loading, setLoading] = useState(false);
@@ -72,7 +59,10 @@ const OrderPage = () => {
   // useEffect(() => {
   //   window.scrollTo(0, 0);
   // }, []);
-
+  useEffect(() => {
+    // Cuộn lên đầu trang khi component được mount
+    window.scrollTo(0, 0);
+  }, []); // Chỉ chạy khi component được mount
   useEffect(() => {
     const sendOrderDetails = async () => {
       try {

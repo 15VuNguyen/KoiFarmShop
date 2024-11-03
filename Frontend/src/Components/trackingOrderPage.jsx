@@ -10,8 +10,9 @@ import "./Css/trackingorderpayStyle.css";
 import Footer from "./Footer";
 import axiosInstance from "../An/Utils/axiosJS";
 import { Spin } from "antd";
-import axios from "axios";
+import { Typography } from "antd";
 
+const { Title } = Typography;
 export default function TrackingOrderPage() {
   const location = useLocation();
   const message = location.state?.message; // Safely access the message
@@ -87,7 +88,17 @@ export default function TrackingOrderPage() {
   }
   return (
     <Container>
-      <h1>Đơn mua hàng thành công của bạn</h1>
+      <Title
+        level={4}
+        style={{
+          textAlign: "left",
+          marginBottom: "55px",
+          marginLeft: "15px",
+          paddingTop: "36px",
+        }}
+      >
+        Đơn mua hang thành công
+      </Title>
       {/* Conditional rendering for orders */}
       {orders.length === 0 ? (
         <Empty

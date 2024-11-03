@@ -303,6 +303,7 @@ export default function Navbar() {
                 variant="success"
                 className="custom-dropdown-toggle"
                 style={{ borderRadius: "32px" }}
+                href="/profile"
               >
                 <CgProfile />
               </Dropdown.Toggle>

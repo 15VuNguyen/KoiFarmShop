@@ -386,7 +386,7 @@ export default function Home() {
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 {koidata.slice(index * 6, index * 6 + 6).map((koi, idx) => (
                   <div className="image-item" key={idx}>
-                    <Link to={`/koikygui`}>
+                    <Link to={`/order`} state={{ selectedItem: koi }}>
                       <img
                         src={koi.Image}
                         alt={koi.KoiName}
