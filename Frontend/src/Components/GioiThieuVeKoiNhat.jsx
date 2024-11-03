@@ -3,6 +3,11 @@ import { Typography } from "antd";
 const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
 import img1 from "../../src/assets/GioiThieuKoiViet/1.jpg";
+import img2 from "../../src/assets/GioiThieuKoiViet/2.jpg";
+import img3 from "../../src/assets/GioiThieuKoiViet/3.jpg";
+import img4 from "../../src/assets/GioiThieuKoiViet/4.jpg";
+import img5 from "../../src/assets/GioiThieuKoiViet/5.jpg";
+import img6 from "../../src/assets/GioiThieuKoiViet/6.jpg";
 export default function GioiThieuVeKoiNhat() {
   const data = [
     {
@@ -81,7 +86,7 @@ export default function GioiThieuVeKoiNhat() {
               chọn kỹ lưỡng và được chăm sóc trong điều kiện tốt nhất.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuKoiViet/2.jpg" alt="Koi Nhat 2" />
+              <img src={img2} alt="Koi Nhat 2" />
             </div>
           </div>
           <div>
@@ -105,10 +110,7 @@ export default function GioiThieuVeKoiNhat() {
                       rõ ràng như cá Koi Nhật.
                     </Paragraph>
                     <div>
-                      <img
-                        src="src/assets/GioiThieuKoiViet/3.jpg"
-                        alt="Koi Nhat 3"
-                      />
+                      <img src={img3} alt="Koi Nhat 3" />
                     </div>
                   </li>
                 </ul>
@@ -136,10 +138,7 @@ export default function GioiThieuVeKoiNhat() {
                   </tbody>
                 </Table>
                 <div>
-                  <img
-                    src="src/assets/GioiThieuKoiViet/4.jpg"
-                    alt="Koi Nhat 4"
-                  />
+                  <img src={img4} alt="Koi Nhat 4" />
                 </div>
               </li>
               <li>
@@ -152,10 +151,7 @@ export default function GioiThieuVeKoiNhat() {
                   lưỡng từ các trại cá nổi tiếng.
                 </Paragraph>
                 <div>
-                  <img
-                    src="src/assets/GioiThieuKoiViet/5.jpg"
-                    alt="Koi Nhat 5"
-                  />
+                  <img src={img5} alt="Koi Nhat 5" />
                 </div>
               </li>
             </ul>
@@ -171,7 +167,7 @@ export default function GioiThieuVeKoiNhat() {
               giá rẻ hơn và dễ chăm sóc hơn.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuKoiViet/6.jpg" alt="Koi Nhat 6" />
+              <img src={img6} alt="Koi Nhat 6" />
             </div>
           </div>
         </div>

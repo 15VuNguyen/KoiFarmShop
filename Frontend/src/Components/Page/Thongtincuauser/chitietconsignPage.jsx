@@ -187,60 +187,8 @@ export default function Chitietconsignpage() {
     console.log("Consign Data:", consignData);
   }, [consignData]);
   const handleSubmit = async (values) => {
-    console.log("Submitting form with values:", values); // Log the form values being submitted
+    setLoading(true);
     try {
-      const originalImageFile = koiData.Image; // Giá trị ban đầu
-      console.log(originalImageFile);
-      const originalVideoFile = koiData.Video; // Giá trị ban đầu
-      console.log(originalVideoFile);
-      // Kiểm tra và lấy tệp hình ảnh
-      let imageFile =
-        formData.Image && formData.Image.length > 0 ? formData.Image[0] : null;
-
-      if (!imageFile) {
-        console.warn("No new image file selected. Using original.");
-        imageFile = originalImageFile; // Khôi phục giá trị ban đầu
-      }
-
-      if (!imageFile) {
-        console.error("Image file is still undefined.");
-        toast.error("Vui lòng chọn một hình ảnh.");
-        return;
-      }
-
-      // Kiểm tra và lấy tệp video
-      let videoFile =
-        formData.Video && formData.Video.length > 0 ? formData.Video[0] : null;
-
-      if (!videoFile) {
-        console.warn("No new video file selected. Using original.");
-        videoFile = originalVideoFile; // Khôi phục giá trị ban đầu
-      }
-
-      if (!videoFile) {
-        console.error("Video file is still undefined.");
-        toast.error("Vui lòng chọn một video.");
-        return;
-      }
-
-      // Tạo tham chiếu đến vị trí lưu trữ
-      const imageRef = ref(storage, `koiImages/${imageFile.name}`);
-      const videoRef = ref(storage, `koiVideos/${videoFile.name}`);
-
-      let imageUrl = originalImageFile ? originalImageFile.url : null; // Giữ URL cũ nếu không có tệp mới
-      let videoUrl = originalVideoFile ? originalVideoFile.url : null; // Giữ URL cũ nếu không có tệp mới
-
-      // Tải lên ảnh nếu có tệp mới
-      if (formData.Image && formData.Image.length > 0) {
-        await uploadBytes(imageRef, imageFile.originFileObj);
-        imageUrl = await getDownloadURL(imageRef); // Nhận URL mới
-      }
-
-      // Tải lên video nếu có tệp mới
-      if (formData.Video && formData.Video.length > 0) {
-        await uploadBytes(videoRef, videoFile.originFileObj);
-        videoUrl = await getDownloadURL(videoRef); // Nhận URL mới
-      }
       const formatDateToISO = (dateString) => {
         const [day, month, year] = dateString.split("/");
         return `${year}-${String(month).padStart(2, "0")}-${String(
@@ -251,13 +199,16 @@ export default function Chitietconsignpage() {
       const shippedDateObj = formData.ShippedDate
         ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
         : null;
-
       const receiptDateObj = formData.ReceiptDate
         ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
         : null;
-
       const currentDate = new Date();
       currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
+
+      // Log the dates for debugging
+      console.log("Shipped Date:", shippedDateObj);
+      console.log("Receipt Date:", receiptDateObj);
+      console.log("Current Date:", currentDate);
 
       // Kiểm tra ngày tháng trước khi gửi
       if (
@@ -265,29 +216,103 @@ export default function Chitietconsignpage() {
         (shippedDateObj < currentDate ||
           (receiptDateObj && shippedDateObj > receiptDateObj))
       ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
+        toast.error("Ngày gửi không được ở quá khứ hoặc trước ngày nhận!");
+        setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
-      // Cập nhật formData với URL
-      const updatedFormData = {
+
+      if (
+        shippedDateObj &&
+        receiptDateObj &&
+        receiptDateObj <
+          new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
+      ) {
+        toast.error("Ngày nhận phải cách ngày gửi ít nhất 1 tháng!");
+        setLoading(false);
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
+
+      // Kiểm tra và lấy tệp hình ảnh
+      let imageFile =
+        formData.Image && formData.Image.length > 0 ? formData.Image[0] : null;
+
+      if (!imageFile) {
+        console.warn("No new image file selected. Using original.");
+        imageFile = koiData.Image; // Khôi phục giá trị ban đầu
+      }
+
+      if (!imageFile) {
+        console.error("Image file is still undefined.");
+        toast.error("Vui lòng chọn một hình ảnh.");
+        setLoading(false);
+        return; // Dừng lại nếu không có tệp hình ảnh
+      }
+
+      // Kiểm tra và lấy tệp video
+      let videoFile =
+        formData.Video && formData.Video.length > 0 ? formData.Video[0] : null;
+
+      if (!videoFile) {
+        console.warn("No new video file selected. Using original.");
+        videoFile = koiData.Video; // Khôi phục giá trị ban đầu
+      }
+
+      if (!videoFile) {
+        console.error("Video file is still undefined.");
+        toast.error("Vui lòng chọn một video.");
+        setLoading(false);
+        return; // Dừng lại nếu không có tệp video
+      }
+
+      // Tạo tham chiếu đến vị trí lưu trữ
+      const imageRef = ref(storage, `koiImages/${imageFile.name}`);
+      const videoRef = ref(storage, `koiVideos/${videoFile.name}`);
+
+      let imageUrl = koiData.Image ? koiData.Image.url : null; // Giữ URL cũ nếu không có tệp mới
+      let videoUrl = koiData.Video ? koiData.Video.url : null; // Giữ URL cũ nếu không có tệp mới
+
+      // Tải lên ảnh nếu có tệp mới
+      if (formData.Image && formData.Image.length > 0) {
+        await uploadBytes(imageRef, imageFile.originFileObj);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+
+      // Tải lên video nếu có tệp mới
+      if (formData.Video && formData.Video.length > 0) {
+        await uploadBytes(videoRef, videoFile.originFileObj);
+        videoUrl = await getDownloadURL(videoRef);
+      }
+
+      // Chuẩn bị dữ liệu để gửi
+      const dataToSend = {
         ...values,
-        Image: imageUrl, // Chọn URL mới hoặc giữ URL cũ
-        Video: videoUrl, // Chọn URL mới hoặc giữ URL cũ
-        Description: formData.Description.toString(),
         ShippedDate: shippedDateObj ? shippedDateObj.toISOString() : null,
         ReceiptDate: receiptDateObj ? receiptDateObj.toISOString() : null,
+        Image: imageUrl,
+        Video: videoUrl,
       };
 
-      console.log("Updated form data:", updatedFormData);
-      console.log(updatedFormData);
-      // Call the API with the entire form values
-      const response = await updateConsign(updatedFormData);
-      console.log(response);
-      console.log("Update response from updateConsign:", response.data); // Log response from API
-      toast.success("Cập nhật thành công.");
+      // Gọi API để cập nhật dữ liệu
+      const response = await axiosInstance.patch(
+        `/users/tat-ca-don-ki-gui/${consign._id}`,
+        dataToSend,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Cập nhật thành công!");
+      } else {
+        toast.error("Cập nhật thất bại!");
+      }
     } catch (error) {
-      console.error("Error updating consign:", error); // Log the error object
-      toast.error("Cập nhật thất bại.");
+      console.error("Error updating consign:", error);
+      toast.error("Cập nhật thất bại!");
+    } finally {
+      setLoading(false);
     }
   };
   const updateConsign = async (formData) => {
@@ -304,7 +329,7 @@ export default function Chitietconsignpage() {
         }
       );
       console.log("Update response:", response.data);
-      alert(response.data.message);
+      toast.success(response.data.message);
       return response;
     } catch (error) {
       console.error("Error during upload or API update:", error);
@@ -487,6 +512,9 @@ export default function Chitietconsignpage() {
                           value={initialValues.ShippedDate}
                           onChange={(date) =>
                             handleDateChange("ShippedDate", date)
+                          }
+                          disabledDate={(current) =>
+                            current && current < moment().startOf("day")
                           }
                           format="DD/MM/YYYY" // Thay đổi format ở đây
                         />
