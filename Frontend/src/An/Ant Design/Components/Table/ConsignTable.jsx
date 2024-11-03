@@ -1,19 +1,19 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Menu, Dropdown } from "antd";
-import { CopyOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Menu, Dropdown, Space } from "antd";
+import { CopyOutlined, CloseCircleOutlined,DownOutlined  } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
 
 export default function ConsignTable({ data, handleActionClick, Search }) {
     const [activeFilters, setActiveFilters] = React.useState([]);
-    const [selectedColumns, setSelectedColumns] = React.useState({ 'UserID': true, 'KoiID': true,'Description' : true });
+    const [selectedColumns, setSelectedColumns] = React.useState({ 'UserID': true, 'KoiID': true, 'Description': true });
     const [showColumnSelector, setShowColumnSelector] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');
-
+    const [visibleColumns, setVisibleColumns] = React.useState([ '_id', 'ShippedDate', 'ReceiptDate', 'Description', 'State', 'Method', 'PositionCare', 'Commission', 'TotalPrice', 'action']);
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         message.success("ID copied to clipboard!");
     };
-    React.useEffect(() => { 
+    React.useEffect(() => {
     }, [activeFilters]);
     const handleTableChange = (pagination, filters, sorter) => {
         const filterNames = [];
@@ -27,7 +27,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
         });
         setActiveFilters(filterNames);
     };
-    
+
     const removeFilter = (filterToRemove) => {
         const updatedFilters = activeFilters.filter(filter =>
             !(filter.column === filterToRemove.column && JSON.stringify(filter.value) === JSON.stringify(filterToRemove.value))
@@ -55,19 +55,19 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
 
     const filteredData = searchTerm ? data.filter(searchFunction) : data;
 
-   
+
     const FilterTag = ({ filter, onRemove }) => (
         <Tag closable onClose={() => onRemove(filter)} closeIcon={<CloseCircleOutlined />}>
             {filter.column}: {filter.value.join(', ')}
         </Tag>
     );
-    
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
-    }).format(value);
-  };
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(value);
+    };
     const columns = [
         {
             title: 'ID',
@@ -200,35 +200,59 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             dataIndex: 'TotalPrice',
             key: 'TotalPrice',
             sorter: (a, b) => a.TotalPrice - b.TotalPrice,
-            render: text => text ? `${formatCurrency(text)}` : <Tag color="red">Not Provided</Tag>, 
+            render: text => text ? `${formatCurrency(text)}` : <Tag color="red">Not Provided</Tag>,
         },
         {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
                 <div>
-                    <Button onClick={() => handleActionClick('View Consign Details',record._id)} type="primary">View Detail</Button>
+                    <Button onClick={() => handleActionClick('View Consign Details', record._id)} type="primary">View Detail</Button>
                 </div>
             ),
         }
-    ].map(col => ({ ...col, visible: !selectedColumns[col.key] }));
-
+    ].map(col => ({...col, visible: visibleColumns.includes(col.key)}));
+    const handleColumnVisibility = (key, visible) => {
+        setVisibleColumns(prev =>
+          visible ? [...prev, key] : prev.filter(colKey => colKey !== key)
+        );
+      };
     const filteredColumns = columns.filter(col => col.visible);
-    
+    const columnSelectionMenu = (
+        <Menu>
+          {columns.map(col => (
+            <Menu.Item key={col.key}>
+              <Checkbox
+                
+                checked={visibleColumns.includes(col.key)}
+                onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
+
+              >
+                {col.title}
+              </Checkbox>
+            </Menu.Item>
+          ))}
+        </Menu>
+      );
     return (
         <div>
-            <p>
+            <Space>
                 <Input
                     placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ width: 200, marginBottom: 16 }}
                 />
-                <Button onClick={() => setShowColumnSelector(true)} >Select Columns</Button>
-            </p>
-            {activeFilters.map((filter, index) => (
+
+                <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
+                    <Button style={{ marginBottom: 16 }}>
+                        Choose Columns <DownOutlined />
+                    </Button>
+                </Dropdown>
+                {/* <Button onClick={() => setShowColumnSelector(true)} >Select Columns</Button>{activeFilters.map((filter, index) => (
                 <FilterTag key={index} filter={filter} onRemove={removeFilter} />
-            ))}
+                ))} */}
+            </Space>
             <Table
                 columns={filteredColumns}
                 dataSource={filteredData}

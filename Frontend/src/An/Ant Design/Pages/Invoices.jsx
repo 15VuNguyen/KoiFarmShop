@@ -7,7 +7,7 @@ import useFetchInvoices from "../Hooks/useFetchInvoices";
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { sizeValidator, priceValidator, quantityValidator, discountValidator } from '../Utils/Validator';
+import { sizeValidator, priceValidator, discountValidator } from '../Utils/Validator';
 import { func } from 'prop-types';
 import moment from 'moment';
 import dayjs from 'dayjs';
@@ -111,7 +111,7 @@ export default function Invoices() {
       label: (
         <>
           Toàn Bộ Hóa Đơn
-          <Badge count={invoices.length} style={{ marginLeft: 8 }} color='green' />
+          <Badge count={invoices.length} style={{ marginLeft: 8 }} showZero color='green' />
         </>
       ),
     },
@@ -120,7 +120,7 @@ export default function Invoices() {
       label: (
         <>
           Hóa Đơn Cho Đơn Hàng Đã Nhận
-          <Badge count={invoices.filter(invoice => invoice.Status === 1).length} style={{ marginLeft: 8 }} color='green' />
+          <Badge count={invoices.filter(invoice => invoice.Status === 1).length} showZero style={{ marginLeft: 8 }} color='green' />
         </>
       ),
     }, {
@@ -128,7 +128,7 @@ export default function Invoices() {
       label: (
         <>
           Hóa Đơn Cho Đơn Hàng Đã Bán Hết
-          <Badge count={invoices.filter(invoice => invoice.Status === 2).length} style={{ marginLeft: 8 }} color='green' />
+          <Badge count={invoices.filter(invoice => invoice.Status === 2).length} showZero style={{ marginLeft: 8 }} color='green' />
         </>
       ),
     },
@@ -388,7 +388,7 @@ export default function Invoices() {
             <Select placeholder="Chọn giống koi">
               <Select.Option value="F1">F1</Select.Option>
               <Select.Option value="Việt">Việt</Select.Option>
-              <Select.Option value="Nhật">Showa</Select.Option>
+              <Select.Option value="Nhật">Nhật</Select.Option>
             </Select>
           </Form.Item>
 
@@ -411,7 +411,7 @@ export default function Invoices() {
             rules={[
               { required: true, message: 'Vui lòng nhập số lượng!' },
               { type: 'number', min: 1, message: 'Số lượng phải lớn hơn 1!' },
-              { validator: quantityValidator }
+
             ]}
           >
             <InputNumber min={1} placeholder="Nhập số lượng" style={{ width: '100%' }} />
@@ -427,7 +427,7 @@ export default function Invoices() {
               { validator: discountValidator }
             ]}
           >
-            <InputNumber min={0} max={100} placeholder="Nhập giảm giá" style={{ width: '100%' }} suffix={'%'} />
+            <InputNumber min={0} max={99} placeholder="Nhập giảm giá" style={{ width: '100%' }} suffix={'%'} />
           </Form.Item>
 
 

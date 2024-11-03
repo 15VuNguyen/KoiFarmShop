@@ -6,12 +6,14 @@ import { initializeApp } from "firebase/app";
 import { PlusOutlined, LoadingOutlined, UploadOutlined, CheckOutlined, PlusCircleOutlined, EditOutlined, StopOutlined } from '@ant-design/icons'
 import axiosInstance from '../../Utils/axiosJS';
 export default function Kois() {
-    const [imageList, setImageList] = React.useState([]);
+
     const [video, setVideo] = React.useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalKoi, setModalKoi] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [imgList, setImgList] = useState();
+    const [videoList, setVideoList] = useState();
     const firebaseConfig = {
         apiKey: import.meta.env.VITE_API_KEY,
         authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -29,6 +31,14 @@ export default function Kois() {
         setIsCreating(false);
         form.resetFields();
     }
+    React.useEffect(() => {
+        if (imgList) console.log("Updated imgList:", imgList);
+    }, [imgList]);
+    
+    React.useEffect(() => {
+        if (videoList) console.log("Updated videoList:", videoList);
+    }, [videoList]);
+    
     const {
         result,
         filteredCategories,
@@ -50,25 +60,33 @@ export default function Kois() {
             //   setImageList((prev) => [...prev, imgURL]);
             //   const updatedFields = { ...validFieldForUpdate, Image: imgURL };
             console.log(imgURL);
-            const {CategoryID, KoiName,Age,Origin,Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Image} = modalKoi;
-            let updatedKoi = {CategoryID, KoiName,Age,Origin , Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Image }
+            const { CategoryID, KoiName, Age, Origin, Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Image } = modalKoi;
+            let updatedKoi = { CategoryID, KoiName, Age, Origin, Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Image }
             updatedKoi.Image = imgURL;
-            
-            setModalKoi(updatedKoi);
-            try {
-                console.log(modalKoi)
-                const reponse = await axiosInstance.put(`/manager/manage-koi/updateKoi/${modalKoi._id}`, updatedKoi);
-                console.log(reponse)
-                Refreshing();
-                // 
-                // console.log(reponse)
-                // setTrigger(trigger + 1);    
-                 message.success(`${file.name} uploaded successfully`)
-            } catch (error) {
-                console.error('Error uploading image:', error);
-                message.error('Image upload failed');
+            if (isCreating) {
+                form.setFieldsValue({ Image: imgURL });
+                setModalKoi(prev => ({ ...prev, Image: imgURL }));
+                  setImgList(imgURL);
             }
-       ;
+            else {
+                setModalKoi(updatedKoi);
+                
+                try {
+                    console.log(modalKoi)
+                    const reponse = await axiosInstance.put(`/manager/manage-koi/updateKoi/${modalKoi._id}`, updatedKoi);
+                    console.log(reponse)
+                    Refreshing();
+                    // 
+                    // console.log(reponse)
+                    // setTrigger(trigger + 1);    
+                    message.success(`${file.name} uploaded successfully`)
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    message.error('Image upload failed');
+                }
+            }
+
+            ;
         } catch (error) {
             console.error('Error uploading image:', error);
             message.error('Image upload failed');
@@ -78,30 +96,50 @@ export default function Kois() {
     };
     const handleVideoUpload = async ({ file }) => {
         try {
+            setIsLoading(true);
             const videoRef = ref(storage, `videos/${file.name}`);
             await uploadBytes(videoRef, file);
             const videoURL = await getDownloadURL(videoRef);
             setVideo(videoURL);
-            const {CategoryID, KoiName,Age,Origin,Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Video} = modalKoi;
-            let updatedKoi = {CategoryID, KoiName,Age,Origin,Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Video}
+            const { CategoryID, KoiName, Age, Origin, Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Video } = modalKoi;
+            let updatedKoi = { CategoryID, KoiName, Age, Origin, Gender, Size, Breed, Description, DailyFoodAmount, FilteringRatio, CertificateID, Price, Video }
             updatedKoi.Video = videoURL;
-            try {
-                const reponse = await axiosInstance.put(`manager/manage-koi/updateKoi/${modalKoi._id}`, updatedKoi);
-                console.log(reponse)
-                message.success(`${file.name} uploaded successfully`);
-                // setTrigger(trigger + 1);
-                Refreshing();
-
-            } catch (error) {
-                console.error('Error uploading video:', error);
-                message.error('Video upload failed');
+            if (isCreating) {
+                setModalKoi(prev => ({ ...prev, Video: videoURL }));
+                form.setFieldsValue({ Video: videoURL });
+                const vidobj ={
+                    uid: '-1',
+                    name: videoURL,
+                    status: 'done',
+                    url: videoURL,
+                  }
+                setVideoList([]);
+                setVideoList(videoURL);
             }
+            else {
+                try {
+                    const reponse = await axiosInstance.put(`manager/manage-koi/updateKoi/${modalKoi._id}`, updatedKoi);
+                    console.log(reponse)
+                    message.success(`${file.name} uploaded successfully`);
+                    // setTrigger(trigger + 1);
+                    Refreshing();
+
+                } catch (error) {
+                    console.error('Error uploading video:', error);
+                    message.error('Video upload failed');
+                }
+            }
+
 
             message.success(`${file.name} uploaded successfully`);
         } catch (error) {
             console.error('Error uploading video:', error);
             message.error('Video upload failed');
         }
+        finally {
+            setIsLoading(false);
+        }
+    
     };
     const KoiStatusMap = {
         0: 'Out of Order',
@@ -152,11 +190,16 @@ export default function Kois() {
         if (isCreating) {
             try {
                 setIsLoading(true);
-                const reponse = await axiosInstance.post('/manager/manage-koi/create-new-koi', values);
+                console.log(values);
+                console.log(imgList);
+                console.log(videoList);
+                const theDATA = {...values, Image: imgList, Video: videoList};
+                console.log(theDATA);
+                  const reponse = await axiosInstance.post('/manager/manage-koi/create-new-koi', theDATA);
                 message.success('Create Koi Success');
                 console.log(reponse);
             } catch (error) {
-                console.log(error.response.data)
+                console.log(error.response)
                 message.error('Create Koi Failed Reason is' + error.response.data.message);
             } finally {
                 setIsLoading(false);
@@ -171,7 +214,8 @@ export default function Kois() {
                 message.success('Update Koi Success');
                 console.log(reponse);
             } catch (error) {
-                console.log(error.response.data)
+                console.log(error)
+                console.log(error.response)
                 message.error('Update Koi Failed Reason is' + error.response.data.message);
             } finally {
                 setIsLoading(false);
@@ -237,15 +281,17 @@ export default function Kois() {
                         {/* Image Section */}
                         {modalKoi?.Image ? (
                             <Image
-                            hoverable
+                                hoverable
                                 src={modalKoi.Image}
                                 style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                             />
                         ) : (
                             <Upload
+                                maxCount={1}
                                 customRequest={handleImageUpload}
                                 showUploadList={false}
                                 accept="image/*"
+                                fileList={imgList}
                             >
                                 <div style={{ width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
                                     {isLoading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -265,9 +311,11 @@ export default function Kois() {
                                 customRequest={handleVideoUpload}
                                 showUploadList={false}
                                 accept="video/*"
+                                maxCount={1}
+                                fileList={videoList}
                             >
                                 <div style={{ width: '480px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
-                                    {isLoading ? <LoadingOutlined /> : <PlusOutlined />}
+                                    {isLoading ? <LoadingOutlined  /> : <PlusOutlined />}
                                     <div>Click to Upload Video</div>
                                 </div>
                             </Upload>

@@ -1,5 +1,5 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal,Input } from "antd";
-import { CopyOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal,Input,Dropdown ,Menu,Space } from "antd";
+import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
 import ProfileModal from "../Modal/ProfileModal";
@@ -9,7 +9,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   const [selectedColumns, setSelectedColumns] = React.useState({});
   const [showColumnSelector, setShowColumnSelector] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-  
+  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'email', 'address', 'date_of_birth', 'verify', 'action']);
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     message.success("ID copied to clipboard!");
@@ -176,26 +176,50 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
         </>
       ),
     },
-  ].map(col => ({...col, visible: !selectedColumns[col.key]}));
+  ].map(col => ({...col, visible: visibleColumns.includes(col.key)}));
 
   const filteredColumns = columns.filter(col => col.visible);
+  const handleColumnVisibility = (key, visible) => {
+    setVisibleColumns(prev =>
+      visible ? [...prev, key] : prev.filter(colKey => colKey !== key)
+    );
+  };
+  const columnSelectionMenu = (
+    <Menu>
+      {columns.map(col => (
+        <Menu.Item key={col.key}>
+          <Checkbox
+            checked={visibleColumns.includes(col.key)}
+            onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
+          >
+            {col.title}
+          </Checkbox>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
 
   return (
     <div>
-      <p>
+      <Space size={"middle"}>
         <Input
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ width: 200, marginBottom: 16 }}
         />
+         {/* 
         <Button onClick={() => setShowColumnSelector(true)}>Select Columns</Button>
-      </p>
-      
+      </p> */}
+      <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
+        <Button style={{ marginBottom: 16 }}>
+          Choose Columns <DownOutlined />
+        </Button>
+      </Dropdown>
       {/* {activeFilters.map((filter, index) => (
         // <FilterTag key={index} filter={filter} onRemove={removeFilter} />
       ))} */}
-      
+      </Space>
       <Table
         columns={filteredColumns}
         dataSource={filteredData}
