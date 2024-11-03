@@ -4,12 +4,14 @@ import axiosInstance from '../../Utils/axiosJS';
 import { useState, useEffect } from 'react';
 import { CheckOutlined, SyncOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import '../Css/GeneralPurpose.css'
-
+import OrderDetail from '../Components/OrderDetail';
 export default function OrdersNext() {
     const { Header, Content } = Layout;
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [refreshData, setRefreshData] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [currentStatus, setCurrentStatus] = useState(null);
     useEffect(() => {
         const fetchOrders = async () => {
             setLoading(true);
@@ -40,7 +42,14 @@ export default function OrdersNext() {
     //     }
     // };
 
-
+    const handleViewDetails = (orderId,STATUSs) => {
+        setSelectedOrder(orderId);
+        setCurrentStatus(STATUSs);
+    };
+    
+    const handleCloseDetails = () => {
+        setSelectedOrder(null);
+    };
     const columns = [
         {
             title: 'User ID',
@@ -81,14 +90,13 @@ export default function OrdersNext() {
                 <Button
                     type="primary"
                     icon={<ShoppingCartOutlined />}
-                    onClick={() => handleChangeStatus(record._id)}
+                    onClick={() => handleViewDetails(record._id,record.Status)}
                 >
                     View Order Detai
                 </Button>
             ),
         },
     ];
-
     return (
         <Layout>
             <Header style={{ background: '#f5f5f5' }}>
@@ -105,6 +113,9 @@ export default function OrdersNext() {
                         pagination={{ pageSize: 10 }}
                     />
                 </Space>
+                {selectedOrder && (
+                    <OrderDetail orderId={selectedOrder} onClose={handleCloseDetails} currentStatus={currentStatus}  />
+                )}
             </Content>
         </Layout>
     );

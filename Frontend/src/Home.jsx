@@ -2,13 +2,13 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/Footer";
+import FooterComponent from "./Components/Footer";
 import "../src/Home.css";
 import Slideshow from "./Components/Slideshow";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Carousel, message } from "antd";
+import { Carousel } from "antd";
 import { Link } from "react-router-dom";
 import "./Components/Css/homeStyle.css";
 import { Typography } from "antd";
@@ -16,7 +16,7 @@ import { Button, Container } from "react-bootstrap";
 const { Paragraph } = Typography;
 import axiosInstance from "./An/Utils/axiosJS";
 import { fetchLoginUserData, getManager } from "./services/userService";
-import CustomerChat from "./Components/Chat/CustomerChat";
+import CustomerChatButton from "./Components/Chat/CustomerChat";
 
 export default function Home() {
   const location = useLocation();
@@ -24,11 +24,6 @@ export default function Home() {
   const [suppliers, setSuppliers] = useState([]);
   const [koidata, setKoiData] = useState([]);
   const navigate = useNavigate();
-  const [isShow, setIsShow] = useState(false);
-  // const [isShowStaffChat, setIsShowStaffChat] = useState(false);
-  // const [showListChat, setShowListChat] = useState(false);
-  // const [customer, setCustomer] = useState({});
-  const [manager, setManager] = useState({});
   const [user, setUser] = useState({});
   useEffect(() => {
     const { message } = location.state || {};
@@ -100,8 +95,6 @@ export default function Home() {
     };
   }, []);
 
-
-
   // Dữ liệu cá koi
   const koiData = [
     {
@@ -167,8 +160,6 @@ export default function Home() {
 
   /// chat
 
-
-
   // const handleLogout = () => {
   //     try {
   //         localStorage.removeItem('userInfo')
@@ -194,36 +185,35 @@ export default function Home() {
 
   const fetchManager = async () => {
     try {
-      const { data } = await getManager()
+      const { data } = await getManager();
       if (data) {
-        console.log("manager: ", data)
-        setManager(data.result)
+        console.log("manager: ", data);
+        setManager(data.result);
       }
     } catch (error) {
-      console.error({ message: error.message })
+      console.error({ message: error.message });
     }
-  }
+  };
 
   const fetchUser = async () => {
     try {
-      const { data } = await fetchLoginUserData()
+      const { data } = await fetchLoginUserData();
       if (data) {
-        console.log("user: ", data.result)
-        setUser(data.result)
+        console.log("user: ", data.result);
+        setUser(data.result);
       }
     } catch (error) {
-      console.error({ message: error.message })
+      console.error({ message: error.message });
     }
-  }
+  };
 
   useEffect(() => {
-    fetchUser()
-  }, [])
+    fetchUser();
+  }, [user._id]);
 
   useEffect(() => {
-    fetchManager()
-  }, [user._id])
-
+    fetchManager();
+  }, []);
 
   return (
     <>
@@ -396,7 +386,7 @@ export default function Home() {
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 {koidata.slice(index * 6, index * 6 + 6).map((koi, idx) => (
                   <div className="image-item" key={idx}>
-                    <Link to={`/koikygui`}>
+                    <Link to={`/order`} state={{ selectedItem: koi }}>
                       <img
                         src={koi.Image}
                         alt={koi.KoiName}
@@ -529,9 +519,8 @@ export default function Home() {
         </div>
       </div>
 
-        <CustomerChat/>
-
-      <Footer style={{ paddingTop: "20px" }} />
+      <CustomerChatButton />
+      <FooterComponent style={{ paddingTop: "20px" }} />
     </>
   );
 }

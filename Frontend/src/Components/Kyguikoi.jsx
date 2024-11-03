@@ -2,8 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../An/Utils/axiosJS";
 import { Container } from "react-bootstrap";
@@ -17,10 +16,9 @@ import {
   Typography,
   Spin,
   Select,
-  Descriptions,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-
+import moment from "moment";
 const { Title } = Typography;
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -91,30 +89,47 @@ export default function Kyguikoi() {
   };
 
   const handleDateChange = (key, date) => {
-    setFormData((prevData) => ({ ...prevData, [key]: date }));
+    // Kiểm tra nếu date không phải là null
+    const formattedDate = date ? date.format("DD/MM/YYYY") : null;
+
+    // In ra giá trị formattedDate để kiểm tra
+    console.log(`${key} date:`, formattedDate);
+
+    setFormData((prevData) => ({ ...prevData, [key]: formattedDate }));
   };
 
   const handleSubmit = async (values) => {
     setLoading(true);
-
     try {
-      const shippedDateObj = formData.shippedDate
-        ? new Date(formData.shippedDate)
-        : null;
-      const receiptDateObj = formData.receiptDate
-        ? new Date(formData.receiptDate)
-        : null;
-      const currentDate = new Date();
+      const formatDateToISO = (dateString) => {
+        const [day, month, year] = dateString.split("/");
+        return `${year}-${String(month).padStart(2, "0")}-${String(
+          day
+        ).padStart(2, "0")}`;
+      };
 
+      const shippedDateObj = formData.shippedDate
+        ? new Date(formatDateToISO(formData.shippedDate) + "T00:00:00Z") 
+        : null;
+
+      const receiptDateObj = formData.receiptDate
+        ? new Date(formatDateToISO(formData.receiptDate) + "T00:00:00Z") 
+        : null;
+
+      const currentDate = new Date();
+      currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
+
+      // Kiểm tra ngày tháng trước khi gửi
       if (
         shippedDateObj &&
         (shippedDateObj < currentDate ||
           (receiptDateObj && shippedDateObj > receiptDateObj))
       ) {
         toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
-        return;
+        return; // Dừng lại nếu ngày không hợp lệ
       }
-      // Parse Size and Age as integers, DailyFoodAmount and FilteringRatio as floats
+
+      // Chuẩn bị dữ liệu để gửi
       const dataToSend = {
         ...values,
         PositionCare: formData.PositionCare.toString(),
@@ -128,10 +143,13 @@ export default function Kyguikoi() {
         DailyFoodAmount: parseFloat(formData.DailyFoodAmount),
         FilteringRatio: parseFloat(formData.FilteringRatio),
         Age: parseInt(formData.Age, 10),
-        shippedDate: shippedDateObj ? shippedDateObj.toISOString() : null,
-        receiptDate: receiptDateObj ? receiptDateObj.toISOString() : null,
+        ShippedDate: shippedDateObj ? shippedDateObj.toISOString() : null,
+        ReceiptDate: receiptDateObj ? receiptDateObj.toISOString() : null,
       };
-      console.log(dataToSend);
+
+      console.log("Data to send:", dataToSend); // In dữ liệu để kiểm tra
+
+      // Tải lên hình ảnh và video
       const imageRef = ref(storage, `koiImages/${formData.Image[0].name}`);
       const videoRef = ref(storage, `koiVideos/${formData.Video[0].name}`);
 
@@ -141,10 +159,11 @@ export default function Kyguikoi() {
       await uploadBytes(videoRef, formData.Video[0].originFileObj);
       const videoUrl = await getDownloadURL(videoRef);
 
-      // Update dataToSend with the URLs
+      // Cập nhật dữ liệu với URL của hình ảnh và video
       dataToSend.Image = imageUrl;
       dataToSend.Video = videoUrl;
 
+      // Gửi dữ liệu tới backend
       const response = await axiosInstance.post("/ki-gui", dataToSend, {
         headers: { "Content-Type": "application/json" },
       });
@@ -153,10 +172,8 @@ export default function Kyguikoi() {
         toast.success(response.data.message);
         setTimeout(() => {
           if (isLoggedIn) {
-            // Nếu người dùng đã đăng nhập, điều hướng đến "/donkygui"
             navigate("/donkyguipage");
           } else {
-            // Nếu chưa đăng nhập, điều hướng đến trang chính với thông điệp
             navigate("/");
           }
         }, 5000);
@@ -330,16 +347,24 @@ export default function Kyguikoi() {
                   </Form.Item>
                 </div>
                 <div style={{ width: "48%" }}>
-                  <Form.Item label="Ngày Gửi">
+                  <Form.Item label="Ngày Gửi" name="shippedDate">
                     <DatePicker
                       style={{ width: "100%" }}
                       onChange={(date) => handleDateChange("shippedDate", date)}
+                      disabledDate={(current) =>
+                        current && current < moment().startOf("day")
+                      }
+                      format="DD/MM/YYYY" // Thay đổi format ở đây
                     />
                   </Form.Item>
-                  <Form.Item label="Ngày Nhận">
+                  <Form.Item label="Ngày Nhận" name="receiptDate">
                     <DatePicker
                       style={{ width: "100%" }}
                       onChange={(date) => handleDateChange("receiptDate", date)}
+                      disabledDate={(current) =>
+                        current && current < moment().startOf("day")
+                      }
+                      format="DD/MM/YYYY" // Thay đổi format ở đây
                     />
                   </Form.Item>
                 </div>

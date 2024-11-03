@@ -35,6 +35,7 @@ export default function Navbar() {
     localStorage.clear();
     setIsLoggedIn(false);
     navigate("/", { state: { message: "Đăng Xuất Thành Công" } });
+    window.location.reload();
   };
 
   const handleStateSignIn = () => {
@@ -302,6 +303,7 @@ export default function Navbar() {
                 variant="success"
                 className="custom-dropdown-toggle"
                 style={{ borderRadius: "32px" }}
+                href="/profile"
               >
                 <CgProfile />
               </Dropdown.Toggle>

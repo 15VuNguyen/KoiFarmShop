@@ -59,7 +59,10 @@ export default function Koidangban() {
   }, []);
 
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
-  const handleSizeChange = (value) => setSelectedSize(value);
+  const handleSizeChange = (e) => {
+    const value = e.target.value || "All";
+    setSelectedSize(value);
+  };
   const handleMinPriceChange = (e) => setMinPrice(e.target.value);
   const handleMaxPriceChange = (e) => setMaxPrice(e.target.value);
 
@@ -156,19 +159,8 @@ export default function Koidangban() {
           </div>
 
           <div className="size-filter" style={{ marginTop: "20px" }}>
-            <Title level={5}>CHỌN KÍCH THƯỚC</Title>
-            <Select
-              value={selectedSize}
-              onChange={handleSizeChange}
-              style={{ width: "100%" }}
-            >
-              <Select.Option value="All">All Sizes</Select.Option>
-              {[20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75].map((size) => (
-                <Select.Option key={size} value={size}>
-                  {size} cm
-                </Select.Option>
-              ))}
-            </Select>
+            <Title level={5}>Chọn kích thước</Title>
+            <Input placeholder="Chọn kích thước" onChange={handleSizeChange} />
           </div>
         </div>
 

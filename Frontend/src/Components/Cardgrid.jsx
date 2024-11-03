@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Row, Col, Typography, Divider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useOrder } from "../Context/OrderContext";
-import { Container } from "react-bootstrap";
 
 const { Text } = Typography;
 
@@ -30,8 +29,12 @@ const CardGrid = ({ cardData }) => {
         return acc;
       }, {});
   };
+  const groupCards2 = (status) => {
+    return cardData.filter((card) => card.Status === status);
+  };
+  // const groupedKygui = groupCards(4); // Grouping for Cá Ký Gửi
+  const groupedKyGui = groupCards2(4);
 
-  const groupedKygui = groupCards(4); // Grouping for Cá Ký Gửi
   const groupedNhat = groupCards(1); // Grouping for Cá Koi Nhật
   const groupedIkoi = cardData
     .filter((card) => card.Status === 2 || card.Status === 3) // Include both statuses
@@ -46,19 +49,26 @@ const CardGrid = ({ cardData }) => {
   const groupAll = cardData
     .filter(
       (card) =>
+        card.Status === 1 ||
         card.Status === 2 ||
         card.Status === 3 ||
-        card.Status === 4 ||
-        card.Status === 1
-    ) // Include both statuses
+        card.Status === 4
+    )
     .reduce((acc, card) => {
-      const key = `${card.Size}-${card.Breed}-${card.Status}`; // Create a unique key
-      if (!acc[key]) {
-        acc[key] = { count: 0, card }; // Initialize if key doesn't exist
+      if (card.Status === 4) {
+        // Nếu Status là 4, thêm thẻ vào mảng riêng
+        acc.push({ card }); // Chỉ lưu thẻ mà không có count
+      } else {
+        // Nếu không phải Status 4, nhóm theo Size, Breed, Status
+        const key = `${card.Size}-${card.Breed}-${card.Status}`; // Tạo khóa duy nhất
+        if (!acc[key]) {
+          // Khởi tạo nếu khóa chưa tồn tại
+          acc[key] = { card, count: 0 }; // Khởi tạo với count = 0
+        }
+        acc[key].count += 1; // Tăng count cho nhóm
       }
-      acc[key].count += 1; // Increment count
       return acc;
-    }, {});
+    }, []);
   return (
     <div className="container" style={{ padding: "0" }}>
       <Divider
@@ -142,7 +152,10 @@ const CardGrid = ({ cardData }) => {
               >
                 <Text strong>{card.KoiName || "N/A"}</Text>
                 <br />
-                <Text>Số Lượng : {count}</Text>
+                {card.Status === 1 && <Text>Số lượng : {count}</Text>}
+                {card.Status === 2 && <Text>Số lượng : {count}</Text>}
+                {card.Status === 3 && <Text>Số lượng : {count}</Text>}
+                {card.Status === 4 && <Text>Số lượng : 1 </Text>}
                 <br />
                 <Text>Size : {card.Size} cm</Text>
                 <br />
@@ -161,7 +174,7 @@ const CardGrid = ({ cardData }) => {
             </Col>
           ))}
         {category === "kygui" &&
-          Object.values(groupedKygui).map(({ count, card }) => (
+          Object.values(groupedKyGui).map((card) => (
             <Col
               key={card._id}
               xs={12}
@@ -189,18 +202,18 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "N/A"} ({count})
-                </Text>
-                <Text>Số lượng : ({count})</Text>
+                <Text strong>{card.KoiName || "N/A"}</Text>
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
+                  Farm:{""}
                   {card.Origin}
                 </Text>
                 <br />
-                Xuất xứ : {""}
-                {card.Status === 2 && <Text>F1</Text>}
-                {card.Status === 3 && <Text>Việt</Text>}
+                <Text strong>Số lượng : 1</Text>
+                <br />
+                {card.Status === 4 && <Text> Cá Ký Gửi</Text>}
+                <br />
+                {card.Breed === "Nhat" && <Text> Xuất xứ : {""}Nhật</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price

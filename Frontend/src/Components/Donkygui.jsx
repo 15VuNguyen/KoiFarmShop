@@ -107,16 +107,15 @@ export default function DonKyGui() {
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
       <Layout style={{ backgroundColor: "whitesmoke" }}>
-        <Container style={{ paddingTop: "50px", paddingBottom: "10px" }}>
+        <Container style={{ paddingTop: "35px", paddingBottom: "10px" }}>
           <Row gutter={16}>
             <Col span={24}>
               <Title
                 level={4}
                 style={{
                   textAlign: "left",
-                  marginBottom: "5px",
+                  marginBottom: "55px",
                   marginLeft: "15px",
-                  marginTop: "20px",
                 }}
               >
                 Danh Sách Ký Gửi Của Khách Hàng
@@ -192,6 +191,15 @@ export default function DonKyGui() {
                                   ).toLocaleDateString()
                                 : "Không yêu cầu"}
                             </Text>
+                            <br />
+                            <Text strong style={{ color: "red" }}>
+                              Ngày nhận hàng:{" "}
+                              {consign.ReceiptDate
+                                ? new Date(
+                                    consign.ReceiptDate
+                                  ).toLocaleDateString()
+                                : "Không yêu cầu"}
+                            </Text>
                           </div>
                         </div>
                       </div>
@@ -242,7 +250,6 @@ export default function DonKyGui() {
                           >
                             Chat ngay
                           </Button>
-
                           <Button
                             style={{ marginLeft: "10px" }}
                             type="default"
@@ -271,6 +278,11 @@ export default function DonKyGui() {
                               Bạn có chắc chắn muốn xóa đơn ký gửi này không?
                             </p>
                           </Modal>
+                          {consign.Status === -1 && (
+                            <div>
+                              <h3>Đơn ký gửi nãy đã hủy</h3>
+                            </div>
+                          )}
                         </div>
                       </div>
 

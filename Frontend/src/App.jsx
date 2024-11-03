@@ -69,6 +69,7 @@ import ChinhSach from "./Components/ChinhSach/chinhSach";
 import Gioithieuvekoinhatpage from "./Components/Page/Gioithieu/gioithieuvekoinhat";
 import Gioithieuvekoivietpage from "./Components/Page/Gioithieu/gioithieuvekoiviet";
 import NguongoccuaikoiPage from "./Components/Page/Gioithieu/nguongoccuaikoiPage";
+import Profilepage from "./Components/Page/Thongtincuauser/profilePage";
 const router = createBrowserRouter([
   {
     path: "/login/oauth",
@@ -168,7 +169,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />, // Home component
+    element: <Profilepage />, // Home component
   },
   {
     path: "/donkygui",

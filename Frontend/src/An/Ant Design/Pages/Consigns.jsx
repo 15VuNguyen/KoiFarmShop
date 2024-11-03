@@ -51,7 +51,7 @@ export default function Profiles() {
             label: (
                 <>
                     Yêu cầu ký gửi
-                    <Badge count={consigns.filter(consign => consign.State == 1).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 1).length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         },
@@ -60,7 +60,7 @@ export default function Profiles() {
             label: (
                 <>
                     Đang kiểm tra Koi
-                    <Badge count={consigns.filter(consign => consign.State == 2).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 2).length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         },
@@ -69,7 +69,7 @@ export default function Profiles() {
             label: (
                 <>
                     Đang thương thảo hợp đồng
-                    <Badge count={consigns.filter(consign => consign.State == 3).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 3).length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         }, {
@@ -77,7 +77,7 @@ export default function Profiles() {
             label: (
                 <>
                     Đang tìm người mua
-                    <Badge count={consigns.filter(consign => consign.State == 4).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 4).length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         }, {
@@ -85,7 +85,7 @@ export default function Profiles() {
             label: (
                 <>
                     Đã bán thành công
-                    <Badge count={consigns.filter(consign => consign.State == 5).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 5).length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         }
@@ -111,62 +111,62 @@ export default function Profiles() {
                 <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản Lý Ký Gửi</Typography.Title>
             </Header>
             <Content style={{ padding: '24px' }}>
-                <Row gutter={24}>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>  Tổng số ký gửi</Typography.Title>}
-                                value={consigns.length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số yêu cầu ký gửi</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 1).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang kiểm tra</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 2).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang thương thảo hợp đồng</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 3).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang tìm người mua</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 4).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đã bán thành công</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 5).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                </Row>
+            <Row gutter={[24, 24]}>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số ký gửi</Typography.Title>}
+                            value={consigns.length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số yêu cầu ký gửi</Typography.Title>}
+                            value={consigns.filter(consign => consign.State === 1).length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số ký gửi đang kiểm tra</Typography.Title>}
+                            value={consigns.filter(consign => consign.State === 2).length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số ký gửi đang thương thảo hợp đồng</Typography.Title>}
+                            value={consigns.filter(consign => consign.State === 3).length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số ký gửi đang tìm người mua</Typography.Title>}
+                            value={consigns.filter(consign => consign.State === 4).length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
+                    <Card hoverable style={{ height: "100%" }}>
+                        <Statistic
+                            title={<Typography.Title level={4}>Tổng số ký gửi đã bán thành công</Typography.Title>}
+                            value={consigns.filter(consign => consign.State === 5).length}
+                            precision={0}
+                        />
+                    </Card>
+                </Col>
+            </Row>
                 <Row gutter={6} style={{ marginTop: '2rem' }} className='Black-Strip'>
                     <Col span={12}>
                         <Space align='center' style={{ paddingLeft: '3rem' }} wrap='true' >
@@ -175,7 +175,7 @@ export default function Profiles() {
                                     defaultActiveKey="1"
                                     items={Tab}
                                     size='small'
-                                    tabBarGutter={78}
+                                    tabBarGutter={42}
                                     onChange={key => setActiveTab(key)}
                                 />
                             }

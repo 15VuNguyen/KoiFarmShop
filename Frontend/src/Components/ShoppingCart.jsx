@@ -1,14 +1,32 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
-import TableCart from "./TableCart";
+import TableCart from "./TableCartForShoppingCart";
+import { useEffect } from "react";
+import axiosInstance from "../An/Utils/axiosJS";
 
-import { Form, Button, Spinner, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 export default function ShoppingCart() {
   const navigate = useNavigate();
   const handlePayment = () => {
     navigate("/formfillinformation");
   };
+
+  useEffect(() => {
+    const clearData = async () => {
+      try {
+        console.log("hello");
+        await axiosInstance.post(
+          "/clear-coookies",
+          { Credential: true },
+          { withCredentials: true }
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    clearData();
+  }, []);
   return (
     <div
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -21,20 +39,6 @@ export default function ShoppingCart() {
           Giỏ hàng của bạn
         </h4>
         <TableCart />
-        <button
-          onClick={handlePayment}
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#FF6F61", // Màu chủ đạo
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Mua Hàng
-        </button>
       </Container>
       <Footer />
     </div>

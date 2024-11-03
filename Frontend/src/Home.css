@@ -12,7 +12,7 @@
 }
 
 .image-item h3 {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   font-weight: 300;
   opacity: 0.7;
   margin-top: 8px;
@@ -70,7 +70,7 @@
 body {
   /* min-height: 100vh; */
 }
-.avatar{
+.avatar {
   width: 40px;
   height: 40px;
   font-size: 25px;
@@ -126,9 +126,11 @@ body {
 /* box chat */
 .box-chat {
   width: 280px;
-  min-height: 350px;
+  height: 362px;
   background-color: #fff;
+  padding-left: 0px;
   border: 1px solid #dadada;
+  border-radius: 5px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -151,7 +153,7 @@ body {
         height: 30px;
         font-size: 22px;
       }
-      p{
+      p {
         margin: 0 7px;
         font-size: 20px;
       }
@@ -180,51 +182,51 @@ body {
       display: flex;
       align-items: flex-end;
       margin-bottom: 10px;
-      .avatar{
+      .avatar {
         margin: 0 5px;
         width: 30px;
         height: 30px;
         font-size: 20px;
       }
     }
-    
-    .me, .you {
-      max-width: 70%; 
+
+    .me,
+    .you {
+      max-width: 70%;
       padding: 10px;
       border-radius: 10px;
       position: relative;
     }
-    
+
     .me {
-      background-color: rgb(0, 132, 255); 
+      background-color: rgb(0, 132, 255);
       color: #fff;
       margin-left: auto;
-      .date{
+      .date {
         color: rgba(252, 241, 241, 0.737);
       }
     }
-    
+
     .you {
-      background-color:rgb(240, 240, 240); 
+      background-color: rgb(240, 240, 240);
     }
-    
+
     p {
       margin: 0;
       white-space: normal; /* Allow text to wrap */
-      word-wrap: break-word; 
+      word-wrap: break-word;
     }
-    
+
     .date {
       font-size: 0.8rem;
       color: #666;
       margin-top: 5px;
-      display: none; 
+      display: none;
     }
-    
+
     .date.showTime {
-      display: block; 
+      display: block;
     }
-     
   }
 
   .footer {
@@ -294,4 +296,3 @@ body {
     transform: rotate(360deg);
   }
 }
-

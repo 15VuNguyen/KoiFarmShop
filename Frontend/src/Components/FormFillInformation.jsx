@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useOrder } from "../Context/OrderContext";
 import axios from "axios";
 import axiosInstance from "../An/Utils/axiosJS";
-import TableCart from "./TableCart";
+import TableCart from "./TableCartForShoppingCart";
 import { Spinner, Container } from "react-bootstrap";
+import TableCartForm from "./TableCartForm";
 export default function FormFillInformation() {
   const orderDetail = useOrder(); // Đảm bảo rằng hàm này trả về giá trị hợp lệ
 
@@ -70,8 +71,8 @@ export default function FormFillInformation() {
         <div style={{ display: "flex", padding: "50px", paddingTop: "100px" }}>
           <Container>
             <div style={{ flex: 1, padding: "20px" }}>
-              <h4 style={{ textAlign: "center" }}>Giỏ hàng của bạn</h4>
-              <TableCart />
+              <h4 style={{ textAlign: "center" }}>Đơn hàng của bạn</h4>
+              <TableCartForm />
             </div>
             <div style={{ flex: 1, padding: "20px" }}>
               <h4 style={{ textAlign: "center" }}>

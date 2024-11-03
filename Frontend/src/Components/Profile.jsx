@@ -326,7 +326,6 @@ export default function Profile() {
 
   return (
     <>
-      <Navbar />
       <div style={{ backgroundColor: "whitesmoke", paddingTop: "50px" }}>
         <Row justify="center" style={{ paddingTop: "50px" }}>
           <Col
@@ -464,35 +463,34 @@ export default function Profile() {
           </Col>
           {currentComponent === "profile" && (
             <Col span={16}>
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
                 <UpdateProfile />
               </div>
             </Col>
           )}
           {currentComponent === "kygui" && (
             <Col span={16}>
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
                 <DonKyGuiPage />
               </div>
             </Col>
           )}
           {currentComponent === "changepassword" && (
             <Col span={16}>
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
                 <ChangePassword />
               </div>
             </Col>
           )}
           {currentComponent === "trackingorder" && (
             <Col span={16}>
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
                 <TrackingOrderPage />
               </div>
             </Col>
           )}
         </Row>
       </div>
-      <Footer />
     </>
   );
 }

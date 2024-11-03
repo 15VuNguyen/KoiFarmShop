@@ -565,7 +565,7 @@ export default function Kohaku() {
                     </Text>
                     <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/gotensakurakohaku.webpp"
+                        src="src/assets/gotensakurakohaku.webp"
                         style={{ width: "50%", paddingTop: "20px" }}
                       />
                       <div style={{ textAlign: "center" }}>
