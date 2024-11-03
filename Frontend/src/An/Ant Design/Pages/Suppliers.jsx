@@ -53,7 +53,7 @@ export default function Suppliers() {
             label: (
                 <>
                     Toàn Bộ Nhà Cung Cấp
-                    <Badge count={suppliers.length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={suppliers.length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         },
@@ -62,7 +62,7 @@ export default function Suppliers() {
             label: (
                 <>
                     Nhà Cung Cấp ở Nhật
-                    <Badge count={suppliers.filter(supplier => supplier.Country === 'Nhật' || supplier.Country === 'Nhật Bản').length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={suppliers.filter(supplier => supplier.Country === 'Nhật' || supplier.Country === 'Nhật Bản').length} showZero style={{ marginLeft: 8 }} color='green' />
                 </>
             ),
         },
@@ -71,7 +71,7 @@ export default function Suppliers() {
             label: (
                 <>
                     Nhà Cung Cấp ở Việt Nam
-                    <Badge count={suppliers.filter(supplier => supplier.Country == 'Việt Nam').length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={suppliers.filter(supplier => supplier.Country == 'Việt Nam').length} style={{ marginLeft: 8 }} showZero color='green' />
                 </>
             ),
         },
@@ -80,7 +80,7 @@ export default function Suppliers() {
             label: (
                 <>
                     Nhà Cung Cấp ở Trung Quốc
-                    <Badge count={suppliers.filter(supplier => supplier.Country === ' Trung Quốc').length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={suppliers.filter(supplier => supplier.Country === 'Trung Quốc').length} style={{ marginLeft: 8 }} showZero color='green' />
                 </>
             )
         }

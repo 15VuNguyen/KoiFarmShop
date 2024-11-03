@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Table, Tag, Dropdown, Button, Checkbox, Menu,Upload, message  } from 'antd';
-import { DownOutlined, EditOutlined } from '@ant-design/icons';
+import { Table, Tag, Dropdown, Button, Checkbox, Menu,Upload, message, Tooltip  } from 'antd';
+import { DownOutlined, EditOutlined,CopyOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import useFetchInvoices from '../../Hooks/useFetchInvoices';
+import { func } from 'prop-types';
 
 export default function InvoiceTable({ data,actions }) {
   const invoices = useFetchInvoices();
@@ -16,19 +17,44 @@ export default function InvoiceTable({ data,actions }) {
       currency: 'VND',
     }).format(value);
   };
-
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+    message.success("ID copied to clipboard!");
+  }
   const columns = [
     {
       title: 'ID',
       dataIndex: '_id',
       key: '_id',
       sorter: (a, b) => a._id.localeCompare(b._id),
+      render: (text) => (
+        <>
+          <Tag color="blue">{text}</Tag>
+          <Tooltip title="Copy ID">
+            <CopyOutlined
+              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
+              onClick={() => copyToClipboard(text)}
+            />
+          </Tooltip>
+        </>
+      ),
     },
     {
       title: 'Group Invoice ID',
       dataIndex: 'GroupKoiIDInvoice',
       key: 'GroupKoiIDInvoice',
       sorter: (a, b) => a.GroupKoiIDInvoice.localeCompare(b.GroupKoiIDInvoice),
+      render: (text) => (
+        <>
+          <Tag color="blue">{text}</Tag>
+          <Tooltip title="Copy ID">
+            <CopyOutlined
+              style={{ marginLeft: 8, cursor: 'pointer', float: 'right'  }}
+              onClick={() => copyToClipboard(text)}
+            />
+          </Tooltip>
+        </>
+      ),
     },
     {
       title: 'Invoice Date',
