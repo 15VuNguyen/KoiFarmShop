@@ -213,10 +213,11 @@ export default function Chitietconsignpage() {
       // Kiểm tra ngày tháng trước khi gửi
       if (
         shippedDateObj &&
-        (shippedDateObj < currentDate ||
-          (receiptDateObj && shippedDateObj > receiptDateObj))
+        receiptDateObj &&
+        receiptDateObj &&
+        shippedDateObj > receiptDateObj
       ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc trước ngày nhận!");
+        toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
@@ -227,7 +228,14 @@ export default function Chitietconsignpage() {
         receiptDateObj <
           new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
       ) {
-        toast.error("Ngày nhận phải cách ngày gửi ít nhất 1 tháng!");
+        toast.error("Ngày nhận phải cách ngày gửi ít nhất 30 ngày!");
+        setLoading(false);
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
+
+      // New condition: Shipped date should not be after receipt date
+      if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
+        toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
@@ -598,14 +606,16 @@ export default function Chitietconsignpage() {
                     rules={[
                       { required: true, message: "Vui lòng nhập tuổi." },
                       {
-                        type: "string",
-                        min: 1,
-                        max: 50,
-                        message: "Tuổi phải từ 1 đến 50.",
-                      },
-                      {
                         validator: (_, value) => {
+                          if (!value) {
+                            return Promise.resolve();
+                          }
                           const numericValue = Number(value); // Convert to a number
+                          if (isNaN(numericValue)) {
+                            return Promise.reject(
+                              new Error("Tuổi phải là một số.")
+                            );
+                          }
                           if (numericValue < 1) {
                             return Promise.reject(
                               new Error("Tuổi phải lớn hơn hoặc bằng 1.")
@@ -613,7 +623,7 @@ export default function Chitietconsignpage() {
                           }
                           if (numericValue > 50) {
                             return Promise.reject(
-                              new Error("Tuổi phải nhỏ hơn bằng 50")
+                              new Error("Tuổi phải nhỏ hơn hoặc bằng 50.")
                             );
                           }
                           return Promise.resolve();
