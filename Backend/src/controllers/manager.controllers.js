@@ -310,61 +310,203 @@ export const getRevenueController = async (req, res) => {
 
 export const getProfitController = async (req, res) => {
   try {
-    const orders = await databaseService.order.find({ Status: 2 }).toArray()
-
-    if (orders.length > 0) {
-      const orderDetailIDs = orders.map((order) => new ObjectId(order.OrderDetailID))
-      const orderDetails = await databaseService.orderDetail.find({ _id: { $in: orderDetailIDs } }).toArray()
-
-      if (orderDetails.length > 0) {
-        const dailyProfitStats = {} // Đối tượng để lưu lợi nhuận theo từng ngày
-        const dailyCostStats = {} // Đối tượng để lưu tổng vốn theo từng ngày
-
-        for (const orderDetail of orderDetails) {
-          const items = orderDetail.Items
-          const koiID = items.map((item) => new ObjectId(item.KoiID))
-
-          const checkKoi = await databaseService.kois.find({ _id: { $in: koiID } }).toArray()
-          if (checkKoi.length > 0) {
-            const koiPrices = checkKoi.map((koi) => koi.TotalPrice) // Lưu giá từ bảng kois
-
-            for (let i = 0; i < statuses.length; i++) {
-              const orderDate = new Date(orders.OrderDate)
-              const formattedDate = `${orderDate.getUTCDate().toString().padStart(2, '0')}/${(orderDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${orderDate.getUTCFullYear()}`
-            }
-          }
-        }
-
-        for (const order of orders) {
-          const orderDate = new Date(order.OrderDate)
-          const formattedDate = `${orderDate.getUTCDate().toString().padStart(2, '0')}/${(orderDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${orderDate.getUTCFullYear()}`
-          const orderDetail = orderDetails.find((detail) => detail._id.equals(order.OrderDetailID))
-
-          if (orderDetail) {
-            dailyProfitStats[formattedDate] = (dailyProfitStats[formattedDate] || 0) + orderDetail.TotalPrice
-          }
-        }
-
-        const finalDailyProfitStats = {}
-        for (const date in dailyProfitStats) {
-          const totalRevenue = dailyProfitStats[date]
-          const totalCost = dailyCostStats[date] || 0 // Nếu không có chi phí thì là 0
-          finalDailyProfitStats[date] = totalRevenue - totalCost // Lợi nhuận = Doanh thu - Chi phí
-        }
-
-        // Trả về lợi nhuận cho từng ngày
-        res.send(finalDailyProfitStats)
-      } else {
-        res.status(404).json({ message: 'Order Detail not found' })
-      }
-    } else {
-      res.status(404).json({ message: 'Order not found' })
+    const Orders = await databaseService.order.find({ Status: 2 }).toArray()
+    if (Orders.length === 0) {
+      return res.json('order rỗng' + [])
     }
+
+    const orderDetailIds = Orders.map((order) => new ObjectId(order.OrderDetailID))
+
+    const OrderDetails = await databaseService.orderDetail
+      .find({
+        _id: { $in: orderDetailIds }
+      })
+      .toArray()
+    if (OrderDetails.length === 0) {
+      return res.json('orderDetail rỗng' + [])
+    }
+
+    console.log(OrderDetails)
+
+    // Lấy tất cả các KoiID từ tất cả các đối tượng trong Items
+    const koiIds = OrderDetails.flatMap((detail) => detail.Items.map((item) => new ObjectId(item.KoiID)))
+
+    console.log(koiIds)
+
+    // Kiểm tra dữ liệu trong cơ sở dữ liệu
+    const Kois = await databaseService.kois
+      .find({
+        _id: { $in: koiIds },
+        Status: 0
+      })
+      .toArray()
+    if (Kois.length === 0) {
+      console.log('Koi rỗng', koiIds)
+      return res.json('Koi rỗng' + [])
+    }
+
+    console.log(Kois)
+
+    // Kiểm tra và chuyển đổi GroupKoiID
+    const groupKoiIds = Kois.map((koi) => {
+      return new ObjectId(koi.GroupKoiID)
+      // if (ObjectId.isValid(koi.GroupKoiID)) {
+      //  return new ObjectId(koi.GroupKoiID)
+      // } else {
+      //   console.log(`Invalid GroupKoiID: ${koi.GroupKoiID}`)
+      //   return null
+      // }
+    }).filter((id) => id !== null)
+
+    const GroupKois = await databaseService.groupKois
+      .find({
+        _id: { $in: groupKoiIds }
+      })
+      .toArray()
+
+    // Kiểm tra và chuyển đổi ConsignID
+    const consignIds = Kois.map((koi) => {
+      if (ObjectId.isValid(koi.ConsignID)) {
+        return new ObjectId(koi.ConsignID)
+      } else {
+        console.log(`Invalid ConsignID: ${koi.ConsignID}`)
+        return null
+      }
+    }).filter((id) => id !== null)
+
+    const Consigns = await databaseService.consigns
+      .find({
+        _id: { $in: consignIds }
+      })
+      .toArray()
+
+    const calculateProfit = (koi, detail) => {
+      switch (koi.Status) {
+        case 1: // Nhập khẩu Nhật
+          const groupKoi = GroupKois.find((gk) => gk._id.equals(koi.GroupKoiID))
+          return detail.Price - (groupKoi ? groupKoi.PriceOneKoi : 0)
+        case 2: // Cá koi F1
+        case 3: // Cá koi Việt
+          return detail.Price
+        case 4: // Cá kí gửi
+          const consign = Consigns.find((c) => c._id.equals(koi.ConsignID))
+          return detail.Price - (consign ? consign.TotalPrice : 0)
+        default:
+          return 0
+      }
+    }
+
+    const dailyProfit = Orders.reduce((accumulator, order) => {
+      const orderDate = new Date(order.OrderDate).toISOString().split('T')[0]
+
+      const detail = OrderDetails.find((d) => d._id.equals(new ObjectId(order.OrderDetailID)))
+      if (!detail) {
+        console.log(`OrderDetail not found for OrderDetailID: ${order.OrderDetailID}`)
+        return accumulator
+      }
+      const koi = Kois.find((k) => k._id.equals(new ObjectId(detail.Items[0].KoiID))) // Lấy KoiID từ Items
+      if (!koi) {
+        console.log(`Koi not found for KoiID: ${detail.Items[0].KoiID}`)
+        return accumulator
+      }
+
+      const profit = calculateProfit(koi, detail)
+
+      if (accumulator[orderDate]) {
+        accumulator[orderDate] += profit
+      } else {
+        accumulator[orderDate] = profit
+      }
+
+      return accumulator
+    }, {})
+
+    const dailyProfitArray = Object.entries(dailyProfit).map(([Date, TotalProfit]) => ({
+      Date,
+      TotalProfit
+    }))
+
+    console.log(dailyProfitArray)
+
+    return res.json(dailyProfitArray)
   } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'An error occurred', error: error.message })
+    console.error('Có lỗi xảy ra:', error)
+    return res.status(500).json({ error: error.message })
   }
 }
+
+// export const getProfitController = async (req, res) => {
+//   try {
+//     const orders = await databaseService.order.find({ Status: 5 }).toArray()
+
+//     if (orders.length > 0) {
+//       const orderDetailIDs = orders.map((order) => new ObjectId(order.OrderDetailID))
+//       const orderDetails = await databaseService.orderDetail.find({ _id: { $in: orderDetailIDs } }).toArray()
+
+//       if (orderDetails.length > 0) {
+//         const dailyProfitStats = {} // Đối tượng để lưu lợi nhuận theo từng ngày
+//         const dailyCostStats = {} // Đối tượng để lưu tổng vốn theo từng ngày
+
+//         for (const orderDetail of orderDetails) {
+//           const items = orderDetail.Items
+//           const koiID = items.map((item) => new ObjectId(item.KoiID))
+
+//           const checkKoi = await databaseService.kois.find({ _id: { $in: koiID } }).toArray()
+//           if (checkKoi.length > 0) {
+//             const statuses = checkKoi.map((koi) => koi.Status)
+//             const koiPrices = checkKoi.map((koi) => koi.TotalPrice) // Lưu giá từ bảng kois
+
+//             for (let i = 0; i < statuses.length; i++) {
+//               const status = statuses[i]
+//               const orderDate = new Date(orderDetail.OrderDate)
+//               const formattedDate = `${orderDate.getUTCDate().toString().padStart(2, '0')}/${(orderDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${orderDate.getUTCFullYear()}`
+
+//               if (status === 4) {
+//                 const consign = await databaseService.consigns.findOne({ KoiID: koiID[i] })
+//                 if (consign) {
+//                   dailyProfitStats[formattedDate] =
+//                     (dailyProfitStats[formattedDate] || 0) + (koiPrices[i] - (consign.TotalPrice || 0))
+//                 }
+//               } else {
+//                 const invoice = await databaseService.invoice.findOne({ KoiID: koiID[i] })
+//                 if (invoice) {
+//                   dailyCostStats[formattedDate] = (dailyCostStats[formattedDate] || 0) + (invoice.TotalPrice || 0)
+//                 }
+//               }
+//             }
+//           }
+//         }
+
+//         for (const order of orders) {
+//           const orderDate = new Date(order.OrderDate)
+//           const formattedDate = `${orderDate.getUTCDate().toString().padStart(2, '0')}/${(orderDate.getUTCMonth() + 1).toString().padStart(2, '0')}/${orderDate.getUTCFullYear()}`
+//           const orderDetail = orderDetails.find((detail) => detail._id.equals(order.OrderDetailID))
+
+//           if (orderDetail) {
+//             dailyProfitStats[formattedDate] = (dailyProfitStats[formattedDate] || 0) + orderDetail.TotalPrice
+//           }
+//         }
+
+//         const finalDailyProfitStats = {}
+//         for (const date in dailyProfitStats) {
+//           const totalRevenue = dailyProfitStats[date]
+//           const totalCost = dailyCostStats[date] || 0 // Nếu không có chi phí thì là 0
+//           finalDailyProfitStats[date] = totalRevenue - totalCost // Lợi nhuận = Doanh thu - Chi phí
+//         }
+
+//         // Trả về lợi nhuận cho từng ngày
+//         res.send(finalDailyProfitStats)
+//       } else {
+//         res.status(404).json({ message: 'Order Detail not found' })
+//       }
+//     } else {
+//       res.status(404).json({ message: 'Order not found' })
+//     }
+//   } catch (error) {
+//     console.error(error)
+//     res.status(500).json({ message: 'An error occurred', error: error.message })
+//   }
+// }
 
 export const updateSupplierController = async (req, res) => {
   //tìm user theo username
