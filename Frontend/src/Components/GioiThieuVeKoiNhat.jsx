@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import { Typography } from "antd";
 const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
-
+import img1 from "../../src/assets/GioiThieuKoiViet/1.jpg";
 export default function GioiThieuVeKoiNhat() {
   const data = [
     {
@@ -36,7 +36,6 @@ export default function GioiThieuVeKoiNhat() {
       nhat: "Thân hình thanh thoát, thường dài hơn",
     },
   ];
-
   return (
     <>
       <Container style={{ padding: "20px", paddingTop: "100px" }}>
@@ -69,7 +68,7 @@ export default function GioiThieuVeKoiNhat() {
               mắn trong văn hóa Nhật Bản.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuKoiViet/1.jpg" alt="Koi Nhat 1" />
+              <img src={img1} alt="Koi Nhat 1" />
             </div>
           </div>
           <div>

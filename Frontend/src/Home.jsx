@@ -17,7 +17,21 @@ const { Paragraph } = Typography;
 import axiosInstance from "./An/Utils/axiosJS";
 import { fetchLoginUserData, getManager } from "./services/userService";
 import CustomerChatButton from "./Components/Chat/CustomerChat";
-
+import img1 from "../src/assets/nguon-goc-kohaku.jpg";
+import img2 from "../src/assets/Koi-Ogon-1/hi-ogon.jpg";
+import img3 from "../src/assets/Koi-Showa/doistu-showa.jpg";
+import img4 from "../src/assets/Koi-Tancho/Tancho-Showa.png";
+import img5 from "../src/assets/Koi Bekko/ca-koi-bekko-4.webp";
+import img6 from "../src/assets/Koi-Doitsu/1_9328_anh1.jpg";
+import img7 from "../src/assets/Koi-Doitsu/1_9328_anh1.jpg";
+import img8 from "../src/assets/Koi-Ginrin/Cá koi Ginrin Showa 4.jpg";
+import img9 from "../src/assets/Koi Benigoi/BENIGOI1.jpg";
+import img10 from "../src/assets/Koi-Asagi/konjo-asagi.jpg";
+import img11 from "../src/assets/koi-platinum-ogon.jpg";
+import img12 from "../src/assets/Koi-shusui/R.jpg";
+import img13 from "../src/assets/homeStyle1.jpg";
+import img14 from "../src/assets/home3.jpg";
+import img15 from "../src/assets/home6.png";
 export default function Home() {
   const location = useLocation();
   const [lastMessage, setLastMessage] = useState("");
@@ -98,61 +112,62 @@ export default function Home() {
   // Dữ liệu cá koi
   const koiData = [
     {
-      src: "src/assets/nguon-goc-kohaku.jpg",
+      src: img1,
       alt: "Koi Kohaku",
       name: "kohaku",
     },
     {
-      src: "src/assets/Koi-Ogon-1/hi-ogon.jpg",
+      src: img2,
+      alt: "Koi Ogon",
       name: "ogon",
     },
     {
-      src: "src/assets/Koi-Showa/doistu-showa.jpg",
+      src: img3,
       alt: "Koi Showa",
       name: "showa",
     },
     {
-      src: "src/assets/Koi-Tancho/Tancho-Showa.png",
+      src: img4,
       alt: "Koi Tancho",
       name: "tancho",
     },
     {
-      src: "src/assets/Koi Bekko/ca-koi-bekko-4.webp",
+      src: img5,
       alt: "Koi Bekko",
       name: "bekko",
     },
     {
-      src: "src/assets/Koi-Doitsu/Cá koi Ginrin Showa 4.jpg",
+      src: img6,
       alt: "Koi Doitsu",
       name: "doitsu",
     },
     {
-      src: "src/assets/Koi-Ginrin/Cá koi Ginrin Showa 4.jpg",
-      alt: "Koi Girin",
-      name: "girin",
+      src: img7,
+      alt: "Koi Ginrin",
+      name: "ginrin",
     },
     {
-      src: "src/assets/koi-goshiki.jpg",
+      src: img8,
       alt: "Koi Goshiki",
       name: "goshiki",
     },
     {
-      src: "src/assets/Koi Benigoi/BENIGOI1.jpg",
+      src: img9,
       alt: "Koi Benigoi",
       name: "benigoi",
     },
     {
-      src: "src/assets/Koi-Asagi/4789c7fd1367ba7ae35a271f1b912a8c.png",
+      src: img10,
       alt: "Koi Asagi",
       name: "asagi",
     },
     {
-      src: "src/assets/koi-platinum-ogon.jpg",
+      src: img11,
       alt: "Koi Platinum",
       name: "platinum",
     },
     {
-      src: "src/assets/Koi-shusui/R.jpg",
+      src: img12,
       alt: "Koi Shusui",
       name: "shusui",
     },
@@ -274,7 +289,7 @@ export default function Home() {
           <div className="row-fix">
             <div className="item">
               <div className="block-child">
-                <img src="src/assets/homeStyle1.jpg" loading="lazy" />
+                <img src={img13} loading="lazy" />
               </div>
             </div>
             <div className="item">
@@ -441,7 +456,7 @@ export default function Home() {
                   </p>
                 </div>
                 <img
-                  src="src/assets/home3.jpg"
+                  src={img14}
                   alt="IKOI Background"
                   className="background-image"
                   loading="lazy"
@@ -470,7 +485,7 @@ export default function Home() {
       <div
         className="image-background"
         style={{
-          backgroundImage: "url('src/assets/home6.png')",
+          backgroundImage: `url(${img15})`, //
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",

@@ -2,6 +2,12 @@ import { Container } from "react-bootstrap";
 import { Typography } from "antd";
 const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
+import img1 from "../../src/assets/GioiThieuF1/1.jpg";
+import img2 from "../../src/assets/GioiThieuF1/2.jpg";
+import img3 from "../../src/assets/GioiThieuF1/3.webp";
+import img4 from "../../src/assets/GioiThieuF1/4.webp";
+import img5 from "../../src/assets/GioiThieuF1/5.webp";
+import img6 from "../../src/assets/GioiThieuF1/6.webp";
 export default function GioiThieuVeKoiF1() {
   const data = [
     {
@@ -81,7 +87,7 @@ export default function GioiThieuVeKoiF1() {
               tại và phát triển tốt nhất.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuF1/1.jpg" />
+              <img src={img1} />
             </div>
           </div>
           <div>
@@ -111,7 +117,7 @@ export default function GioiThieuVeKoiF1() {
               cảnh, sông, hồ, và tiếp tục phát triển.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuF1/2.jpg" />
+              <img src={img2} />
             </div>
           </div>
           <div>
@@ -141,7 +147,7 @@ export default function GioiThieuVeKoiF1() {
                       hiện lên với ánh bạc bắt mắt.
                     </Paragraph>
                     <div>
-                      <img src="src/assets/GioiThieuF1/3.webp" />
+                      <img src={img3} />
                     </div>
                   </li>
                   <li>
@@ -181,7 +187,7 @@ export default function GioiThieuVeKoiF1() {
                   </tbody>
                 </Table>
                 <div>
-                  <img src="src/assets/GioiThieuF1/4.webp" />
+                  <img src={img4} />
                 </div>
               </li>
               <li>
@@ -204,7 +210,7 @@ export default function GioiThieuVeKoiF1() {
                   hợp với ngân sách của bạn.
                 </Paragraph>
                 <div>
-                  <img src="src/assets/GioiThieuF1/5.webp" />
+                  <img src={img5} />
                 </div>
               </li>
             </ul>
@@ -229,7 +235,7 @@ export default function GioiThieuVeKoiF1() {
               ngần ngại liên hệ để được tư vấn và lựa chọn chú cá phù hợp.
             </Paragraph>
             <div>
-              <img src="src/assets/GioiThieuF1/6.webp" />
+              <img src={img6} />
             </div>
           </div>
         </div>
