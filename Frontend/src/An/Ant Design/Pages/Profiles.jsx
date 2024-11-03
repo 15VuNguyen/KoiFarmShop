@@ -8,7 +8,6 @@ import ProfileTable from '../Components/Table/ProfileTable';
 import { SearchOutlined } from '@ant-design/icons';
 import ProfileModal from '../Components/Modal/ProfileModal';
 import axiosInstance from '../../Utils/axiosJS';
-import ManagerChat from '../../../Components/Chat/ManagerChat.jsx';
 
 export default function Profiles() {
   const { Header, Content } = Layout;

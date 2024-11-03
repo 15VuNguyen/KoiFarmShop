@@ -15,10 +15,8 @@ import { Typography } from "antd";
 import { Button, Container } from "react-bootstrap";
 const { Paragraph } = Typography;
 import axiosInstance from "./An/Utils/axiosJS";
-import ChatButton from './Components/Chat/ChatButton'
-import BoxChat from './Components/Chat/BoxChat'
-import ChatList from './Components/Chat/ChatList'
 import { fetchLoginUserData, getManager } from "./services/userService";
+import CustomerChat from "./Components/Chat/CustomerChat";
 
 export default function Home() {
   const location = useLocation();
@@ -531,20 +529,7 @@ export default function Home() {
         </div>
       </div>
 
-        <div className='chat-container'>
-          <BoxChat
-            show={isShow}
-            setShow={setIsShow}
-            receiver={manager}
-            user={user}
-          />
-          <ChatButton
-            show={isShow}
-            setShow={setIsShow}
-            receiver={manager}
-          />
-
-        </div>
+        <CustomerChat/>
 
       <Footer style={{ paddingTop: "20px" }} />
     </>
