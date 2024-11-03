@@ -251,7 +251,7 @@ export default function ConsignDetail({ consignID }) {
       onOk: async () => {
         try {
           let updatedFields 
-          if (field === 'State' && editValue === 4 && consign.Price === 0 || consign.Price === null) {
+          if (field === 'State' && editValue === 4 && koi.Price == 0 || consign.Price === null) {
             message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
             return;
           }
@@ -320,7 +320,7 @@ export default function ConsignDetail({ consignID }) {
 
 
               : inputType === 'selectCommission' ? (
-                <InputNumber min={0} required value={editValue} onChange={(value) => setEditValue(value)} suffix={"%"} />
+                <InputNumber min={0} max={99} required value={editValue} onChange={(value) => setEditValue(value)} suffix={"%"} />
               ) : inputType === 'selectPrice' ? (
 
                 consign.State === 3 || consign.State === '3' ? (
