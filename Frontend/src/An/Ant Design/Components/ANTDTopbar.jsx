@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Avatar, Typography, Dropdown } from "antd";
+import { Layout, Menu, Avatar, Typography, Dropdown, Space } from "antd";
 import { RxAvatar } from "react-icons/rx";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
@@ -38,15 +38,13 @@ export default function AnTopBar({ children, name, role }) {
 
     const menuItems = [
         { key: "1", label: <Link to="/NewDashBoard/staff/Profiles">Hồ Sơ</Link> },
-        { key: "2", label: <Link to="/DashBoard/staff/Orders">Đơn Hàng</Link> },
-        { key: "3", label: <Link to="/NewDashBoard/staff/Consigns">Quản Lý Đơn Ký Gửi</Link> },
-        { key: "4", label: <Link to="/DashBoard/manager/ManageKoi">Quản Lý Cá Koi</Link> },
-        { key: "5", label: <Link to="/NewDashBoard/staff/Suppliers">Quản Lý Nhà Cung Cấp</Link> },
-        { key: "6", label: <Link to="/NewDashBoard/staff/Invoices">Quản Lý Hóa Đơn</Link> },
-        {key: "8" , label: <Link to="/NewDashBoard/staff/Orders">Quản Lý Đơn Hàng</Link>},
-        { key: "9", label: <Link to="/NewDashBoard/staff/Kois">Quản Lý Cá Koi</Link> },
+        { key: "2", label: <Link to="/NewDashBoard/staff/Consigns">Quản Lý Đơn Ký Gửi</Link> },
+        { key: "3", label: <Link to="/NewDashBoard/staff/Suppliers">Quản Lý Nhà Cung Cấp</Link> },
+        { key: "4", label: <Link to="/NewDashBoard/staff/Invoices">Quản Lý Hóa Đơn</Link> },
+        {key: "5" , label: <Link to="/NewDashBoard/staff/Orders">Quản Lý Đơn Hàng</Link>},
+        { key: "6", label: <Link to="/NewDashBoard/staff/Kois">Quản Lý Cá Koi</Link> },
         { type: "divider" },
-        { key: "10", label: <p onClick={logout}>Đăng Xuất</p> },
+        { key: "7", label: <p onClick={logout}>Đăng Xuất</p> },
     ];
 
     const menu = <Menu items={menuItems} />;
@@ -58,12 +56,18 @@ export default function AnTopBar({ children, name, role }) {
             <div className="logo" style={{ float: "left", color: "white", fontSize: "1.5rem" }}>
               IKOI
             </div>
-            
+            <Space size={"large"} >
             <Dropdown overlay={menu} trigger={['click']} className="menu-dropdown">
               <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{color:'white'}}>
                 Menu Quản Lý
               </a>
             </Dropdown>
+            <Dropdown overlay={menu} trigger={['click']} className="menu-dropdown">
+              <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{color:'white'}}>
+                Báo Cáo
+              </a>
+            </Dropdown>
+            </Space>
             <div className="topbar-right" style={{ float: "right" }}>
               <Typography.Text style={{ color: "white", marginRight: "10px" }}>
                 Xin chào {name} Quản Lý {role}
