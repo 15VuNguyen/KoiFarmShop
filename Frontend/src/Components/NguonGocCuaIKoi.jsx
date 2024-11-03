@@ -131,7 +131,7 @@ export default function NguonGocCuaIKoi() {
                     style={{
                       textAlign: "center",
                       width: "100%",
-                      height: "auto",
+                      height: "600px",
                     }}
                   />
                 )}

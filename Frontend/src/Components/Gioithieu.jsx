@@ -3,8 +3,7 @@ import Navbar from "./Navbar/Navbar";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { Layout, Typography } from "antd";
-const { Title, Text, Paragraph } = Typography;
-import { Table } from "react-bootstrap";
+const { Paragraph } = Typography;
 export default function Gioithieu() {
   const [menu, setMenu] = useState("home");
   return (

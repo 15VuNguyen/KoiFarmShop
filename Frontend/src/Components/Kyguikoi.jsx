@@ -109,11 +109,11 @@ export default function Kyguikoi() {
       };
 
       const shippedDateObj = formData.shippedDate
-        ? new Date(formatDateToISO(formData.shippedDate) + "T00:00:00Z") 
+        ? new Date(formatDateToISO(formData.shippedDate) + "T00:00:00Z")
         : null;
 
       const receiptDateObj = formData.receiptDate
-        ? new Date(formatDateToISO(formData.receiptDate) + "T00:00:00Z") 
+        ? new Date(formatDateToISO(formData.receiptDate) + "T00:00:00Z")
         : null;
 
       const currentDate = new Date();
@@ -125,7 +125,20 @@ export default function Kyguikoi() {
         (shippedDateObj < currentDate ||
           (receiptDateObj && shippedDateObj > receiptDateObj))
       ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc sau ngày nhận!");
+        toast.error("Ngày gửi không được ở quá khứ hoặc trước ngày nhận!");
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
+      if (
+        shippedDateObj &&
+        (shippedDateObj < currentDate ||
+          (receiptDateObj &&
+            (shippedDateObj > receiptDateObj ||
+              receiptDateObj <
+                new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000)))) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
+      ) {
+        toast.error(
+          "Ngày gửi không được ở quá khứ, trước ngày nhận, hoặc ngày nhận phải cách ngày gửi ít nhất 1 tháng!"
+        );
         return; // Dừng lại nếu ngày không hợp lệ
       }
 
@@ -354,7 +367,8 @@ export default function Kyguikoi() {
                       disabledDate={(current) =>
                         current && current < moment().startOf("day")
                       }
-                      format="DD/MM/YYYY" // Thay đổi format ở đây
+                      format="DD/MM/YYYY"
+                      inputReadOnly
                     />
                   </Form.Item>
                   <Form.Item label="Ngày Nhận" name="receiptDate">
@@ -364,17 +378,19 @@ export default function Kyguikoi() {
                       disabledDate={(current) =>
                         current && current < moment().startOf("day")
                       }
-                      format="DD/MM/YYYY" // Thay đổi format ở đây
+                      format="DD/MM/YYYY"
+                      inputReadOnly
                     />
                   </Form.Item>
                 </div>
               </div>
 
-              <Form.Item label="Chi tiết về đơn ký gửi " name="Detail">
+              <Form.Item label="Chi tiết về đơn ký gửi">
                 <Input.TextArea
+                  name="Detail"
                   value={formData.Detail}
                   onChange={handleChange}
-                  placeholder="Nhập chi tiết về đơn ký gửi"
+                  placeholder="Nhập chi tiết về cá koi của bạn"
                   style={{ height: "150px", resize: "none" }}
                 />
               </Form.Item>
@@ -549,15 +565,15 @@ export default function Kyguikoi() {
                   value={formData.Breed}
                   onChange={handleChange}
                 >
-                  <Radio value="Nhật">Nhật</Radio>
-                  <Radio value="Việt">Việt</Radio>
+                  <Radio value="Nhat">Nhật</Radio>
+                  <Radio value="Viet">Việt</Radio>
                   <Radio value="F1">F1</Radio>
                 </Radio.Group>
               </Form.Item>
 
               <Form.Item
                 name="DailyFoodAmount"
-                label="Nhập lượng thức ăn / ngày(*) (đơn vị kg/ngày)"
+                label="Nhập lượng thức ăn / ngày(*) (đơn vị g/ngày)"
                 rules={[
                   { required: true, message: "Vui lòng nhập lượng thức ăn." },
                   {
@@ -571,7 +587,7 @@ export default function Kyguikoi() {
                       const numericValue = Number(value); // Convert to a number
                       if (numericValue < 1) {
                         return Promise.reject(
-                          new Error("Lượng thức ăn phải lớn hơn hoặc bằng 1.")
+                          new Error("Lượng thức ăn phải lớn hơn bằng 0")
                         );
                       }
                       if (numericValue > 100) {
@@ -602,14 +618,18 @@ export default function Kyguikoi() {
                   { required: true, message: "Vui lòng nhập tỷ lệ lọc." },
                   {
                     type: "string",
-                    min: 0, // Update min to 0.1 as per your requirement
+                    min: 1, // Update min to 0.1 as per your requirement
                     max: 100,
                     message: "Tỷ lệ lọc phải từ 0.1 đến 100.",
                   },
                   {
                     validator: (_, value) => {
                       const numericValue = Number(value); // Convert to a number
-
+                      if (numericValue < 1) {
+                        return Promise.reject(
+                          new Error("Tỷ lệ lọc phải lớn hơn 0")
+                        );
+                      }
                       if (numericValue > 100) {
                         return Promise.reject(
                           new Error("Tỷ lệ lọc phải nhỏ hơn bằng 100")
@@ -627,7 +647,7 @@ export default function Kyguikoi() {
                   type="number"
                   placeholder="Nhập tỷ lệ lọc"
                   max={100}
-                  step={0.1}
+                  min={1}
                 />
               </Form.Item>
 

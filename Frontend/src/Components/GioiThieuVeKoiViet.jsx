@@ -2,7 +2,12 @@ import { Container } from "react-bootstrap";
 import { Typography } from "antd";
 const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
-
+import img1 from "Frontend/src/assets/GioiThieuKoiViet/1.jpg";
+import img2 from "Frontend/src/assets/GioiThieuKoiViet/2.jpg";
+import img3 from "Frontend/src/assets/GioiThieuKoiViet/3.jpg";
+import img4 from "Frontend/src/assets/GioiThieuKoiViet/4.jpg";
+import img5 from "Frontend/src/assets/GioiThieuKoiViet/5.jpg";
+import img6 from "Frontend/src/assets/GioiThieuKoiViet/6.jpg";
 export default function GioiThieuVeKoiViet() {
   const data = [
     {
@@ -71,7 +76,7 @@ export default function GioiThieuVeKoiViet() {
                 triển tốt trong môi trường tự nhiên.
               </Paragraph>
               <div>
-                <img src="src/assets/GioiThieuViet/1.jpg" alt="Koi Viet 1" />
+                <img src={img1} alt="Koi Viet 1" />
               </div>
             </div>
             <div>
@@ -84,7 +89,7 @@ export default function GioiThieuVeKoiViet() {
                 sóc cá bố mẹ cẩn thận để đảm bảo sức khỏe và chất lượng trứng.
               </Paragraph>
               <div>
-                <img src="src/assets/GioiThieuViet/2.jpg" alt="Koi Viet 2" />
+                <img src={img2} alt="Koi Viet 2" />
               </div>
             </div>
             <div>
@@ -108,10 +113,7 @@ export default function GioiThieuVeKoiViet() {
                         không rõ ràng.
                       </Paragraph>
                       <div>
-                        <img
-                          src="src/assets/GioiThieuViet/3.webp"
-                          alt="Koi Viet 3"
-                        />
+                        <img src={img3} alt="Koi Viet 3" />
                       </div>
                     </li>
                   </ul>
@@ -139,10 +141,7 @@ export default function GioiThieuVeKoiViet() {
                     </tbody>
                   </Table>
                   <div>
-                    <img
-                      src="src/assets/GioiThieuViet/4.webp"
-                      alt="Koi Viet 4"
-                    />
+                    <img src={img4} alt="Koi Viet 4" />
                   </div>
                 </li>
                 <li>
@@ -156,10 +155,7 @@ export default function GioiThieuVeKoiViet() {
                     thuộc vào kích thước và màu sắc.
                   </Paragraph>
                   <div>
-                    <img
-                      src="src/assets/GioiThieuViet/5.webp"
-                      alt="Koi Viet 5"
-                    />
+                    <img src={img5} alt="Koi Viet 5" />
                   </div>
                 </li>
               </ul>
@@ -175,7 +171,7 @@ export default function GioiThieuVeKoiViet() {
                 mang lại giá trị cao hơn về mặt nghệ thuật và thẩm mỹ.
               </Paragraph>
               <div>
-                <img src="src/assets/GioiThieuViet/6.webp" alt="Koi Viet 6" />
+                <img src={img6} alt="Koi Viet 6" />
               </div>
             </div>
           </div>
