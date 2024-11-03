@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import { toast } from "react-toastify";
-import { useOrder } from "../Context/OrderContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaCartPlus } from "react-icons/fa";
@@ -20,8 +19,7 @@ import Platinum from "./ThongTinCaKoi/Platinum";
 import Showa from "./ThongTinCaKoi/Showa";
 import Shusui from "./ThongTinCaKoi/Shusui";
 import Tancho from "./ThongTinCaKoi/Tancho";
-import { Button, Typography, Spin, Layout, Breadcrumb } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+import { Button, Typography, Spin, Layout } from "antd";
 import { Container } from "react-bootstrap";
 const { Title, Text, Paragraph } = Typography;
 
@@ -41,21 +39,6 @@ const OrderPage = () => {
   const [comboQuantity, setComboQuantity] = useState(1); // Track combo quantity
   console.log(selectedItem);
 
-  // useEffect(() => {
-  //   // Check local storage for existing cart data
-  //   const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-  //   const existingItem = cartData.find(
-  //     (item) => item.itemId === selectedItem?._id
-  //   );
-
-  //   if (existingItem && existingItem.quantity === maxQuantity) {
-  //     setIsAddedToCart(true);
-  //     setQuantityInCart(existingItem.quantity || 0); // Set the quantity already in cart
-  //   }
-  // }, [selectedItem, maxQuantity]);
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
   useEffect(() => {
     // Cuộn lên đầu trang khi component được mount
     window.scrollTo(0, 0);
@@ -297,25 +280,6 @@ const OrderPage = () => {
         }}
       >
         <Container>
-          <div>
-            <Breadcrumb
-              style={{
-                padding: "16px",
-                marginTop: "10px",
-                backgroundColor: "#f7f7f7",
-                borderRadius: "5px",
-                transform: "translateY(16px)",
-              }}
-            >
-              <Breadcrumb.Item style={{ color: "#1890ff" }}>
-                <HomeOutlined />
-                <Link to={"/"}>Trang chủ</Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item style={{ color: "#1890ff" }}>
-                <Link to={"/koidangban"}>Ký gửi</Link>
-              </Breadcrumb.Item>
-            </Breadcrumb>
-          </div>
           <div
             style={{
               display: "flex",
