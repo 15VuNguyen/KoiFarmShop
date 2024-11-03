@@ -63,10 +63,10 @@ class AdminsService {
     try {
       const checkKoi = await databaseService.consigns.find({ KoiID: KoiIDInput }).toArray()
 
-      if (checkKoi.length > 0) {
-        // Kiểm tra nếu có kết quả
-        // Nếu có trong consigns, thực hiện XOR với 4
+      if (checkKoi.length > 0) { 
+        const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput) }) 
         if (koi.Status === 4) {
+          console.log('status 4')
           await databaseService.kois.findOneAndUpdate(
             { _id: new ObjectId(KoiIDInput) },
             { $set: { Status: 0 } },
