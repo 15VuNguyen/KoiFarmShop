@@ -221,9 +221,9 @@ export default function Kois() {
 
             try {
                 setIsLoading(true);
-                const breedValue = values.Breed;
-                const KOISTATUS = BREEDMAPTOSTATUS[breedValue];
-                values = { ...values, Status: KOISTATUS };
+                // const breedValue = values.Breed;
+                // const KOISTATUS = BREEDMAPTOSTATUS[breedValue];
+                // values = { ...values, Status: KOISTATUS };
                 const reponse = await axiosInstance.put(`/manager/manage-koi/updateKoi/${modalKoi._id}`, values);
                 message.success('Update Koi Success');
                 console.log(reponse);
@@ -276,7 +276,7 @@ export default function Kois() {
                                             {koi.Status === 0 ? (
                                                 <Button icon={<CheckOutlined />} onClick={() => handleDisableEnable(koi._id, 1)}>Enable</Button>
                                             ) : koi.Status === 2 || koi.Status === 3 ? (
-                                                <Tooltip title="Cannot disable this Koi">
+                                                <Tooltip title="Koi có nguồn gốc F1 hoặc thuần việt không thể cập nhật">
                                                     <Button danger icon={<StopOutlined />} disabled>Vô Hiệu Hóa</Button>
                                                 </Tooltip>
                                             ) : (
