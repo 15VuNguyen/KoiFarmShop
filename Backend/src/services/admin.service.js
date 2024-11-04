@@ -47,8 +47,20 @@ class AdminsService {
       if (error) {
         return { success: false, message: error.details[0].message }
       }
+      const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiID) })
 
       const updateKoi = await databaseService.kois.findOneAndUpdate({ _id: new ObjectId(KoiID) }, { $set: payload })
+
+      const updateKoiConsign = await databaseService.consigns.findOne({ KoiID: KoiID })
+
+      if (updateKoiConsign) {
+        const newPrice = payload.Price - (payload.Price * updateKoiConsign.Commission) / 100
+        await databaseService.consigns.findOneAndUpdate(
+          { KoiID: KoiID },
+          { $set: { TotalPrice: newPrice } },
+          { new: true }
+        )
+      }
 
       if (!updateKoi) {
         return { success: false, message: 'Koi not found' }
@@ -63,8 +75,8 @@ class AdminsService {
     try {
       const checkKoi = await databaseService.consigns.find({ KoiID: KoiIDInput }).toArray()
 
-      if (checkKoi.length > 0) { 
-        const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput) }) 
+      if (checkKoi.length > 0) {
+        const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput) })
         if (koi.Status === 4) {
           console.log('status 4')
           await databaseService.kois.findOneAndUpdate(
