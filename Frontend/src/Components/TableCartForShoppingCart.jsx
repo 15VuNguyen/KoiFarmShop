@@ -185,20 +185,32 @@ export default function ShoppingCart() {
                       {koi.Price.toLocaleString()}đ
                     </span>
                     <span style={{ fontSize: "15px", marginRight: "120px" }}>
-                      <input
-                        type="number"
-                        min={1}
-                        value={koi.quantity}
-                        onChange={(e) => {
-                          const newQuantity = parseInt(e.target.value, 10);
-                          if (!isNaN(newQuantity) && newQuantity >= 1) {
-                            handleUpdateQuantity(koi._id, newQuantity);
-                          } else {
-                            handleUpdateQuantity(koi._id, 1);
-                          }
-                        }}
-                        style={{ width: "70px" }}
-                      />
+                      {koi.Status === 1 ||
+                        koi.Status === 2 ||
+                        (koi.Status === 3 && (
+                          <input
+                            type="number"
+                            min={1}
+                            value={koi.quantity}
+                            onChange={(e) => {
+                              const newQuantity = parseInt(e.target.value, 10);
+                              if (!isNaN(newQuantity) && newQuantity >= 1) {
+                                handleUpdateQuantity(koi._id, newQuantity);
+                              } else {
+                                handleUpdateQuantity(koi._id, 1);
+                              }
+                            }}
+                            style={{ width: "70px" }}
+                          />
+                        ))}
+                      {koi.Status === 4 && (
+                        <input
+                          type="number"
+                          min={1}
+                          value={1}
+                          style={{ width: "70px" }}
+                        />
+                      )}
                     </span>
                     <span
                       style={{

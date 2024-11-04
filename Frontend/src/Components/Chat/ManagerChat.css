@@ -1,39 +1,39 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.chat-btn-container{
+.chat-btn-container {
   position: fixed;
   bottom: 0;
   width: fit-content;
 }
 
-    .list-container{
-        z-index: 100;
-        top: 0;
-    }
-  
-  .mess-btn{
-    font-size: 22px;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background-color: rgba(218, 218, 218,0.5);
-    text-align: center;
-    align-content: center;
-    cursor: pointer;
-  }
-  .mess-btn:hover{
-    background-color: #dadada;
-  }
-  .name{
-    max-width: 150px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+.list-container {
+  z-index: 100;
+  top: 0;
+}
+
+.mess-btn {
+  font-size: 22px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: rgba(218, 218, 218, 0.5);
+  text-align: center;
+  align-content: center;
+  cursor: pointer;
+}
+.mess-btn:hover {
+  background-color: #dadada;
+}
+.name {
+  max-width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
   .list-chat{
     width: 400px;

@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb'
+import { Int32, ObjectId } from 'mongodb'
 import HTTP_STATUS from '../constants/httpStatus.js'
 import { MANAGER_MESSAGES } from '../constants/managerMessage.js'
 import { ErrorWithStatus } from '../models/Errors.js'
@@ -244,17 +244,18 @@ class ConsignsService {
         $set: {
           CategoryID: payload.CategoryID || koi.CategoryID || '',
           KoiName: payload.KoiName || koi.KoiName || '',
-          Age: payload.Age || koi.Age || '',
+          Age: parseInt(payload.Age) || koi.Age || '',
           Origin: payload.Origin || koi.Origin || '',
           Gender: payload.Gender || koi.Gender || '',
-          Size: payload.Size || koi.Size || '',
+          Size: parseInt(payload.Size) || koi.Size || '',
           Breed: payload.Breed || koi.Breed || '',
           Description: payload.Description || koi.Description || '',
-          DailyFoodAmount: payload.DailyFoodAmount || koi.DailyFoodAmount || '',
-          FilteringRatio: payload.FilteringRatio || koi.FilteringRatio || '',
+          DailyFoodAmount: parseInt(payload.DailyFoodAmount) || koi.DailyFoodAmount || '',
+          FilteringRatio: parseInt(payload.FilteringRatio) || koi.FilteringRatio || '',
           CertificateID: payload.CertificateID || koi.CertificateID || '',
           Image: payload.Image || koi.Image || '',
-          Video: payload.Video || koi.Video || ''
+          Video: payload.Video || koi.Video || '',
+          Status: parseInt(payload.Status) || koi.Status || ''
         }
       }
     ])
@@ -267,7 +268,8 @@ class ConsignsService {
           ReceiptDate: payload.ReceiptDate || consign.ReceiptDate || '',
           Detail: payload.Detail || consign.Detail || '',
           Method: payload.Method || consign.Method || '',
-          PositionCare: payload.PositionCare || consign.PositionCare || ''
+          PositionCare: payload.PositionCare || consign.PositionCare || '',
+          State: consign.State || ''
         }
       }
     ])
