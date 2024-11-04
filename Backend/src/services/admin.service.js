@@ -47,9 +47,23 @@ class AdminsService {
       if (error) {
         return { success: false, message: error.details[0].message }
       }
-      const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiID) })
 
-      const updateKoi = await databaseService.kois.findOneAndUpdate({ _id: new ObjectId(KoiID) }, { $set: payload })
+      const updatedPayload = { ...payload }
+      await databaseService.kois.findOne({ _id: new ObjectId(KoiID) })
+
+      if (updatedPayload.Breed === 'Nhat') {
+        updatedPayload.Status = 1
+      } else if (updatedPayload.Breed === 'Viet') {
+        updatedPayload.Status = 3
+      } else if (updatedPayload.Breed === 'F1') {
+        updatedPayload.Status = 2
+      }
+
+      const updateKoi = await databaseService.kois.findOneAndUpdate(
+        { _id: new ObjectId(KoiID) },
+        { $set: updatedPayload },
+        { new: true }
+      )
 
       const updateKoiConsign = await databaseService.consigns.findOne({ KoiID: KoiID })
 
