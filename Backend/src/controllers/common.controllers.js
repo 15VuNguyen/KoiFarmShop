@@ -148,8 +148,28 @@ export const getUserInfoForChatController = async (req, res) => {
   }
 }
 
+export const checkCartController = async (req, res) => {
+  try {
+    const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {}
 
+    const KoiIDs = reqOrderDTCookie.Items.map((item) => item.KoiID)
 
+    for (const koiID of KoiIDs) {
+      const check = await databaseService.kois.findOne({ _id: new ObjectId(koiID) })
 
+      if (check.Status === 0) {
+        return res.status(410).json({
+          message: `${check.KoiName} đã hết hàng`
+        })
+      }
+    }
 
-
+    return res.status(200).json({
+      message: 'Available'
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'An error occurred while processing your request.'
+    })
+  }
+}
