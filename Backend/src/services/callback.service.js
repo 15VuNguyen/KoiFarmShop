@@ -59,21 +59,26 @@ export const callback = async (req, res) => {
         }
       }
 
-      const groupKoi = await databaseService.groupKois.find().toArray()
-      const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
+      try {
+        const groupKoi = await databaseService.groupKois.find().toArray()
 
-      for (const groupKoi of groupKoiID) {
-        const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
-        // check xem tất cả phần tử có Status = 0 chưa
-        const allStatusZero = Koi.every((koi) => koi.Status === 0)
+        const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
 
-        if (allStatusZero) {
-          await databaseService.groupKois.findOneAndUpdate(
-            { _id: new ObjectId(groupKoi) },
-            { $set: { Status: 2 } },
-            { new: true }
-          )
+        for (const groupKoi of groupKoiID) {
+          const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
+
+          const allStatusZero = Koi.every((koi) => koi.Status === 0)
+
+          if (allStatusZero) {
+            await databaseService.invoices.findOneAndUpdate(
+              { GroupKoiIDInvoice: groupKoi },
+              { $set: { Status: 2 } },
+              { new: true }
+            )
+          }
         }
+      } catch (error) {
+        console.error('Error occurred:', error)
       }
 
       if (!reqOrderDetails) {
