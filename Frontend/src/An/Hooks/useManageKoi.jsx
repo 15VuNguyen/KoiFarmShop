@@ -159,17 +159,11 @@ export const useManageKoi = () => {
             await axiosInstance.put(`manager/manage-koi/disable-enable/${koiId}`);
 
             // Update the status to the new status
-            setResult(result.map(koi => {
-                if (koi._id === koiId) {
-                    if (koi.Status !== 0) {
-                        const newStatus = 0;
-                        return { ...koi, Status: newStatus };
-
-                    }
-                    else setUpdatedKoi(updatedKoi + 1);
-                }
-                return koi;
-            }));
+          
+                    setUpdatedKoi(updatedKoi + 1);
+                
+          
+         
         } catch (error) {
             message.error('Failed to disable/enable koi. Please try again.'+error.response.data.message);
             
