@@ -10,7 +10,6 @@ export default function Gioithieu() {
     <>
       <Layout>
         <Navbar menu={menu} setMenu={setMenu} />
-
         <Container>
           <div>
             <div>

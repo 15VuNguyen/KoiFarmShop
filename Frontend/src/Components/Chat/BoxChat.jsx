@@ -80,14 +80,14 @@ const BoxChat = (props) => {
       console.log("new message.chatID: ", newMessage.ChatId);
       console.log("selected chat ID: ", selectedChat?._id);
       if (newMessage.ChatId === selectedChat?._id) {
-        setMessageList([...messageList, newMessage]);
+        setMessageList((prevMessage) => [...prevMessage, newMessage]);
       } else {
         console.log("message from another box");
       }
     });
 
     return () => socket?.off("newMessage");
-  }, [socket, selectedChat?._id, messageList]);
+  }, [socket, selectedChat?._id]);
 
   return (
     <div className={`box-chat ${show ? "" : "hide"}`}>

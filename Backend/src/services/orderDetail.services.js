@@ -463,7 +463,7 @@ class OrderDetailService {
             //         Price: Number(koi.Price)
             //     }
             // }
-            koiList = await databaseService.kois.find(koiProperties).toArray()
+            koiList = (await databaseService.kois.find(koiProperties).toArray()).filter(koi => koi.Status != 0)
             return koiList
         } else {
             return { message: 'KoiID not found' }

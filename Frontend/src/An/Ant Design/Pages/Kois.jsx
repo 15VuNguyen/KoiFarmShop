@@ -66,7 +66,7 @@ export default function Kois() {
             if (isCreating) {
                 form.setFieldsValue({ Image: imgURL });
                 setModalKoi(prev => ({ ...prev, Image: imgURL }));
-                  setImgList(imgURL);
+                setImgList(imgURL);
             }
             else {
                 setModalKoi(updatedKoi);
@@ -142,11 +142,11 @@ export default function Kois() {
     
     };
     const KoiStatusMap = {
-        0: 'Out of Order',
-        1: 'Imported',
+        0: 'Hết Hàng',
+        1: 'Nhập Khẩu',
         2: 'F1',
-        3: 'Vietnam',
-        4: 'Consigned',
+        3: 'Việt',
+        4: 'Ký Gửi',
     };
 
     const handleEditClick = (koi) => {
@@ -169,7 +169,11 @@ export default function Kois() {
         setIsCreating(true);
 
     };
-
+    const BREEDMAPTOSTATUS={
+        'Nhat': 1,
+        'Viet': 3,
+        'F1': 2
+    }
     const [form] = Form.useForm();
     const beforeSubmit = async () => {
         try {
@@ -193,11 +197,18 @@ export default function Kois() {
                 console.log(values);
                 console.log(imgList);
                 console.log(videoList);
-                const theDATA = {...values, Image: imgList, Video: videoList};
+                let theDATA = {...values, Image: imgList, Video: videoList};
+                const breedValue = values.Breed;
+                const KOISTATUS = BREEDMAPTOSTATUS[breedValue];
+                console.log(KOISTATUS + ' ' + breedValue);
                 console.log(theDATA);
-                  const reponse = await axiosInstance.post('/manager/manage-koi/create-new-koi', theDATA);
+                theDATA = {...theDATA, Status: KOISTATUS};
+                console.log(theDATA);
+                const reponse = await axiosInstance.post('/manager/manage-koi/create-new-koi', theDATA);
                 message.success('Create Koi Success');
                 console.log(reponse);
+                setImgList(null);
+                setVideoList(null);
             } catch (error) {
                 console.log(error.response)
                 message.error('Create Koi Failed Reason is' + error.response.data.message);
@@ -291,7 +302,7 @@ export default function Kois() {
                                 customRequest={handleImageUpload}
                                 showUploadList={false}
                                 accept="image/*"
-                                fileList={imgList}
+                                fileList={imgList? [imgList]: []}
                             >
                                 <div style={{ width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
                                     {isLoading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -312,7 +323,7 @@ export default function Kois() {
                                 showUploadList={false}
                                 accept="video/*"
                                 maxCount={1}
-                                fileList={videoList}
+                                fileList={videoList? [videoList]: []}
                             >
                                 <div style={{ width: '480px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
                                     {isLoading ? <LoadingOutlined  /> : <PlusOutlined />}
@@ -405,10 +416,10 @@ export default function Kois() {
                                 name="Breed"
                                 rules={[{ required: true, message: 'Please select a Breed!' }]}>
                                 <Select>
-                                    <Select.Option value="Nhập Khẩu Nhật">Nhập Khẩu Nhật</Select.Option>
-                                    <Select.Option value="Nhập Khẩu Việt">Nhập Khẩu Việt</Select.Option>
-                                    <Select.Option value="Nhập Khẩu Trung">Nhập Khẩu Trung</Select.Option>
-                                    <Select.Option value="Nhập Khẩu F1">Nhập Khẩu F1</Select.Option>
+                                    <Select.Option value="Nhat">Nhập Khẩu Nhật</Select.Option>
+                                    <Select.Option value="Viet">Nhập Khẩu Việt</Select.Option>
+                
+                                    <Select.Option value="F1">Nhập Khẩu F1</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>

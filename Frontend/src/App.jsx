@@ -47,7 +47,7 @@ import ManageKoi from "./An/Pages/Manager/ManageKoi";
 import ManageSupplier from "./An/Pages/Manager/ManageSupplier";
 import ChangePassword from "./Components/ChangePassword";
 import FormFillInformation from "./Components/FormFillInformation";
-import Chart from "./An/Pages/Charts/Charts";
+// import Chart from "./An/Pages/Charts/Charts";
 import PaymentMethod from "./Components/Paymentmethod";
 import ManageInvoices from "./An/Pages/Manager/ManageInvoices";
 import Profiles from "./An/Ant Design/Pages/Profiles";
@@ -70,6 +70,7 @@ import Gioithieuvekoinhatpage from "./Components/Page/Gioithieu/gioithieuvekoinh
 import Gioithieuvekoivietpage from "./Components/Page/Gioithieu/gioithieuvekoiviet";
 import NguongoccuaikoiPage from "./Components/Page/Gioithieu/nguongoccuaikoiPage";
 import Profilepage from "./Components/Page/Thongtincuauser/profilePage";
+import Chart from "./An/Ant Design/Pages/Chart";
 const router = createBrowserRouter([
   {
     path: "/login/oauth",
@@ -272,6 +273,10 @@ const router = createBrowserRouter([
         path: "staff/Kois",
         element: <Kois />,
       },
+      {
+        path: "staff/Report/:chartType",
+        element: <Chart />,
+      }
     ],
   },
   {
@@ -290,14 +295,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "staff/Report/:chartType",
-        element: (
-          <Suspense fallback={<Spinner />}>
-            <Chart />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "staff/Report/:chartType",
+      //   element: (
+      //     <Suspense fallback={<Spinner />}>
+      //       <Chart />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "manager/ManageInvoices",
         element: (

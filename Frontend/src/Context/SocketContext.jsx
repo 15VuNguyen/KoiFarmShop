@@ -54,7 +54,7 @@ export const SocketContextProvider = ({ children }) => {
                 newSocket.close();
             };
         }
-    }, [currentUser?._id]); // Only establish socket connection when `currentUser._id` is available
+    }, [currentUser?._id]);
 
     return (
         <SocketContext.Provider value={{ socket, onlineUser }}>

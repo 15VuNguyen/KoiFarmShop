@@ -30,7 +30,7 @@ const ChatList = (props) => {
 
     useEffect(() => {
         fetchExistedChats()
-    }, [messageList], customer)
+    }, [messageList, customer])
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
