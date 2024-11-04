@@ -246,11 +246,13 @@ export default function Invoices() {
         GroupKoiVideo: videoUrl
       };
       const { SupplierImage, SupplierVideo, ...restValues } = values;
-      const THEREALDATA = {
+      let THEREALDATA = {
         ...restValues,
         GroupKoiImage: imageUrl,
         GroupKoiVideo: videoUrl
       }
+      const breedNhat = 'Nhat'
+      THEREALDATA = { ...THEREALDATA, BreedGroupKoi: breedNhat }
       console.log(THEREALDATA);
       await axiosInstance.post('manager/manage-invoice/create-new-invoice-group-koi', THEREALDATA);
       message.success('Hóa đơn đã được tạo thành công!');
@@ -379,7 +381,7 @@ export default function Invoices() {
           </Form.Item>
 
 
-          <Form.Item
+          {/* <Form.Item
             label="Giống"
             name="BreedGroupKoi"
             initialValue={'F1'}
@@ -390,7 +392,7 @@ export default function Invoices() {
               <Select.Option value="Việt">Việt</Select.Option>
               <Select.Option value="Nhật">Nhật</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label="Giá mỗi Koi"
