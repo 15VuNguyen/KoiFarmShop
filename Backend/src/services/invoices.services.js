@@ -50,11 +50,16 @@ class InvoicesService {
 
     //tạo hóa đơn
     const InvoiceID = new ObjectId()
-    const specificDate = new Date(Date.UTC(2024, 10, 4, 0, 0, 0)); // Tháng 10 là tháng 11 vì tháng trong JavaScript bắt đầu từ 0
+    const currentDate = new Date();
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+
     const invoicePayload = {
       _id: InvoiceID,
       GroupKoiIDInvoice: GroupKoiID,
-      InvoiceDate: specificDate.toISOString(),
+      InvoiceDate: invoiceDateTime,
       Status: 1,
       Discount: discount,
       TotalPrice: quantity * priceOneKoi - quantity * priceOneKoi * (discount / 100)

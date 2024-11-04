@@ -39,54 +39,52 @@ class KoisService {
     }
 
     return `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 50px; border: 1px solid #ddd; border-radius: 25px; background-color: #f9f9f9;">
+      <div style="font-family: Arial, sans-serif; line-height: 1.8; color: #333;  font-size: 14px;">
+        <div style="max-width: 1000px; margin: 0 auto; padding: 40px; border: 1px solid #ddd; border-radius: 20px; background-color: #f9f9f9;">
           <h2 style="text-align: center; color: #4CAF50;">Yêu Cầu Kí Gửi Koi Tại IKOI FARM</h2>
           <p>Xin chào,</p>
           <p>Dưới đây là thông tin chi tiết về yêu cầu ký gửi Koi của bạn:</p>
-          <div style="display: flex; justify-content: space-between; border: 1px solid #ddd; padding: 20px; border-radius: 10px; background-color: #fff;">
-            <div style="flex: 1; margin-right: 10px;">
-            <h3 style="text-align: center; color: #4CAF50;">1. Thông Tin Liên Hệ</h3>
-            <ul>
-              <li><strong>Email:</strong> ${getField(userResult.email, 'email')}</li>
-              <li><strong>Tên:</strong> ${getField(userResult.name, 'tên')}</li>
-              <li><strong>Địa chỉ:</strong> ${getField(userResult.address, 'địa chỉ')}</li>
-              <li><strong>Số điện thoại:</strong> ${getField(userResult.phone_number, 'số điện thoại')}</li>
-            </ul>
+          <div style="display: flex; justify-content: space-between; border: 1px solid #ddd; padding: 10px; border-radius: 10px; background-color: #fff;">
+            <div style="flex: 1; margin-right: 20px;">
+              <h3 style="text-align: center; color: #4CAF50;  font-size: 18px;">1. Thông Tin Liên Hệ</h3>
+              <ul>
+                <li><strong>Email:</strong> ${getField(userResult.email, 'email')}</li>
+                <li><strong>Tên:</strong> ${getField(userResult.name, 'tên')}</li>
+                <li><strong>Địa chỉ:</strong> ${getField(userResult.address, 'địa chỉ')}</li>
+                <li><strong>Số điện thoại:</strong> ${getField(userResult.phone_number, 'số điện thoại')}</li>
+              </ul>
+              <h3 style="text-align: center; color: #4CAF50; font-size: 18px;">3. Thông Tin Về Đơn Ký Gửi</h3>
+              <ul>
+                <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng')}</li>
+                <li><strong>Ngày nhận lại Koi:</strong> ${getField(consignResult.ReceiptDate, 'ngày nhận lại Koi')}</li>
+                <li><strong>Vị trí chăm sóc:</strong> ${getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
+                <li><strong>Phương thức kí gửi:</strong> ${getField(consignResult.Method, 'phương thức kí gửi')}</li>
+                <li><strong>Chi tiết về đơn ký gửi:</strong> ${getField(consignResult.Detail, 'chi tiết')}</li>
+                <li><strong>Trạng thái:</strong> ${getStateDescription(consignResult.State)}</li>
+                <li><strong>Hoa hồng IKOI FARM nhận được cho đơn hàng:</strong> ${getField(consignResult.Commission, 'hoa hồng')}</li>
+                <li><strong>Tổng tiền mà khách hàng sẽ nhận được cho đơn ký gửi:</strong> ${getField(consignResult.TotalPrice, 'tổng tiền')}</li>
+              </ul>
+            </div>
+           <div style="flex: 1; margin-left: 20px;">
+              <h3 style="text-align: center; color: #4CAF50; font-size: 18px;">2. Thông Tin Cá Koi Ký Gửi</h3>
+              <ul>
+                <li><strong>Loài Koi:</strong> ${getField(nameCategory, 'loài Koi')}</li>
+                <li><strong>Tên Koi:</strong> ${getField(koiResult.KoiName, 'tên Koi')}</li>
+                <li><strong>Tuổi:</strong> ${getField(koiResult.Age, 'tuổi Koi')}</li>
+                <li><strong>Xuất xứ:</strong> ${getField(koiResult.Origin, 'xuất xứ Koi')}</li>
+                <li><strong>Giới tính:</strong> ${getField(koiResult.Gender, 'giới tính Koi')}</li>
+                <li><strong>Kích thước:</strong> ${getField(koiResult.Size, 'kích thước Koi')}</li>
+                <li><strong>Giống:</strong> ${getField(koiResult.Breed, 'giống Koi')}</li>
+                <li><strong>Mô tả:</strong> ${getField(koiResult.Description, 'mô tả Koi')}</li>
+                <li><strong>Lượng thức ăn hàng ngày:</strong> ${getField(koiResult.DailyFoodAmount, 'lượng thức ăn hàng ngày Koi')}</li>
+                <li><strong>Tỷ lệ lọc:</strong> ${getField(koiResult.FilteringRatio, 'tỷ lệ lọc Koi')}</li>
+                <li><strong>ID chứng nhận:</strong> ${getField(koiResult.CertificateID, 'ID chứng nhận Koi')}</li>
+                <li><strong>Giá:</strong> ${getField(koiResult.Price, 'giá Koi')}</li>
+                <li><strong>Hình ảnh:</strong> ${getField(koiResult.Image, 'hình ảnh Koi')}</li>
+                <li><strong>Video:</strong> ${getField(koiResult.Video, 'video Koi')}</li>
+              </ul>
+            </div>
           </div>
-           <div style="flex: 1; margin-right: 10px;">
-            <h3 style="text-align: center; color: #4CAF50;">2. Thông Tin Cá Koi Ký Gửi</h3>
-            <ul>
-              <li><strong>Loài Koi:</strong> ${getField(nameCategory, 'loài Koi')}</li>
-              <li><strong>Tên Koi:</strong> ${getField(koiResult.KoiName, 'tên Koi')}</li>
-              <li><strong>Tuổi:</strong> ${getField(koiResult.Age, 'tuổi Koi')}</li>
-              <li><strong>Xuất xứ:</strong> ${getField(koiResult.Origin, 'xuất xứ Koi')}</li>
-              <li><strong>Giới tính:</strong> ${getField(koiResult.Gender, 'giới tính Koi')}</li>
-              <li><strong>Kích thước:</strong> ${getField(koiResult.Size, 'kích thước Koi')}</li>
-              <li><strong>Giống:</strong> ${getField(koiResult.Breed, 'giống Koi')}</li>
-              <li><strong>Mô tả:</strong> ${getField(koiResult.Description, 'mô tả Koi')}</li>
-              <li><strong>Lượng thức ăn hàng ngày:</strong> ${getField(koiResult.DailyFoodAmount, 'lượng thức ăn hàng ngày Koi')}</li>
-              <li><strong>Tỷ lệ lọc:</strong> ${getField(koiResult.FilteringRatio, 'tỷ lệ lọc Koi')}</li>
-              <li><strong>ID chứng nhận:</strong> ${getField(koiResult.CertificateID, 'ID chứng nhận Koi')}</li>
-              <li><strong>Giá:</strong> ${getField(koiResult.Price, 'giá Koi')}</li>
-              <li><strong>Hình ảnh:</strong> ${getField(koiResult.Image, 'hình ảnh Koi')}</li>
-              <li><strong>Video:</strong> ${getField(koiResult.Video, 'video Koi')}</li>
-            </ul>
-          </div>
-          <div style="flex: 1;">
-            <h3 style="text-align: center; color: #4CAF50;">3. Thông Tin Về Đơn Ký Gửi</h3>
-            <ul>
-              <li><strong>Ngày vận chuyển Koi:</strong> ${getField(consignResult.ShippedDate, 'ngày vận chuyển Koi')}</li>
-              <li><strong>Ngày nhận lại Koi:</strong> ${getField(consignResult.ReceiptDate, 'ngày nhận lại Koi')}</li>
-              <li><strong>Vị trí chăm sóc:</strong> ${getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
-              <li><strong>Phương thức kí gửi:</strong> ${getField(consignResult.Method, 'phương thức kí gửi')}</li>
-              <li><strong>Chi tiết về đơn ký gửi:</strong> ${getField(consignResult.Detail, 'chi tiết')}</li>
-              <li><strong>Trạng thái:</strong> ${getField(getStateDescription(consignResult.State))}</li>
-              <li><strong>Hoa hồng IKOI FARM nhận được cho đơn hàng:</strong> ${getField(consignResult.Commission, 'hoa hồng')}</li>
-              <li><strong>Tổng tiền mà khách hàng sẽ nhận được cho đơn ký gửi:</strong> ${getField(consignResult.TotalPrice, 'tổng tiền')}</li>
-            </ul>
-          </div>
-        </div>
           <p>Chúng tôi rất vui mừng chào đón bạn. Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.</p>
           <p>Trân trọng,</p>
           <p>Đội ngũ IKOI FARM</p>
