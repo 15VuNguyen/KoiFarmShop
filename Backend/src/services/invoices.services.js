@@ -50,10 +50,11 @@ class InvoicesService {
 
     //tạo hóa đơn
     const InvoiceID = new ObjectId()
+    const specificDate = new Date(Date.UTC(2024, 10, 4, 0, 0, 0)); // Tháng 10 là tháng 11 vì tháng trong JavaScript bắt đầu từ 0
     const invoicePayload = {
       _id: InvoiceID,
       GroupKoiIDInvoice: GroupKoiID,
-      InvoiceDate: new Date(),
+      InvoiceDate: specificDate.toISOString(),
       Status: 1,
       Discount: discount,
       TotalPrice: quantity * priceOneKoi - quantity * priceOneKoi * (discount / 100)
@@ -128,7 +129,8 @@ class InvoicesService {
           Discount: discountInvoice,
           TotalPrice:
             quantityGroupKoi * priceOneKoiGroupKoi - quantityGroupKoi * priceOneKoiGroupKoi * (discountInvoice / 100) ??
-            invoice.TotalPrice ?? 0
+            invoice.TotalPrice ??
+            0
         }
       }
     ])
