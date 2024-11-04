@@ -261,7 +261,7 @@ export default function Invoices() {
       setRefreshData(!refreshData);
       form.resetFields();
     } catch (error) {
-
+      console.error('Error:', error); 
       message.error('Vui lòng kiểm tra lại các trường!');
       setLoading(false);
     }
@@ -434,7 +434,7 @@ export default function Invoices() {
 
 
           <Form.Item
-            label="Supplier Image"
+            label="Ảnh nhóm Koi"
             name="SupplierImage"
           // rules={[
           //   {
@@ -457,6 +457,7 @@ export default function Invoices() {
             <Upload
               listType="picture"
               customRequest={handleImageUpload}
+              maxCount={1}
               {...(isUpdate && {
                 fileList: imageUrl
                   ? [{ url: imageUrl, thumbUrl: imageUrl, name: 'Group Koi Image' }]
@@ -476,7 +477,7 @@ export default function Invoices() {
           </Form.Item>
 
           <Form.Item
-            label="Video"
+            label="Video nhóm Koi"
             name="SupplierVideo"
             rules={[]}
           >

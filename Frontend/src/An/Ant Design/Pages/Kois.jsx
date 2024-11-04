@@ -224,6 +224,7 @@ export default function Kois() {
                 // const breedValue = values.Breed;
                 // const KOISTATUS = BREEDMAPTOSTATUS[breedValue];
                 // values = { ...values, Status: KOISTATUS };
+                console.log(values);
                 const reponse = await axiosInstance.put(`/manager/manage-koi/updateKoi/${modalKoi._id}`, values);
                 message.success('Update Koi Success');
                 console.log(reponse);
@@ -426,9 +427,9 @@ export default function Kois() {
                                 name="Breed"
                                 rules={[{ required: true, message: 'Hãy chọn giống Koi!' }]}>
                                 <Select>
-                                    <Select.Option value="Nhat"> Nhật</Select.Option>
-                                    <Select.Option value="Viet">Việt</Select.Option>
-                                    <Select.Option value="F1">F1</Select.Option>
+                                    <Select.Option value="Nhat"><Typography.Text strong>Nhập Khẩu Nhật</Typography.Text></Select.Option>
+                                    <Select.Option value="Viet"><Typography.Text strong>Cá IKOI Việt</Typography.Text></Select.Option>
+                                    <Select.Option value="F1"><Typography.Text strong>Cá IKOI F1</Typography.Text></Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
