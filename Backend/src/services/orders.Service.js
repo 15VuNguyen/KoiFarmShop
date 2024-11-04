@@ -44,7 +44,6 @@ class OrdersService {
 
 
         reqOrderCookie = {
-            // _id: new ObjectId(),
             UserID: user._id,
             OrderDetailID: orderDT?._id,
             ShipAddress: payload.ShipAddress,
@@ -52,28 +51,12 @@ class OrdersService {
             OrderDate: new Date(),
             Status: 1,
         }
-
-
-        // newOrder = await databaseService.order.insertOne(new OrdersSchema(orderPayload))
-        // newOrder = await this.saveOrderToDatabase(orderPayload)
-        // const order = await databaseService.order.findOne({ _id: new ObjectId(newOrder.insertedId) })
-        // console.log("order detail id: ", orderDTID)
-        // const orderDetail = await databaseService.orderDetail.findOne({ _id: new ObjectId(orderDTID) })
+        
         const koiList = await Promise.all(
             orderDT.Items.map(item => databaseService.kois.findOne({ _id: new ObjectId(item.KoiID) }))
         );
 
         return {
-            // user, order: {
-            //     _id: order._id,
-            //     UserID: order.UserID,
-            //     OrderDetail: orderDetail,
-            //     ShipAddress: order.ShipAddress,
-            //     Description: order.Description,
-            //     OrderDate: order.OrderDate,
-            //     Type: order.Type,
-            //     Status: order.Status
-            // }, koiList
             user, order: reqOrderCookie, orderDetail: orderDT, koiList
         }
     }

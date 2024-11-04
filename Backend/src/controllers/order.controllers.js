@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 export const createOrderController = async (req, res) => {
   try {
     const reqOrderCookie = req.cookies && req.cookies.order ? JSON.parse(req.cookies.order) : {}
-    const reqOrderDTCookie = req.cookies?.orderDT
+    const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {}
     if(!reqOrderDTCookie){
       return res.json({
         message: USERS_MESSAGES.ORDER_DETAIL_NOT_FOUND
@@ -19,11 +19,10 @@ export const createOrderController = async (req, res) => {
         message: USERS_MESSAGES.NO_ITEMS
       })
     }
-    const result = await ordersService.createOrder(req.body,reqOrderDTCookie, reqOrderCookie)
+    const result = await ordersService.createOrder(req.body, reqOrderDTCookie, reqOrderCookie)
     res.cookie('order', JSON.stringify(result.order), { 
       httpOnly: true,
-      maxAge: 3600000 * 2,
-      sameSite: 'None',
+      maxAge: 3600000 * 2
     })
     return res.json({
       message: USERS_MESSAGES.CREATE_ORDER_SUCCESS,
