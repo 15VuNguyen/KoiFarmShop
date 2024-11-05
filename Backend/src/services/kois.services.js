@@ -57,6 +57,7 @@ class KoisService {
               <ul>
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng')}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${getField(consignResult.ReceiptDate, 'ngày nhận lại Koi')}</li>
+                <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${getField(consignResult.Detail, 'chi tiết')}</li>
@@ -139,6 +140,7 @@ class KoisService {
               <ul>
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng')}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${getField(consignResult.ReceiptDate, 'ngày nhận lại Koi')}</li>
+                <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${getField(consignResult.Detail, 'chi tiết')}</li>
@@ -235,6 +237,7 @@ class KoisService {
               <ul>
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng')}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${getField(consignResult.ReceiptDate, 'ngày nhận lại Koi')}</li>
+                <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${getField(consignResult.Detail, 'chi tiết')}</li>
@@ -398,11 +401,18 @@ class KoisService {
     }
     const koiResult = await databaseService.kois.insertOne(new KoiSchema(koiPayload))
 
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    const consignCreateDate = localTime.toISOString().replace('Z', '+07:00')
+
     // Tạo bản ghi mới trong bảng consigns
     const consignID = new ObjectId()
     const consignPayload = {
       ShippedDate: payload.ShippedDate,
       ReceiptDate: payload.ReceiptDate,
+      ConsignCreateDate: consignCreateDate,
       Detail: payload.Detail,
       PositionCare: payload.PositionCare,
       Method: payload.Method,

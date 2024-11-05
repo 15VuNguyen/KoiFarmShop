@@ -6,6 +6,7 @@ export default class ConsignSchema {
   KoiID = ''
   ShippedDate = ''
   ReceiptDate = ''
+  ConsignCreateDate = new Date()
   Detail = ''
   State = ''
   Method = ''
@@ -14,11 +15,13 @@ export default class ConsignSchema {
   TotalPrice = ''
 
   constructor(consign) {
+    const dateCreate = new Date()
     this._id = consign?._id ?? new ObjectId() // tự tạo id
     this.UserID = consign.UserID || ''
     this.KoiID = consign.KoiID || ''
     this.ShippedDate = consign.ShippedDate || ''
     this.ReceiptDate = consign.ReceiptDate || ''
+    this.ConsignCreateDate = consign.ConsignCreateDate || dateCreate
     this.Detail = consign.Detail || ''
     this.State = consign.State || 1
     this.Method = consign.Method || ''

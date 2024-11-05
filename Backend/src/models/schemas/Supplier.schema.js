@@ -10,8 +10,10 @@ export default class SupplierSchema {
   SupplierImage = ''
   SupplierVideo = ''
   SupplierWebsite = ''
+  SupplierCreateDate = new Date()
 
   constructor(supplier) {
+    const dateCreate = new Date()
     this._id = supplier?._id ?? new ObjectId() // tự tạo id
     this.SupplierName = supplier.SupplierName || ''
     this.Address = supplier.Address || ''
@@ -21,5 +23,6 @@ export default class SupplierSchema {
     this.SupplierImage = supplier.SupplierImage || ''
     this.SupplierVideo = supplier.SupplierVideo || ''
     this.SupplierWebsite = supplier.SupplierWebsite || ''
+    this.SupplierCreateDate = supplier.SupplierCreateDate || dateCreate
   }
 }

@@ -8,7 +8,15 @@ import _ from 'lodash'
 class SuplliersService {
   async createNewSupplier(payload) {
     const SupllierID = new ObjectId()
-    const result = await databaseService.suppliers.insertOne(new SupplierSchema({ ...payload, _id: SupllierID }))
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    const supplierCreateDate = localTime.toISOString().replace('Z', '+07:00')
+
+    const result = await databaseService.suppliers.insertOne(
+      new SupplierSchema({ ...payload, _id: SupllierID, SupplierCreateDate: supplierCreateDate })
+    )
     console.log(payload)
     console.log(result)
     return result
@@ -44,6 +52,7 @@ class SuplliersService {
           SupplierImage: payload.SupplierImage || supplier.SupplierImage,
           SupplierVideo: payload.SupplierVideo || supplier.SupplierVideo,
           SupplierWebsite: payload.SupplierWebsite || supplier.SupplierWebsite,
+          SupplierCreateDate: payload.SupplierCreateDate || supplier.SupplierCreateDate
         }
       }
     ])

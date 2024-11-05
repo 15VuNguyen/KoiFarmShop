@@ -5,6 +5,7 @@ import { ErrorWithStatus } from '../models/Errors.js'
 import databaseService from './database.service.js'
 import { USERS_MESSAGES } from '../constants/userMessages.js'
 import koisService from './kois.services.js'
+import nodemailer from 'nodemailer'
 
 class ConsignsService {
   async getAllConsign() {
@@ -134,6 +135,7 @@ class ConsignsService {
         $set: {
           ShippedDate: payload.ShippedDate || consign.ShippedDate || '',
           ReceiptDate: payload.ReceiptDate || consign.ReceiptDate || '',
+          ConsignCreateDate: payload.ConsignCreateDate || consign.ConsignCreateDate || '',
           Detail: payload.Detail || consign.Detail || '',
           State: payload.State || consign.State || '',
           Method: payload.Method || consign.Method || '',
@@ -267,6 +269,7 @@ class ConsignsService {
         $set: {
           ShippedDate: payload.ShippedDate || consign.ShippedDate || '',
           ReceiptDate: payload.ReceiptDate || consign.ReceiptDate || '',
+          ConsignCreateDate: payload.ConsignCreateDate || consign.ConsignCreateDate || '',
           Detail: payload.Detail || consign.Detail || '',
           Method: payload.Method || consign.Method || '',
           PositionCare: payload.PositionCare || consign.PositionCare || '',
