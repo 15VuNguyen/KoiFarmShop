@@ -5,14 +5,34 @@ import axiosInstance from "../An/Utils/axiosJS";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 const { Text } = Typography;
+import { message } from "antd";
 
 export default function ShoppingCart() {
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
   const navigate = useNavigate();
-  const handlePayment = () => {
-    navigate("/formfillinformation");
+  const handlePayment = async () => {
+    try {
+      const res = await axiosInstance.post("/order/checkCart", null, {
+        withCredentials: true,
+      });
+
+      if (res.status === 200) {
+        navigate("/formfillinformation");
+      }
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 410) {
+          message.error(data.message || "Sản phẩm trong giỏ hàng đã hết hàng.");
+        } else {
+          message.error(data.message || "Đã có lỗi xảy ra.");
+        }
+      } else {
+        message.error("An error occurred while processing your payment.");
+      }
+    }
   };
   // useEffect(() => {
   //   const storedKoiList = JSON.parse(localStorage.getItem("koiList")) || [];

@@ -80,8 +80,8 @@ managerRouter.get('/manage-koi/get-all', accessTokenValidator, isAdminValidator,
 
 managerRouter.put(
   '/manage-koi/updateKoi/:KoiID',
-  accessTokenValidator,
-  isAdminValidator,
+  // accessTokenValidator,
+  // isAdminValidator,
   wrapAsync(updateKoiController)
 )
 

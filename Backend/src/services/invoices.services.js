@@ -50,10 +50,16 @@ class InvoicesService {
 
     //tạo hóa đơn
     const InvoiceID = new ObjectId()
+    const currentDate = new Date();
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+
     const invoicePayload = {
       _id: InvoiceID,
       GroupKoiIDInvoice: GroupKoiID,
-      InvoiceDate: new Date(),
+      InvoiceDate: invoiceDateTime,
       Status: 1,
       Discount: discount,
       TotalPrice: quantity * priceOneKoi - quantity * priceOneKoi * (discount / 100)
@@ -128,7 +134,8 @@ class InvoicesService {
           Discount: discountInvoice,
           TotalPrice:
             quantityGroupKoi * priceOneKoiGroupKoi - quantityGroupKoi * priceOneKoiGroupKoi * (discountInvoice / 100) ??
-            invoice.TotalPrice ?? 0
+            invoice.TotalPrice ??
+            0
         }
       }
     ])

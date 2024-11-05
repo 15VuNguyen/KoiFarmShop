@@ -71,7 +71,6 @@ export default function Home() {
   useEffect(() => {
     const clearData = async () => {
       try {
-        console.log("hello");
         await axiosInstance.post(
           "/clear-coookies",
           { Credential: true },
