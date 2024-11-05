@@ -1,4 +1,4 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal,Input,Dropdown ,Menu,Space } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space } from "antd";
 import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
@@ -9,10 +9,10 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   const [selectedColumns, setSelectedColumns] = React.useState({});
   const [showColumnSelector, setShowColumnSelector] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'email', 'address', 'date_of_birth', 'verify', 'action']);
+  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'email', 'address', 'date_of_birth', 'verify', 'Status']);
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    message.success("ID copied to clipboard!");
+    message.success("ID đã được sao chép vào clipboard!");
   };
   
   const handleTableChange = (pagination, filters, sorter) => {
@@ -72,7 +72,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       render: (text) => (
         <>
           <Tag color="blue">{text}</Tag>
-          <Tooltip title="Copy ID">
+          <Tooltip title="Sao chép ID">
             <CopyOutlined
               style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
               onClick={() => copyToClipboard(text)}
@@ -82,13 +82,13 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       ),
     },
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Avatar',
+      title: 'Ảnh đại diện',
       dataIndex: 'picture',
       key: 'picture',
       render: (url) => <Avatar src={url} />,
@@ -98,18 +98,18 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       dataIndex: 'email',
       key: 'email',
       sorter: (a, b) => (a.email || '').localeCompare(b.email || ''),
-      render: (text) => text || <Tag color="red">Not Provided</Tag>,
+      render: (text) => text || <Tag color="red">Không cung cấp</Tag>,
     },
     {
-      title: 'Date of Birth',
-      dataIndex: 'date_of_birth',
-      key: 'date_of_birth',
+      title: 'Ngày Tạo Hồ Sơ',
+      dataIndex: 'created_at',
+      key: 'created_at',
       render: (text) => moment(text).format('YYYY-MM-DD'),
       sorter: (a, b) => moment(a.date_of_birth).unix() - moment(b.date_of_birth).unix(),
       filters: [
-        { text: 'Last 7 Days', value: '7d' },
-        { text: 'Last Month', value: '1m' },
-        { text: 'Last Year', value: '1y' },
+        { text: '7 Ngày qua', value: '7d' },
+        { text: 'Tháng trước', value: '1m' },
+        { text: 'Năm trước', value: '1y' },
       ],
       onFilter: (value, record) => {
         const recordDate = moment(record.date_of_birth);
@@ -127,25 +127,25 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       filterMultiple: false,
     },
     {
-      title: 'Address',
+      title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
-      render: (text) => text || <Tag color="red">Not Provided</Tag>,
+      render: (text) => text || <Tag color="red">Không cung cấp</Tag>,
     },{
-      title: 'Email Verified',
+      title: 'Email đã xác minh',
       dataIndex: 'verify',
       key: 'verify',
-      render: (text) => text ? <Tag color="green">Verified</Tag> : <Tag color="red">Unverified</Tag>,
+      render: (text) => text ? <Tag color="green">Đã xác minh</Tag> : <Tag color="red">Chưa xác minh</Tag>,
       filters: [
-        { text: 'Verified', value: 1 },
-        { text: 'Unverified', value: 0 },
+        { text: 'Đã xác minh', value: 1 },
+        { text: 'Chưa xác minh', value: 0 },
       ],
       onFilter: (value, record) => record.verify === value,
       filterMultiple: false,
 
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       key: 'Status',
       render: (_, record) => (
         <>
@@ -154,7 +154,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
             style={{ marginRight: 8 }}
             onClick={() => handleActionClick('update', record._id)}
           >
-            Update
+            Cập nhật
           </Button>
           {
             record.Status  == 1 ? (
@@ -162,14 +162,14 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
                 type="primary"
                 onClick={() => handleActionClick('disable/enable', record._id,'enable')}
               >
-                Enable
+                Kích hoạt
               </Button>
             ) : (
               <Button danger 
                 variant="solid"
                 onClick={() => handleActionClick('disable/enable', record._id,'disable')}
               >
-                Disable
+                Vô hiệu hóa
               </Button>
           )
           }
@@ -203,7 +203,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
     <div>
       <Space size={"middle"}>
         <Input
-          placeholder="Search..."
+          placeholder="Tìm kiếm..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ width: 200, marginBottom: 16 }}
@@ -213,7 +213,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       </p> */}
       <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
         <Button style={{ marginBottom: 16 }}>
-          Choose Columns <DownOutlined />
+          Chọn cột <DownOutlined />
         </Button>
       </Dropdown>
       {/* {activeFilters.map((filter, index) => (
@@ -229,7 +229,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       />
 
       <Modal
-        title="Select Columns"
+        title="Chọn cột"
         visible={showColumnSelector}
         onCancel={() => setShowColumnSelector(false)}
         onOk={() => setShowColumnSelector(false)}
@@ -243,7 +243,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
             {col.title}
           </Checkbox>
         ))}
-        <Button onClick={resetColumns}>Reset All</Button>
+        <Button onClick={resetColumns}>Đặt lại tất cả</Button>
       </Modal>
     </div>
   );

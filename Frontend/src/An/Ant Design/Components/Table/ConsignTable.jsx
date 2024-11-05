@@ -1,5 +1,5 @@
 import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Menu, Dropdown, Space } from "antd";
-import { CopyOutlined, CloseCircleOutlined,DownOutlined  } from "@ant-design/icons";
+import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
 
@@ -11,7 +11,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
     const [visibleColumns, setVisibleColumns] = React.useState([ '_id', 'ShippedDate', 'ReceiptDate', 'Description', 'State', 'Method', 'PositionCare', 'Commission', 'TotalPrice', 'action']);
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
-        message.success("ID copied to clipboard!");
+        message.success("ID đã được sao chép vào clipboard!");
     };
     React.useEffect(() => {
     }, [activeFilters]);
@@ -77,7 +77,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             render: (text) => (
                 <>
                     <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Copy ID">
+                    <Tooltip title="Sao chép ID">
                         <CopyOutlined
                             style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
                             onClick={() => copyToClipboard(text)}
@@ -87,14 +87,14 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             ),
         },
         {
-            title: 'User ID',
+            title: 'Mã Người Dùng',
             dataIndex: 'UserID',
             key: 'UserID',
             sorter: (a, b) => a.UserID.localeCompare(b.UserID),
             render: text => (
                 <>
                     <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Copy ID">
+                    <Tooltip title="Sao chép ID">
                         <CopyOutlined
                             style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
                             onClick={() => copyToClipboard(text)}
@@ -106,7 +106,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             visible: false,
         },
         {
-            title: 'Koi ID',
+            title: 'Mã Koi',
             dataIndex: 'UserID',
             key: 'KoiID',
             sorter: (a, b) => a.UserID.localeCompare(b.UserID),
@@ -114,7 +114,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             render: text => (
                 <>
                     <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Copy ID">
+                    <Tooltip title="Sao chép ID">
                         <CopyOutlined
                             style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
                             onClick={() => copyToClipboard(text)}
@@ -124,28 +124,39 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             ),
         },
         {
-            title: 'Shipped Date',
+            title: 'Ngày Vận Chuyển',
             dataIndex: 'ShippedDate',
             key: 'ShippedDate',
-            sorter: (a, b) => moment(a.ShippedDate) - moment(b.ShippedDate),
-            render: text => text ? moment(text).format('YYYY/MM/DD') : <Tag color="red">Not Provided</Tag>,
+            sorter: (a, b) => {
+                if (!a.ShippedDate && !b.ShippedDate) return 0;
+                if (!a.ShippedDate) return -1;
+                if (!b.ShippedDate) return 1;
+                return moment(a.ShippedDate).diff(moment(b.ShippedDate));
+            },
+            render: text => text ? moment(text).format('DD-MM-YYYY') : <Tag color="red">Không Cung Cấp</Tag>,
         },
         {
-            title: 'Receipt Date',
+            title: 'Ngày Nhận Hàng',
             dataIndex: 'ReceiptDate',
             key: 'ReceiptDate',
-            sorter: (a, b) => moment(a.ReceiptDate) - moment(b.ReceiptDate),
-            render: text => text ? moment(text).format('YYYY/MM/DD') : <Tag color="red">Not Provided</Tag>
+            sorter: (a, b) => 
+            {
+                if (!a.ReceiptDate && !b.ReceiptDate) return 0;
+                if (!a.ReceiptDate) return -1;
+                if (!b.ReceiptDate) return 1;
+                return moment(a.ReceiptDate).diff(moment(b.ReceiptDate));
+            },
+            render: text => text ? moment(text).format('DD-MM-YYYY') : <Tag color="red">Không Cung Cấp</Tag>
         },
         {
-            title: 'Description',
+            title: 'Mô Tả',
             dataIndex: 'Description',
             key: 'Description',
-            sorter: (a, b) => a.Description.localeCompare(b.Description),
-            render: text => text || <Tag color="red">Not Provided</Tag>,
+            sorter: (a, b) => (a.Description || '').localeCompare(b.Description || ''),
+            render: text => text || <Tag color="red">Không Cung Cấp</Tag>,
         },
         {
-            title: 'State',
+            title: 'Trạng Thái',
             dataIndex: 'State',
             key: 'State',
             filters: [
@@ -166,16 +177,16 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                     4: 'Đang tìm người mua',
                     5: 'Đã bán thành công',
                 };
-                return <Tag color={["blue", "green", "orange", "purple", "red"][state - 1]}>{stateMap[state]}</Tag> || <Tag color="red">Unknown</Tag>;
+                return <Tag color={["blue", "green", "orange", "purple", "red"][state - 1]}>{stateMap[state]}</Tag> || <Tag color="red">Không xác định</Tag>;
             },
         },
         {
-            title: 'Method',
+            title: 'Phương Thức',
             dataIndex: 'Method',
             key: 'Method',
             filters: [
-                { text: 'Online', value: 'Online' },
-                { text: 'Offline', value: 'Offline' },
+                { text: 'Trực tuyến', value: 'Online' },
+                { text: 'Trực tiếp', value: 'Offline' },
             ],
             filteredValue: activeFilters.find(filter => filter.column === 'Method')?.value || null,
             filterMultiple: false,
@@ -183,31 +194,31 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             render: text => <Tag color="green">{text}</Tag>
         },
         {
-            title: 'Position Care',
+            title: 'Vị Trí Chăm Sóc',
             dataIndex: 'PositionCare',
             key: 'PositionCare',
             sorter: (a, b) => a.PositionCare.localeCompare(b.PositionCare),
         },
         {
-            title: 'Commission Rate',
+            title: 'Tỷ Lệ Hoa Hồng',
             dataIndex: 'Commission',
             key: 'Commission',
             sorter: (a, b) => a.Commission - b.Commission,
-            render: text => text ? `${text}%` : <Tag color="red">Not Provided</Tag>,
+            render: text => text ? `${text}%` : <Tag color="red">Không Cung Cấp</Tag>,
         },
         {
-            title: 'Total Price',
+            title: 'Tổng Giá',
             dataIndex: 'TotalPrice',
             key: 'TotalPrice',
             sorter: (a, b) => a.TotalPrice - b.TotalPrice,
-            render: text => text ? `${formatCurrency(text)}` : <Tag color="red">Not Provided</Tag>,
+            render: text => text ? `${formatCurrency(text)}` : <Tag color="red">Không Cung Cấp</Tag>,
         },
         {
-            title: 'Action',
+            title: 'Hành Động',
             key: 'action',
             render: (text, record) => (
                 <div>
-                    <Button onClick={() => handleActionClick('View Consign Details', record._id)} type="primary">View Detail</Button>
+                    <Button onClick={() => handleActionClick('View Consign Details', record._id)} type="primary">Xem Chi Tiết</Button>
                 </div>
             ),
         }
@@ -223,10 +234,8 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
           {columns.map(col => (
             <Menu.Item key={col.key}>
               <Checkbox
-                
                 checked={visibleColumns.includes(col.key)}
                 onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
-
               >
                 {col.title}
               </Checkbox>
@@ -238,7 +247,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
         <div>
             <Space>
                 <Input
-                    placeholder="Search..."
+                    placeholder="Tìm kiếm..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ width: 200, marginBottom: 16 }}
@@ -246,7 +255,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
 
                 <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
                     <Button style={{ marginBottom: 16 }}>
-                        Choose Columns <DownOutlined />
+                        Chọn Cột <DownOutlined />
                     </Button>
                 </Dropdown>
                 {/* <Button onClick={() => setShowColumnSelector(true)} >Select Columns</Button>{activeFilters.map((filter, index) => (
@@ -261,7 +270,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 onChange={handleTableChange}
             />
             <Modal
-                title="Select Columns"
+                title="Chọn Cột"
                 visible={showColumnSelector}
                 onCancel={() => setShowColumnSelector(false)}
                 onOk={() => setShowColumnSelector(false)}
@@ -269,13 +278,13 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 {columns.map(col => (
                     <Checkbox
                         key={col.key}
-                        checked={!selectedColumns[col.key]}
-                        onChange={() => toggleColumnVisibility(col.key)}
+                        checked={visibleColumns.includes(col.key)}
+                        onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
                     >
                         {col.title}
                     </Checkbox>
                 ))}
-                <Button onClick={resetColumns}>Reset All</Button>
+                <Button onClick={resetColumns}>Đặt Lại Tất Cả</Button>
             </Modal>
         </div>
     );

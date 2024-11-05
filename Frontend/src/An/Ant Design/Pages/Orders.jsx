@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { CheckOutlined, SyncOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import '../Css/GeneralPurpose.css'
 import OrderDetail from '../Components/OrderDetail';
+import dayjs from 'dayjs';
 export default function OrdersNext() {
     const { Header, Content } = Layout;
     const [orders, setOrders] = useState([]);
@@ -19,7 +20,7 @@ export default function OrdersNext() {
                 const response = await axiosInstance.get('/manager/manage-order/get-all');
                 setOrders(response.data.result);
             } catch (error) {
-                message.error("Error fetching orders");
+                message.error("Lỗi khi lấy đơn hàng");
             } finally {
                 setLoading(false);
             }
@@ -52,23 +53,28 @@ export default function OrdersNext() {
     };
     const columns = [
         {
-            title: 'User ID',
+            title: 'Mã Người Dùng',
             dataIndex: 'UserID',
             key: 'UserID',
+            render: (text) => 
+                text ? <Tag color="blue">{text}</Tag> : <Tag color="red">Không có dữ liệu</Tag>
+            
         },
         {
-            title: 'Ship Address',
+            title: 'Địa Chỉ Giao Hàng',
             dataIndex: 'ShipAddress',
             key: 'ShipAddress',
+            render: (text) => text ? text : <Tag color="red">Không có dữ liệu</Tag>
         },
         {
-            title: 'Order Date',
+            title: 'Ngày Đặt Hàng',
             dataIndex: 'OrderDate',
             key: 'OrderDate',
-            render: (text) => new Date(text).toLocaleDateString(),
+            render: (text) => new dayjs(text).format('DD/MM/YYYY'),
+            sorter: (a, b) => dayjs(a.OrderDate) - dayjs(b.OrderDate)
         },
         {
-            title: 'Status',
+            title: 'Trạng Thái',
             dataIndex: 'Status',
             key: 'Status',
             render: (status) => {
@@ -84,7 +90,7 @@ export default function OrdersNext() {
             }
         },
         {
-            title: 'Actions',
+            title: 'Hành Động',
             key: 'action',
             render: (_, record) => (
                 <Button
@@ -92,7 +98,7 @@ export default function OrdersNext() {
                     icon={<ShoppingCartOutlined />}
                     onClick={() => handleViewDetails(record._id,record.Status)}
                 >
-                    View Order Detai
+                    Xem Chi Tiết Đơn Hàng
                 </Button>
             ),
         },
@@ -100,7 +106,7 @@ export default function OrdersNext() {
     return (
         <Layout>
             <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Orders Dashboard</Typography.Title>
+                <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Đơn Hàng</Typography.Title>
             </Header>
             <Content className='fix-Table' style={{ padding: '24px' }}>
                 <Space direction="vertical" style={{ width: '100%' }}>
@@ -109,8 +115,10 @@ export default function OrdersNext() {
                         dataSource={orders}
                         rowKey={(record) => record._id}
                         loading={loading}
+                        
                         bordered
-                        pagination={{ pageSize: 10 }}
+                        pagination={{ pageSize: 5 }}
+                        l
                     />
                 </Space>
                 {selectedOrder && (

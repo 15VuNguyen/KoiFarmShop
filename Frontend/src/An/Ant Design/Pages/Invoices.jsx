@@ -347,7 +347,7 @@ export default function Invoices() {
               ))}
             </Select>
           </Form.Item>
-          {isUpdate && (
+          {/* {isUpdate && (
             <Form.Item  name="InvoiceDate"
               label={
                 <Tooltip title="Ngày hóa đơn phải là hiện tại hoặc quá khứ">
@@ -364,7 +364,7 @@ export default function Invoices() {
                 disabledDate={(current) => current && current > moment().endOf('day')}
               />
             </Form.Item>
-          )}
+          )} */}
           <Form.Item
             label="Kích thước"
             name="Dimension"
@@ -403,7 +403,8 @@ export default function Invoices() {
               { validator: priceValidator }
             ]}
           >
-            <InputNumber min={1000} placeholder="Nhập Giá" style={{ width: '100%' }} />
+            <InputNumber suffix={'đ'} min={1000} placeholder="Nhập Giá" style={{ width: '100%' }}  formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  />
           </Form.Item>
 
           <Form.Item
@@ -524,15 +525,27 @@ export default function Invoices() {
 
           <Col span={6}>
             <Card hoverable style={{ height: '100%' }}>
+              <Row gutter={16}>
+                
               <Statistic
                 title={<Typography.Title level={4}>Hóa đơn đã nhận</Typography.Title>}
                 value={invoices.filter(invoice => invoice.Status === 1).length}
                 precision={0}
               />
+              </Row>
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card hoverable style={{ height: '100%' }}>
+              <Statistic
+                title={<Typography.Title level={4}>Hóa đơn đã bán hết</Typography.Title>}
+                value={invoices.filter(invoice => invoice.Status === 2).length}
+                precision={0}
+              />
             </Card>
           </Col>
 
-          <Col span={6}>
+          {/* <Col span={6}>
             <Card hoverable style={{ height: '100%' }}>
               <Statistic
                 title={<Typography.Title level={4}>Tổng số giảm giá</Typography.Title>}
@@ -551,7 +564,7 @@ export default function Invoices() {
                 prefix="₫"
               />
             </Card>
-          </Col>
+          </Col> */}
         </Row>
 
         <div style={{ marginTop: '24px' }}>
