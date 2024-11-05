@@ -2,16 +2,23 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import TableCart from "./TableCartForShoppingCart";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../An/Utils/axiosJS";
 
 import { Container } from "react-bootstrap";
 export default function ShoppingCart() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const handlePayment = () => {
     navigate("/formfillinformation");
   };
-
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!accessToken);
+    if (!accessToken) {
+      navigate("/login");
+    }
+  }, [isLoggedIn]);
   useEffect(() => {
     const clearData = async () => {
       try {

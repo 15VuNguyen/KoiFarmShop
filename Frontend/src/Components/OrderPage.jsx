@@ -34,6 +34,7 @@ const OrderPage = () => {
   const navigate = useNavigate();
   const [quantityInCart, setQuantityInCart] = useState(0); // Track quantity in cart
   const [cardData, setCardData] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
   const [categoryName, setCategoryName] = useState();
@@ -122,6 +123,11 @@ const OrderPage = () => {
   }, [selectedItem, categoryData]);
 
   const handleAddToCart = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      navigate("/Login", { state: { from: location, selectedItem } });
+      return;
+    }
     if (!selectedItem || loading) return;
     const totalQuantity = quantityInCart + selectedQuantity;
     // Prevent adding if total exceeds maxQuantity
@@ -172,11 +178,16 @@ const OrderPage = () => {
     }
   };
   const handleOrderNow = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      navigate("/Login", { state: { from: location, selectedItem } });
+      return;
+    }
     if (!selectedItem || loading) return;
     setLoading(true);
     setCategoryName(selectedItem.CategoryName);
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         "http://localhost:4000/order/detail/makes",
         {
           Size: parseInt(selectedItem.Size),
