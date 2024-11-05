@@ -185,14 +185,12 @@ export default function Kyguikoi() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.status === 200) {
-        form.resetFields();
-        toast.success(response.data.message);
         setTimeout(() => {
           if (isLoggedIn) {
             navigate("/donkyguipage");
-          } else {
           }
         }, 3000);
+        toast.success(response.data.message);
       } else {
         toast.error(`Có lỗi xảy ra: ${response.data.message}`);
       }
@@ -223,6 +221,25 @@ export default function Kyguikoi() {
   }, []);
 
   useEffect(() => {
+    if (userData) {
+      form.setFieldsValue({
+        email: userData.email || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        ShipAddress: userData.address || "",
+      });
+      setFormData({
+        ...formData,
+        email: userData.email || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        ShipAddress: userData.address || "",
+      });
+    }
+  }, [userData]);
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(
@@ -249,13 +266,6 @@ export default function Kyguikoi() {
             style={{ maxWidth: "800px", margin: "auto" }}
             onFinish={handleSubmit}
             form={form}
-            initialValues={{
-              email: userData?.email || "",
-              name: userData?.name || "",
-              address: userData?.address || "",
-              phone_number: userData?.phone_number || "",
-              ShipAddress: userData?.address || "",
-            }}
           >
             <div style={{ color: "black" }}>
               <Title level={3}>Thông tin khách hàng</Title>
@@ -379,10 +389,18 @@ export default function Kyguikoi() {
                         value={formData.PositionCare}
                         onChange={handleChange}
                       >
-                        <Radio id="PositionCareHome" value="Home">
+                        <Radio
+                          id="PositionCareHome"
+                          value="Home"
+                          style={{ width: "100px" }}
+                        >
                           Home
                         </Radio>
-                        <Radio id="PositionCareIKoiFarm" value="IKoiFarm">
+                        <Radio
+                          id="PositionCareIKoiFarm"
+                          value="IKoiFarm"
+                          style={{ width: "100px" }}
+                        >
                           IKoiFarm
                         </Radio>
                       </Radio.Group>
@@ -410,10 +428,18 @@ export default function Kyguikoi() {
                         name="Method"
                         value={formData.Method}
                       >
-                        <Radio id="MethodOnline" value="Online">
+                        <Radio
+                          id="MethodOnline"
+                          value="Online"
+                          style={{ width: "100px" }}
+                        >
                           Online
                         </Radio>
-                        <Radio id="MethodOffline" value="Offline">
+                        <Radio
+                          id="MethodOffline"
+                          value="Offline"
+                          style={{ width: "100px" }}
+                        >
                           Offline
                         </Radio>
                       </Radio.Group>
