@@ -30,7 +30,6 @@ export default function Koidangban() {
         );
         if (Array.isArray(response.data.result)) {
           setCardData(response.data.result);
-
           // Initialize category count object
           const categoryCounts = {};
           response.data.result.forEach((card) => {
@@ -40,8 +39,6 @@ export default function Koidangban() {
               categoryCounts[card.CategoryID] = 1;
             }
           });
-
-          // Update categoryData with counts
           const categoryData = response.data.categoryList.map((category) => ({
             ...category,
             count: categoryCounts[category._id] || 0,

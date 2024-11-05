@@ -70,6 +70,7 @@ export default function Kyguikoi() {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
+  const [form] = Form.useForm();
   const navigate = useNavigate();
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -175,13 +176,12 @@ export default function Kyguikoi() {
       // Cập nhật dữ liệu với URL của hình ảnh và video
       dataToSend.Image = imageUrl;
       dataToSend.Video = videoUrl;
-
       // Gửi dữ liệu tới backend
       const response = await axiosInstance.post("/ki-gui", dataToSend, {
         headers: { "Content-Type": "application/json" },
       });
-
       if (response.status === 200) {
+        form.resetFields();
         toast.success(response.data.message);
         setTimeout(() => {
           if (isLoggedIn) {
@@ -189,7 +189,7 @@ export default function Kyguikoi() {
           } else {
             navigate("/");
           }
-        }, 5000);
+        }, 3000);
       } else {
         toast.error(`Có lỗi xảy ra: ${response.data.message}`);
       }
@@ -245,6 +245,7 @@ export default function Kyguikoi() {
           <Form
             style={{ maxWidth: "800px", margin: "auto" }}
             onFinish={handleSubmit}
+            form={form}
             initialValues={{
               email: userData?.email || "",
               name: userData?.name || "",
@@ -257,458 +258,623 @@ export default function Kyguikoi() {
               <Title level={3}>Thông tin khách hàng</Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "48%" }}>
-                  <Form.Item
-                    label="Địa chỉ email (*)"
-                    name="email"
-                    rules={[
-                      {
-                        required: true,
-                        type: "email",
-                        message: "Vui lòng nhập email hợp lệ.",
-                      },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Nhập địa chỉ email (name@example.com)"
-                      disabled={userData?.email}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Địa chỉ (*)"
-                    name="address"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập địa chỉ." },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Nhập địa chỉ"
-                      disabled={userData?.address}
-                    />
-                  </Form.Item>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Địa chỉ email
+                    </span>
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        {
+                          required: true,
+                          type: "email",
+                          message: "Vui lòng nhập email hợp lệ.",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Nhập địa chỉ email (name@example.com)"
+                        disabled={userData?.email}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Địa chỉ
+                    </span>
+                    <Form.Item
+                      name="address"
+                      rules={[
+                        { required: true, message: "Vui lòng nhập địa chỉ." },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Nhập địa chỉ"
+                        disabled={userData?.address}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
                 <div style={{ width: "48%" }}>
-                  <Form.Item
-                    label="Số điện thoại (*)"
-                    name="phone_number"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập số điện thoại",
-                      },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Nhập số điện thoại"
-                      disabled={userData?.phone_number}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Tên người ký gửi (*)"
-                    name="name"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập họ và tên." },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Nhập họ và tên"
-                      disabled={userData?.name}
-                    />
-                  </Form.Item>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Số điện thoại
+                    </span>
+                    <Form.Item
+                      name="phone_number"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập số điện thoại",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Nhập số điện thoại"
+                        disabled={userData?.phone_number}
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Tên người ký gửi
+                    </span>
+                    <Form.Item
+                      name="name"
+                      rules={[
+                        { required: true, message: "Vui lòng nhập họ và tên." },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Nhập họ và tên"
+                        disabled={userData?.name}
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
               <hr />
               <Title level={3}>Thông Tin Ký Gửi</Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ width: "48%" }}>
-                  <Form.Item
-                    label="Nơi chăm sóc koi (*)"
-                    name="PositionCare"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng Nơi chăm sóc koi.",
-                      },
-                    ]}
-                  >
-                    <Radio.Group
+                <div style={{ width: "50%" }}>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Nơi chăm sóc koi
+                    </span>
+                    <Form.Item
                       name="PositionCare"
-                      value={formData.PositionCare}
-                      onChange={handleChange}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng Nơi chăm sóc koi.",
+                        },
+                      ]}
                     >
-                      <Radio value="Home">Home</Radio>
-                      <Radio value="IKoiFarm">IKoiFarm</Radio>
-                    </Radio.Group>
-                  </Form.Item>
+                      <Radio.Group
+                        name="PositionCare"
+                        value={formData.PositionCare}
+                        onChange={handleChange}
+                      >
+                        <Radio value="Home">Home</Radio>
+                        <Radio value="IKoiFarm">IKoiFarm</Radio>
+                      </Radio.Group>
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Phương thức nhận koi
+                    </span>
+                    <Form.Item
+                      name="Method"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn phương thức nhận koi.",
+                        },
+                      ]}
+                    >
+                      <Radio.Group
+                        onChange={handleChange}
+                        name="Method"
+                        value={formData.Method}
+                      >
+                        <Radio value="Online">Online</Radio>
+                        <Radio value="Offline">Offline</Radio>
+                      </Radio.Group>
+                    </Form.Item>
+                  </div>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Ngày gửi
+                    </span>
+                    <Form.Item name="shippedDate">
+                      <DatePicker
+                        style={{ width: "100%", height: "35px" }}
+                        onChange={(date) =>
+                          handleDateChange("shippedDate", date)
+                        }
+                        disabledDate={(current) =>
+                          current && current < moment().startOf("day")
+                        }
+                        format="DD/MM/YYYY"
+                        inputReadOnly
+                      />
+                    </Form.Item>
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Ngày nhận
+                    </span>
+                    <Form.Item name="receiptDate">
+                      <DatePicker
+                        style={{ width: "100%", height: "35px" }}
+                        onChange={(date) =>
+                          handleDateChange("receiptDate", date)
+                        }
+                        disabledDate={(current) =>
+                          current && current < moment().startOf("day")
+                        }
+                        format="DD/MM/YYYY"
+                        inputReadOnly
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                  {" "}
+                  <span style={{ color: "red" }}>* </span>
+                  Chi tiết về đơn ký gửi
+                </span>
+                <Form.Item>
+                  <Input.TextArea
+                    name="Detail"
+                    value={formData.Detail}
+                    onChange={handleChange}
+                    placeholder="Nhập chi tiết về cá koi của bạn"
+                    style={{ height: "150px", resize: "none" }}
+                  />
+                </Form.Item>
+              </div>
+              <hr />
+              <Title level={3}>Thông Tin Koi Muốn Ký Gửi</Title>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div
+                  style={{
+                    width: "50%",
+                    paddingRight: "10px",
+                  }}
+                >
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Các loại cá
+                    </span>
+                  </div>
                   <Form.Item
-                    label="Phương thức nhận koi (*)"
-                    name="Method"
+                    name="CategoryID"
                     rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng chọn phương thức nhận koi.",
-                      },
+                      { required: true, message: "Vui lòng chọn danh mục." },
                     ]}
                   >
-                    <Radio.Group
-                      onChange={handleChange}
-                      name="Method"
-                      value={formData.Method}
+                    <Select
+                      value={formData.CategoryID}
+                      onChange={(value) =>
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          CategoryID: value,
+                        }))
+                      }
+                      placeholder="Chọn loại cá"
                     >
-                      <Radio value="Online">Online</Radio>
-                      <Radio value="Offline">Offline</Radio>
-                    </Radio.Group>
+                      {categoryData.map((category) => (
+                        <Select.Option key={category._id} value={category._id}>
+                          {category.CategoryName}
+                        </Select.Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                 </div>
-                <div style={{ width: "48%" }}>
-                  <Form.Item label="Ngày Gửi" name="shippedDate">
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      onChange={(date) => handleDateChange("shippedDate", date)}
-                      disabledDate={(current) =>
-                        current && current < moment().startOf("day")
-                      }
-                      format="DD/MM/YYYY"
-                      inputReadOnly
-                    />
-                  </Form.Item>
-                  <Form.Item label="Ngày Nhận" name="receiptDate">
-                    <DatePicker
-                      style={{ width: "100%" }}
-                      onChange={(date) => handleDateChange("receiptDate", date)}
-                      disabledDate={(current) =>
-                        current && current < moment().startOf("day")
-                      }
-                      format="DD/MM/YYYY"
-                      inputReadOnly
+                <div style={{ width: "50%" }}>
+                  <div>
+                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                      {" "}
+                      <span style={{ color: "red" }}>* </span>
+                      Tên Koi của bạn
+                    </span>
+                  </div>
+                  <Form.Item
+                    name="KoiName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập tên loại cá koi.",
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="KoiName"
+                      value={formData.KoiName}
+                      onChange={handleChange}
+                      placeholder="Nhập KoiName (Category + Origin)"
                     />
                   </Form.Item>
                 </div>
               </div>
-
-              <Form.Item label="Chi tiết về đơn ký gửi">
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ width: "50%", paddingRight: "10px" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Tuổi Koi của bạn
+                  </span>
+                  <Form.Item
+                    name="Age"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập tuổi." },
+                      {
+                        type: "string",
+                        min: 1,
+                        max: 50,
+                        message: "Tuổi phải từ 1 đến 50.",
+                      },
+                      {
+                        validator: (_, value) => {
+                          const numericValue = Number(value); // Convert to a number
+                          if (numericValue < 1) {
+                            return Promise.reject(
+                              new Error("Tuổi phải lớn hơn hoặc bằng 1.")
+                            );
+                          }
+                          if (numericValue > 50) {
+                            return Promise.reject(
+                              new Error("Tuổi phải nhỏ hơn bằng 50")
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="Age"
+                      value={formData.Age}
+                      onChange={handleChange}
+                      type="number"
+                      placeholder="Nhập tuổi"
+                    />
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Nguồn gốc
+                  </span>
+                  <Form.Item
+                    name="Origin"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập nguồn gốc." },
+                    ]}
+                  >
+                    <Input
+                      name="Origin"
+                      value={formData.Origin}
+                      onChange={handleChange}
+                      placeholder="Nhập nguồn gốc"
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Giới Tính
+                  </span>
+                  <Form.Item
+                    name="Gender"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng chọn giới tính.",
+                      },
+                    ]}
+                  >
+                    <Radio.Group
+                      name="Gender"
+                      value={formData.Gender}
+                      onChange={handleChange}
+                    >
+                      <Radio value="Male" style={{ width: "100px" }}>
+                        Male
+                      </Radio>
+                      <Radio value="Female" style={{ width: "100px" }}>
+                        Female
+                      </Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Kích Thước(cm)
+                  </span>
+                  <Form.Item
+                    name="Size"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập kích thước." },
+                      {
+                        validator: (_, value) => {
+                          if (!value) {
+                            return Promise.resolve(); // If the value is empty, resolve the promise
+                          }
+                          const numericValue = Number(value); // Convert to a number
+                          if (numericValue < 1) {
+                            return Promise.reject(
+                              new Error("Kích Thước phải lớn hơn hoặc bằng 1.")
+                            );
+                          }
+                          if (numericValue > 200) {
+                            return Promise.reject(
+                              new Error("Kích Thước phải nhỏ hơn bằng 200")
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="Size"
+                      value={formData.Size}
+                      onChange={handleChange}
+                      type="number"
+                      placeholder="Nhập kích thước(cm)"
+                      min={5}
+                      max={150}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Giống loài
+                  </span>
+                  <Form.Item
+                    name="Breed"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng chọn trạng thái.",
+                      },
+                    ]}
+                  >
+                    <Radio.Group
+                      name="Breed"
+                      value={formData.Breed}
+                      onChange={handleChange}
+                    >
+                      <Radio value="Nhat" style={{ width: "100px" }}>
+                        Nhật
+                      </Radio>
+                      <Radio value="Viet" style={{ width: "100px" }}>
+                        Việt
+                      </Radio>
+                      <Radio value="F1" style={{ width: "100px" }}>
+                        F1
+                      </Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Nhập lượng thức ăn/ngày (đơn vị g/ngày)
+                  </span>
+                  <Form.Item
+                    name="DailyFoodAmount"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập lượng thức ăn.",
+                      },
+                      {
+                        validator: (_, value) => {
+                          if (!value) {
+                            return Promise.resolve(); // If the value is empty, resolve the promise
+                          }
+                          const numericValue = Number(value); // Convert to a number
+                          if (numericValue < 1) {
+                            return Promise.reject(
+                              new Error("Lượng thức ăn phải lớn hơn bằng 0")
+                            );
+                          }
+                          if (numericValue > 100) {
+                            return Promise.reject(
+                              new Error("Lượng thức ăn phải nhỏ hơn bằng 100")
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="DailyFoodAmount"
+                      value={formData.DailyFoodAmount}
+                      onChange={handleChange}
+                      type="number"
+                      placeholder="Nhập lượng thức ăn/ngày"
+                      min={1}
+                      step={1}
+                      max={100}
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "50%", paddingRight: "15px" }}>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Nhập tỷ lệ lọc(%)
+                  </span>
+                  <Form.Item
+                    name="FilteringRatio"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập tỷ lệ lọc." },
+                      {
+                        validator: (_, value) => {
+                          if (!value) {
+                            return Promise.resolve(); // If the value is empty, resolve the promise
+                          }
+                          const numericValue = Number(value); // Convert to a number
+                          if (numericValue < 1) {
+                            return Promise.reject(
+                              new Error("Tỷ lệ lọc phải lớn hơn 0")
+                            );
+                          }
+                          if (numericValue > 100) {
+                            return Promise.reject(
+                              new Error("Tỷ lệ lọc phải nhỏ hơn bằng 100")
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="FilteringRatio"
+                      value={formData.FilteringRatio}
+                      onChange={handleChange}
+                      type="number"
+                      placeholder="Nhập tỷ lệ lọc"
+                      max={100}
+                      step={1}
+                      min={1}
+                    />
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    CertificateID
+                  </span>
+                  <Form.Item
+                    name="CertificateID"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập CertificateID.",
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="CertificateID"
+                      value={formData.CertificateID}
+                      onChange={handleChange}
+                      placeholder="Nhập CertificateID"
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Nộp ảnh
+                  </span>
+                  <Form.Item
+                    name="Image"
+                    rules={[{ required: true, message: "Vui lòng nộp ảnh." }]}
+                  >
+                    <Upload
+                      beforeUpload={() => false}
+                      maxCount={1}
+                      onChange={({ fileList }) =>
+                        handleUploadChange("Image", fileList)
+                      }
+                      listType="picture"
+                    >
+                      <Button icon={<UploadOutlined />}>Upload</Button>
+                    </Upload>
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                    {" "}
+                    <span style={{ color: "red" }}>* </span>
+                    Nộp video
+                  </span>
+                  <Form.Item
+                    name="Video"
+                    rules={[{ required: true, message: "Vui lòng nộp video." }]}
+                  >
+                    <Upload
+                      beforeUpload={() => false}
+                      maxCount={1}
+                      onChange={({ fileList }) =>
+                        handleUploadChange("Video", fileList)
+                      }
+                      listType="text"
+                    >
+                      <Button icon={<UploadOutlined />}>Upload</Button>
+                    </Upload>
+                  </Form.Item>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span style={{ fontWeight: "bold", fontSize: "15px" }}>
+                {" "}
+                <span style={{ color: "red" }}>* </span>
+                Chi tiết về koi
+              </span>
+              <Form.Item>
                 <Input.TextArea
-                  name="Detail"
-                  value={formData.Detail}
+                  name="Description"
+                  value={formData.Description}
                   onChange={handleChange}
                   placeholder="Nhập chi tiết về cá koi của bạn"
                   style={{ height: "150px", resize: "none" }}
                 />
               </Form.Item>
-
-              <hr />
-
-              <Title level={3}>Thông Tin Koi Muốn Ký Gửi</Title>
-
-              <Form.Item
-                name="CategoryID"
-                label="Loại Cá (*)"
-                rules={[{ required: true, message: "Vui lòng chọn danh mục." }]}
-              >
-                <Select
-                  value={formData.CategoryID}
-                  onChange={(value) =>
-                    setFormData((prevData) => ({
-                      ...prevData,
-                      CategoryID: value,
-                    }))
-                  }
-                  placeholder="Chọn danh mục..."
-                >
-                  {categoryData.map((category) => (
-                    <Select.Option key={category._id} value={category._id}>
-                      {category.CategoryName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-
-              <Form.Item
-                name="KoiName"
-                label="Tên Loại Cá Koi (*)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập tên loại cá koi." },
-                ]}
-              >
-                <Input
-                  name="KoiName"
-                  value={formData.KoiName}
-                  onChange={handleChange}
-                  placeholder="Nhập KoiName (Category + Origin)"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="Age"
-                label="Tuổi (*)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập tuổi." },
-                  {
-                    type: "string",
-                    min: 1,
-                    max: 50,
-                    message: "Tuổi phải từ 1 đến 50.",
-                  },
-                  {
-                    validator: (_, value) => {
-                      const numericValue = Number(value); // Convert to a number
-                      if (numericValue < 1) {
-                        return Promise.reject(
-                          new Error("Tuổi phải lớn hơn hoặc bằng 1.")
-                        );
-                      }
-                      if (numericValue > 50) {
-                        return Promise.reject(
-                          new Error("Tuổi phải nhỏ hơn bằng 50")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-              >
-                <Input
-                  name="Age"
-                  value={formData.Age}
-                  onChange={handleChange}
-                  type="number"
-                  placeholder="Nhập tuổi"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="Origin"
-                label="Nguồn Gốc (*)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập nguồn gốc." },
-                ]}
-              >
-                <Input
-                  name="Origin"
-                  value={formData.Origin}
-                  onChange={handleChange}
-                  placeholder="Nhập nguồn gốc"
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Giới Tính (*)"
-                name="Gender"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn giới tính.",
-                  },
-                ]}
-              >
-                <Radio.Group
-                  name="Gender"
-                  value={formData.Gender}
-                  onChange={handleChange}
-                >
-                  <Radio value="Male">Male</Radio>
-                  <Radio value="Female">Female</Radio>
-                </Radio.Group>
-              </Form.Item>
-
-              <Form.Item
-                name="Size"
-                label="Kích Thước (*) (cm)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập kích thước." },
-                  {
-                    type: "string",
-                    min: 1,
-                    max: 200,
-                    message: "Kích thước phải từ 1 đến 200.",
-                  },
-                  {
-                    validator: (_, value) => {
-                      const numericValue = Number(value); // Convert to a number
-                      if (numericValue < 1) {
-                        return Promise.reject(
-                          new Error("Kích Thước phải lớn hơn hoặc bằng 1.")
-                        );
-                      }
-                      if (numericValue > 200) {
-                        return Promise.reject(
-                          new Error("Kích Thước phải nhỏ hơn bằng 200")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-              >
-                <Input
-                  name="Size"
-                  value={formData.Size}
-                  onChange={handleChange}
-                  type="number"
-                  placeholder="Nhập kích thước(cm)"
-                  min={5}
-                  max={150}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Xuất xứ(*)"
-                name="Breed"
-                rules={[
-                  {
-                    required: true,
-                    message: "Vui lòng chọn trạng thái.",
-                  },
-                ]}
-              >
-                <Radio.Group
-                  name="Breed"
-                  value={formData.Breed}
-                  onChange={handleChange}
-                >
-                  <Radio value="Nhat">Nhật</Radio>
-                  <Radio value="Viet">Việt</Radio>
-                  <Radio value="F1">F1</Radio>
-                </Radio.Group>
-              </Form.Item>
-
-              <Form.Item
-                name="DailyFoodAmount"
-                label="Nhập lượng thức ăn / ngày(*) (đơn vị g/ngày)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập lượng thức ăn." },
-                  {
-                    type: "string",
-                    min: 1,
-                    max: 100,
-                    message: "Lượng thức ăn / ngày(*) phải từ 1 đến 100.",
-                  },
-                  {
-                    validator: (_, value) => {
-                      const numericValue = Number(value); // Convert to a number
-                      if (numericValue < 1) {
-                        return Promise.reject(
-                          new Error("Lượng thức ăn phải lớn hơn bằng 0")
-                        );
-                      }
-                      if (numericValue > 100) {
-                        return Promise.reject(
-                          new Error("Lượng thức ăn phải nhỏ hơn bằng 100")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-              >
-                <Input
-                  name="DailyFoodAmount"
-                  value={formData.DailyFoodAmount}
-                  onChange={handleChange}
-                  type="number"
-                  placeholder="Nhập lượng thức ăn / ngày"
-                  min={1}
-                  max={100}
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="FilteringRatio"
-                label="Nhập tỷ lệ lọc(*) (%)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập tỷ lệ lọc." },
-                  {
-                    type: "string",
-                    min: 1, // Update min to 0.1 as per your requirement
-                    max: 100,
-                    message: "Tỷ lệ lọc phải từ 0.1 đến 100.",
-                  },
-                  {
-                    validator: (_, value) => {
-                      const numericValue = Number(value); // Convert to a number
-                      if (numericValue < 1) {
-                        return Promise.reject(
-                          new Error("Tỷ lệ lọc phải lớn hơn 0")
-                        );
-                      }
-                      if (numericValue > 100) {
-                        return Promise.reject(
-                          new Error("Tỷ lệ lọc phải nhỏ hơn bằng 100")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-              >
-                <Input
-                  name="FilteringRatio"
-                  value={formData.FilteringRatio}
-                  onChange={handleChange}
-                  type="number"
-                  placeholder="Nhập tỷ lệ lọc"
-                  max={100}
-                  min={1}
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="CertificateID"
-                label="CertificateID(*)"
-                rules={[
-                  { required: true, message: "Vui lòng nhập CertificateID." },
-                ]}
-              >
-                <Input
-                  name="CertificateID"
-                  value={formData.CertificateID}
-                  onChange={handleChange}
-                  placeholder="Nhập CertificateID"
-                />
-              </Form.Item>
-
-              <Form.Item
-                name="Image"
-                label="Nộp ảnh (*)"
-                rules={[{ required: true, message: "Vui lòng nộp ảnh." }]}
-              >
-                <Upload
-                  beforeUpload={() => false}
-                  maxCount={1}
-                  onChange={({ fileList }) =>
-                    handleUploadChange("Image", fileList)
-                  }
-                  listType="picture"
-                >
-                  <Button icon={<UploadOutlined />}>Upload</Button>
-                </Upload>
-              </Form.Item>
-
-              <Form.Item
-                name="Video"
-                label="Nộp video (*)"
-                rules={[{ required: true, message: "Vui lòng nộp video." }]}
-              >
-                <Upload
-                  beforeUpload={() => false}
-                  maxCount={1}
-                  onChange={({ fileList }) =>
-                    handleUploadChange("Video", fileList)
-                  }
-                  listType="text"
-                >
-                  <Button icon={<UploadOutlined />}>Upload</Button>
-                </Upload>
-              </Form.Item>
             </div>
-            <Form.Item label="Chi tiết về koi">
-              <Input.TextArea
-                name="Description"
-                value={formData.Description}
-                onChange={handleChange}
-                placeholder="Nhập chi tiết về cá koi của bạn"
-                style={{ height: "150px", resize: "none" }}
-              />
-            </Form.Item>
 
             <div style={{ textAlign: "center", marginTop: "20px" }}>
               <Button

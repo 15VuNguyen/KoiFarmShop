@@ -9,6 +9,7 @@ import axiosInstance from "../An/Utils/axiosJS";
 import TableCart from "./TableCartForShoppingCart";
 import { Spinner, Container } from "react-bootstrap";
 import TableCartForm from "./TableCartForm";
+import { toast } from "react-toastify";
 export default function FormFillInformation() {
   const orderDetail = useOrder(); // Đảm bảo rằng hàm này trả về giá trị hợp lệ
 
@@ -33,7 +34,7 @@ export default function FormFillInformation() {
 
       if (response.status === 200) {
         message.success(response.data.message);
-        alert("Đặt hàng thành công!");
+        toast.success("Đặt hàng thành công!");
         navigate("/paymentmethod");
       } else {
         message.error(`Có lỗi xảy ra: ${response.data.message}`);

@@ -2,15 +2,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Card, Row, Col, Typography, Divider } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useOrder } from "../Context/OrderContext";
 
 const { Text } = Typography;
 
 const CardGrid = ({ cardData }) => {
   const navigate = useNavigate();
   const [category, setCategory] = useState("All"); // State for category switch
-  const { addedKoiIds } = useOrder(); // Get added Koi IDs
-  console.log(addedKoiIds);
 
   const handleCategoryChange = (newCategory) => {
     setCategory(newCategory);

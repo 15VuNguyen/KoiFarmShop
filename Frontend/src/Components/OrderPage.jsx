@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import { InputNumber, message } from "antd";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import { toast } from "react-toastify";
@@ -21,6 +21,7 @@ import Shusui from "./ThongTinCaKoi/Shusui";
 import Tancho from "./ThongTinCaKoi/Tancho";
 import { Button, Typography, Spin, Layout } from "antd";
 import { Container } from "react-bootstrap";
+import axiosInstance from "../An/Utils/axiosJS";
 const { Title, Text, Paragraph } = Typography;
 
 const OrderPage = () => {
@@ -46,14 +47,12 @@ const OrderPage = () => {
   useEffect(() => {
     const sendOrderDetails = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:4000/order/detail/price",
-          {
-            Size: selectedItem.Size,
-            Breed: selectedItem.Breed,
-            CategoryID: selectedItem.CategoryID,
-          }
-        );
+        const response = await axiosInstance.post("/order/detail/price", {
+          Size: selectedItem.Size,
+          Breed: selectedItem.Breed,
+          CategoryID: selectedItem.CategoryID,
+          Status: selectedItem.Status,
+        });
         //
         if (response.status === 200) {
           let maxQty;
@@ -93,72 +92,47 @@ const OrderPage = () => {
     };
     sendOrderDetails();
   }, [selectedItem]);
-  //   useEffect(()=> {
-  //  const handleAddToCart = async () => {
-  //     if (!selectedItem || loading) return;
 
-  //     const totalQuantity = quantityInCart + selectedQuantity;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://localhost:4000/getAllKoi"
+        );
+        if (Array.isArray(response.data.result)) {
+          setCategoryData(response.data.categoryList);
+          console.log("Card data fetched successfully." + categoryData);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (selectedItem && selectedItem._id && categoryData.length > 0) {
+      const name = categoryData.find(
+        (data) => data._id === selectedItem.CategoryID
+      );
+      if (name) {
+        setCategoryName(name.CategoryName);
+      }
+    }
+    console.log("categoryName" + categoryName);
+  }, [selectedItem, categoryData]);
 
-  //     // Prevent adding if total exceeds maxQuantity
-  //     if (totalQuantity > maxQuantity) {
-  //       toast.error("Số lượng vượt quá giới hạn cho phép.");
-  //       return;
-  //     }
-
-  //     setLoading(true);
-  //     try {
-  //       const response = await axios.post(
-  //         "http://localhost:4000/order/detail/makes",
-  //         {
-  //           Size: parseInt(selectedItem.Size),
-  //           Breed: selectedItem.Breed,
-  //           CategoryID: selectedItem.CategoryID,
-  //           Quantity: parseInt(selectedQuantity),
-  //         },
-  //         {
-  //           withCredentials: true,
-  //         }
-  //       );
-
-  //       if (response.status === 200) {
-  //         const { result } = response.data; // Lấy thuộc tính 'result' từ phản hồi
-  //         console.log(result);
-  //         if (
-  //           typeof result === "string" &&
-  //           result.includes("available in stock")
-  //         ) {
-  //           setError(result); // Hiển thị thông điệp từ phản hồi
-  //           return;
-  //         }
-  //         console.log("Add to cart successful: " + response.data.message);
-  //         setOrderId(response.data.result.orderDT._id);
-  //       }
-  //       if (totalQuantity === maxQuantity) {
-  //         setIsAddedToCart(true);
-  //       }
-  //       toast.success("Đã thêm vào giỏ hàng!");
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error("Có lỗi xảy ra! " + (error.response?.data?.message || ""));
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   },[])
   const handleAddToCart = async () => {
     if (!selectedItem || loading) return;
-
     const totalQuantity = quantityInCart + selectedQuantity;
-
     // Prevent adding if total exceeds maxQuantity
     if (totalQuantity > maxQuantity) {
       toast.error("Số lượng vượt quá giới hạn cho phép.");
       return;
     }
-
+    setCategoryName(selectedItem.CategoryName);
     try {
-      const response = await axios.post(
-        "http://localhost:4000/order/detail/makes",
+      const response = await axiosInstance.post(
+        "/order/detail/makes",
         {
           Size: parseInt(selectedItem.Size),
           Breed: selectedItem.Breed,
@@ -199,8 +173,8 @@ const OrderPage = () => {
   };
   const handleOrderNow = async () => {
     if (!selectedItem || loading) return;
-
     setLoading(true);
+    setCategoryName(selectedItem.CategoryName);
     try {
       const response = await axios.post(
         "http://localhost:4000/order/detail/makes",
@@ -239,35 +213,6 @@ const OrderPage = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/getAllKoi");
-        console.log("Data received from API:", response.data); // Kiểm tra dữ liệu
-        if (Array.isArray(response.data.result)) {
-          setCardData(response.data.result); // Lấy mảng từ thuộc tính 'result'
-          setCategoryData(response.data.categoryList);
-          console.log("CategoryData" + categoryData);
-          console.log("Card data set successfully:", response.data.result); // Kiểm tra sau khi set
-          console.log(
-            "Category Data set successfully:",
-            response.data.categoryList
-          );
-        } else {
-          console.error("Dữ liệu không phải là mảng:", response.data);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err); // Ghi lại lỗi
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <>
@@ -409,27 +354,25 @@ const OrderPage = () => {
                       {selectedItem.Size > 20 && (
                         <label>
                           <strong>Quantity: </strong>
-                          <input
-                            type="number"
+                          <InputNumber
                             style={{
                               fontSize: "14px",
                               color: "red",
                               width: "48%",
                             }}
+                            type="number"
                             value={selectedQuantity}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              // Kiểm tra xem giá trị có phải là số hợp lệ không
-                              if (
-                                !isNaN(value) &&
-                                value >= 1 &&
-                                value <= maxQuantity
-                              ) {
-                                setSelectedQuantity(value);
+                            onChange={(value) => {
+                              if (value >= 1) {
+                                if (value <= maxQuantity) {
+                                  setSelectedQuantity(value);
+                                } else {
+                                  message.error("Cá trong kho không đủ");
+                                }
                               }
                             }}
-                            min="1"
-                            max={maxQuantity}
+                            min={1}
+                            max={100}
                             onKeyPress={(e) => {
                               // Ngăn nhập ký tự "e"
                               if (e.key === "e" || e.key === "E") {
@@ -438,6 +381,13 @@ const OrderPage = () => {
                             }}
                           />
                         </label>
+                      )}
+                      {selectedQuantity > maxQuantity && (
+                        <div>
+                          <span style={{ color: "red" }}>
+                            Cá trong kho không đủ
+                          </span>
+                        </div>
                       )}
                       {selectedItem.Size < 20 && (
                         <label>
@@ -452,7 +402,6 @@ const OrderPage = () => {
                             value={selectedQuantity}
                             onChange={(e) => {
                               const value = e.target.value;
-                              // Kiểm tra xem giá trị có phải là số hợp lệ không
                               if (
                                 !isNaN(value) &&
                                 value >= 1 &&
@@ -463,6 +412,7 @@ const OrderPage = () => {
                             }}
                             min="1"
                             max={maxQuantity}
+                            disabled={selectedItem.Size < 20}
                             onKeyPress={(e) => {
                               // Ngăn nhập ký tự "e"
                               if (e.key === "e" || e.key === "E") {
@@ -1022,286 +972,3 @@ const OrderPage = () => {
 };
 
 export default OrderPage;
-{
-  /* <div
-              style={{
-                display: "flex",
-                width: "80%",
-                maxWidth: "1000px",
-
-                margin: "0 auto",
-                flexWrap: "wrap",
-                padding: "20px",
-                borderRadius: "8px",
-              }}
-            >
-              <div
-                style={{
-                  flex: "1 1 50%",
-                  textAlign: "center",
-                  paddingRight: "10px",
-                }}
-              >
-                {selectedItem ? (
-                  <>
-                    <img
-                      src={selectedItem.Image}
-                      alt={selectedItem.KoiName}
-                      style={{
-                        height: "400px",
-                        width: "100%",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <video
-                      controls
-                      style={{
-                        width: "100%",
-                        marginTop: "10px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <source src={selectedItem.Video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </>
-                ) : (
-                  <Spin tip="Loading..." />
-                )}
-              </div>
-              <div
-                style={{
-                  flex: "1 1 50%",
-                  paddingLeft: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <Title level={1} style={{ color: "red" }}>
-                  {selectedItem.KoiName}
-                </Title>
-                {selectedItem && (
-                  <>
-                    <hr style={{ margin: "10px 0" }} />
-                    <Paragraph style={{ paddingTop: "18px" }}>
-                      <h3 style={{ fontSize: "25px", textAlign: "left" }}>
-                        Price:{" "}
-                        <span style={{ fontSize: "25px", color: "red" }}>
-                          {" "}
-                          {new Intl.NumberFormat("vi-VN").format(
-                            selectedItem.Price
-                          )}{" "}
-                          VND
-                        </span>
-                      </h3>
-                      <Text>
-                        Tình trạng: Sẵn hàng, xem và lựa chọn cá trực tiếp tại
-                        trại{" "}
-                        <span
-                          style={{
-                            fontWeight: "600",
-                            color: "red",
-                            fontSize: "25px",
-                          }}
-                        >
-                          IKoi
-                        </span>
-                        .
-                      </Text>
-                    </Paragraph>
-                    <hr style={{ margin: "10px 0" }} />
-                    <Paragraph>
-                      <Text
-                        style={{
-                          fontWeight: "bold",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        Ưu đãi:
-                      </Text>
-                      <ul>
-                        <li>
-                          Mua nhiều tặng nhiều: Mua 20 tặng 5; Mua 12 tặng 3;
-                          Mua 30 tặng 9 (áp dụng với cá Koi Việt , Koi F1 phụ
-                          thuộc vào size).
-                        </li>
-                        <li>
-                          Giá trị đơn hàng từ 1.500.000đ tặng kèm 1 chai vi sinh
-                          (không hợp nhất với combo khác).
-                        </li>
-                        <li>Miễn phí ship từ trại ra các bến xe tại Hà Nội.</li>
-                      </ul>
-                    </Paragraph>
-                    <Paragraph
-                      style={{
-                        fontSize: "20px",
-                        textAlign: "left",
-                        color: "red",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "20px",
-                          textAlign: "left",
-                          color: "red",
-                        }}
-                      >
-                        {selectedItem.Size > 20 && (
-                          <label>
-                            <strong>Quantity: </strong>
-                            <input
-                              type="number"
-                              style={{
-                                fontSize: "14px",
-                                color: "red",
-                                width: "48%",
-                              }}
-                              value={selectedQuantity}
-                              onChange={(e) =>
-                                setSelectedQuantity(e.target.value)
-                              }
-                              min="1"
-                              max={maxQuantity}
-                            />
-                          </label>
-                        )}
-                        {selectedItem.Size < 20 && (
-                          <label>
-                            <strong>Quantity: </strong>
-                            <input
-                              type="number"
-                              style={{
-                                fontSize: "14px",
-                                color: "red",
-                                width: "48%",
-                              }}
-                              value={selectedQuantity}
-                              onChange={(e) =>
-                                setSelectedQuantity(e.target.value)
-                              }
-                              min="1"
-                              max={maxQuantity}
-                              disabled
-                            />
-                          </label>
-                        )}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "20px",
-                          textAlign: "left",
-                          color: "red",
-                        }}
-                      >
-                        {selectedItem.Size < 20 && (
-                          <Paragraph
-                            style={{
-                              fontSize: "20px",
-                              textAlign: "left",
-                              color: "red",
-                            }}
-                          >
-                            <strong>Combo: </strong>
-                            <input
-                              type="number"
-                              style={{
-                                fontSize: "14px",
-                                color: "red",
-                                width: "48%",
-                              }}
-                              value={comboQuantity}
-                              onChange={(e) => {
-                                const value = Math.max(e.target.value, 1);
-                                setComboQuantity(value);
-                                setSelectedQuantity(value * 25);
-                              }}
-                              min="1"
-                            />
-                          </Paragraph>
-                        )}
-                      </div>
-                    </Paragraph>
-                    <Paragraph style={{ fontSize: "20px", textAlign: "left" }}>
-                      <strong>Certificate ID: </strong>
-                      <Text style={{ fontSize: "20px", color: "red" }}>
-                        {selectedItem.CertificateID}
-                      </Text>
-                    </Paragraph>
-                    <Paragraph>
-                      <div
-                        style={{
-                          display: "flex",
-                          paddingTop: "20px",
-                          gap: "10px",
-                        }}
-                      >
-                        <Button
-                          type="primary"
-                          danger
-                          size="large"
-                          onClick={handleOrderPlacement}
-                          disabled={isAddedToCart}
-                          style={{
-                            flex: "0 1 40%", // Đặt width nhỏ hơn
-                            padding: "10px", // Giảm padding
-                            borderRadius: "8px",
-                            fontSize: "18px", // Giảm font size
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Mua Ngay
-                        </Button>
-                        <Button
-                          style={{
-                            flex: "1 1 60%", // Đặt width lớn hơn
-                            padding: "20px", // Tăng padding
-                            borderRadius: "8px",
-                            fontSize: "22px", // Tăng font size
-                            fontWeight: "bold",
-                            backgroundColor: "#ffffff", // Màu nền trắng
-                            color: "red", // Màu chữ cam
-                            border: "2px solid red", // Viền cam
-                            transition: "background-color 0.3s, transform 0.2s", // Hiệu ứng chuyển đổi
-                          }}
-                          onClick={handleAddToCart}
-                          loading={loading}
-                          size="large"
-                          disabled={
-                            isAddedToCart ||
-                            quantityInCart + selectedQuantity > maxQuantity
-                          }
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "red"; // Màu nền khi hover
-                            e.currentTarget.style.color = "#FFFFFF"; // Màu chữ trắng khi hover
-                            e.currentTarget.style.transform = "scale(1.05)"; // Phóng to nút khi hover
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#FFFFFF"; // Màu nền lại khi không hover
-                            e.currentTarget.style.color = "red"; // Màu chữ lại khi không hover
-                            e.currentTarget.style.transform = "scale(1)"; // Trở lại kích thước ban đầu
-                          }}
-                        >
-                          <FaCartPlus style={{ marginRight: "8px" }} />
-                          {isAddedToCart ? "Đã Thêm" : "Thêm Vào Giỏ Hàng"}
-                        </Button>
-                      </div>
-                    </Paragraph>
-                    {isAddedToCart && (
-                      <Paragraph
-                        style={{
-                          color: "green",
-                          fontWeight: "bold",
-                          marginTop: "10px",
-                        }}
-                      >
-                        Hàng đã vào giỏ hàng của bạn!
-                      </Paragraph>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-          </div> */
-}

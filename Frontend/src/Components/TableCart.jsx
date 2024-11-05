@@ -1,20 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useOrder } from "../Context/OrderContext";
-import axios from "axios";
-import { Empty } from "antd"; // Import only Empty from Ant Design
-import Cookies from "js-cookie";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Typography } from "antd";
 import axiosInstance from "../An/Utils/axiosJS";
 const { Text } = Typography;
 
 export default function ShoppingCart() {
-  const orderDetail = useOrder();
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
-  const navigate = useNavigate();
+
 
   // useEffect(() => {
   //   const storedKoiList = JSON.parse(localStorage.getItem("koiList")) || [];

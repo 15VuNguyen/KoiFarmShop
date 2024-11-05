@@ -104,38 +104,23 @@ const PaymentMethod = () => {
             Chọn Phương Thức Thanh Toán
           </Title>
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
-            <Button
-              type="primary"
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease",
-              }}
-              onClick={() => handlePaymentMethodSelect("Zalo Pay")}
-            >
-              Zalo Pay
-            </Button>
-            <Button
-              type="primary"
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease",
-              }}
-              onClick={() => handlePaymentMethodSelect("Momo Pay")}
-            >
-              Momo Pay
-            </Button>
+            <div onClick={() => handlePaymentMethodSelect("Zalo Pay")}>
+              <img
+                src="src/assets/logozalopay.jpg"
+                alt="Zalo Pay"
+                style={{ width: "15%" }}
+              />
+            </div>
+            <div onClick={() => handlePaymentMethodSelect("Momo Pay")}></div>
+            <img
+              src="src/assets/MoMo_Logo.png"
+              alt="Momo"
+              style={{ width: "15%" }}
+            />
           </Space>
           <div style={{ marginTop: "20px", fontSize: "16px", color: "#555" }}>
             <p>
-              Tổng Giá: <strong>{totalPrice} VND</strong>
+              Tổng Giá: <strong>{totalPrice.toLocaleString()} VND</strong>
             </p>
           </div>
         </div>
