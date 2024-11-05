@@ -173,62 +173,37 @@ export default function Home() {
     },
   ];
 
-  /// chat
-
-  // const handleLogout = () => {
-  //     try {
-  //         localStorage.removeItem('userInfo')
-  //         localStorage.removeItem('selectedChat')
-  //         toast.success('Logout successfully!')
-  //         navigate('/login')
-  //     } catch (error) {
-  //         toast.error('Logout fail!')
+  // const fetchManager = async () => {
+  //   try {
+  //     const { data } = await getManager();
+  //     if (data) {
+  //       console.log("manager: ", data);
+  //       setManager(data.result);
   //     }
-  // }
+  //   } catch (error) {
+  //     console.error({ message: error.message });
+  //   }
+  // };
 
-  // const getStaff = async () => {
-  //     const {data} = await fetchStaff(config)
-  //     if(data){
-  //         console.log("staff: ", data)
-  //         setStaff(data[0])
+  // const fetchUser = async () => {
+  //   try {
+  //     const { data } = await fetchLoginUserData();
+  //     if (data) {
+  //       console.log("user: ", data.result);
+  //       setUser(data.result);
   //     }
-  // }
+  //   } catch (error) {
+  //     console.error({ message: error.message });
+  //   }
+  // };
 
   // useEffect(() => {
-  //     getStaff()
-  // }, [authUser._id])
+  //   fetchUser();
+  // }, [user._id]);
 
-  const fetchManager = async () => {
-    try {
-      const { data } = await getManager();
-      if (data) {
-        console.log("manager: ", data);
-        setManager(data.result);
-      }
-    } catch (error) {
-      console.error({ message: error.message });
-    }
-  };
-
-  const fetchUser = async () => {
-    try {
-      const { data } = await fetchLoginUserData();
-      if (data) {
-        console.log("user: ", data.result);
-        setUser(data.result);
-      }
-    } catch (error) {
-      console.error({ message: error.message });
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-  }, [user._id]);
-
-  useEffect(() => {
-    fetchManager();
-  }, []);
+  // useEffect(() => {
+  //   fetchManager();
+  // }, []);
 
   return (
     <>

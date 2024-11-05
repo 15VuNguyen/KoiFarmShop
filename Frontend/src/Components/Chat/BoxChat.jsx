@@ -24,6 +24,7 @@ const BoxChat = (props) => {
   console.log("socket: ", socket);
 
   const sendMessage = async () => {
+    if(!message.trim()) return;
     try {
       setLoading(true);
       setMessage("");
@@ -62,9 +63,10 @@ const BoxChat = (props) => {
 
   useEffect(() => {
     if (selectedChat?._id && receiver._id) {
-      fetchMessages();
+        fetchMessages();
     }
   }, [selectedChat?._id, receiver._id]);
+
 
   useEffect(() => {
     setTimeout(() => {

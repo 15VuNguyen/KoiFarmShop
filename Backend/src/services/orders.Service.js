@@ -23,7 +23,6 @@ class OrdersService {
         }
         await databaseService.users.insertOne(new UserSchema(userPayload))
         const newUser = await databaseService.users.findOne({ _id: user_id })
-        console.log("new User: ", newUser)
         return newUser
     }
 

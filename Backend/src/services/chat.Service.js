@@ -14,7 +14,6 @@ class ChatService {
 
         const populateChat = await Promise.all(chats.map(async (chat) => {
             const otherParticipant = chat.Participants.find(participant => participant.toString() !== userID.toString())
-            console.log("other: ", otherParticipant)
             const participant = await databaseService.users.findOne({
                 _id: otherParticipant
             })
@@ -29,7 +28,6 @@ class ChatService {
             }
         }))
 
-        console.log("populate chat: ", populateChat)
         return populateChat
     }
 
@@ -60,7 +58,6 @@ class ChatService {
             Messages: []
         }
         const insertedChat = await databaseService.chats.insertOne(chat)
-        console.log("insert chat: ", insertedChat)
         chat._id = insertedChat.insertedId
         return chat
     }
@@ -94,9 +91,7 @@ class ChatService {
 
         const insertedMessage = await databaseService.messages.insertOne(newMessage)
 
-        console.log("first")
-        const foundChat = await databaseService.chats.findOne({_id: new ObjectId(chat._id)})
-        console.log("found chat: ", foundChat)
+        await databaseService.chats.findOne({_id: new ObjectId(chat._id)})
 
         await databaseService.chats.findOneAndUpdate(
             { _id: chat._id },

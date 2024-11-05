@@ -20,7 +20,7 @@ const orderRouter = Router()
 
 //Order Detail
 orderRouter.post('/detail/make', makeOrderDetailController)
-orderRouter.post('/detail/makes', makeOrdersDetailController)
+orderRouter.post('/detail/makes', accessTokenValidator ,wrapAsync(makeOrdersDetailController))
 orderRouter.post('/detail/buy', buyNowController)
 orderRouter.get('/detail', getOrderDetailController)
 orderRouter.post('/detail/edit', updateOrderDetailController)
