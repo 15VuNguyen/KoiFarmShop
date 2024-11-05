@@ -4,6 +4,7 @@ import { MANAGER_MESSAGES } from '../constants/managerMessage.js'
 import { ErrorWithStatus } from '../models/Errors.js'
 import databaseService from './database.service.js'
 import { USERS_MESSAGES } from '../constants/userMessages.js'
+import koisService from './kois.services.js'
 
 class ConsignsService {
   async getAllConsign() {
@@ -273,6 +274,40 @@ class ConsignsService {
         }
       }
     ])
+
+    if (koiUpdate.modifiedCount > 0 || consignUpdate.modifiedCount > 0) {
+      const consign = await databaseService.consigns.findOne({ _id: new ObjectId(consignID) })
+      const user = await databaseService.users.findOne({ _id: new ObjectId(consign.UserID) })
+      const koi = await databaseService.kois.findOne({ _id: new ObjectId(consign.KoiID) })
+
+      const titleEmail = 'Thông báo cập nhật thông tin Koi từ khách hàng'
+
+      const emailContent = await koisService.generateConsignUpdateInformation(user, koi, consign, titleEmail)
+
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_APP,
+          pass: process.env.EMAIL_PASSWORD_APP
+        }
+      })
+
+      let mailOptions = {
+        from: process.env.EMAIL_APP,
+        to: user.email, // Địa chỉ email của người dùng
+        bcc: process.env.EMAIL_APP, // Địa chỉ email của manager
+        subject: 'Thông tin ký gửi Koi đã được cập nhật từ khách hàng',
+        html: emailContent
+      }
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      })
+    }
 
     return {
       consign: consignUpdate,
