@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import { HiLink } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
+import message from "antd/lib/message";
 import "../../../Css/Modal.css";
 import React from 'react'
 import { SelfCheckContext } from '../../../Ant Design/Components/ANTDTopbar';
@@ -27,6 +28,7 @@ export default function ViewProfile({ actions, setactions, id }) {
   const storage = getStorage(app);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const savedToClipboard = () => {
+    message.success("ID đã được sao chép vào clipboard!");
     navigator.clipboard.writeText(user._id);
   };
 
@@ -109,10 +111,16 @@ export default function ViewProfile({ actions, setactions, id }) {
       const response = await axiosInstance.post(`manager/manage-user/updateUser/${id}`, updatedData);
       console.log(response.data);
       if (response.data.result.success == true) {
-        console.log('Update successfully');
-        window.location.reload();
+        console.log('Cập nhật thành công');
+        message.success('Cập nhật hồ sơ thành công');
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
       }
-      alert('Profile updated successfully');
+      
+    //  alert('Cập nhật hồ sơ thành công');
     } catch (error) {
       console.log(error);
     }
@@ -121,7 +129,7 @@ export default function ViewProfile({ actions, setactions, id }) {
   return (
     <Modal show={actions} onHide={handleClose} centered dialogClassName="modal-30w">
       <Modal.Header className="bg-light">
-        <Modal.Title>Profile</Modal.Title>
+        <Modal.Title>Hồ sơ</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -136,7 +144,7 @@ export default function ViewProfile({ actions, setactions, id }) {
             <span className="text-muted">{user.email || 'amelie@untitledui.com'}</span>
             <div className="user-id-container mt-2" onClick={savedToClipboard}>
               <HiLink />
-              <span className="ms-1 fw-bold">Copy User ID</span>
+              <span className="ms-1 fw-bold">Sao chép ID Người dùng</span>
             </div>
           </div>
         </div>
@@ -144,7 +152,7 @@ export default function ViewProfile({ actions, setactions, id }) {
         <Form onSubmit={handleSubmit}>
 
           <Form.Group className="mb-3">
-            <Form.Label>Profile Picture</Form.Label>
+            <Form.Label>Ảnh hồ sơ</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
@@ -154,10 +162,10 @@ export default function ViewProfile({ actions, setactions, id }) {
 
           {/* Name */}
           <Form.Group className="mb-3">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Tên</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter name"
+              placeholder="Nhập tên"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
@@ -166,10 +174,10 @@ export default function ViewProfile({ actions, setactions, id }) {
 
           {/* Address*/}
           <Form.Group className="mb-3">
-            <Form.Label>Address</Form.Label>
+            <Form.Label>Địa chỉ</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter address"
+              placeholder="Nhập địa chỉ"
               name="address"
               value={formData.address}
               onChange={handleInputChange}
@@ -177,7 +185,7 @@ export default function ViewProfile({ actions, setactions, id }) {
           </Form.Group>
           {/* Date of Birth */}
           <Form.Group className="mb-3">
-            <Form.Label>Date of Birth</Form.Label>
+            <Form.Label>Ngày sinh</Form.Label>
             <Form.Control
               type="date"
               name="date_of_birth"
@@ -188,7 +196,7 @@ export default function ViewProfile({ actions, setactions, id }) {
 
           {/* Email */}
           <Form.Group className="mb-3">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label>Địa chỉ email</Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -199,7 +207,7 @@ export default function ViewProfile({ actions, setactions, id }) {
 
           {/* User ID */}
           <Form.Group className="mb-3">
-            <Form.Label>User ID</Form.Label>
+            <Form.Label>ID Người dùng</Form.Label>
             <Form.Control
               type="text"
               name="user_id"
@@ -212,10 +220,10 @@ export default function ViewProfile({ actions, setactions, id }) {
 
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Cancel
+          Hủy
         </Button>
         <Button variant="primary" onClick={handleSubmit} disabled={isSubmitting}>
-          Save Changes
+          Lưu thay đổi
         </Button>
       </Modal.Footer>
     </Modal>

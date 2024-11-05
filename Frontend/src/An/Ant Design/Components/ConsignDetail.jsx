@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker, Tooltip } from 'antd';
+import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker, Tooltip, Typography } from 'antd';
 import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -102,12 +102,12 @@ export default function ConsignDetail({ consignID }) {
         setTrigger(trigger + 1);
       } catch (error) {
         console.error('Error uploading image:', error);
-        message.error('Image upload failed');
+        message.error('Tải ảnh lên thất bại');
       }
-      message.success(`${file.name} uploaded successfully`);
+      message.success(`${file.name} đã tải lên thành công`);
     } catch (error) {
       console.error('Error uploading image:', error);
-      message.error('Image upload failed');
+      message.error('Tải ảnh lên thất bại');
     } finally {
       setIsLoading(false);
     }
@@ -155,24 +155,24 @@ export default function ConsignDetail({ consignID }) {
       try {
         const reponse = await axiosInstance.put(`manager/manage-ki-gui/${consignID}`, updatedFields);
         console.log(reponse)
-        message.success(`${file.name} uploaded successfully`);
+        message.success(`${file.name} đã tải lên thành công`);
         setVideo(videoURL);
         setTrigger(trigger + 1);
 
       } catch (error) {
         console.error('Error uploading video:', error);
-        message.error('Video upload failed');
+        message.error('Tải video lên thất bại');
       }
 
-      message.success(`${file.name} uploaded successfully`);
+      message.success(`${file.name} đã tải lên thành công`);
     } catch (error) {
       console.error('Error uploading video:', error);
-      message.error('Video upload failed');
+      message.error('Tải video lên thất bại');
     }
   };
 
   if (!consignData.user || !consignData.consign || !consignData.koi) {
-    return <p>Loading...</p>;
+    return <p>Đang tải...</p>;
   }
 
   const handleAvatarChange = (e) => {
@@ -186,15 +186,31 @@ export default function ConsignDetail({ consignID }) {
   const toggleEdit = (field, initialValue) => {
     if (field === 'ShippedDate' || field === 'ReceiptDate') {
       if (field === 'ShippedDate') {
-        initialValue = dayjs(consign.ShippedDate).utc(true);
-        setEditField(field);
-        setEditValue(initialValue);
+        if (consign.ShippedDate === null || consign.ShippedDate === undefined || consign.ShippedDate === '') {
+          initialValue = dayjs().utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        } else {
+          initialValue = dayjs(consign.ShippedDate).utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        }
       }
       else if (field === 'ReceiptDate') {
-        initialValue = dayjs(consign.ReceiptDate).utc(true);
-        setEditField(field);
-        setEditValue(initialValue);
+        if (consign.ReceiptDate === null || consign.ReceiptDate === undefined || consign.ReceiptDate === '') {
+          initialValue = dayjs().utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        } else {
+          initialValue = dayjs(consign.ReceiptDate).utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        }
       }
+    }
+    else if (field === 'Price') {
+      setEditField(field);
+      setEditValue(koi.Price);
     }
     else {
 
@@ -223,7 +239,7 @@ export default function ConsignDetail({ consignID }) {
       case 5:
         return <Tag color="red">{stateMap[State]}</Tag>;
       default:
-        return <Tag color="red">Unknown</Tag>;
+        return <Tag color="red">Không xác định</Tag>;
     }
   }
 
@@ -247,22 +263,22 @@ export default function ConsignDetail({ consignID }) {
   function isAtLeast30Days(date1, date2) {
     return dayjs(date1).utc().diff(dayjs(date2), 'days') >= 30;
   }
-  
+
   function add30Days(date) {
     const targetDate = dayjs(date).add(30, 'days');
     return targetDate.format('YYYY-MM-DD');
   }
 
-  
+
   const saveEdit = (field) => {
     Modal.confirm({
-      title: 'Are you sure?',
-      content: `Are you sure you want to save changes to ${field}?`,
+      title: 'Bạn có chắc không?',
+      content: `Bạn có chắc chắn muốn lưu thay đổi cho ${field}?`,
       onOk: async () => {
         try {
           let updatedFields 
           if (field === 'State' && editValue === 4 && koi.Price == 0 || consign.Price === null) {
-            message.error("Please enter a price before updating the state to 'Đang tìm người mua'.");
+            message.error("Vui lòng nhập giá trước khi cập nhật trạng thái thành 'Đang tìm người mua'.");
             return;
           }
           if (field === 'ShippedDate' && !isAtLeast30Days(editValue, consign.ReceiptDate)) {
@@ -281,12 +297,12 @@ export default function ConsignDetail({ consignID }) {
           console.log(updatedFields)
           setEditField(null);
           const reponse = await axiosInstance.put(`manager/manage-ki-gui/${consignID}`, updatedFields);
-          message.success(`${field} has been updated successfully`);
+          message.success(`${field} đã được cập nhật thành công`);
           setTrigger(trigger + 1);
           console.log(reponse)
         } catch (error) {
           console.error('Error saving changes:', error);
-          message.error(`Failed to update ${field}`);
+          message.error(`Cập nhật ${field} thất bại`);
         }
       },
       onCancel: () => {
@@ -339,9 +355,14 @@ export default function ConsignDetail({ consignID }) {
               ) : inputType === 'selectPrice' ? (
 
                 consign.State === 3 || consign.State === '3' ? (
-                  <InputNumber min={1000} required value={editValue} onChange={(value) => setEditValue(value)} />
+                  <InputNumber  min={1000} required value={editValue} onChange={(value) => setEditValue(value)}
+                  formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  style={{ width: '25%' }} suffix={"đ"}
+                  />
                 ) : (
-                  <InputNumber min={0} value={editValue} onChange={(value) => setEditValue(value)} />
+                  <InputNumber min={0}  value={editValue} onChange={(value) => setEditValue(value)} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  style={{ width: '20%' }} suffix={"đ"}
+                  />
                 )
 
               ) : inputType === 'selectCategory' ? (
@@ -358,8 +379,8 @@ export default function ConsignDetail({ consignID }) {
               ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
                 <Form.Item label={
                   <Space>
-                    <span>Shipped Date</span>
-                    <Tooltip title="Ngày ship phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng"> 
+                    <span>Ngày vận chuyển</span>
+                    <Tooltip title="Ngày vận chuyển phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng"> 
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </Space>
@@ -381,8 +402,8 @@ export default function ConsignDetail({ consignID }) {
                 inputType === 'selectReceiptDate' && field === 'ReceiptDate' ? (
                   <Form.Item label={
                     <Space>
-                      <span>Receipt Date</span>
-                      <Tooltip title="Receipt Date must be at least 30 days after Shipped Date">
+                      <span>Ngày nhận</span>
+                      <Tooltip title="Ngày nhận phải ít nhất 30 ngày sau ngày vận chuyển">
                         <QuestionCircleOutlined />
                       </Tooltip>
                     </Space>
@@ -400,8 +421,8 @@ export default function ConsignDetail({ consignID }) {
 
                   inputType === 'setGender' ? (
                     <Select value={editValue} onChange={(value) => setEditValue(value)} >
-                      <Select.Option value={'Male'} >Male</Select.Option>
-                      <Select.Option value={'Female'} > Female</Select.Option>
+                      <Select.Option value={'Male'} >Nam</Select.Option>
+                      <Select.Option value={'Female'} > Nữ</Select.Option>
                     </Select>) :
                     inputType === 'SelectPositionCare' ? (
                       <Select value={editValue} onChange={(value) => setEditValue(value)} style={{ width: '10rem' }}>
@@ -409,24 +430,23 @@ export default function ConsignDetail({ consignID }) {
                         <Select.Option value={'Home'} >Home</Select.Option>
                       </Select>) :
 
-                      inputType === 'selectBreed' ? (
-                        <Select value={editValue} onChange={(value) => setEditValue(value)}>
-                          <Select.Option value={'Nhập Khẩu Nhật'} >Nhập Khẩu Nhật</Select.Option>
-                          <Select.Option value={'Nhập Khẩu Việt'} >Nhập Khẩu Việt</Select.Option>
-                          <Select.Option value={'Nhập Khẩu Trung'} >Nhập Khẩu Trung</Select.Option>
-                          <Select.Option value={'Nhập Khẩu F1'} >Nhập Khẩu F1</Select.Option>
-                        </Select>
-                      ) : inputType === 'selectFood' ? (
-                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                      ) : inputType === 'selectFilter' ? (
-                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                      ) :
+                        inputType === 'selectBreed' ? (
+                          <Select value={editValue} onChange={(value) => setEditValue(value)}>
+                            <Select.Option value={'Nhat'} >Nhập Khẩu Nhật</Select.Option>
+                            <Select.Option value={'Viet'} >IKOI Việt</Select.Option>                           
+                            <Select.Option value={'F1'} >IKOIF1</Select.Option>
+                          </Select>
+                        ) : inputType === 'selectFood' ? (
+                          <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                        ) : inputType === 'selectFilter' ? (
+                          <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                        ) :
 
 
 
-                        (
-                          <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-                        )}
+                          (
+                            <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                          )}
           <Button icon={<CheckOutlined />} type="link" onClick={() => saveEdit(field)} />
           <Button icon={<CloseOutlined />} type="link" onClick={cancelEdit} />
         </>
@@ -455,51 +475,52 @@ export default function ConsignDetail({ consignID }) {
           <Descriptions.Item label="Tên người dùng">{user.name}</Descriptions.Item>
           {renderEditableItem("Địa chỉ", user.address, "address")}
           {renderEditableItem("Số điện thoại", user.phone_number, "phone_number")}
-          <Descriptions.Item label="Verified">
-            {user.verify ? 'Yes' : 'No'}
+          <Descriptions.Item label="Đã xác minh">
+            {user.verify ? <Tag color="green">Đã xác minh</Tag> : <Tag color="red">Chưa xác minh</Tag>}
           </Descriptions.Item>
-          <Descriptions.Item label="Profile Picture">
+          <Descriptions.Item label="Ảnh đại diện">
             <Avatar src={user.picture} size={64} />
           </Descriptions.Item>
         </Descriptions>
 
         <Divider />
 
-        <Descriptions title="Consign Information" bordered>
-          {renderEditableItem("Method", consign.Method, "Method", "selectMethod")}
-          {renderEditableItem("Position Care", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
+        <Descriptions title="Thông tin ký gửi" bordered>
+          {renderEditableItem("Phương thức", consign.Method, "Method", "selectMethod")}
+          {renderEditableItem("Vị trí chăm sóc", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
           {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
-          {renderEditableItem("Shipped Date", dayjs(consign.ShippedDate).utc().format('YYYY-MM-DD'), "ShippedDate", "selectReceivedDate")}
-          {renderEditableItem("Receipt Date", moment.utc(consign.ReceiptDate).format('YYYY-MM-DD'), "ReceiptDate", "selectReceiptDate")}
+          {renderEditableItem("Ngày vận chuyển", consign.ShippedDate ? dayjs(consign.ShippedDate).utc().format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag> , "ShippedDate", "selectReceivedDate")}
+    
+          {renderEditableItem("Ngày nhận", consign.ReceiptDate ?  moment.utc(consign.ReceiptDate).format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag> , "ReceiptDate", "selectReceiptDate")}
 
 
           {renderEditableItem("Hoa Hồng", consign.Commission, "Commission", "selectCommission")}
           {renderEditableItem("Chi tiết kí gửi", consign.Detail, "Detail")}
-          <Descriptions.Item label="Total Price">
+          <Descriptions.Item label="Tổng Giá">
             {consign.TotalPrice == 0 ? (
-              <Tag color="red">Not Provided</Tag>
+              <Tag color="red">Chưa cung cấp</Tag>
             ) : (
-              formatCurrency(consign.TotalPrice)
+             formatCurrency(consign.TotalPrice) 
             )}
           </Descriptions.Item>
         </Descriptions>
 
         <Divider />
 
-        <Descriptions title="Koi Information" bordered>
-          {renderEditableItem("Koi Name", koi.KoiName, "KoiName")}
-          {renderEditableItem("Age", koi.Age, "Age", 'selectAge')}
-          {renderEditableItem("Origin", koi.Origin, "Origin")}
-          {renderEditableItem("Gender", koi.Gender, "Gender", 'setGender')}
-          {renderEditableItem("Size (cm)", koi.Size, "Size", 'selectSize')}
-          {renderEditableItem("Breed", koi.Breed, "Breed", 'selectBreed')}
-          {renderEditableItem("Certificate ID", koi.CertificateID, "CertificateID")}
-          {renderEditableItem("Price", formatCurrency(koi.Price), "Price", "selectPrice")}
-          {renderEditableItem("đơn vị g/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
-          {renderEditableItem("Filtering Ratio (%)", koi.FilteringRatio, "FilteringRatio", 'selectFilter')}
-          {renderEditableItem("Status", koi.Status, "Status", "SelectStatus")}
-          {renderEditableItem("Category ID", koi.CategoryID, "CategoryID", 'selectCategory')}
-          {renderEditableItem("Description", koi.Description, "Description")}
+        <Descriptions title="Thông tin Koi" bordered>
+          {renderEditableItem("Tên Koi", koi.KoiName, "KoiName")}
+          {renderEditableItem("Tuổi", koi.Age, "Age", 'selectAge')}
+          {renderEditableItem("Nguồn gốc", koi.Origin, "Origin")}
+          {renderEditableItem("Giới tính", koi.Gender, "Gender", 'setGender')}
+          {renderEditableItem("Kích thước (cm)", koi.Size, "Size", 'selectSize')}
+          {renderEditableItem("Giống", koi.Breed, "Breed", 'selectBreed')}
+          {renderEditableItem("ID Chứng chỉ", koi.CertificateID, "CertificateID")}
+          {renderEditableItem("Giá", formatCurrency(koi.Price)  , "Price", "selectPrice")}
+          {renderEditableItem("Lượng thức ăn đơn vị g/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
+          {renderEditableItem("Tỉ lệ lọc (%)", koi.FilteringRatio, "FilteringRatio", 'selectFilter')}
+          {renderEditableItem("Trạng thái", koi.Status, "Status", "SelectStatus")}
+          {renderEditableItem("ID Danh mục", koi.CategoryID, "CategoryID", 'selectCategory')}
+          {renderEditableItem("Mô tả", koi.Description, "Description")}
         </Descriptions>
         <Divider />
         <Row justify="center" align="middle" gutter={[16, 16]}>
@@ -511,7 +532,7 @@ export default function ConsignDetail({ consignID }) {
               accept="image/*"
 
             >
-              <Button loading={isLoading} icon={<UploadOutlined />}>Upload Image</Button>
+              <Button loading={isLoading} icon={<UploadOutlined />}>Tải ảnh lên</Button>
             </Upload>
             {imageList.length > 0 && (
               <Carousel lazyLoad='anticipated'>
@@ -532,12 +553,12 @@ export default function ConsignDetail({ consignID }) {
               accept="video/*"
 
             >
-              <Button loading={isLoading} icon={<UploadOutlined />}>Upload Video</Button>
+              <Button loading={isLoading} icon={<UploadOutlined />}>Tải video lên</Button>
             </Upload>
             {video && (
               <video style={{ display: 'block' }} width="480px" height='360px' controls >
                 <source src={video} type="video/mp4" />
-                Your browser does not support the video tag.
+                Trình duyệt của bạn không hỗ trợ thẻ video.
               </video>
             )}
           </Col>

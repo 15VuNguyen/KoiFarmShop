@@ -17,39 +17,15 @@ export default function Profiles() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [selectedProfile, setSelectedProfile] = React.useState(null);
-//   const isSelfCheck = React.useContext(SelfCheckContext);
-//   const setIsCheckingSelf = React.useContext(SelfCheckContext);
-//   React.useEffect(() => {
-//     console.log('SelfCheck:',isSelfCheck)
-//     console.log('isCheckingSelf:',typeof isSelfCheck === 'boolean')
-//     console.log('Type of isSelfCheck:', typeof isSelfCheck);
-//     const isSelfCheckBoolean = !!isSelfCheck;
-//     console.log('isSelfCheck (converted):', isSelfCheckBoolean);
-//       async function FetchMe() {
-//         if (isSelfCheck) {
-//           console.log('SelfCheck:',isSelfCheck)
-//           const rep = await axiosInstance.get('users/me');
-//           const {_id} = rep.data.result
-//           console.log(_id)
-//           setSelectedProfile(_id)
-//           setIsModalVisible(true)
-          
-//         }
-//         else {
-//           setIsModalVisible(false)
-//         }
-//       }
-//       FetchMe();
-//     }
-// , [isSelfCheck]);
+
   const getFilteredProfiles = () => {
     switch (activeTab) {
       case '1':
         return profiles;
       case '2':
-        return profiles.filter(profile => profile.verify); // Verified profiles
+        return profiles.filter(profile => profile.verify);
       case '3':
-        return profiles.filter(profile => profile.roleid == '3'); // Staff profiles
+        return profiles.filter(profile => profile.roleid == '3'); 
       default:
         return profiles;
     }
@@ -64,7 +40,7 @@ export default function Profiles() {
       key: '1',
       label: (
         <>
-          Toàn Bộ Hồ Sơ
+          Tất Cả Hồ Sơ
           <Badge count={profiles.length} showZero style={{ marginLeft: 8 }} color='green'  />
         </>
       ),
@@ -90,34 +66,32 @@ export default function Profiles() {
   ];
   const handleSearch = (value) => {
     setSearchTerm(value.target.value);
-    console.log('Search:', searchTerm);
+    console.log('Tìm kiếm:', searchTerm);
   };
-  const handleActionClick = async (actionType, id, messageInfo,SelfView) => {
+  const handleActionClick = async (actionType, id, messageInfo, SelfView) => {
     if (actionType === 'update') {
       setIsModalVisible(true);
       setSelectedProfile(id);
-      message.info(`Update action triggered for ID: ${id}`);
+      message.info(`Đã kích hoạt hành động cập nhật cho ID: ${id}`);
     } else if (actionType === 'disable') {
-      message.warning(`Disable action triggered for ID: ${id}`);
+      message.warning(`Đã kích hoạt hành động vô hiệu hóa cho ID: ${id}`);
     }
     else if (actionType === 'disable/enable') {
       const response = await axiosInstance.post('manager/manage-user/disable-enable/' + id);
       if (response.data.result.success) {
         if (messageInfo === 'disable') {
-          message.success('Disabled successfully');
+          message.success('Vô hiệu hóa thành công');
           refreshData();
         } else {
-          message.success('Enabled successfully');
+          message.success('Kích hoạt thành công');
           refreshData();
         }
       } else {
-        message.error('Disable/Enable failed');
+        message.error('Vô hiệu hóa/Kích hoạt thất bại');
       }
     }
     else if (actionType === 'close') {
       setIsModalVisible(false);
-
-
     }
   }
 
@@ -125,7 +99,7 @@ export default function Profiles() {
     <Layout >
       <ProfileModal actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
       <Header style={{ background: '#f5f5f5' }}>
-        <Typography.Title style={{ textAlign: 'center' }} level={1}>Profile Dashboard</Typography.Title>
+        <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Hồ Sơ</Typography.Title>
       </Header>
       <Content style={{ padding: '24px' }}>
 
@@ -134,7 +108,7 @@ export default function Profiles() {
           <Col span={6}>
             <Card hoverable>
               <Statistic
-                title={<Typography.Title level={4}>Total Active Customers</Typography.Title>}
+                title={<Typography.Title level={4}>Tổng Khách Hàng Hoạt Động</Typography.Title>}
                 value={totalCustomers()}
                 precision={0}
               />
@@ -145,7 +119,7 @@ export default function Profiles() {
           <Col span={6}>
             <Card hoverable>
               <Statistic
-                title={<Typography.Title level={4}>Total Verified Customers</Typography.Title>}
+                title={<Typography.Title level={4}>Tổng Khách Hàng Đã Xác Minh</Typography.Title>}
                 value={totalVerified()}
                 precision={0}
               />
@@ -153,21 +127,10 @@ export default function Profiles() {
           </Col>
 
 
-          {/* <Col span={6}>
-            <Card hoverable>
-              <Statistic
-                title={<Typography.Title level={4}>Total Staff</Typography.Title>}
-                value={totalStaff()}
-                precision={0}
-              />
-            </Card>
-          </Col> */}
-
-
           <Col span={6}>
             <Card hoverable>
               <Statistic
-                title={<Typography.Title level={4}>User Changes in Last 7 Days</Typography.Title>}
+                title={<Typography.Title level={4}>Thay Đổi Người Dùng Trong 7 Ngày Qua</Typography.Title>}
                 value={userChangePercent + '%'}
                 precision={2}
                 valueStyle={{ color: isPositiveChange ? '#3f8600' : '#cf1322' }}

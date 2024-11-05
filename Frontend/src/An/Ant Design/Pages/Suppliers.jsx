@@ -74,15 +74,6 @@ export default function Suppliers() {
                     <Badge count={suppliers.filter(supplier => supplier.Country == 'Việt Nam').length} style={{ marginLeft: 8 }} showZero color='green' />
                 </>
             ),
-        },
-        {
-            key: '4',
-            label: (
-                <>
-                    Nhà Cung Cấp ở Trung Quốc
-                    <Badge count={suppliers.filter(supplier => supplier.Country === 'Trung Quốc').length} style={{ marginLeft: 8 }} showZero color='green' />
-                </>
-            )
         }
     ];
     const handleSearch = (value) => {
@@ -153,14 +144,13 @@ export default function Suppliers() {
                             paddingLeft: '3rem',
                             flexWrap: 'wrap',
                             justifyContent: 'flex-start'
-                        }} wrap={true} >
+                        }} wrap >
                             <Tabs
                                 defaultActiveKey="1"
                                 items={Tab}
                                 size='small'
                                 tabBarGutter={78}
                                 onChange={key => setActiveTab(key)}
-                                wrap={true}
                             />
                         </Space>
                     </Col>

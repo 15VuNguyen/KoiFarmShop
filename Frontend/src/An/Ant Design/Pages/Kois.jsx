@@ -483,7 +483,7 @@ export default function Kois() {
                     </Row>
 
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" loading={isLoading}>
                             {isCreating ? "Tạo" : "Cập Nhật"}
                         </Button>
                         <Button danger onClick={() => resetLeModal()} style={{ marginLeft: '10px' }}>Hủy</Button>

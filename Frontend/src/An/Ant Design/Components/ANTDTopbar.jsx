@@ -1,10 +1,10 @@
 import React from "react";
-import { Layout, Menu, Avatar, Typography, Dropdown, Space } from "antd";
+import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button } from "antd";
 import { RxAvatar } from "react-icons/rx";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 
-import 'antd/dist/reset.css'; 
+import 'antd/dist/reset.css';
 import ManagerChat from "../../../Components/Chat/ManagerChat";
 
 const { Header, Content } = Layout;
@@ -12,44 +12,95 @@ const SelfCheckContext = React.createContext();
 
 export default function AnTopBar({ children, name, role }) {
     const [isCheckingSelf, setIsCheckingSelf] = React.useState(false);
-   
+
     const useAuthCheck = () => {
         const navigate = useNavigate();
         const { checkRole } = useAuth();
-      
+
         React.useEffect(() => {
-          const fetchRole = async () => {
-            try {
-              const role = await checkRole();
-              
-              if (role !== "Staff" && role !== "Manager") {
-                navigate("/login", { replace: true });
-              }
-            } catch (error) {
-              console.error("Error checking role:", error);
-              navigate("/login", { replace: true });
-            }
-          };
-      
-          fetchRole();
+            const fetchRole = async () => {
+                try {
+                    const role = await checkRole();
+
+                    if (role !== "Staff" && role !== "Manager") {
+                        navigate("/login", { replace: true });
+                    }
+                } catch (error) {
+                    console.error("Error checking role:", error);
+                    navigate("/login", { replace: true });
+                }
+            };
+
+            fetchRole();
         }, [checkRole, navigate]);
-      
+
         return null;
     };
 
     const { logout } = useAuth();
 
-    const chartMenu = (
-        <Menu>
-            <Menu.Item key="1">
-                <Link to="/NewDashBoard/staff/Report/BarChart">Biểu Đồ Bar</Link>
-            </Menu.Item>
-            <Menu.Item key="2">
+    const chartMenu = [
+        {
+            key: '1',
+            label: (
+                <Link to="/NewDashBoard/staff/Report/BarChart">
+                    Biểu Đồ Cột 
+                </Link>
+            ),
+        },
+        {
+            key: '2',
+            label: (
                 <Link to="/NewDashBoard/staff/Report/LineChart">Biểu Đồ Đường</Link>
-            </Menu.Item>
-        </Menu>
-    );
+            ),
+        }
 
+    ];
+    
+    const items = [
+        {
+            key: '1',
+            label: (
+                <Link to="/NewDashBoard/staff/Profiles">
+                    Hồ Sơ
+                </Link>
+            ),
+        },
+        {
+            key: '2',
+            label: (
+                <Link to="/NewDashBoard/staff/Consigns">Quản Lý Đơn Ký Gửi</Link>
+            ),
+        },
+        {
+            key: '3',
+            label: (
+                <Link to="/NewDashBoard/staff/Suppliers">Quản Lý Nhà Cung Cấp</Link>
+            ),
+        },
+        {
+            key: '4',
+            label: (
+                <Link to="/NewDashBoard/staff/Invoices">Quản Lý Hóa Đơn</Link>
+            ),
+        },{
+            key: '5',
+            label: (
+                <Link to="/NewDashBoard/staff/Orders">Quản Lý Đơn Hàng</Link>
+            ),
+        },{
+            key: '6',
+            label: (
+                <Link to="/NewDashBoard/staff/Kois">Quản Lý Cá Koi</Link>
+            ),
+
+        },{
+            key : '7',
+            label : (
+                <Button type="primary" onClick={logout}>Đăng Xuất</Button>
+            )
+        }
+    ];
     const mainMenu = (
         <Menu>
             <Menu.Item key="1">
@@ -87,12 +138,14 @@ export default function AnTopBar({ children, name, role }) {
                         IKOI
                     </div>
                     <Space size="large">
-                        <Dropdown overlay={mainMenu} trigger={['click']} className="menu-dropdown">
+                        <Dropdown menu={{
+                            items,
+                        }} trigger={['click']} className="menu-dropdown">
                             <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ color: 'white' }}>
                                 Menu Quản Lý
                             </a>
                         </Dropdown>
-                        <Dropdown overlay={chartMenu} trigger={['click']} className="menu-dropdown">
+                        <Dropdown menu={{ items: chartMenu }} trigger={['click']} className="menu-dropdown">
                             <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ color: 'white' }}>
                                 Báo Cáo
                             </a>
@@ -112,7 +165,7 @@ export default function AnTopBar({ children, name, role }) {
                     <Outlet />
                 </Content>
             </Layout>
-            <ManagerChat/>
+            <ManagerChat />
         </SelfCheckContext.Provider>
     );
 }
