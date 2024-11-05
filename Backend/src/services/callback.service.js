@@ -40,16 +40,10 @@ export const callback = async (req, res) => {
       const flattenedKoiIDs = koiIDsList.flat()
 
       for (const koiID of flattenedKoiIDs) {
-        console.log(koiID)
         await databaseService.kois.findOneAndUpdate({ _id: koiID }, { $set: { Status: 0 } }, { new: true })
-
         const stringKoiID = koiID.toString()
-
-        console.log('string koiid: ', stringKoiID)
-
         try {
           const consignkoi = await databaseService.consigns.findOne({ KoiID: stringKoiID })
-          console.log('consignkoi: ', consignkoi)
 
           if (consignkoi) {
             await databaseService.consigns.findOneAndUpdate(
@@ -57,13 +51,34 @@ export const callback = async (req, res) => {
               { $set: { State: 5 } },
               { new: true }
             )
-            console.log(`Updated State to 5 for KoiID: ${stringKoiID}`)
           } else {
             console.log(`No consign found for KoiID: ${stringKoiID}`)
           }
         } catch (error) {
           console.error('Error updating consign state: ', error)
         }
+      }
+
+      try {
+        const groupKoi = await databaseService.groupKois.find().toArray()
+
+        const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
+
+        for (const groupKoi of groupKoiID) {
+          const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
+
+          const allStatusZero = Koi.every((koi) => koi.Status === 0)
+
+          if (allStatusZero) {
+            await databaseService.invoices.findOneAndUpdate(
+              { GroupKoiIDInvoice: groupKoi },
+              { $set: { Status: 2 } },
+              { new: true }
+            )
+          }
+        }
+      } catch (error) {
+        console.error('Error occurred:', error)
       }
 
       if (!reqOrderDetails) {

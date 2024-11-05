@@ -147,13 +147,13 @@ class DatabaseService {
     }
   }
 
-  get invoice(){
-    try {
-      return this._db.collection(DB_INVOICES_COLLECTION)
-    } catch (error) {
-      console.log(error + 'lỗi ở database service - get invoice')
-    }
-  }
+  // get invoice(){
+  //   try {
+  //     return this._db.collection(DB_INVOICES_COLLECTION)
+  //   } catch (error) {
+  //     console.log(error + 'lỗi ở database service - get invoice')
+  //   }
+  // }
 }
 
 const databaseService = new DatabaseService()

@@ -50,7 +50,6 @@ export const getAllKoiController = async (req, res) => {
         koi.Status === 2 ||
         koi.Status === 3
     )
-    console.log(filteredResult)
 
     res.json({
       result: filteredResult,

@@ -30,12 +30,12 @@ const ChatList = (props) => {
 
     useEffect(() => {
         fetchExistedChats()
-    }, [messageList], customer)
+    }, [messageList, customer])
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
             setListChat(prevChats => {
-                const chatExists = prevChats.some(chat => chat._id == newMessage.ChatId)
+                const chatExists = prevChats.some(chat => chat._id === newMessage.ChatId)
 
                 if (chatExists) {
                     return prevChats.map(chat => {

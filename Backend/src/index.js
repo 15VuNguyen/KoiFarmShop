@@ -15,7 +15,8 @@ import {
   getKoiByIDController,
   getKoiGroupIDController,
   getManagerInfoForChatController,
-  getUserInfoForChatController
+  getUserInfoForChatController,
+  confirmConsignInformationController
 } from './controllers/common.controllers.js'
 import { getKoiByCategoryIDController } from './controllers/home.controllers.js'
 
@@ -27,7 +28,7 @@ import { accessTokenValidator } from './middlewares/users.middlewares.js'
 import paymentRouter from './routes/payments.routes.js'
 import orderRouter from './routes/order.routes.js'
 import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser';
+import bodyParser from 'body-parser'
 import { app, server } from './Socket/socket.js'
 import { removeAllItemsDetailController } from './controllers/orderDetailController.js'
 import chatRouter from './routes/chat.routes.js'
@@ -36,11 +37,7 @@ config()
 // const app = express()
 app.use(
   cors({
-    origin:[
-      'http://localhost:3000',
-      'https://ikoi-22c6e.web.app',
-    ]
-    ,
+    origin: ['http://localhost:3000', 'https://ikoi-22c6e.web.app'],
     credentials: true
   })
 )
@@ -48,7 +45,7 @@ const PORT = process.env.PORT || 4000
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 databaseService.connect().then(() => {
   databaseService.indexUsers()
 })
@@ -58,6 +55,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/ki-gui', createNewKoiKiGuiValidator, wrapAsync(createNewKoiKiGuiController))
+app.get('/confirm_consign_information/:consignId', wrapAsync(confirmConsignInformationController))
 
 app.use('/users', usersRouter)
 // app.get('/categories/getCategory', getCategory)
@@ -75,10 +73,10 @@ app.get('/get-all-supplier', wrapAsync(guestGetAllSupplierController))
 
 app.get('/supplierDetail/:_id', wrapAsync(guestGetSupplierController))
 
-app.get('/get-kois-groupKoiID',wrapAsync(getKoiGroupIDController))
+app.get('/get-kois-groupKoiID', wrapAsync(getKoiGroupIDController))
 
 app.use('/payment', paymentRouter)
-app.post('/clear-coookies',  wrapAsync(removeAllItemsDetailController))
+app.post('/clear-coookies', wrapAsync(removeAllItemsDetailController))
 app.get('/getManagerInfoForChat', wrapAsync(getManagerInfoForChatController))
 app.get('/getUserInfoForChat/:userID', wrapAsync(getUserInfoForChatController))
 

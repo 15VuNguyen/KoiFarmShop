@@ -15,12 +15,13 @@ import {
 import { createOrderController, getOrderController, saveOrderController } from '../controllers/order.controllers.js'
 import { accessTokenValidator } from '../middlewares/users.middlewares.js'
 import { wrapAsync } from '../utils/handle.js'
+import { checkCartController } from '../controllers/common.controllers.js'
 
 const orderRouter = Router()
 
 //Order Detail
 orderRouter.post('/detail/make', makeOrderDetailController)
-orderRouter.post('/detail/makes', makeOrdersDetailController)
+orderRouter.post('/detail/makes', accessTokenValidator ,wrapAsync(makeOrdersDetailController))
 orderRouter.post('/detail/buy', buyNowController)
 orderRouter.get('/detail', getOrderDetailController)
 orderRouter.post('/detail/edit', updateOrderDetailController)
@@ -37,4 +38,6 @@ orderRouter.post('/detail/koi', getKoiByPriceController)
 orderRouter.post('/koi/filter', filterKoiController)
 //save
 orderRouter.get('/save', saveOrderController)
+
+orderRouter.post('/checkCart', wrapAsync(checkCartController))
 export default orderRouter

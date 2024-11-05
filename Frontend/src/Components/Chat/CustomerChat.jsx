@@ -67,7 +67,7 @@ const CustomerChatButton = () => {
 
   useEffect(() => {
     fetchManager();
-  }, []);
+  }, [isShow]);
 
   return (
     <div className="chat-container">
