@@ -783,14 +783,12 @@ export default function Chitietconsignpage() {
                             required: true,
                             message: "Vui lòng nhập kích thước.",
                           },
-                          {
-                            type: "string",
-                            min: 1,
-                            max: 200,
-                            message: "Kích thước phải từ 1 đến 200.",
-                          },
+
                           {
                             validator: (_, value) => {
+                              if (!value) {
+                                return Promise.resolve(); // If the value is empty, resolve the promise
+                              }
                               const numericValue = Number(value); // Convert to a number
                               if (numericValue < 1) {
                                 return Promise.reject(
@@ -862,13 +860,10 @@ export default function Chitietconsignpage() {
                             message: "Vui lòng nhập lượng thức ăn.",
                           },
                           {
-                            type: "string",
-                            min: 1,
-                            max: 100,
-                            message: "Lượng thức ăn/ngày phải (từ 1 đến 100).",
-                          },
-                          {
                             validator: (_, value) => {
+                              if (!value) {
+                                return Promise.resolve(); // If the value is empty, resolve the promise
+                              }
                               const numericValue = Number(value); // Convert to a number
                               if (numericValue < 1) {
                                 return Promise.reject(
@@ -917,15 +912,11 @@ export default function Chitietconsignpage() {
                             message: "Vui lòng nhập tỷ lệ lọc.",
                           },
                           {
-                            type: "string",
-                            min: 0, // Update min to 0.1 as per your requirement
-                            max: 100,
-                            message: "Tỷ lệ lọc phải từ 0.1 đến 100.",
-                          },
-                          {
                             validator: (_, value) => {
+                              if (!value) {
+                                return Promise.resolve(); // If the value is empty, resolve the promise
+                              }
                               const numericValue = Number(value); // Convert to a number
-
                               if (numericValue > 100) {
                                 return Promise.reject(
                                   new Error("Tỷ lệ lọc phải nhỏ hơn bằng 100")

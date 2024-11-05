@@ -100,6 +100,11 @@ export default function Kyguikoi() {
   };
 
   const handleSubmit = async (values) => {
+    setFormData({
+      ...formData,
+      Description: "",
+      Detail: "",
+    });
     setLoading(true);
     try {
       const formatDateToISO = (dateString) => {
@@ -187,7 +192,6 @@ export default function Kyguikoi() {
           if (isLoggedIn) {
             navigate("/donkyguipage");
           } else {
-            navigate("/");
           }
         }, 3000);
       } else {
@@ -259,11 +263,13 @@ export default function Kyguikoi() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "48%" }}>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="email"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Địa chỉ email
-                    </span>
+                    </label>
                     <Form.Item
                       name="email"
                       rules={[
@@ -275,17 +281,20 @@ export default function Kyguikoi() {
                       ]}
                     >
                       <Input
+                        id="email"
                         placeholder="Nhập địa chỉ email (name@example.com)"
                         disabled={userData?.email}
                       />
                     </Form.Item>
                   </div>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="address"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Địa chỉ
-                    </span>
+                    </label>
                     <Form.Item
                       name="address"
                       rules={[
@@ -301,11 +310,13 @@ export default function Kyguikoi() {
                 </div>
                 <div style={{ width: "48%" }}>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="phone_number"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Số điện thoại
-                    </span>
+                    </label>
                     <Form.Item
                       name="phone_number"
                       rules={[
@@ -322,11 +333,13 @@ export default function Kyguikoi() {
                     </Form.Item>
                   </div>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="phone_number"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Tên người ký gửi
-                    </span>
+                    </label>
                     <Form.Item
                       name="name"
                       rules={[
@@ -346,11 +359,13 @@ export default function Kyguikoi() {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "50%" }}>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="PositionCareHome"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
-                      Nơi chăm sóc koi
-                    </span>
+                      Nơi chăm sóc cá koi
+                    </label>
                     <Form.Item
                       name="PositionCare"
                       rules={[
@@ -365,17 +380,23 @@ export default function Kyguikoi() {
                         value={formData.PositionCare}
                         onChange={handleChange}
                       >
-                        <Radio value="Home">Home</Radio>
-                        <Radio value="IKoiFarm">IKoiFarm</Radio>
+                        <Radio id="PositionCareHome" value="Home">
+                          Home
+                        </Radio>
+                        <Radio id="PositionCareIKoiFarm" value="IKoiFarm">
+                          IKoiFarm
+                        </Radio>
                       </Radio.Group>
                     </Form.Item>
                   </div>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="MethodOnline"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Phương thức nhận koi
-                    </span>
+                    </label>
                     <Form.Item
                       name="Method"
                       rules={[
@@ -390,19 +411,24 @@ export default function Kyguikoi() {
                         name="Method"
                         value={formData.Method}
                       >
-                        <Radio value="Online">Online</Radio>
-                        <Radio value="Offline">Offline</Radio>
+                        <Radio id="MethodOnline" value="Online">
+                          Online
+                        </Radio>
+                        <Radio id="MethodOffline" value="Offline">
+                          Offline
+                        </Radio>
                       </Radio.Group>
                     </Form.Item>
                   </div>
                 </div>
                 <div style={{ width: "50%" }}>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
-                      <span style={{ color: "red" }}>* </span>
+                    <label
+                      htmlFor="shippedDate"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       Ngày gửi
-                    </span>
+                    </label>
                     <Form.Item name="shippedDate">
                       <DatePicker
                         style={{ width: "100%", height: "35px" }}
@@ -418,11 +444,12 @@ export default function Kyguikoi() {
                     </Form.Item>
                   </div>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
-                      <span style={{ color: "red" }}>* </span>
+                    <label
+                      htmlFor="receiptDate"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       Ngày nhận
-                    </span>
+                    </label>
                     <Form.Item name="receiptDate">
                       <DatePicker
                         style={{ width: "100%", height: "35px" }}
@@ -440,14 +467,16 @@ export default function Kyguikoi() {
                 </div>
               </div>
               <div>
-                <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                  {" "}
-                  <span style={{ color: "red" }}>* </span>
+                <label
+                  htmlFor="Detail"
+                  style={{ fontWeight: "bold", fontSize: "15px" }}
+                >
                   Chi tiết về đơn ký gửi
-                </span>
+                </label>
                 <Form.Item>
                   <Input.TextArea
                     name="Detail"
+                    type="text"
                     value={formData.Detail}
                     onChange={handleChange}
                     placeholder="Nhập chi tiết về cá koi của bạn"
@@ -465,69 +494,78 @@ export default function Kyguikoi() {
                   }}
                 >
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="CategoryID"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Các loại cá
-                    </span>
-                  </div>
-                  <Form.Item
-                    name="CategoryID"
-                    rules={[
-                      { required: true, message: "Vui lòng chọn danh mục." },
-                    ]}
-                  >
-                    <Select
-                      value={formData.CategoryID}
-                      onChange={(value) =>
-                        setFormData((prevData) => ({
-                          ...prevData,
-                          CategoryID: value,
-                        }))
-                      }
-                      placeholder="Chọn loại cá"
+                    </label>
+                    <Form.Item
+                      name="CategoryID"
+                      rules={[
+                        { required: true, message: "Vui lòng chọn danh mục." },
+                      ]}
                     >
-                      {categoryData.map((category) => (
-                        <Select.Option key={category._id} value={category._id}>
-                          {category.CategoryName}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
+                      <Select
+                        value={formData.CategoryID}
+                        onChange={(value) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            CategoryID: value,
+                          }))
+                        }
+                        placeholder="Chọn loại cá"
+                      >
+                        {categoryData.map((category) => (
+                          <Select.Option
+                            key={category._id}
+                            value={category._id}
+                          >
+                            {category.CategoryName}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </div>
                 </div>
                 <div style={{ width: "50%" }}>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="CategoryID"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Tên Koi của bạn
-                    </span>
-                  </div>
-                  <Form.Item
-                    name="KoiName"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập tên loại cá koi.",
-                      },
-                    ]}
-                  >
-                    <Input
+                    </label>
+                    <Form.Item
                       name="KoiName"
-                      value={formData.KoiName}
-                      onChange={handleChange}
-                      placeholder="Nhập KoiName (Category + Origin)"
-                    />
-                  </Form.Item>
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập tên loại cá koi.",
+                        },
+                      ]}
+                    >
+                      <Input
+                        name="KoiName"
+                        value={formData.KoiName}
+                        onChange={handleChange}
+                        placeholder="Nhập KoiName (Category + Origin)"
+                      />
+                    </Form.Item>
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "50%", paddingRight: "10px" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="Age"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Tuổi Koi của bạn
-                  </span>
+                  </label>
                   <Form.Item
                     name="Age"
                     rules={[
@@ -566,11 +604,13 @@ export default function Kyguikoi() {
                   </Form.Item>
                 </div>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="Origin"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
-                    Nguồn gốc
-                  </span>
+                    Tuổi Koi của bạn
+                  </label>
                   <Form.Item
                     name="Origin"
                     rules={[
@@ -588,11 +628,13 @@ export default function Kyguikoi() {
               </div>
               <div style={{ display: "flex" }}>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="GenderMale"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Giới Tính
-                  </span>
+                  </label>
                   <Form.Item
                     name="Gender"
                     rules={[
@@ -607,10 +649,18 @@ export default function Kyguikoi() {
                       value={formData.Gender}
                       onChange={handleChange}
                     >
-                      <Radio value="Male" style={{ width: "100px" }}>
+                      <Radio
+                        id="GenderMale"
+                        value="Male"
+                        style={{ width: "100px" }}
+                      >
                         Male
                       </Radio>
-                      <Radio value="Female" style={{ width: "100px" }}>
+                      <Radio
+                        id="GenderFemale"
+                        value="Female"
+                        style={{ width: "100px" }}
+                      >
                         Female
                       </Radio>
                     </Radio.Group>
@@ -661,11 +711,13 @@ export default function Kyguikoi() {
               </div>
               <div style={{ display: "flex" }}>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="BreedNhat"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Giống loài
-                  </span>
+                  </label>
                   <Form.Item
                     name="Breed"
                     rules={[
@@ -680,24 +732,34 @@ export default function Kyguikoi() {
                       value={formData.Breed}
                       onChange={handleChange}
                     >
-                      <Radio value="Nhat" style={{ width: "100px" }}>
+                      <Radio
+                        id="BreedNhat"
+                        value="Nhat"
+                        style={{ width: "100px" }}
+                      >
                         Nhật
                       </Radio>
-                      <Radio value="Viet" style={{ width: "100px" }}>
+                      <Radio
+                        id="BreedViet"
+                        value="Viet"
+                        style={{ width: "100px" }}
+                      >
                         Việt
                       </Radio>
-                      <Radio value="F1" style={{ width: "100px" }}>
+                      <Radio id="BreedF1" value="F1" style={{ width: "100px" }}>
                         F1
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
                 </div>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="DailyFoodAmount"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Nhập lượng thức ăn/ngày (đơn vị g/ngày)
-                  </span>
+                  </label>
                   <Form.Item
                     name="DailyFoodAmount"
                     rules={[
@@ -741,16 +803,14 @@ export default function Kyguikoi() {
               </div>
               <div style={{ display: "flex" }}>
                 <div style={{ width: "50%", paddingRight: "15px" }}>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "15px",
-                    }}
+                  <label
+                    htmlFor="FilteringRatio"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
-                    {" "}
                     <span style={{ color: "red" }}>* </span>
                     Nhập tỷ lệ lọc(%)
-                  </span>
+                  </label>
+
                   <Form.Item
                     name="FilteringRatio"
                     rules={[
@@ -789,11 +849,13 @@ export default function Kyguikoi() {
                   </Form.Item>
                 </div>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="FilteringRatio"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     CertificateID
-                  </span>
+                  </label>
                   <Form.Item
                     name="CertificateID"
                     rules={[
@@ -814,11 +876,13 @@ export default function Kyguikoi() {
               </div>
               <div style={{ display: "flex" }}>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="Image"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Nộp ảnh
-                  </span>
+                  </label>
                   <Form.Item
                     name="Image"
                     rules={[{ required: true, message: "Vui lòng nộp ảnh." }]}
@@ -836,11 +900,14 @@ export default function Kyguikoi() {
                   </Form.Item>
                 </div>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="Video"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Nộp video
-                  </span>
+                  </label>
+
                   <Form.Item
                     name="Video"
                     rules={[{ required: true, message: "Vui lòng nộp video." }]}
@@ -851,7 +918,8 @@ export default function Kyguikoi() {
                       onChange={({ fileList }) =>
                         handleUploadChange("Video", fileList)
                       }
-                      listType="text"
+                      listType="picture"
+                      style={{ paddingRight: "15px", width: "100%" }}
                     >
                       <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
@@ -860,14 +928,16 @@ export default function Kyguikoi() {
               </div>
             </div>
             <div>
-              <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                {" "}
-                <span style={{ color: "red" }}>* </span>
+              <label
+                htmlFor="Video"
+                style={{ fontWeight: "bold", fontSize: "15px" }}
+              >
                 Chi tiết về koi
-              </span>
+              </label>
               <Form.Item>
                 <Input.TextArea
                   name="Description"
+                  type="video"
                   value={formData.Description}
                   onChange={handleChange}
                   placeholder="Nhập chi tiết về cá koi của bạn"

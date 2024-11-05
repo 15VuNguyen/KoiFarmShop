@@ -139,7 +139,6 @@ export default function FormFillInformation() {
                   >
                     <Input placeholder="Nhập số điện thoại" />
                   </Form.Item>
-
                   <Form.Item
                     name="ShipAddress"
                     label="Địa chỉ giao hàng"
