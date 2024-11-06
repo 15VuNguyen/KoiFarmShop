@@ -20,7 +20,7 @@ export default function Koidangban() {
   const [selectedSize, setSelectedSize] = useState("All");
   const [minPrice, setMinPrice] = useState("0");
   const [categoryCounts, setCategoryCounts] = useState([]);
-  const [maxPrice, setMaxPrice] = useState("20000000");
+  const [maxPrice, setMaxPrice] = useState("100000000");
 
   useEffect(() => {
     const fetchData = async () => {

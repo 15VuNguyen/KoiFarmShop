@@ -268,7 +268,9 @@ export default function Kyguikoi() {
             form={form}
           >
             <div style={{ color: "black" }}>
-              <Title level={3}>Thông tin khách hàng</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông tin khách hàng
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "48%" }}>
                   <div>
@@ -364,7 +366,9 @@ export default function Kyguikoi() {
                 </div>
               </div>
               <hr />
-              <Title level={3}>Thông Tin Ký Gửi</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông Tin Ký Gửi
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "50%" }}>
                   <div>
@@ -510,7 +514,9 @@ export default function Kyguikoi() {
                 </Form.Item>
               </div>
               <hr />
-              <Title level={3}>Thông Tin Koi Muốn Ký Gửi</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông Tin Koi Muốn Ký Gửi
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div
                   style={{
@@ -978,6 +984,7 @@ export default function Kyguikoi() {
                 htmlType="submit"
                 loading={loading}
                 disabled={loading}
+                style={{ marginBottom: "50px" }}
               >
                 Ký Gửi
               </Button>

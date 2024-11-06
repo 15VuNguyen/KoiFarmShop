@@ -184,6 +184,9 @@ export default function Chitietconsignpage() {
   useEffect(() => {
     console.log("Consign Data:", consignData);
   }, [consignData]);
+  useEffect(() => {
+    console.log("Koi Data:", koiData);
+  }, [koiData]);
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
@@ -193,6 +196,7 @@ export default function Chitietconsignpage() {
           day
         ).padStart(2, "0")}`;
       };
+
       const shippedDateObj = formData.ShippedDate
         ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
         : null;
@@ -207,13 +211,15 @@ export default function Chitietconsignpage() {
       console.log("Receipt Date:", receiptDateObj);
       console.log("Current Date:", currentDate);
 
+      // Kiểm tra nếu người dùng không nhập mà thay đổi 1 trong 2 ngày
+      if ((formData.ShippedDate && !formData.ReceiptDate) || (!formData.ShippedDate && formData.ReceiptDate)) {
+        toast.error("Vui lòng nhập cả ngày gửi và ngày nhận!");
+        setLoading(false);
+        return; // Dừng lại nếu ngày không hợp lệ
+      }
+
       // Kiểm tra ngày tháng trước khi gửi
-      if (
-        shippedDateObj &&
-        receiptDateObj &&
-        receiptDateObj &&
-        shippedDateObj > receiptDateObj
-      ) {
+      if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
         toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
@@ -226,13 +232,6 @@ export default function Chitietconsignpage() {
           new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
       ) {
         toast.error("Ngày nhận phải cách ngày gửi ít nhất 30 ngày!");
-        setLoading(false);
-        return; // Dừng lại nếu ngày không hợp lệ
-      }
-
-      // New condition: Shipped date should not be after receipt date
-      if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
-        toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
@@ -307,9 +306,9 @@ export default function Chitietconsignpage() {
           },
         }
       );
-
       if (response.status === 200) {
-        setLoading(true);
+        toast.success("Cập nhật thành công!");
+        fetchData();
       } else {
         toast.error("Cập nhật thất bại!");
       }
@@ -320,11 +319,7 @@ export default function Chitietconsignpage() {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (loading) {
-      toast.success("Cập nhật thành công!");
-    }
-  }, [loading]);
+
   const initialKoiData = koiData || {}; // Ensure koiData is an object
   //lấy data khi người dùng đã điền đưa vào Form của ant design ( phải có loading để tránh tình trạng api chưa kịp load đã render hết)
   const initialValues = {
@@ -406,8 +401,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.email}
                             placeholder="Nhập địa chỉ email (name@example.com)"
-                            disabled={userData?.email}
+                            disabled={initialValues?.email}
                           />
                         </Form.Item>
                       </div>
@@ -429,8 +425,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.address}
                             placeholder="Nhập địa chỉ"
-                            disabled={userData?.address}
+                            disabled={initialValues?.address}
                           />
                         </Form.Item>
                       </div>
@@ -454,8 +451,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.phone_number}
                             placeholder="Nhập số điện thoại"
-                            disabled={userData?.phone_number}
+                            disabled={initialValues?.phone_number}
                           />
                         </Form.Item>
                       </div>
@@ -477,8 +475,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.name}
                             placeholder="Nhập họ và tên"
-                            disabled={userData?.name}
+                            disabled={initialValues?.name}
                           />
                         </Form.Item>
                       </div>
@@ -509,7 +508,7 @@ export default function Chitietconsignpage() {
                         >
                           <Radio.Group
                             name="PositionCare"
-                            value={formData.PositionCare}
+                            value={initialValues.PositionCare}
                             onChange={handleChange}
                           >
                             <Radio id="PositionCareHome" value="Home">
@@ -1023,6 +1022,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           { required: true, message: "Vui lòng nộp ảnh." },
                         ]}
+                        style={{ paddingRight: "15px", width: "80%" }}
                       >
                         <Upload
                           beforeUpload={() => false}
@@ -1051,6 +1051,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           { required: true, message: "Vui lòng nộp video." },
                         ]}
+                        style={{ paddingRight: "15px", width: "80%" }}
                       >
                         <Upload
                           beforeUpload={() => false}
@@ -1058,7 +1059,7 @@ export default function Chitietconsignpage() {
                           onChange={({ fileList }) =>
                             handleUploadChange("Video", fileList)
                           }
-                          listType="text"
+                          listType="video"
                           fileList={videoFileList1} // Add this line to bind the value to the Upload component
                         >
                           <Button icon={<UploadOutlined />}>Upload</Button>
@@ -1125,7 +1126,6 @@ export default function Chitietconsignpage() {
           </div>
         </Container>
       </div>
-
       <Footer />
     </div>
   );

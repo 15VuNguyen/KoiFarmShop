@@ -6,7 +6,9 @@ export default function NguongoccuaikoiPage() {
   return (
     <div>
       <Navbar />
-      <NguonGocCuaIKoi />
+    <div style={{ backgroundColor: "#470101" }}>
+        <NguonGocCuaIKoi />
+      </div>
       <CustomerChatButton />
       <Footer />
     </div>
