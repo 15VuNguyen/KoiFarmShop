@@ -131,39 +131,39 @@ export default function Chitietconsignpage() {
       ]
     : [];
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetch user data
-      const userResponse = await axiosInstance.get("users/me");
-      if (userResponse.data) {
-        setUserData(userResponse.data.result);
-        console.log("Fetched user data:", userResponse.data.result); // Debug log
-      }
-
-      // Fetch consign data
-      const consignResponse = await axiosInstance.get(
-        `/users/tat-ca-don-ki-gui/${consign._id}`
-      );
-      if (consignResponse.status === 200) {
-        const { koi, consign } = consignResponse.data.result; // Extract koi and consign data
-        setConsignData(consign);
-        setKoiData(koi);
-        console.log("Fetched consign data:", consign); // Debug log
-        console.log("Fetched koi data:", koi); // Debug log
-      }
-    } catch (error) {
-      console.error(
-        "Error fetching data:",
-        error.response ? error.response.data : error.message
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch user data
+        const userResponse = await axiosInstance.get("users/me");
+        if (userResponse.data) {
+          setUserData(userResponse.data.result);
+          console.log("Fetched user data:", userResponse.data.result); // Debug log
+        }
+
+        // Fetch consign data
+        const consignResponse = await axiosInstance.get(
+          `/users/tat-ca-don-ki-gui/${consign._id}`
+        );
+        if (consignResponse.status === 200) {
+          const { koi, consign } = consignResponse.data.result; // Extract koi and consign data
+          setConsignData(consign);
+          setKoiData(koi);
+          console.log("Fetched consign data:", consign); // Debug log
+          console.log("Fetched koi data:", koi); // Debug log
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, []);
+  }, []); // Fetch data when consignData._id changes
 
   useEffect(() => {
     const fetchData = async () => {
@@ -199,9 +199,13 @@ export default function Chitietconsignpage() {
 
       const shippedDateObj = formData.ShippedDate
         ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
+        : consignData?.ShippedDate
+        ? new Date(consignData.ShippedDate)
         : null;
       const receiptDateObj = formData.ReceiptDate
         ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
+        : consignData?.ReceiptDate
+        ? new Date(consignData.ReceiptDate)
         : null;
       const currentDate = new Date();
       currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
@@ -210,13 +214,6 @@ export default function Chitietconsignpage() {
       console.log("Shipped Date:", shippedDateObj);
       console.log("Receipt Date:", receiptDateObj);
       console.log("Current Date:", currentDate);
-
-      // Kiểm tra nếu người dùng không nhập mà thay đổi 1 trong 2 ngày
-      if ((formData.ShippedDate && !formData.ReceiptDate) || (!formData.ShippedDate && formData.ReceiptDate)) {
-        toast.error("Vui lòng nhập cả ngày gửi và ngày nhận!");
-        setLoading(false);
-        return; // Dừng lại nếu ngày không hợp lệ
-      }
 
       // Kiểm tra ngày tháng trước khi gửi
       if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
@@ -308,7 +305,9 @@ export default function Chitietconsignpage() {
       );
       if (response.status === 200) {
         toast.success("Cập nhật thành công!");
-        fetchData();
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       } else {
         toast.error("Cập nhật thất bại!");
       }
