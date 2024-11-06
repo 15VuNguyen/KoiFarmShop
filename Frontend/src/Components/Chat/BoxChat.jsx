@@ -5,7 +5,6 @@ import { useSocketContext } from "../../Context/SocketContext";
 import { useMessage } from "../../Context/MessageContext";
 import { getMessages, sendMessages } from "../../services/messageService";
 import { useAuth } from "../../Context/AuthContext";
-// import { fetchLoginUserData } from '../../services/userService'
 
 const BoxChat = (props) => {
   const { show, setShow, receiver } = props;
@@ -18,12 +17,6 @@ const BoxChat = (props) => {
   const {currentUser} = useAuth()
   const lastMessageRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-
-  console.log("message list: ", messageList);
-  console.log("receiver: ", receiver);
-  console.log("selectedChat: ", selectedChat);
-  console.log("currenUser: ", currentUser);
-  console.log("socket: ", socket);
 
   const sendMessage = async () => {
     if(!message.trim()) return;
