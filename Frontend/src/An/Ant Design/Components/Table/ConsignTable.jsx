@@ -8,7 +8,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
     const [selectedColumns, setSelectedColumns] = React.useState({ 'UserID': true, 'KoiID': true, 'Description': true });
     const [showColumnSelector, setShowColumnSelector] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [visibleColumns, setVisibleColumns] = React.useState([ '_id', 'ShippedDate', 'ReceiptDate', 'Description', 'State', 'Method', 'PositionCare', 'Commission', 'TotalPrice', 'action']);
+    const [visibleColumns, setVisibleColumns] = React.useState([ '_id', 'ShippedDate', 'ReceiptDate', 'State', 'Method', 'Commission', 'TotalPrice', 'action']);
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         message.success("ID đã được sao chép vào clipboard!");

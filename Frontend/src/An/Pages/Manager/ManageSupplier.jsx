@@ -220,14 +220,7 @@ export default function ManageSupplier() {
                         onFilterChange={handleFilterChange}
                         count={intialData.filter((item) => item.Country === 'Việt Nam').length}
                     />
-                    <FilterButton
-                        label="Tất cả Nhà Cung Cấp Trung Quốc"
-                        filterType="Country"
-                        filterValue="Trung Quốc"
-                        currentFilter={filterList.Country}
-                        onFilterChange={handleFilterChange}
-                        count={intialData.filter((item) => item.Country === 'Trung Quốc').length}
-                    />
+                    
 
             </div>
             <hr className="my-1 mb-4" />
