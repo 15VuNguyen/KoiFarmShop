@@ -62,19 +62,21 @@ export const callback = async (req, res) => {
       try {
         const groupKoi = await databaseService.groupKois.find().toArray()
 
-        const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
+        if (groupKoi.length > 0) {
+          const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
 
-        for (const groupKoi of groupKoiID) {
-          const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
+          for (const groupKoi of groupKoiID) {
+            const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
 
-          const allStatusZero = Koi.every((koi) => koi.Status === 0)
+            const allStatusZero = Koi.every((koi) => koi.Status === 0)
 
-          if (allStatusZero) {
-            await databaseService.invoices.findOneAndUpdate(
-              { GroupKoiIDInvoice: groupKoi },
-              { $set: { Status: 2 } },
-              { new: true }
-            )
+            if (allStatusZero) {
+              await databaseService.invoices.findOneAndUpdate(
+                { GroupKoiIDInvoice: groupKoi },
+                { $set: { Status: 2 } },
+                { new: true }
+              )
+            }
           }
         }
       } catch (error) {

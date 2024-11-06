@@ -18,6 +18,7 @@ const BoxChat = (props) => {
   const lastMessageRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
+
   const sendMessage = async () => {
     if(!message.trim()) return;
     try {

@@ -14,17 +14,19 @@ export const SocketContextProvider = ({ children }) => {
     const { currentUser } = useAuth()
 
     useEffect(() => {
-        const newSocket = io("http://localhost:4000", {
-            query: { userId: currentUser?._id }
-        });
-
-        newSocket.on("getOnlineUsers", (users) => {
-            setOnlineUser(users);
-        });
-
-        setSocket(newSocket);
-
-        return () => newSocket.close();
+        if(currentUser && currentUser._id){
+            const newSocket = io("http://localhost:4000", {
+                query: { userId: currentUser?._id }
+            });
+    
+            newSocket.on("getOnlineUsers", (users) => {
+                setOnlineUser(users);
+            });
+    
+            setSocket(newSocket);
+    
+            return () => newSocket.close();
+        }    
     }, [currentUser?._id]);
 
 
