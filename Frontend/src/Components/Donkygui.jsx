@@ -149,7 +149,9 @@ export default function DonKyGui() {
                         <div style={{ marginTop: "20px" }}>
                           <Text>Age: {koi?.Age ?? "N/A"} years</Text>
                           <div style={{ marginBottom: "8px" }}></div>
-                          <Text>Price: {koi?.Price || "N/A"}</Text>
+                          <Text>
+                            Price: {koi?.Price || "Chờ bên shop định giá"}
+                          </Text>
                         </div>
                         <div style={{ marginLeft: "300px", marginTop: "22px" }}>
                           <Text>

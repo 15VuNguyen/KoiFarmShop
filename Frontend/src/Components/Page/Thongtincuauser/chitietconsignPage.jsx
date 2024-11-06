@@ -41,12 +41,10 @@ export default function Chitietconsignpage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const { consign } = location.state || {}; // Access the passed state
-  console.log(consign);
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const loggedIn = !!accessToken; // Kiểm tra nếu có accessToken
     setIsLoggedIn(loggedIn);
-
     // Check localStorage for toast state
   }, [isLoggedIn]);
   const [initialFormData, setInitialFormData] = useState({
@@ -195,7 +193,6 @@ export default function Chitietconsignpage() {
           day
         ).padStart(2, "0")}`;
       };
-
       const shippedDateObj = formData.ShippedDate
         ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
         : null;
@@ -299,7 +296,7 @@ export default function Chitietconsignpage() {
         Image: imageUrl,
         Video: videoUrl,
       };
-
+      console.log("Data to send:", dataToSend);
       // Gọi API để cập nhật dữ liệu
       const response = await axiosInstance.patch(
         `/users/tat-ca-don-ki-gui/${consign._id}`,
@@ -312,7 +309,7 @@ export default function Chitietconsignpage() {
       );
 
       if (response.status === 200) {
-        toast.success("Cập nhật thành công!");
+        setLoading(true);
       } else {
         toast.error("Cập nhật thất bại!");
       }
@@ -323,28 +320,11 @@ export default function Chitietconsignpage() {
       setLoading(false);
     }
   };
-  const updateConsign = async (formData) => {
-    console.log("Updating consign with data:", formData);
-    try {
-      console.log("Updated form data:", formData);
-      const response = await axiosInstance.patch(
-        `/users/tat-ca-don-ki-gui/${consign._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Update response:", response.data);
-      toast.success(response.data.message);
-      return response;
-    } catch (error) {
-      console.error("Error during upload or API update:", error);
-      toast.error("Cập nhật thất bại.");
+  useEffect(() => {
+    if (loading) {
+      toast.success("Cập nhật thành công!");
     }
-  };
-
+  }, [loading]);
   const initialKoiData = koiData || {}; // Ensure koiData is an object
   //lấy data khi người dùng đã điền đưa vào Form của ant design ( phải có loading để tránh tình trạng api chưa kịp load đã render hết)
   const initialValues = {
@@ -408,11 +388,13 @@ export default function Chitietconsignpage() {
                   >
                     <div style={{ width: "48%" }}>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="email"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Địa chỉ email
-                        </span>
+                        </label>
                         <Form.Item
                           name="email"
                           rules={[
@@ -430,11 +412,13 @@ export default function Chitietconsignpage() {
                         </Form.Item>
                       </div>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="address"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Địa chỉ
-                        </span>
+                        </label>
                         <Form.Item
                           name="address"
                           rules={[
@@ -453,11 +437,13 @@ export default function Chitietconsignpage() {
                     </div>
                     <div style={{ width: "48%" }}>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="phone_number"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Số điện thoại
-                        </span>
+                        </label>
                         <Form.Item
                           name="phone_number"
                           rules={[
@@ -474,11 +460,13 @@ export default function Chitietconsignpage() {
                         </Form.Item>
                       </div>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="name"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Tên người ký gửi
-                        </span>
+                        </label>
                         <Form.Item
                           name="name"
                           rules={[
@@ -503,11 +491,13 @@ export default function Chitietconsignpage() {
                   >
                     <div style={{ width: "48%" }}>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="PositionCareHome"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Nơi chăm sóc koi
-                        </span>
+                        </label>
                         <Form.Item
                           name="PositionCare"
                           rules={[
@@ -522,17 +512,23 @@ export default function Chitietconsignpage() {
                             value={formData.PositionCare}
                             onChange={handleChange}
                           >
-                            <Radio value="Home">Home</Radio>
-                            <Radio value="IKoiFarm">IKoiFarm</Radio>
+                            <Radio id="PositionCareHome" value="Home">
+                              Home
+                            </Radio>
+                            <Radio id="PositionCareIKoiFarm" value="IKoiFarm">
+                              IKoiFarm
+                            </Radio>
                           </Radio.Group>
                         </Form.Item>
                       </div>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
+                        <label
+                          htmlFor="MethodOnline"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           <span style={{ color: "red" }}>* </span>
                           Phương thức nhận koi
-                        </span>
+                        </label>
                         <Form.Item
                           name="Method"
                           rules={[
@@ -546,19 +542,24 @@ export default function Chitietconsignpage() {
                             onChange={handleChange}
                             value={formData.Method}
                           >
-                            <Radio value="Online">Online</Radio>
-                            <Radio value="Offline">Offline</Radio>
+                            <Radio id="MethodOnline" value="Online">
+                              Online
+                            </Radio>
+                            <Radio id="MethodOffline" value="Offline">
+                              Offline
+                            </Radio>
                           </Radio.Group>
                         </Form.Item>
                       </div>
                     </div>
                     <div style={{ width: "48%" }}>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
-                          <span style={{ color: "red" }}>* </span>
+                        <label
+                          htmlFor="ShippedDate"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           Ngày Gửi
-                        </span>
+                        </label>
                         <Form.Item name="ShippedDate">
                           <DatePicker
                             style={{ width: "100%", height: "35px" }}
@@ -574,11 +575,12 @@ export default function Chitietconsignpage() {
                         </Form.Item>
                       </div>
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                          {" "}
-                          <span style={{ color: "red" }}>* </span>
+                        <label
+                          htmlFor="ReceiptDate"
+                          style={{ fontWeight: "bold", fontSize: "15px" }}
+                        >
                           Ngày Nhận
-                        </span>
+                        </label>
                         <Form.Item name="ReceiptDate">
                           <DatePicker
                             style={{ width: "100%", height: "35px" }}
@@ -596,11 +598,13 @@ export default function Chitietconsignpage() {
                     </div>
                   </div>
                   <div>
-                    <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                      {" "}
+                    <label
+                      htmlFor="Detail"
+                      style={{ fontWeight: "bold", fontSize: "15px" }}
+                    >
                       <span style={{ color: "red" }}>* </span>
                       Chi tiết về đơn ký gửi
-                    </span>
+                    </label>
                     <Form.Item name="Detail">
                       <Input.TextArea
                         name="Detail"
@@ -615,11 +619,13 @@ export default function Chitietconsignpage() {
                   <Title level={3}>Thông Tin Koi Muốn Ký Gửi</Title>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%", paddingRight: "15px" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="CategoryID"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Loại Cá
-                      </span>
+                      </label>
                       <Form.Item
                         name="CategoryID"
                         rules={[
@@ -651,11 +657,13 @@ export default function Chitietconsignpage() {
                       </Form.Item>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="KoiName"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Tên cá của bạn
-                      </span>
+                      </label>
                       <Form.Item
                         name="KoiName"
                         rules={[
@@ -676,13 +684,15 @@ export default function Chitietconsignpage() {
                   </div>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%", paddingRight: "15px" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="Age"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Tuổi cá của bạn
-                      </span>
+                      </label>
                       <Form.Item
-                        label="Tuổi"
+                        name="Age"
                         rules={[
                           { required: true, message: "Vui lòng nhập tuổi." },
                           {
@@ -721,11 +731,13 @@ export default function Chitietconsignpage() {
                       </Form.Item>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="Origin"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Nguồn Gốc
-                      </span>
+                      </label>
                       <Form.Item
                         name="Origin"
                         rules={[
@@ -746,11 +758,13 @@ export default function Chitietconsignpage() {
                   </div>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="GenderMale"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Giới Tính
-                      </span>
+                      </label>
                       <Form.Item
                         name="Gender"
                         rules={[
@@ -765,17 +779,23 @@ export default function Chitietconsignpage() {
                           value={formData.Gender}
                           onChange={handleChange}
                         >
-                          <Radio value="Male">Male</Radio>
-                          <Radio value="Female">Female</Radio>
+                          <Radio id="GenderMale" value="Male">
+                            Male
+                          </Radio>
+                          <Radio id="GenderFemale" value="Female">
+                            Female
+                          </Radio>
                         </Radio.Group>
                       </Form.Item>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="Size"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Kích Thước(cm)
-                      </span>
+                      </label>
                       <Form.Item
                         name="Size"
                         rules={[
@@ -783,14 +803,13 @@ export default function Chitietconsignpage() {
                             required: true,
                             message: "Vui lòng nhập kích thước.",
                           },
-
                           {
                             validator: (_, value) => {
                               if (!value) {
                                 return Promise.resolve(); // If the value is empty, resolve the promise
                               }
                               const numericValue = Number(value); // Convert to a number
-                              if (numericValue < 1) {
+                              if (numericValue < 5) {
                                 return Promise.reject(
                                   new Error(
                                     "Kích Thước phải lớn hơn hoặc bằng 1."
@@ -821,11 +840,13 @@ export default function Chitietconsignpage() {
                   </div>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="BreedNhat"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Giống loài
-                      </span>
+                      </label>
                       <Form.Item
                         name="Breed"
                         rules={[
@@ -836,22 +857,42 @@ export default function Chitietconsignpage() {
                         ]}
                       >
                         <Radio.Group
-                          name="Giống loài"
+                          name="Breed"
                           value={formData.Breed}
                           onChange={handleChange}
                         >
-                          <Radio value="Nhật">Nhật</Radio>
-                          <Radio value="Việt">Việt</Radio>
-                          <Radio value="F1">F1</Radio>
+                          <Radio
+                            id="BreedNhat"
+                            value="Nhat"
+                            style={{ width: "100px" }}
+                          >
+                            Nhật
+                          </Radio>
+                          <Radio
+                            id="BreedViet"
+                            value="Viet"
+                            style={{ width: "100px" }}
+                          >
+                            Việt
+                          </Radio>
+                          <Radio
+                            id="BreedF1"
+                            value="F1"
+                            style={{ width: "100px" }}
+                          >
+                            F1
+                          </Radio>
                         </Radio.Group>
                       </Form.Item>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="DailyFoodAmount"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Nhập lượng thức ăn/ngày(đơn vị kg/ngày)
-                      </span>
+                      </label>
                       <Form.Item
                         name="DailyFoodAmount"
                         rules={[
@@ -899,11 +940,13 @@ export default function Chitietconsignpage() {
                   </div>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%", paddingRight: "15px" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="DailyFoodAmount"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         Nhập tỷ lệ lọc (%)
-                      </span>
+                      </label>
                       <Form.Item
                         name="FilteringRatio"
                         rules={[
@@ -940,11 +983,14 @@ export default function Chitietconsignpage() {
                       </Form.Item>
                     </div>
                     <div style={{ width: "50%" }}>
-                      <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                        {" "}
+                      <label
+                        htmlFor="CertificateID"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
                         <span style={{ color: "red" }}>* </span>
                         CertificateID
-                      </span>
+                      </label>
+
                       <Form.Item
                         name="CertificateID"
                         rules={[
@@ -965,9 +1011,15 @@ export default function Chitietconsignpage() {
                   </div>
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%" }}>
+                      <label
+                        htmlFor="Image"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
+                        <span style={{ color: "red" }}>* </span>
+                        Nộp ảnh
+                      </label>
                       <Form.Item
                         name="Image"
-                        label="Nộp ảnh"
                         rules={[
                           { required: true, message: "Vui lòng nộp ảnh." },
                         ]}
@@ -987,9 +1039,15 @@ export default function Chitietconsignpage() {
                       </Form.Item>
                     </div>
                     <div>
+                      <label
+                        htmlFor="Video"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
+                        <span style={{ color: "red" }}>* </span>
+                        Nộp video
+                      </label>
                       <Form.Item
                         name="Video"
-                        label="Nộp video"
                         rules={[
                           { required: true, message: "Vui lòng nộp video." },
                         ]}
@@ -1009,15 +1067,23 @@ export default function Chitietconsignpage() {
                     </div>
                   </div>
                 </div>
-                <Form.Item label="Chi tiết về koi" name="Description">
-                  <Input.TextArea
-                    name="Description"
-                    value={formData.Description}
-                    onChange={handleChange}
-                    placeholder="Nhập chi tiết về cá koi của bạn"
-                    style={{ height: "150px", resize: "none" }}
-                  />
-                </Form.Item>
+                <div>
+                  <label
+                    htmlFor="Description"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    Chi tiết về koi
+                  </label>
+                  <Form.Item name="Description">
+                    <Input.TextArea
+                      name="Description"
+                      value={formData.Description}
+                      onChange={handleChange}
+                      placeholder="Nhập chi tiết về cá koi của bạn"
+                      style={{ height: "150px", resize: "none" }}
+                    />
+                  </Form.Item>
+                </div>
                 {consignData.State === 1 && (
                   <div>
                     {" "}

@@ -9,14 +9,15 @@ import { Container } from "react-bootstrap";
 import {
   Form,
   Input,
-  Button,
   Radio,
   DatePicker,
   Upload,
   Typography,
   Spin,
   Select,
+  Button,
 } from "antd";
+
 import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 const { Title } = Typography;
@@ -131,7 +132,7 @@ export default function Kyguikoi() {
         (shippedDateObj < currentDate ||
           (receiptDateObj && shippedDateObj > receiptDateObj))
       ) {
-        toast.error("Ngày gửi không được ở quá khứ hoặc trước ngày nhận!");
+        toast.error("Ngày gửi không được sau ngày nhận!");
         return; // Dừng lại nếu ngày không hợp lệ
       }
       if (
@@ -142,9 +143,7 @@ export default function Kyguikoi() {
               receiptDateObj <
                 new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000)))) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
       ) {
-        toast.error(
-          "Ngày gửi không được ở quá khứ, trước ngày nhận, hoặc ngày nhận phải cách ngày gửi ít nhất 1 tháng!"
-        );
+        toast.error("Ngày nhận phải cách ngày gửi ít nhất 30 ngày!");
         return; // Dừng lại nếu ngày không hợp lệ
       }
 
@@ -186,14 +185,12 @@ export default function Kyguikoi() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.status === 200) {
-        form.resetFields();
-        toast.success(response.data.message);
         setTimeout(() => {
           if (isLoggedIn) {
             navigate("/donkyguipage");
-          } else {
           }
         }, 3000);
+        toast.success(response.data.message);
       } else {
         toast.error(`Có lỗi xảy ra: ${response.data.message}`);
       }
@@ -224,6 +221,25 @@ export default function Kyguikoi() {
   }, []);
 
   useEffect(() => {
+    if (userData) {
+      form.setFieldsValue({
+        email: userData.email || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        ShipAddress: userData.address || "",
+      });
+      setFormData({
+        ...formData,
+        email: userData.email || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        ShipAddress: userData.address || "",
+      });
+    }
+  }, [userData]);
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get(
@@ -250,13 +266,6 @@ export default function Kyguikoi() {
             style={{ maxWidth: "800px", margin: "auto" }}
             onFinish={handleSubmit}
             form={form}
-            initialValues={{
-              email: userData?.email || "",
-              name: userData?.name || "",
-              address: userData?.address || "",
-              phone_number: userData?.phone_number || "",
-              ShipAddress: userData?.address || "",
-            }}
           >
             <div style={{ color: "black" }}>
               <Title level={3}>Thông tin khách hàng</Title>
@@ -380,10 +389,18 @@ export default function Kyguikoi() {
                         value={formData.PositionCare}
                         onChange={handleChange}
                       >
-                        <Radio id="PositionCareHome" value="Home">
+                        <Radio
+                          id="PositionCareHome"
+                          value="Home"
+                          style={{ width: "100px" }}
+                        >
                           Home
                         </Radio>
-                        <Radio id="PositionCareIKoiFarm" value="IKoiFarm">
+                        <Radio
+                          id="PositionCareIKoiFarm"
+                          value="IKoiFarm"
+                          style={{ width: "100px" }}
+                        >
                           IKoiFarm
                         </Radio>
                       </Radio.Group>
@@ -411,10 +428,18 @@ export default function Kyguikoi() {
                         name="Method"
                         value={formData.Method}
                       >
-                        <Radio id="MethodOnline" value="Online">
+                        <Radio
+                          id="MethodOnline"
+                          value="Online"
+                          style={{ width: "100px" }}
+                        >
                           Online
                         </Radio>
-                        <Radio id="MethodOffline" value="Offline">
+                        <Radio
+                          id="MethodOffline"
+                          value="Offline"
+                          style={{ width: "100px" }}
+                        >
                           Offline
                         </Radio>
                       </Radio.Group>
@@ -473,7 +498,7 @@ export default function Kyguikoi() {
                 >
                   Chi tiết về đơn ký gửi
                 </label>
-                <Form.Item>
+                <Form.Item name="Detail">
                   <Input.TextArea
                     name="Detail"
                     type="text"
@@ -532,7 +557,7 @@ export default function Kyguikoi() {
                 <div style={{ width: "50%" }}>
                   <div>
                     <label
-                      htmlFor="CategoryID"
+                      htmlFor="KoiName"
                       style={{ fontWeight: "bold", fontSize: "15px" }}
                     >
                       <span style={{ color: "red" }}>* </span>
@@ -609,7 +634,7 @@ export default function Kyguikoi() {
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
                     <span style={{ color: "red" }}>* </span>
-                    Tuổi Koi của bạn
+                    Nguồn gốc Koi của bạn
                   </label>
                   <Form.Item
                     name="Origin"
@@ -667,11 +692,13 @@ export default function Kyguikoi() {
                   </Form.Item>
                 </div>
                 <div style={{ width: "50%" }}>
-                  <span style={{ fontWeight: "bold", fontSize: "15px" }}>
-                    {" "}
+                  <label
+                    htmlFor="Size"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
                     <span style={{ color: "red" }}>* </span>
                     Kích Thước(cm)
-                  </span>
+                  </label>
                   <Form.Item
                     name="Size"
                     rules={[
@@ -850,7 +877,7 @@ export default function Kyguikoi() {
                 </div>
                 <div style={{ width: "50%" }}>
                   <label
-                    htmlFor="FilteringRatio"
+                    htmlFor="CertificateID"
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
                     <span style={{ color: "red" }}>* </span>
@@ -886,6 +913,7 @@ export default function Kyguikoi() {
                   <Form.Item
                     name="Image"
                     rules={[{ required: true, message: "Vui lòng nộp ảnh." }]}
+                    style={{ paddingRight: "15px", width: "80%" }}
                   >
                     <Upload
                       beforeUpload={() => false}
@@ -911,6 +939,7 @@ export default function Kyguikoi() {
                   <Form.Item
                     name="Video"
                     rules={[{ required: true, message: "Vui lòng nộp video." }]}
+                    style={{ paddingRight: "15px", width: "80%" }}
                   >
                     <Upload
                       beforeUpload={() => false}
@@ -918,8 +947,7 @@ export default function Kyguikoi() {
                       onChange={({ fileList }) =>
                         handleUploadChange("Video", fileList)
                       }
-                      listType="picture"
-                      style={{ paddingRight: "15px", width: "100%" }}
+                      listType="video"
                     >
                       <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
@@ -929,15 +957,14 @@ export default function Kyguikoi() {
             </div>
             <div>
               <label
-                htmlFor="Video"
+                htmlFor="Description"
                 style={{ fontWeight: "bold", fontSize: "15px" }}
               >
-                Chi tiết về koi
+                Chi tiết về cá koi
               </label>
-              <Form.Item>
+              <Form.Item name="Description">
                 <Input.TextArea
                   name="Description"
-                  type="video"
                   value={formData.Description}
                   onChange={handleChange}
                   placeholder="Nhập chi tiết về cá koi của bạn"
@@ -945,7 +972,6 @@ export default function Kyguikoi() {
                 />
               </Form.Item>
             </div>
-
             <div style={{ textAlign: "center", marginTop: "20px" }}>
               <Button
                 type="primary"
