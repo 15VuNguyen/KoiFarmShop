@@ -137,14 +137,21 @@ const OrderPage = () => {
     }
     setCategoryName(selectedItem.CategoryName);
     try {
+      let requestData = {
+        Quantity: parseInt(selectedQuantity),
+      };
+
+      if (selectedItem.Status === 4 || selectedItem.Status === 1) {
+        requestData.KoiID = selectedItem._id;
+      } else {
+        requestData.Size = parseInt(selectedItem.Size);
+        requestData.Breed = selectedItem.Breed;
+        requestData.CategoryID = selectedItem.CategoryID;
+      }
+
       const response = await axiosInstance.post(
         "/order/detail/makes",
-        {
-          Size: parseInt(selectedItem.Size),
-          Breed: selectedItem.Breed,
-          CategoryID: selectedItem.CategoryID,
-          Quantity: parseInt(selectedQuantity),
-        },
+        requestData,
         {
           withCredentials: true,
         }
@@ -187,14 +194,21 @@ const OrderPage = () => {
     setLoading(true);
     setCategoryName(selectedItem.CategoryName);
     try {
+      let requestData = {
+        Quantity: parseInt(selectedQuantity),
+      };
+
+      if (selectedItem.Status === 4 || selectedItem.Status === 1) {
+        requestData.KoiID = selectedItem._id;
+      } else {
+        requestData.Size = parseInt(selectedItem.Size);
+        requestData.Breed = selectedItem.Breed;
+        requestData.CategoryID = selectedItem.CategoryID;
+      }
+
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/makes",
-        {
-          Size: parseInt(selectedItem.Size),
-          Breed: selectedItem.Breed,
-          CategoryID: selectedItem.CategoryID,
-          Quantity: parseInt(selectedQuantity),
-        },
+        "/order/detail/makes",
+        requestData,
         {
           withCredentials: true,
         }
@@ -307,7 +321,7 @@ const OrderPage = () => {
                         {new Intl.NumberFormat("vi-VN").format(
                           selectedItem.Price
                         )}{" "}
-                        VND
+                        đ
                       </span>
                     </h3>
                     <Text>
@@ -363,6 +377,38 @@ const OrderPage = () => {
                       }}
                     >
                       {selectedItem.Size > 20 && (
+                        <label>
+                          <strong>Quantity: </strong>
+                          <InputNumber
+                            style={{
+                              fontSize: "14px",
+                              color: "red",
+                              width: "48%",
+                            }}
+                            type="number"
+                            value={selectedQuantity}
+                            onChange={(value) => {
+                              if (value >= 1) {
+                                if (value <= maxQuantity) {
+                                  setSelectedQuantity(value);
+                                } else {
+                                  message.error("Cá trong kho không đủ");
+                                }
+                              }
+                            }}
+                            min={1}
+                            max={100}
+                            onKeyPress={(e) => {
+                              // Ngăn nhập ký tự "e"
+                              if (e.key === "e" || e.key === "E") {
+                                e.preventDefault();
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
+
+                      {selectedItem.Status === 4 && (
                         <label>
                           <strong>Quantity: </strong>
                           <InputNumber

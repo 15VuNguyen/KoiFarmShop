@@ -260,7 +260,10 @@ export default function Kyguikoi() {
     <Container>
       <div>
         {loading ? (
-          <Spin size="large" style={{ display: "block", margin: "auto" }} />
+          <Spin
+            size="large"
+            style={{ display: "block", margin: "auto", paddingBottom: "100px" }}
+          />
         ) : (
           <Form
             style={{ maxWidth: "800px", margin: "auto" }}
@@ -738,6 +741,7 @@ export default function Kyguikoi() {
                       placeholder="Nhập kích thước(cm)"
                       min={5}
                       max={150}
+                      addonAfter="cm"
                     />
                   </Form.Item>
                 </div>
@@ -830,6 +834,7 @@ export default function Kyguikoi() {
                       min={1}
                       step={1}
                       max={100}
+                      addonAfter="g/ngày"
                     />
                   </Form.Item>
                 </div>
@@ -878,6 +883,7 @@ export default function Kyguikoi() {
                       max={100}
                       step={1}
                       min={1}
+                      addonAfter="%"
                     />
                   </Form.Item>
                 </div>
