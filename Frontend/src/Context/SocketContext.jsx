@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { fetchLoginUserData } from '../services/userService';
+import { useAuth } from './AuthContext';
 
 const SocketContext = createContext();
 
@@ -11,35 +11,22 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     const [onlineUser, setOnlineUser] = useState([]);
-
-    const fetchUser = async () => {
-        try {
-            const { data } = await fetchLoginUserData();
-            if (data && data.result) {
-                console.log("Fetched user:", data.result);
-                const newSocket = io("http://localhost:4000", {
-                    query: { userId: data.result._id }
-                });
-    
-                newSocket.on("getOnlineUsers", (users) => {
-                    console.log("Online users:", users);
-                    setOnlineUser(users);
-                });
-    
-                setSocket(newSocket);
-    
-                return () => {
-                    newSocket.close();
-                };
-            }
-        } catch (error) {
-            console.error("Fetch user error:", error.message);
-        }
-    };
+    const { currentUser } = useAuth()
 
     useEffect(() => {
-        fetchUser()
-    }, []);
+        const newSocket = io("http://localhost:4000", {
+            query: { userId: currentUser?._id }
+        });
+
+        newSocket.on("getOnlineUsers", (users) => {
+            setOnlineUser(users);
+        });
+
+        setSocket(newSocket);
+
+        return () => newSocket.close();
+    }, [currentUser?._id]);
+
 
     return (
         <SocketContext.Provider value={{ socket, onlineUser }}>

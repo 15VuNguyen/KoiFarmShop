@@ -34,45 +34,44 @@ const ChatList = (props) => {
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
-            setListChat(prevChats => {
-                const chatExists = prevChats.some(chat => chat._id === newMessage.ChatId)
-
-                if (chatExists) {
-                    return prevChats.map(chat => {
-                        if (chat._id.toString() == newMessage.ChatId.toString()) {
-                            return {
-                                ...chat,
-                                Messages: [...chat.Messages, newMessage]
+            const chatExists = listChat.some(chat => chat._id === newMessage.ChatId);
+    
+            if (chatExists) {
+                setListChat(prevChats => prevChats.map(chat => {
+                    if (chat._id.toString() === newMessage.ChatId.toString()) {
+                        return {
+                            ...chat,
+                            Messages: [...chat.Messages, newMessage]
+                        };
+                    }
+                    return chat;
+                }));
+            } else {
+                try {
+                    const { data: userData } = await fetchUser(newMessage.SenderId);
+                    if (userData) {
+                        setListChat(prevChats => [
+                            ...prevChats,
+                            {
+                                _id: newMessage.ChatId,
+                                OtherUser: userData.result,
+                                Messages: [newMessage]
                             }
-                        }
-                        return chat
-                    })
-                }
-                return prevChats
-            })
-
-            const existingChat = listChat.find(chat => chat._id === newMessage.ChatId)
-            if (!existingChat) {
-                const { data: userData } = await fetchUser(newMessage.SenderId)
-                if (userData) {
-                    setListChat(prevChats => [
-                        ...prevChats,
-                        {
-                            _id: newMessage.chatId,
-                            OtherUser: userData,
-                            Messages: [newMessage]
-                        }
-                    ])
+                        ]);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch user data:", error);
                 }
             }
-        }
-
-        socket?.on('newMessage', handleNewMessage)
-
+        };
+    
+        socket?.on('newMessage', handleNewMessage);
+    
         return () => {
-            socket?.off('newMessage', handleNewMessage)
-        }
-    }, [socket, listChat])
+            socket?.off('newMessage', handleNewMessage);
+        };
+    }, [socket]);
+    
 
     return (
         <div

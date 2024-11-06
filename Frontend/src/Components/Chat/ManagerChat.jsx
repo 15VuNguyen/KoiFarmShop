@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ChatList from './ChatList'
 import "./ManagerChat.css"
 import BoxChat from './BoxChat'
-import { fetchLoginUserData } from '../../services/userService'
+// import { fetchLoginUserData } from '../../services/userService'
 
 const ManagerChat = () => {
 
     const [isShowStaffChat, setIsShowStaffChat] = useState(false)
     const [showListChat, setShowListChat] = useState(false)
     const [customer, setCustomer] = useState({})
-    const [user, setUser] = useState({});
+    // const [user, setUser] = useState({});
 
-    const fetchUser = async () => {
-        try {
-            const { data } = await fetchLoginUserData()
-            if (data) {
-                console.log("user: ", data.result)
-                localStorage.setItem("userInfo", JSON.stringify(data.result))
-                setUser(data.result)
-            }
-        } catch (error) {
-            console.error({ message: error.message })
-        }
-    }
+    // const fetchUser = async () => {
+    //     try {
+    //         const { data } = await fetchLoginUserData()
+    //         if (data) {
+    //             console.log("user: ", data.result)
+    //             localStorage.setItem("userInfo", JSON.stringify(data.result))
+    //             setUser(data.result)
+    //         }
+    //     } catch (error) {
+    //         console.error({ message: error.message })
+    //     }
+    // }
 
-    useEffect(() => {
-        fetchUser()
-    }, [])
+    // useEffect(() => {
+    //     fetchUser()
+    // }, [])
 
     return (
             
@@ -50,7 +50,7 @@ const ManagerChat = () => {
                 show={isShowStaffChat}
                 receiver={customer}
                 setShow={setIsShowStaffChat}
-                user = {user}
+                // user = {user}
             />
             </div>
             
