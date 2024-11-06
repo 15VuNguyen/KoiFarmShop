@@ -9,7 +9,7 @@ import "./ManagerChat.css"
 const ChatList = (props) => {
     const { show, setIsShowStaffChat, setCustomer, customer } = props
     const [listChat, setListChat] = useState([])
-    const listChatRef = useRef(listChat) // Reference to track the latest state of listChat
+    const listChatRef = useRef(listChat) 
     const { messageList, setMessageList } = useMessage()
     const { setSelectedChat } = useChat()
     const { socket } = useSocketContext()
@@ -19,7 +19,7 @@ const ChatList = (props) => {
         if (data) {
             console.log("list chat: ", data.result)
             setListChat(data.result)
-            listChatRef.current = data.result // Update the ref with the latest data
+            listChatRef.current = data.result 
         }
     }
 
@@ -36,48 +36,34 @@ const ChatList = (props) => {
 
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
-            const chatExists = listChatRef.current.some(chat => chat._id === newMessage.ChatId);
-
-            if (chatExists) {
-                setListChat(prevChats => {
-                    const updatedChats = prevChats.map(chat => {
-                        if (chat._id.toString() === newMessage.ChatId.toString()) {
-                            return {
-                                ...chat,
-                                Messages: [...chat.Messages, newMessage]
-                            };
+            setListChat(prevChats => {
+                const existingChat = prevChats.find(chat => chat._id === newMessage.ChatId);
+                if (existingChat) {
+                    // If chat exists, append the new message to it
+                    return prevChats.map(chat => 
+                        chat._id === newMessage.ChatId
+                            ? { ...chat, Messages: [...chat.Messages, newMessage] }
+                            : chat
+                    );
+                } else {
+                    // Fetch new user's data if it's a new chat
+                    fetchUser(newMessage.SenderId).then(({ data: userData }) => {
+                        if (userData) {
+                            setListChat(currChats => [
+                                ...currChats,
+                                {
+                                    _id: newMessage.ChatId,
+                                    OtherUser: userData.result,
+                                    Messages: [newMessage]
+                                }
+                            ]);
                         }
-                        return chat;
-                    });
-                    listChatRef.current = updatedChats; // Update the ref with the new state
-                    return updatedChats;
-                });
-            } else {
-                console.log("Adding new chat entry for new message.")
-                try {
-                    const { data: userData } = await fetchUser(newMessage.SenderId);
-                    if (userData) {
-                        setListChat(prevChats => {
-                            // Check again before adding to avoid duplicates
-                            const updatedChatExists = prevChats.some(chat => chat._id === newMessage.ChatId);
-                            if (!updatedChatExists) {
-                                return [
-                                    ...prevChats,
-                                    {
-                                        _id: newMessage.ChatId,
-                                        OtherUser: userData.result,
-                                        Messages: [newMessage]
-                                    }
-                                ];
-                            }
-                            return prevChats;
-                        });
-                    }
-                } catch (error) {
-                    console.error("Failed to fetch user data:", error);
+                    }).catch(error => console.error("Failed to fetch user data:", error));
+                    return prevChats;
                 }
-            }
+            });
         };
+        
 
         socket?.on('newMessage', handleNewMessage);
 
