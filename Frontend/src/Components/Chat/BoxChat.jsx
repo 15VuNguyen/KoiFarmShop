@@ -4,24 +4,19 @@ import { useChat } from "../../Context/ChatContext";
 import { useSocketContext } from "../../Context/SocketContext";
 import { useMessage } from "../../Context/MessageContext";
 import { getMessages, sendMessages } from "../../services/messageService";
-// import { fetchLoginUserData } from '../../services/userService'
+import { useAuth } from "../../Context/AuthContext";
 
 const BoxChat = (props) => {
-  const { show, setShow, receiver, user } = props;
+  const { show, setShow, receiver } = props;
+  const {socket} = useSocketContext()
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageTime, setShowMessageTime] = useState(null);
   const { messageList, setMessageList } = useMessage();
-  const { socket } = useSocketContext();
   const { selectedChat } = useChat();
+  const {currentUser} = useAuth()
   const lastMessageRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-
-  console.log("message list: ", messageList);
-  console.log("receiver: ", receiver);
-  console.log("selectedChat: ", selectedChat);
-  console.log("user: ", user);
-  console.log("socket: ", socket);
 
   const sendMessage = async () => {
     if(!message.trim()) return;
@@ -129,12 +124,12 @@ const BoxChat = (props) => {
         {!loading &&
           messageList?.map((m) => (
             <div key={m?._id} ref={lastMessageRef} className="mess-container">
-              {user?._id === m.ReceiverId ? (
+              {currentUser?._id === m.ReceiverId ? (
                 <i className="avatar fa-solid fa-user"></i>
               ) : (
                 <></>
               )}
-              <div className={user?._id === m.SenderId ? "me" : "you"}>
+              <div className={currentUser?._id === m.SenderId ? "me" : "you"}>
                 <p onClick={() => toggleMessageTime(m._id)}>{m.Content}</p>
                 <div
                   className={`date ${

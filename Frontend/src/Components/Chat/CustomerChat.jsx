@@ -3,6 +3,7 @@ import { fetchLoginUserData, getManager } from "../../services/userService";
 import BoxChat from "./BoxChat";
 import ChatButton from "./ChatButton";
 import "./CustomerChat.css";
+import { useSocketContext } from "../../Context/SocketContext";
 // import { useChat } from '../../Context/ChatContext';
 // import { useMessage } from '../../Context/MessageContext';
 // import { createNewChats } from '../../services/chatService';
@@ -10,7 +11,7 @@ import "./CustomerChat.css";
 const CustomerChatButton = () => {
   const [isShow, setIsShow] = useState(false);
   const [manager, setManager] = useState({});
-  const [user, setUser] = useState({});
+  // const [user, setUser] = useState({});
   // const {setSelectedChat} = useChat()
   // const { setMessageList } = useMessage()
 
@@ -25,16 +26,16 @@ const CustomerChatButton = () => {
     }
   };
 
-  const fetchUser = async () => {
-    try {
-      const { data } = await fetchLoginUserData();
-      if (data) {
-        setUser(data.result);
-      }
-    } catch (error) {
-      console.error({ message: error.message });
-    }
-  };
+  // const fetchUser = async () => {
+  //   try {
+  //     const { data } = await fetchLoginUserData();
+  //     if (data) {
+  //       setUser(data.result);
+  //     }
+  //   } catch (error) {
+  //     console.error({ message: error.message });
+  //   }
+  // };
 
   //   const findChat = async() => {
   //     try {
@@ -61,9 +62,9 @@ const CustomerChatButton = () => {
   //     }
   // }, []);
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   fetchUser();
+  // }, []);
 
   useEffect(() => {
     fetchManager();
@@ -75,7 +76,7 @@ const CustomerChatButton = () => {
         show={isShow}
         receiver={manager}
         setShow={setIsShow}
-        user={user}
+        // user={user}
       />
       <ChatButton show={isShow} setShow={setIsShow} receiver={manager} />
     </div>
