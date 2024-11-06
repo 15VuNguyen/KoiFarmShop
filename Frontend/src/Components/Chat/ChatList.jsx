@@ -28,13 +28,6 @@ const ChatList = (props) => {
         setSelectedChat(c)
         setCustomer(c.OtherUser)
         setMessageList(c.Messages)
-        setListChat(prevChats => {
-            const chatExists = prevChats.some(chat => chat._id === c._id)
-            if (!chatExists) {
-                return [...prevChats, c]
-            }
-            return prevChats
-        })
     }
 
     useEffect(() => {
