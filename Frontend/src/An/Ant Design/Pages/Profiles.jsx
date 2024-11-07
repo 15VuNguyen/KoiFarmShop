@@ -106,7 +106,9 @@ export default function Profiles() {
         <Row gutter={24}>
 
           <Col span={6}>
-            <Card hoverable>
+            <Card hoverable
+              style={{ height: "100%" }}
+            >
               <Statistic
                 title={<Typography.Title level={4}>Tổng Khách Hàng Hoạt Động</Typography.Title>}
                 value={totalCustomers()}
@@ -117,7 +119,9 @@ export default function Profiles() {
 
 
           <Col span={6}>
-            <Card hoverable>
+            <Card hoverable 
+              style={{ height: "100%" }}
+              >
               <Statistic
                 title={<Typography.Title level={4}>Tổng Khách Hàng Đã Xác Minh</Typography.Title>}
                 value={totalVerified()}

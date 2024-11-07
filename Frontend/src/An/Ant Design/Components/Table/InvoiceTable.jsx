@@ -40,7 +40,7 @@ export default function InvoiceTable({ data, actions }) {
       ),
     },
     {
-      title: 'Mã nhóm hóa đơn',
+      title: 'Mã lô cá koi',
       dataIndex: 'GroupKoiIDInvoice',
       key: 'GroupKoiIDInvoice',
       sorter: (a, b) => a.GroupKoiIDInvoice.localeCompare(b.GroupKoiIDInvoice),
@@ -57,7 +57,7 @@ export default function InvoiceTable({ data, actions }) {
       ),
     },
     {
-      title: 'Ngày hóa đơn',
+      title: 'Ngày tạo hóa đơn',
       dataIndex: 'InvoiceDate',
       key: 'InvoiceDate',
       sorter: (a, b) => moment(a.InvoiceDate).unix() - moment(b.InvoiceDate).unix(),

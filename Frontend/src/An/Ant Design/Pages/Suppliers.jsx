@@ -6,6 +6,7 @@ import useFetchProfiles from '../../Ant Design/Hooks/useFetchProfiles';
 import SupplierTable from '../Components/Table/SupplierTable';
 import useFetchSupplier from '../Hooks/useFetchSupplier';
 import axiosInstance from '../../Utils/axiosJS';
+import InvoiceChartModal from '../Components/Modal/InvoiceChartModal';
 export default function Suppliers() {
     const { Header, Content } = Layout;
     const [activeTab, setActiveTab] = React.useState('1');
@@ -15,6 +16,8 @@ export default function Suppliers() {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedProfile, setSelectedProfile] = React.useState(null);
+    const [ChartDATA, setChartData] = React.useState({});
+  const [openChartModal, setOpenChartModal] = React.useState(false)
     const reseter = () => { setReset(!reset) }
     React.useEffect(() => {
         const fetchData = async () => {
@@ -37,16 +40,26 @@ export default function Suppliers() {
                 return suppliers.filter(suppliers => suppliers.Country === 'Nhật' || suppliers.Country === 'Nhật Bản');
             case '3':
                 return suppliers.filter(suppliers => suppliers.Country == 'Việt Nam');
-            case '4':
-                return suppliers.filter(suppliers => suppliers.Country == 'Trung Quốc');
             default:
                 return suppliers;
         }
     };
 
     const filteredSupplier = getFilteredSuppliers();
-
-
+    const handleOpenUpChartModal = () => {
+        const howManyCreateEachDate = suppliers.reduce((acc, cur) => {
+          const date = new Date(cur.SupplierCreateDate).toLocaleDateString();
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+      }
+      , {});
+      setChartData(howManyCreateEachDate);
+      console.log(ChartDATA);
+      setOpenChartModal(true);
+      }
+      const handleCancel = () => {
+        setOpenChartModal(false);
+        }
     const Tab = [
         {
             key: '1',
@@ -95,13 +108,18 @@ export default function Suppliers() {
     };
     return (
         <Layout >
+            <InvoiceChartModal visible={openChartModal} onClose={handleCancel} data={ChartDATA} whichType='Supplier' />
             <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Supplier Dashboard</Typography.Title>
+                <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý thông tin nhà cung cấp cá KOI</Typography.Title>
             </Header>
             <Content style={{ padding: '24px' }}>
                 <Row gutter={24}>
                     <Col span={6}>
-                        <Card hoverable>
+                        <Card hoverable
+                            
+                            onClick={handleOpenUpChartModal}
+                            style={{ height:'100%' }}
+                        >
                             <Statistic
                                 title={<Typography.Title level={4}>Toàn bộ nhà cung cấp</Typography.Title>}
                                 value={suppliers.length}
@@ -127,16 +145,7 @@ export default function Suppliers() {
                             />
                         </Card>
                     </Col>
-                    <Col span={6}>
-                        <Card hoverable>
-                            <Statistic
-                                title={<Typography.Title level={4}>Toàn Bộ Nhà Cung Cấp Trung Quốc</Typography.Title>}
-                                value={suppliers.filter(supplier => supplier.Country === ' Trung Quốc').length}
-                                precision={0}
-
-                            />
-                        </Card>
-                    </Col>
+                
                 </Row>
                 <Row gutter={6} style={{ marginTop: '2rem' }} className='Black-Strip'>
                     <Col span={12} >

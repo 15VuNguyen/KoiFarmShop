@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker, Tooltip } from 'antd';
-import { UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Typography, Card, Statistic, Row, Col, Layout, Button, Tabs, Badge, Space, Modal, Form, Input, Select, InputNumber, message, Upload, DatePicker, Tooltip, Spin } from 'antd';
+import { ArrowDownOutlined, ArrowUpOutlined, LoadingOutlined, ReloadOutlined, UploadOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import InvoiceTable from '../Components/Table/InvoiceTable';
 import '../Css/GeneralPurpose.css';
 import useFetchInvoices from "../Hooks/useFetchInvoices";
@@ -8,8 +8,7 @@ import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import { sizeValidator, priceValidator, discountValidator } from '../Utils/Validator';
-import { func } from 'prop-types';
-import moment from 'moment';
+import InvoiceChartModal from '../Components/Modal/InvoiceChartModal';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -32,9 +31,13 @@ export default function Invoices() {
   const [imageUrl, setImageUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
   const [videoUrl, setVideoUrl] = React.useState('');
-
-
-  ;
+  const [openChartModal, setOpenChartModal] = React.useState(false)
+  const [ChartDATA, setChartData] = React.useState({})
+  const [recivedOrerPrecentChanges, setRecivedOrerPrecentChanges] = React.useState(0)
+  const [soldOutPrecentChanges, setSoldOutPrecentChanges] = React.useState(0)
+  const [totalInvocesPrecentChanges, setTotalInvocesPrecentChanges] = React.useState(0)
+    ;
+    const [tellMeWhatIs, setTellMeWhatIs] = React.useState('')
   React.useEffect(() => {
     console.log(isUpdate);
   }, [isUpdate]);
@@ -52,6 +55,7 @@ export default function Invoices() {
   const [refreshData, setRefreshData] = React.useState(false);
   React.useEffect(() => {
     const fetchCatagory = async () => {
+      setLoading(true);
       try {
         Promise.all([
           axiosInstance.get('getAllKoi'),
@@ -69,10 +73,39 @@ export default function Invoices() {
         });
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchCatagory();
   }, [refreshData]);
+  React.useEffect(() => {
+    function calculateOrderPercentChanges(invoices) {
+
+      const today = new Date();
+      const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+      // Filter invoices from the last 7 days
+      const recentInvoices = invoices.filter(invoice => new Date(invoice.InvoiceDate) > lastWeek);
+
+
+      const totalRecentInvoices = recentInvoices.length;
+      const receivedOrders = recentInvoices.filter(invoice => invoice.Status === 1).length;
+      const soldOutOrders = recentInvoices.filter(invoice => invoice.Status === 2).length;
+
+
+      if (totalRecentInvoices === 0) return { receivedOrderPercentChange: '0.00', soldOutPercentChange: '0.00' };
+
+
+      const receivedOrderPercentChange = ((receivedOrders / totalRecentInvoices) * 100).toFixed(2);
+      const soldOutPercentChange = ((soldOutOrders / totalRecentInvoices) * 100).toFixed(2);
+      const totalInvocesPercentChange = ((totalRecentInvoices / totalRecentInvoices) * 100).toFixed(2);
+      return { receivedOrderPercentChange, soldOutPercentChange, totalInvocesPercentChange };
+    }
+    setRecivedOrerPrecentChanges(calculateOrderPercentChanges(invoices).receivedOrderPercentChange);
+    setSoldOutPrecentChanges(calculateOrderPercentChanges(invoices).soldOutPercentChange);
+    setTotalInvocesPrecentChanges(calculateOrderPercentChanges(invoices).totalInvocesPercentChange);
+  }, [invoices])
   const handleAction = async (record) => {
     try {
       setIsUpdate(true);
@@ -91,6 +124,10 @@ export default function Invoices() {
     } catch (error) {
       console.error(error);
     }
+  }
+  const handleReloading = () => {
+    setLoading(true);
+    setRefreshData(!refreshData);
   }
   const getFilteredInvoices = () => {
     switch (activeTab) {
@@ -235,6 +272,40 @@ export default function Invoices() {
       setVideoLoading(false);
     }
   };
+  const handleOpenUpChartModal = () => {
+    const howManyCreateEachDate = invoices.reduce((acc, cur) => {
+      const date = new Date(cur.InvoiceDate).toLocaleDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }
+      , {});
+   
+    setChartData(howManyCreateEachDate);
+    console.log(ChartDATA);
+    setOpenChartModal(true);
+  }
+  const handleCancelChartModal = () => {
+    setOpenChartModal(false);
+  } 
+  const handleOpenUpChartModalWithStatus = (Status) => {
+      const filterInvoices = invoices.filter(invoice => invoice.Status == Status);
+      if (Status == 1) {
+        setTellMeWhatIs('Recived')
+      }
+      else if (Status == 2) {
+        setTellMeWhatIs('Sold Out')
+      }
+      const howManyCreateEachDate = filterInvoices.reduce((acc, cur) => {
+        
+        const date = new Date(cur.InvoiceDate).toLocaleDateString();
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+      }
+        , {});
+        setChartData(howManyCreateEachDate);
+        console.log(ChartDATA);
+        setOpenChartModal(true);
+    }
   const handleOk = async () => {
     try {
 
@@ -261,7 +332,7 @@ export default function Invoices() {
       setRefreshData(!refreshData);
       form.resetFields();
     } catch (error) {
-      console.error('Error:', error); 
+      console.error('Error:', error);
       message.error('Vui lòng kiểm tra lại các trường!');
       setLoading(false);
     }
@@ -307,6 +378,7 @@ export default function Invoices() {
 
   return (
     <Layout>
+      <InvoiceChartModal visible={openChartModal} onClose={handleCancelChartModal} data={ChartDATA} tellMeWhatIs={tellMeWhatIs} />
       <Modal
         title={
           isUpdate ? 'Cập nhật hóa đơn' : 'Tạo hóa đơn'
@@ -403,8 +475,8 @@ export default function Invoices() {
               { validator: priceValidator }
             ]}
           >
-            <InputNumber suffix={'đ'} min={1000} placeholder="Nhập Giá" style={{ width: '100%' }}  formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  />
+            <InputNumber suffix={'đ'} min={1000} placeholder="Nhập Giá" style={{ width: '100%' }} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} />
           </Form.Item>
 
           <Form.Item
@@ -508,38 +580,52 @@ export default function Invoices() {
 
       <Header style={{ background: '#f5f5f5' }}></Header>
       <Header style={{ background: '#f5f5f5' }}>
-        <Typography.Title style={{ textAlign: 'center' }} level={1}>Invoice Dashboard</Typography.Title>
+        <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý hóa đơn nhập khẩu cá KOI</Typography.Title>
       </Header>
 
       <Content className='fix-Table' style={{ padding: '24px' }}>
         <Row gutter={24}>
           <Col span={6}>
-            <Card hoverable style={{ height: '100%' }}>
+            <Card hoverable style={{ height: '100%' }} onClick={handleOpenUpChartModal}>
               <Statistic
-                title={<Typography.Title level={4}>Tổng số hóa đơn</Typography.Title>}
-                value={invoices.length}
+                title={<Typography.Title level={4}>Tổng số hóa đơn được tạo trong 7 ngày qua</Typography.Title>}
+                value={totalInvocesPrecentChanges}
+                suffix="%"
+                valueStyle={{ color: totalInvocesPrecentChanges > 0 ? '#3f8600' : '#cf1322' }}
+                prefix={totalInvocesPrecentChanges > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
                 precision={0}
               />
             </Card>
           </Col>
 
           <Col span={6}>
-            <Card hoverable style={{ height: '100%' }}>
+            <Card hoverable style={{ height: '100%' }}
+            onClick={() => handleOpenUpChartModalWithStatus(1)}>  
+            
               <Row gutter={16}>
-                
-              <Statistic
-                title={<Typography.Title level={4}>Hóa đơn đã nhận</Typography.Title>}
-                value={invoices.filter(invoice => invoice.Status === 1).length}
-                precision={0}
-              />
+
+                <Statistic
+                  title={<Typography.Title level={4}>Hóa đơn đã nhận trong 7 ngày qua</Typography.Title>}
+                  value={recivedOrerPrecentChanges}
+                  suffix="%"
+                  valueStyle={{ color: recivedOrerPrecentChanges > 0 ? '#3f8600' : '#cf1322' }}
+                  prefix={recivedOrerPrecentChanges > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
+                  precision={0}
+
+                />
               </Row>
             </Card>
           </Col>
           <Col span={6}>
-            <Card hoverable style={{ height: '100%' }}>
+            <Card hoverable style={{ height: '100%' }}
+              onClick={() => handleOpenUpChartModalWithStatus(2)}
+            >
               <Statistic
-                title={<Typography.Title level={4}>Hóa đơn đã bán hết</Typography.Title>}
-                value={invoices.filter(invoice => invoice.Status === 2).length}
+                title={<Typography.Title level={4}>Hóa đơn đã bán hết trong 7 ngày qua</Typography.Title>}
+                value={soldOutPrecentChanges}
+                suffix="%"
+                valueStyle={{ color: soldOutPrecentChanges > 0 ? '#3f8600' : '#cf1322' }}
+                prefix={soldOutPrecentChanges > 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
                 precision={0}
               />
             </Card>
@@ -572,6 +658,9 @@ export default function Invoices() {
             <Button type="primary" onClick={handleAddInvoice}>
               Tạo Hóa Đơn Mới
             </Button>
+            <Button type="primary" onClick={handleReloading} loading={isLoading} disabled={isLoading} icon={isLoading ? <LoadingOutlined /> : <ReloadOutlined />}>
+              Làm mới dữ liệu
+            </Button>
           </Space>
 
           <Tabs
@@ -582,7 +671,15 @@ export default function Invoices() {
           />
         </div>
 
-        <InvoiceTable data={getFilteredInvoices()} actions={handleAction} />
+        {
+          loading ? (
+            <div style={{ textAlign: 'center', marginTop: '24px' }}>
+              <Spin size="large" />
+            </div>
+          ) : (
+            <InvoiceTable data={getFilteredInvoices()} actions={handleAction} />
+          )
+        }
       </Content>
     </Layout>
   );
