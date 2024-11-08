@@ -210,7 +210,7 @@ export default function Profiles() {
     return (
         <Layout>
             <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản Lý Ký Gửi</Typography.Title>
+                <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý đơn ký gửi</Typography.Title>
             </Header>
             <Content style={{ padding: '24px' }}>
                 <Row style={{ paddingLeft: '3rem' }} gutter={[24, 24]} >
@@ -234,7 +234,7 @@ export default function Profiles() {
                         </Card>
                     </Col>
                     <Col span={12}>
-                        <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ky gửi theo thời gian'} >
+                        <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ký gửi theo thời gian'} >
                             <Line data={lineData}
                                 options={
                                     {

@@ -1,4 +1,4 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Dropdown, Menu, Checkbox, Input, Modal, Form, Select, Image, Upload, Space } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Dropdown, Menu, Checkbox, Input, Modal, Form, Select, Image, Upload, Space, Result, Col, Row, AutoComplete } from "antd";
 import { CopyOutlined, DownOutlined } from "@ant-design/icons";
 import React, { useEffect } from 'react';
 import axiosInstance from "../../../Utils/axiosJS";
@@ -6,13 +6,49 @@ import moment from 'moment';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import useAddress from "../useAddress";
 export default function SupplierTable({ data, showCreate, setCreate, ResetTable }) {
   const [selectedColumns, setSelectedColumns] = React.useState({});
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [currentSupplier, setCurrentSupplier] = React.useState(null);
+  const [currentCountry, setCurrentCountry] = React.useState(null);
+  const [selectedCity, setSelectedCity] = React.useState(null);
+  const [selectedDistrict, setSelectedDistrict] = React.useState(null);
+  const [selectedWard, setSelectedWard] = React.useState(null);
   const [form] = Form.useForm();
   const [uploading, setUploading] = React.useState(false);
+  const { searchText, setSearchText, recommendations } = useAddress();
+  // const { allVietnameseAddress, getAllDistrictOfACity, getALLWardOfADistrict } = useAddress();
+  // console.log(allVietnameseAddress);
+  // console.log(getAllDistrictOfACity('Thành phố Hồ Chí Minh'));
+  const handleCityChange = (value) => {
+    setSelectedDistrict(null); 
+    setSelectedCity(value);
+    setSelectedDistrict(null); 
+
+
+  };
+
+
+
+
+
+
+
+
+  const handleDistrictChange = (value) => {
+    setSelectedDistrict(value);
+    setSelectedWard(null); 
+    form.setFieldsValue({ District: value, Ward: null });
+
+  };
+  const handleWardChange = (value) => {
+    setSelectedWard(value);
+    form.setFieldsValue({ Ward: value });
+
+  };
+
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
     authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -21,6 +57,9 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
     messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_APP_ID,
   };
+  useEffect(() => {
+    console.log(currentCountry)
+  }, [currentCountry])
   useEffect(() => {
     if (showCreate) {
       console.log("showCreate", showCreate);
@@ -38,6 +77,9 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
     form.setFieldsValue(supplier);
     console.log("form", form.getFieldValue());
   };
+  const handleSetContry = (value) => {
+    setCurrentCountry(value);
+  }
   const showCreateModal = () => {
     setCurrentSupplier(null);
     setIsModalVisible(true);
@@ -65,6 +107,7 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
           updatedData.SupplierVideo = downloadURL;
         }
         console.log("updatedData", updatedData);
+        // updatedData.Address = `${selectedWard}, ${selectedDistrict}, ${selectedCity}`;
         await axiosInstance.put(`/manager/manage-supplier/${currentSupplier._id}`, updatedData);
         message.success(`Nhà cung cấp "${values.SupplierName}" đã được cập nhật.`);
         ResetTable()
@@ -77,7 +120,7 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
       } finally {
         setUploading(false);
         ResetTable(),
-        form.resetFields();
+          form.resetFields();
       }
     }
     else {
@@ -99,8 +142,13 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
           console.log("downloadURL", downloadURL);
           newSupplier.SupplierVideo = downloadURL;
         }
+        //  
         await axiosInstance.post(`/manager/manage-supplier/create-new-supplier`, newSupplier);
         message.success(`Nhà cung cấp "${values.SupplierName}" đã được tạo.`);
+        form.resetFields();
+        setSelectedCity(null);
+        setSelectedDistrict(null);
+        setSelectedWard(null);
         setIsModalVisible(false);
         ResetTable()
       } catch (error) {
@@ -290,9 +338,9 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
       >
         {
           showCreate ? null : (
-            <Space>  
-              <Image 
-                width={300} 
+            <Space>
+              <Image
+                width={300}
                 src={currentSupplier?.SupplierImage}
                 fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOq3QdDFcvjV3jOD1boQVTPQrgSkktTgbSf4A4LbmgqISBgTEFyFYuLykAsTuAbJEioKOA7DkgdjqEvQHEToKwj4DVhAQ5A9k3gGyB5IxEoBmML4BsnSQk8XQkNtReEOBxcfXxUQg1Mjc0dyHgXNJBSWpFCYh2zi+oLMpMzyhRcASGUqqCZ16yno6CkYGRAQMDKMwhqj/fAIcloxgHQqxAjIHBEugw5sUIsSQpBobtQPdLciLEVJYzMPBHMDBsayhILEqEO4DxG0txmrERhM29nYGBddr//5/DGRjYNRkY/l7////39v///y4Dmn+LgeHANwDrkl1AuO+pmgAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAwqADAAQAAAABAAAAwwAAAAD9b/HnAAAHlklEQVR4Ae3dP3PTWBSGcbGzM6GCKqlIBRV0dHRJFarQ0eUT8LH4BnRU0NHR0UEFVdIlFRV7TzRksomPY8uykTk/zewQfKw/9znv4yvJynLv4uLiV2dBoDiBf4qP3/ARuCRABEFAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghgg0Aj8i0JO4OzsrPv69Wv+hi2qPHr0qNvf39+iI97soRIh4f3z58/u7du3SXX7Xt7Z2enevHmzfQe+oSN2apSAPj09TSrb+XKI/f379+08+A0cNRE2ANkupk+ACNPvkSPcAAEibACyXUyfABGm3yNHuAECRNgAZLuYPgEirKlHu7u7XdyytGwHAd8jjNyng4OD7vnz51dbPT8/7z58+NB9+/bt6jU/TI+AGWHEnrx48eJ/EsSmHzx40L18+fLyzxF3ZVMjEyDCiEDjMYZZS5wiPXnyZFbJaxMhQIQRGzHvWR7XCyOCXsOmiDAi1HmPMMQjDpbpEiDCiL358eNHurW/5SnWdIBbXiDCiA38/Pnzrce2YyZ4//59F3ePLNMl4PbpiL2J0L979+7yDtHDhw8vtzzvdGnEXdvUigSIsCLAWavHp/+qM0BcXMd/q25n1vF57TYBp0a3mUzilePj4+7k5KSLb6gt6ydAhPUzXnoPR0dHl79WGTNCfBnn1uvSCJdegQhLI1vvCk+fPu2ePXt2tZOYEV6/fn31dz+shwAR1sP1cqvLntbEN9MxA9xcY jsx0TyjF_GLISODks8)"
               />
@@ -313,26 +361,107 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
             <Input />
           </Form.Item>
 
-          <Form.Item
-            label="Địa Chỉ"
-            name="Address"
-            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
-          >
-            <Input />
-          </Form.Item>
+
 
           <Form.Item
             label="Quốc Gia"
             name="Country"
             rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
+            initialValue={"Việt Nam"}
+
           >
-            <Select>
+            <Select
+              onChange={handleSetContry}
+              placeholder="Chọn Quốc Gia"
+            >
               <Select.Option value="Nhật Bản">Nhật Bản</Select.Option>
               <Select.Option value="Việt Nam">Việt Nam</Select.Option>
 
             </Select>
           </Form.Item>
+          {/* <Form.Item
+            label="Địa Chỉ"
+            name="Address"
+            rules={[
+              {
+                required: true,
+                // validator: (_, value) => {
+                //   if (!selectedCity) {
+                //     return Promise.reject('Vui lòng chọn Tỉnh/Thành Phố.');
+                //   }
+                //   if (!selectedDistrict) {
+                //     return Promise.reject('Vui lòng chọn Quận/Huyện.');
+                //   }
+                //   if (!selectedWard) {
+                //     return Promise.reject('Vui lòng chọn Phường/Xã.');
+                //   }
+                //   return Promise.resolve();
+                // }
+              }
+            ]}
+          >
+            <Input />
+            {/* <Row gutter={16}>
+              <Col span={8}>
+                <Select
+                  value={selectedCity}
+                  placeholder="Chọn Tỉnh/Thành Phố"
+                  onChange={handleCityChange}
+                >
+                  {allVietnameseAddress.map((city) => (
+                    <Select.Option key={city.name} value={city.name}>
+                      {city.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Col>
 
+              {selectedCity && (
+                <Col span={8}>
+                  <Select
+                    value={selectedDistrict}
+                    placeholder="Chọn Quận/Huyện"
+                    onChange={handleDistrictChange}
+                  >
+                    {getAllDistrictOfACity(selectedCity)?.map((district) => (
+                      <Select.Option key={district.name} value={district.name}>
+                        {district.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Col>
+              )}
+
+              {selectedDistrict && (
+                <Col span={8}>
+                  <Select
+                    value={selectedWard}
+                    placeholder="Chọn Phường/Xã"
+                    onChange={handleWardChange}
+                  >
+                    {getALLWardOfADistrict(selectedCity, selectedDistrict)?.map((ward) => (
+                      <Select.Option key={ward.name} value={ward.name}>
+                        {ward.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Col>
+              )}
+            </Row> 
+          </Form.Item> */}
+            <Form.Item label="Address"
+              name="Address"
+              rules={ [{ required: true, message: 'Vui lòng nhập địa chỉ' }] }
+            >
+                <AutoComplete
+                  allowClear
+                    value={searchText}
+                    onChange={setSearchText}
+                    options={recommendations.map(address => ({ value: address }))}
+                    placeholder= "Nhập địa chỉ"
+                    
+                />
+            </Form.Item>
           <Form.Item
             label="Số Điện Thoại"
             name="PhoneNumber"

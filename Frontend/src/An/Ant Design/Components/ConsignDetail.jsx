@@ -1,20 +1,20 @@
 import React from 'react';
-import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker, Tooltip, Typography } from 'antd';
+import { Avatar, Form, Descriptions, Divider, Input, Button, Select, Row, Col, Tag, Carousel, message, Upload, Image, Space, Modal, InputNumber, DatePicker, Tooltip, Typography, AutoComplete } from 'antd';
 import { EditOutlined, CheckOutlined, CloseOutlined, UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import axiosInstance from '../../Utils/axiosJS';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import utc from 'dayjs/plugin/utc';
+import useAddress from './useAddress';
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 import moment from 'moment';
-import FormItem from 'antd/es/form/FormItem';
-import { func } from 'prop-types';
 
 export default function ConsignDetail({ consignID }) {
   const [consignData, setConsignData] = React.useState({});
   const [imageList, setImageList] = React.useState([]);
   const [video, setVideo] = React.useState(null);
+  const { searchText, setSearchText, recommendations } = useAddress();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [catagoryList, setCatagoryList] = React.useState([]);
@@ -211,6 +211,12 @@ export default function ConsignDetail({ consignID }) {
     else if (field === 'Price') {
       setEditField(field);
       setEditValue(koi.Price);
+    }  else if (field === 'address') {
+      console.log('Address');
+      setSearchText(editValue);
+      setEditField(field);
+      setEditValue(initialValue);
+      
     }
     else {
 
@@ -269,11 +275,32 @@ export default function ConsignDetail({ consignID }) {
     return targetDate.format('YYYY-MM-DD');
   }
 
-
+  const fieldMapping = {
+    address: 'Địa chỉ',
+    phone_number: 'Số điện thoại',
+    PositionCare: 'Vị trí chăm sóc',
+    Method: 'Phương thức',
+    CategoryID: 'ID Danh mục',
+    KoiName: 'Tên Koi',
+    Age: 'Tuổi',
+    Origin: 'Nguồn gốc',
+    ShippingDate: 'Ngày vận chuyển',
+    ReceiptDate: 'Ngày nhận',
+    Price : 'Giá',
+    State : 'Trạng thái',
+    Commission: 'Hoa Hồng',
+    Breed: 'Giống',
+    Description: 'Mô tả',
+    DailyFoodAmount: 'Lượng thức ăn đơn vị g/ngày',
+    FilteringRatio: 'Tỉ lệ lọc (%)',
+    CertificateID: 'ID Chứng chỉ',
+    Size: 'Kích thước (cm)',
+    
+  }
   const saveEdit = (field) => {
     Modal.confirm({
       title: 'Bạn có chắc không?',
-      content: `Bạn có chắc chắn muốn lưu thay đổi cho ${field}?`,
+      content: `Bạn có chắc chắn muốn lưu thay đổi cho ${fieldMapping[field]}?`,
       onOk: async () => {
         try {
           let updatedFields 
@@ -289,6 +316,7 @@ export default function ConsignDetail({ consignID }) {
           else if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
+        
           else {
             updatedFields = { ...validFieldForUpdate, [field]: editValue };
           }
@@ -417,6 +445,17 @@ export default function ConsignDetail({ consignID }) {
                       }
                     />
                   </Form.Item>
+                ) : inputType === 'selectAddress' ? (
+                  <AutoComplete
+                  allowClear
+                    value={editValue}
+                    onChange={(value) => {
+                      setSearchText(value);
+                      setEditValue(value); 
+                    }}
+                    options={recommendations.map((address) => ({ value: address }))}
+                    style={{ width: '100%' }}
+                  />
                 ) :
 
                   inputType === 'setGender' ? (
@@ -473,7 +512,7 @@ export default function ConsignDetail({ consignID }) {
       <Form layout="vertical">
         <Descriptions title="Thông tin người ký gửi" bordered>
           <Descriptions.Item label="Tên người dùng">{user.name}</Descriptions.Item>
-          {renderEditableItem("Địa chỉ", user.address, "address")}
+          {renderEditableItem("Địa chỉ", user.address, "address", "selectAddress")}
           {renderEditableItem("Số điện thoại", user.phone_number, "phone_number")}
           <Descriptions.Item label="Đã xác minh">
             {user.verify ? <Tag color="green">Đã xác minh</Tag> : <Tag color="red">Chưa xác minh</Tag>}
