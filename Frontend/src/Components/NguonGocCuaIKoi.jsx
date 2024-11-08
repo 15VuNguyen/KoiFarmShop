@@ -39,7 +39,7 @@ export default function NguonGocCuaIKoi() {
           </div>
           <div>
             <br />
-            <Paragraph className="paragraph-Style" style={{ color: "#e4cfb1" }}>
+            <Paragraph className="paragraph-Style" style={{}}>
               Cá Koi có nguồn gốc từ Trung Quốc, nơi có truyền thống lai tạo lâu
               đời. Tuy nhiên, cá Koi Nhật Bản lại được biết đến với những phẩm
               chất và giá trị nghệ thuật vượt trội hơn hẳn. Sự khác biệt này

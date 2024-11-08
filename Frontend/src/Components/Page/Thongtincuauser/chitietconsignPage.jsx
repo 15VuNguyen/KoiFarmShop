@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../../An/Utils/axiosJS";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 import {
   Form,
   Input,
@@ -81,7 +81,7 @@ export default function Chitietconsignpage() {
   const [categoryData, setCategoryData] = useState([]);
   const [consignData, setConsignData] = useState([]);
   const [koiData, setKoiData] = useState([]);
-
+  const [updateTrigger, setUpdateTrigger] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -162,8 +162,9 @@ export default function Chitietconsignpage() {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, []); // Fetch data when consignData._id changes
+  }, [updateTrigger]); // Add updateTrigger to the dependency array
 
   useEffect(() => {
     const fetchData = async () => {
@@ -305,9 +306,7 @@ export default function Chitietconsignpage() {
       );
       if (response.status === 200) {
         toast.success("Cập nhật thành công!");
-        setTimeout(() => {
-          window.location.reload();
-        }, 4000);
+        setUpdateTrigger(!updateTrigger); // Trigger the useEffect to re-fetch data
       } else {
         toast.error("Cập nhật thất bại!");
       }
