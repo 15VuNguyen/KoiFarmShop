@@ -65,6 +65,14 @@ class DatabaseService {
       throw error
     }
   }
+  get loyaltyCard(){
+    try {
+      return this._db.collection('loyalty_card')
+    } catch (error) {
+      console.log(error + 'lỗi ở database service - get loyalty_card')
+      throw error
+    }
+  }
   get kois() {
     try {
       return this._db.collection('kois')

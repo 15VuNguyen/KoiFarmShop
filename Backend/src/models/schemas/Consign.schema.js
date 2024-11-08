@@ -13,6 +13,8 @@ export default class ConsignSchema {
   PositionCare = ''
   Commission = ''
   TotalPrice = ''
+  AddressConsignKoi = ''
+  PhoneNumberConsignKoi = ''
 
   constructor(consign) {
     const dateCreate = new Date()
@@ -28,5 +30,7 @@ export default class ConsignSchema {
     this.PositionCare = consign.PositionCare || ''
     this.Commission = consign.Commission || ''
     this.TotalPrice = consign.TotalPrice || ''
+    this.TotaAddressConsignKoilPrice = consign.AddressConsignKoi || ''
+    this.PhoneNumberConsignKoi = consign.PhoneNumberConsignKoi || ''
   }
 }

@@ -132,6 +132,10 @@ export const USERS_MESSAGES = {
   REMOVE_ITEM_SUCCESS: 'Remove item from order detail success',
   //save
   SAVE_TO_DB_SUCCESS: 'Save order to database success',
+  //loyalty card
+  GET_CARD_SUCCESS: 'Get loyalty card success',
+  //phone number validate
+  SENT_OTP_SUCCESSFULLY: 'Sent otp code successfully',
   //check authorization
   CHECK_AUTHORIZATION_SUCCESS: 'Check authorization success',
   //get all consign

@@ -391,8 +391,9 @@ class OrderDetailService {
 
     async makeArrayOrder(payload, reqCookie) {
         let newPrice = 0
-        let orderDT, koiList, point = 0
-        let reducePercent = 20
+        let orderDT, koiList
+        // , point = 0
+        // let reducePercent = 20
         const koiListObject = await this.filterKoiId(payload)
         if (koiListObject.message) {
             return 'Koi not found'
@@ -438,9 +439,9 @@ class OrderDetailService {
             }, orderDT.TotalPrice)
             orderDT.TotalPrice = Number(newPrice)
 
-            point += koiList?.reduce((total, koi)=>{
-                return total + Math.floor((Number(koi.Price) * reducePercent / 100))
-            },0)
+            // point += koiList?.reduce((total, koi)=>{
+            //     return total + Math.floor((Number(koi.Price) * reducePercent / 100))
+            // },0)
 
         } else {
             if (payload.Quantity > samePropertiesKois.length) {
@@ -451,9 +452,9 @@ class OrderDetailService {
                 return total + Number(koi.Price);
             }, 0);
 
-            point = koiList?.reduce((total, koi)=>{
-                return total + Math.floor((Number(koi.Price) * reducePercent / 100))
-            },0)
+            // point = koiList?.reduce((total, koi)=>{
+            //     return total + Math.floor((Number(koi.Price) * reducePercent / 100))
+            // },0)
 
             orderDT = {
                 _id: new ObjectId(),
@@ -466,8 +467,8 @@ class OrderDetailService {
         }
 
         return {
-            orderDT,
-            totalPoint : point
+            orderDT
+            // totalPoint : point
         }
     }
     async getMinMaxPrice(payload) {

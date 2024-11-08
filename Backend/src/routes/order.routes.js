@@ -29,7 +29,7 @@ orderRouter.post('/detail/price', getKoiQuantityController)
 orderRouter.post('/detail/remove', removeItemsDetailController)
 orderRouter.get('/detail/removeAll', removeAllItemsDetailController)
 //Order
-orderRouter.post('/create', createOrderController)
+orderRouter.post('/create',accessTokenValidator, wrapAsync(createOrderController))
 orderRouter.get('/',accessTokenValidator, wrapAsync(getOrderController))
 //Price
 orderRouter.post('/detail/price/minmax', getMinMaxPriceController)
@@ -39,5 +39,6 @@ orderRouter.post('/koi/filter', filterKoiController)
 //save
 orderRouter.get('/save', saveOrderController)
 
+//
 orderRouter.post('/checkCart', wrapAsync(checkCartController))
 export default orderRouter

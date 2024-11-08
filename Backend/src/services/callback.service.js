@@ -26,6 +26,7 @@ export const callback = async (req, res) => {
       const embedData = JSON.parse(parsedData.embed_data) // Phân tích cú pháp embed_data
       const reqOrderDetails = embedData.orderDetails // Thông tin đơn hàng
       const reqOrder = embedData.order // Thông tin đơn hàng
+      const reqLoyaltyCard = embedData.loyaltyCard // Thông tin thẻ tích điểm
 
       const koiIDsList = await Promise.all(
         reqOrderDetails.Items.map(async (item) => {
@@ -114,8 +115,8 @@ export const callback = async (req, res) => {
   res.json(result)
 }
 
-export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie) => {
-  if (!reqOrderDetailCookie || !reqOrderCookie) {
+export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, reqLoyaltyCard) => {
+  if (!reqOrderDetailCookie || !reqOrderCookie || !reqLoyaltyCard) {
     return { error: 'No order data found in cookies' }
   }
 
@@ -135,7 +136,6 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie) 
   const newOrder = {
     _id: new ObjectId(),
     UserID: reqOrderCookie.UserID,
-    // OrderDetailID: newOrderDT._id,
     OrderDetailID: newOrderDT?._id,
     ShipAddress: reqOrderCookie.ShipAddress,
     Description: reqOrderCookie.Description,
@@ -148,6 +148,26 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie) 
     newOrder._id = order.insertedId
   } else {
     return 'Fail to save'
+  }
+
+  if (reqOrderCookie.UserID instanceof ObjectId) {
+    console.log('user._id là ObjectID');
+  } else {
+    console.log('user._id không phải là ObjectID');
+  }
+  const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: reqOrderCookie.UserID })
+  if (loyaltyCard) {
+    const updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
+      {
+        UserID: reqOrderCookie.UserID
+      },
+      {
+        $set: {
+          ...reqLoyaltyCard,
+          Point: Math.round(reqLoyaltyCard.Point)
+        }
+      })
+    return { orderDT, order: newOrder, loyaltyCard: updatedLoyaltyCard }
   }
   return { orderDT, order: newOrder }
 }
