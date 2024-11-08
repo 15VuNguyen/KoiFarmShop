@@ -16,6 +16,7 @@ export default function Suppliers() {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedProfile, setSelectedProfile] = React.useState(null);
+    const [whatIs, setTellMeWhatIs] = React.useState('');
     const [ChartDATA, setChartData] = React.useState({});
   const [openChartModal, setOpenChartModal] = React.useState(false)
     const reseter = () => { setReset(!reset) }
@@ -44,7 +45,26 @@ export default function Suppliers() {
                 return suppliers;
         }
     };
-
+    const handleOpenUpChartModalWithCountry = (Status) => {
+        const filterInvoices = suppliers.filter(supplier => supplier.Country === Status); 
+        console.log(filterInvoices);
+        if (Status === "Nhật" || Status === "Nhật Bản") {
+          setTellMeWhatIs('Nhật Bản')
+        }
+        else if (Status === "Việt Nam") {
+          setTellMeWhatIs('Việt Nam')
+        }
+        const howManyCreateEachDate = filterInvoices.reduce((acc, cur) => {
+          
+          const date = new Date(cur.SupplierCreateDate).toLocaleDateString();
+          acc[date] = (acc[date] || 0) + 1;
+          return acc;
+        }
+          , {});
+          setChartData(howManyCreateEachDate);
+          console.log(ChartDATA);
+          setOpenChartModal(true);
+      }
     const filteredSupplier = getFilteredSuppliers();
     const handleOpenUpChartModal = () => {
         const howManyCreateEachDate = suppliers.reduce((acc, cur) => {
@@ -53,6 +73,7 @@ export default function Suppliers() {
           return acc;
       }
       , {});
+      setTellMeWhatIs('');
       setChartData(howManyCreateEachDate);
       console.log(ChartDATA);
       setOpenChartModal(true);
@@ -108,7 +129,7 @@ export default function Suppliers() {
     };
     return (
         <Layout >
-            <InvoiceChartModal visible={openChartModal} onClose={handleCancel} data={ChartDATA} whichType='Supplier' />
+            <InvoiceChartModal visible={openChartModal} onClose={handleCancel} data={ChartDATA} whichType='Supplier' tellMeWhatIs={whatIs} />
             <Header style={{ background: '#f5f5f5' }}>
                 <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý thông tin nhà cung cấp cá KOI</Typography.Title>
             </Header>
@@ -128,7 +149,9 @@ export default function Suppliers() {
                         </Card>
                     </Col>
                     <Col span={6}>
-                        <Card hoverable>
+                        <Card hoverable
+                            onClick={() => handleOpenUpChartModalWithCountry('Nhật Bản')}
+                        >
                             <Statistic
                                 title={<Typography.Title level={4}>Toàn Bộ Nhà Cung Cấp Nhật Bản</Typography.Title>}
                                 value={suppliers.filter(supplier => supplier.Country === 'Nhật' || supplier.Country === 'Nhật Bản').length}
@@ -137,7 +160,9 @@ export default function Suppliers() {
                         </Card>
                     </Col>
                     <Col span={6}>
-                        <Card hoverable>
+                        <Card hoverabl
+                            onClick={() => handleOpenUpChartModalWithCountry('Việt Nam')}
+                        >
                             <Statistic
                                 title={<Typography.Title level={4}>Toàn Bộ Nhà Cung Cấp Việt Nam</Typography.Title>}
                                 value={suppliers.filter(supplier => supplier.Country == 'Việt Nam').length}

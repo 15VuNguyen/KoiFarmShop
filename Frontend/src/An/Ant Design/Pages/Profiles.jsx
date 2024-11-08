@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography, Card, Statistic, Row, Col, Layout, Form, Input, Space, Dropdown, Tabs, Button, message, Badge } from 'antd';
 import { ArrowUpOutlined, ArrowDownOutlined, DownOutlined, BorderBottomOutlined } from '@ant-design/icons';
 import '../Css/GeneralPurpose.css'
-
+import InvoiceChartModal from '../Components/Modal/InvoiceChartModal';
 import useFetchProfiles from '../../Ant Design/Hooks/useFetchProfiles';
 import ProfileTable from '../Components/Table/ProfileTable';
 import { SearchOutlined } from '@ant-design/icons';
@@ -12,12 +12,42 @@ import axiosInstance from '../../Utils/axiosJS';
 export default function Profiles() {
   const { Header, Content } = Layout;
   const [activeTab, setActiveTab] = React.useState('1');
-
+  const [openChartModal, setOpenChartModal] = React.useState(false)
+  const [ChartDATA, setChartData] = React.useState({});
   const { profiles, UserChangesIn7DaysPercent, totalVerified, totalCustomers, totalStaff, totalManager, refreshData } = useFetchProfiles();
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [selectedProfile, setSelectedProfile] = React.useState(null);
-
+  const [whatIs, setTellMeWhatIs] = React.useState('');
+  const handleOpenUpChartModal = () => {
+    const howManyCreateEachDate = profiles.reduce((acc, cur) => {
+      const date = new Date(cur.created_at).toLocaleDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }
+      , {});
+   
+      setTellMeWhatIs('Profile');
+    setChartData(howManyCreateEachDate);
+    console.log(ChartDATA);
+    setOpenChartModal(true);
+  }
+  const handleOpenUpChartModalWithVerify = () => {
+    const filterInvoices = profiles.filter(profile => profile.verify === 1);
+    const howManyCreateEachDate = filterInvoices.reduce((acc, cur) => {
+      const date = new Date(cur.created_at).toLocaleDateString();
+      acc[date] = (acc[date] || 0) + 1;
+      return acc;
+    }
+      , {});
+    setTellMeWhatIs('Profile_Verified');  
+    setChartData(howManyCreateEachDate);
+    console.log(ChartDATA);
+    setOpenChartModal(true);
+  } 
+  const handleCancelChartModal = () => {
+    setOpenChartModal(false);
+  } 
   const getFilteredProfiles = () => {
     switch (activeTab) {
       case '1':
@@ -97,6 +127,7 @@ export default function Profiles() {
 
   return (
     <Layout >
+      <InvoiceChartModal visible={openChartModal} onClose={ handleCancelChartModal}  data={ChartDATA} whichType={whatIs}  />
       <ProfileModal actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
       <Header style={{ background: '#f5f5f5' }}>
         <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Hồ Sơ</Typography.Title>
@@ -121,6 +152,7 @@ export default function Profiles() {
           <Col span={6}>
             <Card hoverable 
               style={{ height: "100%" }}
+              onClick={handleOpenUpChartModalWithVerify}
               >
               <Statistic
                 title={<Typography.Title level={4}>Tổng Khách Hàng Đã Xác Minh</Typography.Title>}
@@ -132,7 +164,9 @@ export default function Profiles() {
 
 
           <Col span={6}>
-            <Card hoverable>
+            <Card hoverable
+              onClick={handleOpenUpChartModal}
+            >
               <Statistic
                 title={<Typography.Title level={4}>Thay Đổi Người Dùng Trong 7 Ngày Qua</Typography.Title>}
                 value={userChangePercent + '%'}

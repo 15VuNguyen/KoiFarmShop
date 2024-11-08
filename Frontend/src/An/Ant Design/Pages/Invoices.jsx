@@ -279,7 +279,7 @@ export default function Invoices() {
       return acc;
     }
       , {});
-   
+    setTellMeWhatIs('');
     setChartData(howManyCreateEachDate);
     console.log(ChartDATA);
     setOpenChartModal(true);
@@ -378,7 +378,7 @@ export default function Invoices() {
 
   return (
     <Layout>
-      <InvoiceChartModal visible={openChartModal} onClose={handleCancelChartModal} data={ChartDATA} tellMeWhatIs={tellMeWhatIs} />
+      <InvoiceChartModal visible={openChartModal} onClose={handleCancelChartModal} data={ChartDATA} whichType={'Invoice'} tellMeWhatIs={tellMeWhatIs} />
       <Modal
         title={
           isUpdate ? 'Cập nhật hóa đơn' : 'Tạo hóa đơn'
