@@ -13,6 +13,12 @@ export default function InvoiceChartModal({ visible, onClose, data, whichType,te
         '1m': 'Tháng Qua',
         '1y': 'Năm Nay',
     };
+    const whichTypeMapper = {
+        'Supplier': 'Số lượng nhà cung cấp',
+        'Invoice': 'Số lượng Hoá Đơn',
+        'Profile': 'Số lượng người dùng',
+        'Profile_Verified': 'Số lượng người dùng đã xác minh'
+    }
     useEffect(() => {
         const currentDate = dayjs();
         let filteredData = {};
@@ -46,7 +52,7 @@ export default function InvoiceChartModal({ visible, onClose, data, whichType,te
             labels: formattedLabels,
             datasets: [
                 {
-                    label: whichType === 'Supplier' ? 'Số lượng nhà cung cấp' : 'Số lượng Hoá Đơn',
+                    label: whichTypeMapper[whichType],
                     data: Object.values(filteredData),
                     borderColor: 'rgba(75,192,192,1)',
                     fill: false,
@@ -54,10 +60,26 @@ export default function InvoiceChartModal({ visible, onClose, data, whichType,te
             ],
         });
     }, [selectedTimePeriod, data]);
+    const whichChart = {
+        'Supplier': 'Nhà Cung Cấp',
+        'Invoice': 'Hóa Đơn ',
+        'Profile': 'Hồ Sơ',
+        'Profile_Verified': 'Hồ Sơ Đã Xác Minh'
+    }
     const tellMEMapper = {
         'Recived': 'Đã Nhận ',
         'Sold Out': 'Đã Bán Hết ',
-        undefined : ''
+        '' : ' ',
+        'Nhật Bản': 'Nhật Bản',
+        'Việt Nam': 'Việt Nam',
+        'Profile': 'Hồ Sơ',
+        undefined:' ',
+    }
+    const speciapMapper = {
+        'Nhật Bản': 'Nhật Bản',
+        'Việt Nam': 'Việt Nam',
+        undefined:' ',
+        ''  :'',
     }
     const handleChangeTimePeriod = (value) => {
         setSelectedTimePeriod(value);
@@ -65,7 +87,7 @@ export default function InvoiceChartModal({ visible, onClose, data, whichType,te
 
     return (
         <Modal
-            title= {whichType === 'Supplier' ? 'Biểu Đồ Doanh Thu ' + 'Trong ' + MapfilterDateToVietnamese[selectedTimePeriod] : 'Biểu Đồ Số Lượng Hóa Đơn '+ tellMEMapper[tellMeWhatIs] + 'Trong ' + MapfilterDateToVietnamese[selectedTimePeriod]}
+            title= {whichType === 'Supplier' ? 'Biểu Đồ Nhà Cung Cấp ' + tellMEMapper[tellMeWhatIs] + ' Trong ' + MapfilterDateToVietnamese[selectedTimePeriod] : 'Biểu Đồ Số Lượng '+ whichChart[whichType] + tellMEMapper[tellMeWhatIs] + 'Trong ' + MapfilterDateToVietnamese[selectedTimePeriod]}
             open={visible}
             onCancel={onClose}
             footer={null}
