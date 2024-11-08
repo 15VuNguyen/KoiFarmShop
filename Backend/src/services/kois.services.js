@@ -442,6 +442,8 @@ class KoisService {
       Detail: payload.Detail,
       PositionCare: payload.PositionCare,
       Method: payload.Method,
+      AddressConsignKoi: payload.AddressConsignKoi,
+      PhoneNumberConsignKoi: payload.PhoneNumberConsignKoi,
       UserID: userId,
       KoiID: koiID.toString(),
       _id: consignID,
