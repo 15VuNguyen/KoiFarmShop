@@ -5,6 +5,7 @@ import moment from 'moment'
 const zaloPayment = async (req, res) => {
   const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {} // Lấy từ cookie orderDT
   const reqOrderCookie = req.cookies && req.cookies.order ? JSON.parse(req.cookies.order) : {} // Lấy từ cookie order
+  const reqDiscountCookie = req.cookies && req.cookies.loyaltyCard ? JSON.parse(req.cookies.loyaltyCard) : {} // Lấy từ cookie discount
 
   const config = {
     app_id: '2554',
@@ -16,7 +17,8 @@ const zaloPayment = async (req, res) => {
   const embed_data = {
     redirecturl: 'http://localhost:3000/',
     orderDetails: reqOrderDTCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
-    order: reqOrderCookie // Thêm thông tin đơn hàng từ cookie vào embed_data
+    order: reqOrderCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
+    loyaltyCard: reqDiscountCookie
   }
 
   const items = [{}]
