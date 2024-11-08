@@ -258,7 +258,7 @@ export default function Ogon() {
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>
-      <Layout>
+      <Layout style={{ backgroundColor: "#470101" }}>
         <Container>
           <div>
             <div>
@@ -268,59 +268,121 @@ export default function Ogon() {
                 </h2>
                 <ul style={{ marginTop: "10px" }}>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                    >
                       1. Nguồn gốc lịch sử của giống cá Koi Ogon
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                    >
                       2. Đặc điểm của Koi ogon
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                    >
                       3. Những dòng cá Koi ogon phổ biến hiện nay
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll31} className="contentBox">
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.1 Giá cá Koi Ogon F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.2 Giá cá Koi Ogon Nhật chuẩn
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.3 Cá Koi Hi Ogon
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll34} className="contentBox">
+                        <span
+                          onClick={handleScroll34}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.4 Cá Koi Orenji Ogon
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll35} className="contentBox">
+                        <span
+                          onClick={handleScroll35}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.5 Cá Koi Mukashi Ogon
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll36} className="contentBox">
+                        <span
+                          onClick={handleScroll36}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "rgb(255, 178, 0)",
+                          }}
+                        >
                           3.6 Cá Nezu Ogon Koi
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                    >
                       4. Cách nuôi cá Koi ogon khỏe mạnh, phát triển tốt
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                    >
                       5. Địa chỉ bán cá Koi Ogon đẹp, uy tín
                     </span>
                   </li>
@@ -330,7 +392,10 @@ export default function Ogon() {
               <div>
                 <h2 className="noidungchitiet">Nội dung chi tiết</h2>
                 <div style={{ fontSize: "15px", fontWeight: "400" }}>
-                  <Paragraph className="paragraph-Style">
+                  <Paragraph
+                    className="paragraph-Style"
+                    style={{ color: "#e4cfb1" }}
+                  >
                     <span className="span-Style">Koi Ogon</span> là dòng cá Koi
                     được yêu thích nhất trên thế giới. Với vẻ ngoài lấp lánh tạo
                     ra vẻ sang trọng cho không gian nuôi cá Koi. Hãy cùng chúng
@@ -339,7 +404,7 @@ export default function Ogon() {
                 </div>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>
+                <h3 style={{ color: "rgb(255, 178, 0)" }}>
                   {" "}
                   1. Nguồn gốc lịch sử của giống cá Koi Ogon
                 </h3>
@@ -352,7 +417,10 @@ export default function Ogon() {
                     Giới thiệu về cá Koi Ogon
                   </Paragraph>
                 </div>
-                <Paragraph className="paragraph-Style">
+                <Paragraph
+                  className="paragraph-Style"
+                  style={{ color: "#e4cfb1" }}
+                >
                   Koi Ogon có lịch sử từ 90 năm trước, ông Sawata Aoki tại Nhật
                   Bản đã có ý tưởng lai tạo một giống cá Koi đặc biệt. Có thể
                   nói sự xuất hiện của cá Koi Ogon gắn liền với lịch sử khai
@@ -367,7 +435,10 @@ export default function Ogon() {
                     Nguồn gốc lịch sử của giống cá Koi Ogon
                   </Paragraph>
                 </div>
-                <Paragraph className="paragraph-Style">
+                <Paragraph
+                  className="paragraph-Style"
+                  style={{ color: "#e4cfb1" }}
+                >
                   Đây cũng là lúc hành trình nuôi cá của ông bắt đầu, ông đã
                   nuôi dưỡng chú cá suốt 25 năm, trong suốt khoảng thời gian này
                   ông đã quan sát, theo dõi từng giai đoạn cá đẻ trứng, nhân đàn
@@ -379,8 +450,13 @@ export default function Ogon() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>2.Đặc điểm của Koi ogon</h3>
-                <Paragraph className="paragraph-Style">
+                <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                  2.Đặc điểm của Koi ogon
+                </h3>
+                <Paragraph
+                  className="paragraph-Style"
+                  style={{ color: "#e4cfb1" }}
+                >
                   Cá Koi Ogon được coi là một trong những giống cá Koi đẹp nhất
                   và độc đáo nhất trên trái đất với ngoại hình đặc trưng là màu
                   vàng óng ánh rực rỡ. Tên gọi Ogon được lấy theo từ tiếng Nhật,
@@ -401,7 +477,10 @@ export default function Ogon() {
                     Đặc điểm của Koi ogon
                   </Paragraph>
                 </div>
-                <Paragraph className="paragraph-Style">
+                <Paragraph
+                  className="paragraph-Style"
+                  style={{ color: "#e4cfb1" }}
+                >
                   Ngoài màu sắc rực rỡ, Koi Ogon cũng được yêu thích bởi vẻ đẹp
                   tinh tế, sang trọng và thon gọn của chúng. Thân cá Koi Ogon
                   cũng có hình dạng khá dài, chúng có đầu tròn và mắt lớn, đuôi
@@ -418,16 +497,23 @@ export default function Ogon() {
                 </Paragraph>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>
+                <h3 style={{ color: "rgb(255, 178, 0)" }}>
                   3. Những dòng cá Koi ogon phổ biến hiện nay
                 </h3>
                 <ul>
                   <li>
-                    <span className="span-Style" id="31">
+                    <span
+                      className="span-Style"
+                      id="31"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.1 Cá Koi Platinum Ogon
                     </span>
                     <br />
-                    <Paragraph className="paragraph-Style">
+                    <Paragraph
+                      className="paragraph-Style"
+                      style={{ color: "#e4cfb1" }}
+                    >
                       Cá Koi Platinum Ogon là một trong những dòng cá Koi Ogon
                       đẹp và đặc biệt nhất với màu trắng bạc sang trọng. Loại cá
                       Koi này được tạo ra từ sự pha trộn giữa các dòng Koi Ogon
@@ -454,11 +540,18 @@ export default function Ogon() {
                     </div>
                   </li>
                   <li>
-                    <span className="span-Style" id="32">
+                    <span
+                      className="span-Style"
+                      id="32"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.2 Cá Koi Yamabuki Ogon
                     </span>
                     <br />
-                    <Paragraph className="paragraph-Style">
+                    <Paragraph
+                      className="paragraph-Style"
+                      style={{ color: "#e4cfb1" }}
+                    >
                       Cá Koi Yamabuki Ogon là một trong những giống cá Koi Ogon
                       phổ biến và được ưa chuộng trên khắp thế giới. Đây là một
                       dòng cá có màu vàng kim rực rỡ với những đặc trưng màu sắc
@@ -490,7 +583,11 @@ export default function Ogon() {
                   </li>
 
                   <li>
-                    <span className="span-Style" id="33">
+                    <span
+                      className="span-Style"
+                      id="33"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.3 Cá Koi Hi Ogon
                     </span>
                     <br />
@@ -518,7 +615,11 @@ export default function Ogon() {
                   </li>
 
                   <li>
-                    <span className="span-Style" id="34">
+                    <span
+                      className="span-Style"
+                      id="34"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.4 Cá Koi Orenji Ogon
                     </span>
                     <br />
@@ -545,7 +646,11 @@ export default function Ogon() {
                     </div>
                   </li>
                   <li>
-                    <span className="span-Style" id="35">
+                    <span
+                      className="span-Style"
+                      id="35"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.5 Cá Koi Mukashi Ogon
                     </span>
                     <br />
@@ -573,7 +678,11 @@ export default function Ogon() {
                     </div>
                   </li>
                   <li>
-                    <span className="span-Style" id="36">
+                    <span
+                      className="span-Style"
+                      id="36"
+                      style={{ color: "rgb(255, 178, 0)" }}
+                    >
                       3.6 Nezu Ogon Koi
                     </span>
                     <br />
@@ -602,7 +711,7 @@ export default function Ogon() {
                 </ul>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3        style={{ color: "rgb(255, 178, 0)" }}>
                   4. Cách nuôi cá Koi ogon khỏe mạnh, phát triển tốt
                 </h3>
                 <Paragraph className="paragraph-Style">

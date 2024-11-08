@@ -206,7 +206,6 @@ export const confirmConsignInformationController = async (req, res) => {
         text: 'Người dùng đã xác nhận thông tin ký gửi Koi.',
         html: emailContent
       }
-
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error)
@@ -214,8 +213,7 @@ export const confirmConsignInformationController = async (req, res) => {
           console.log('Email sent: ' + info.response)
         }
       })
-
-      res.send('Thông tin đã được xác nhận thành công.')
+      res.redirect(process.env.CONFIRM_CONSIGN_INFORMATION)
     } else {
       res.status(400).send('Không tìm thấy đơn ký gửi hoặc không thể cập nhật trạng thái.')
     }

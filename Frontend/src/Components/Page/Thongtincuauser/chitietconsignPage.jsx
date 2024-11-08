@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../../An/Utils/axiosJS";
-import { Container } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 import {
   Form,
   Input,
@@ -81,7 +81,7 @@ export default function Chitietconsignpage() {
   const [categoryData, setCategoryData] = useState([]);
   const [consignData, setConsignData] = useState([]);
   const [koiData, setKoiData] = useState([]);
-
+  const [updateTrigger, setUpdateTrigger] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -131,39 +131,40 @@ export default function Chitietconsignpage() {
       ]
     : [];
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetch user data
-      const userResponse = await axiosInstance.get("users/me");
-      if (userResponse.data) {
-        setUserData(userResponse.data.result);
-        console.log("Fetched user data:", userResponse.data.result); // Debug log
-      }
-
-      // Fetch consign data
-      const consignResponse = await axiosInstance.get(
-        `/users/tat-ca-don-ki-gui/${consign._id}`
-      );
-      if (consignResponse.status === 200) {
-        const { koi, consign } = consignResponse.data.result; // Extract koi and consign data
-        setConsignData(consign);
-        setKoiData(koi);
-        console.log("Fetched consign data:", consign); // Debug log
-        console.log("Fetched koi data:", koi); // Debug log
-      }
-    } catch (error) {
-      console.error(
-        "Error fetching data:",
-        error.response ? error.response.data : error.message
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch user data
+        const userResponse = await axiosInstance.get("users/me");
+        if (userResponse.data) {
+          setUserData(userResponse.data.result);
+          console.log("Fetched user data:", userResponse.data.result); // Debug log
+        }
+
+        // Fetch consign data
+        const consignResponse = await axiosInstance.get(
+          `/users/tat-ca-don-ki-gui/${consign._id}`
+        );
+        if (consignResponse.status === 200) {
+          const { koi, consign } = consignResponse.data.result; // Extract koi and consign data
+          setConsignData(consign);
+          setKoiData(koi);
+          console.log("Fetched consign data:", consign); // Debug log
+          console.log("Fetched koi data:", koi); // Debug log
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching data:",
+          error.response ? error.response.data : error.message
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
-  }, []);
+  }, [updateTrigger]); // Add updateTrigger to the dependency array
 
   useEffect(() => {
     const fetchData = async () => {
@@ -184,6 +185,9 @@ export default function Chitietconsignpage() {
   useEffect(() => {
     console.log("Consign Data:", consignData);
   }, [consignData]);
+  useEffect(() => {
+    console.log("Koi Data:", koiData);
+  }, [koiData]);
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
@@ -193,11 +197,16 @@ export default function Chitietconsignpage() {
           day
         ).padStart(2, "0")}`;
       };
+
       const shippedDateObj = formData.ShippedDate
         ? new Date(formatDateToISO(formData.ShippedDate) + "T00:00:00Z")
+        : consignData?.ShippedDate
+        ? new Date(consignData.ShippedDate)
         : null;
       const receiptDateObj = formData.ReceiptDate
         ? new Date(formatDateToISO(formData.ReceiptDate) + "T00:00:00Z")
+        : consignData?.ReceiptDate
+        ? new Date(consignData.ReceiptDate)
         : null;
       const currentDate = new Date();
       currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
@@ -208,12 +217,7 @@ export default function Chitietconsignpage() {
       console.log("Current Date:", currentDate);
 
       // Kiểm tra ngày tháng trước khi gửi
-      if (
-        shippedDateObj &&
-        receiptDateObj &&
-        receiptDateObj &&
-        shippedDateObj > receiptDateObj
-      ) {
+      if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
         toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
@@ -226,13 +230,6 @@ export default function Chitietconsignpage() {
           new Date(shippedDateObj.getTime() + 30 * 24 * 60 * 60 * 1000) // Kiểm tra ngày nhận phải sau ngày gửi ít nhất 1 tháng
       ) {
         toast.error("Ngày nhận phải cách ngày gửi ít nhất 30 ngày!");
-        setLoading(false);
-        return; // Dừng lại nếu ngày không hợp lệ
-      }
-
-      // New condition: Shipped date should not be after receipt date
-      if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
-        toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
@@ -307,9 +304,9 @@ export default function Chitietconsignpage() {
           },
         }
       );
-
       if (response.status === 200) {
-        setLoading(true);
+        toast.success("Cập nhật thành công!");
+        setUpdateTrigger(!updateTrigger); // Trigger the useEffect to re-fetch data
       } else {
         toast.error("Cập nhật thất bại!");
       }
@@ -320,11 +317,7 @@ export default function Chitietconsignpage() {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (loading) {
-      toast.success("Cập nhật thành công!");
-    }
-  }, [loading]);
+
   const initialKoiData = koiData || {}; // Ensure koiData is an object
   //lấy data khi người dùng đã điền đưa vào Form của ant design ( phải có loading để tránh tình trạng api chưa kịp load đã render hết)
   const initialValues = {
@@ -406,8 +399,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.email}
                             placeholder="Nhập địa chỉ email (name@example.com)"
-                            disabled={userData?.email}
+                            disabled={initialValues?.email}
                           />
                         </Form.Item>
                       </div>
@@ -429,8 +423,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.address}
                             placeholder="Nhập địa chỉ"
-                            disabled={userData?.address}
+                            disabled={initialValues?.address}
                           />
                         </Form.Item>
                       </div>
@@ -454,8 +449,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.phone_number}
                             placeholder="Nhập số điện thoại"
-                            disabled={userData?.phone_number}
+                            disabled={initialValues?.phone_number}
                           />
                         </Form.Item>
                       </div>
@@ -477,8 +473,9 @@ export default function Chitietconsignpage() {
                           ]}
                         >
                           <Input
+                            value={initialValues?.name}
                             placeholder="Nhập họ và tên"
-                            disabled={userData?.name}
+                            disabled={initialValues?.name}
                           />
                         </Form.Item>
                       </div>
@@ -509,7 +506,7 @@ export default function Chitietconsignpage() {
                         >
                           <Radio.Group
                             name="PositionCare"
-                            value={formData.PositionCare}
+                            value={initialValues.PositionCare}
                             onChange={handleChange}
                           >
                             <Radio id="PositionCareHome" value="Home">
@@ -1023,6 +1020,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           { required: true, message: "Vui lòng nộp ảnh." },
                         ]}
+                        style={{ paddingRight: "15px", width: "80%" }}
                       >
                         <Upload
                           beforeUpload={() => false}
@@ -1051,6 +1049,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           { required: true, message: "Vui lòng nộp video." },
                         ]}
+                        style={{ paddingRight: "15px", width: "80%" }}
                       >
                         <Upload
                           beforeUpload={() => false}
@@ -1058,7 +1057,7 @@ export default function Chitietconsignpage() {
                           onChange={({ fileList }) =>
                             handleUploadChange("Video", fileList)
                           }
-                          listType="text"
+                          listType="video"
                           fileList={videoFileList1} // Add this line to bind the value to the Upload component
                         >
                           <Button icon={<UploadOutlined />}>Upload</Button>
@@ -1125,7 +1124,6 @@ export default function Chitietconsignpage() {
           </div>
         </Container>
       </div>
-
       <Footer />
     </div>
   );

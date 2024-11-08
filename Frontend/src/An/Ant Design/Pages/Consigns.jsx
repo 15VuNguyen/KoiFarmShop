@@ -4,7 +4,8 @@ import '../Css/GeneralPurpose.css'
 import useFetchConsigns from '../../Ant Design/Hooks/useFetchConsigns';
 import ConsignDetail from '../Components/ConsignDetail';
 import ConsignTable from '../Components/Table/ConsignTable';
-
+import 'chart.js/auto';
+import { Doughnut, Line } from 'react-chartjs-2';
 export default function Profiles() {
     const { Header, Content } = Layout;
     const [activeTab, setActiveTab] = React.useState('1');
@@ -32,6 +33,85 @@ export default function Profiles() {
             default:
                 return consigns;
         }
+    };
+    const doughnutData = {
+        labels: [ "Đang chờ", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
+        datasets: [{
+            data: [
+           
+                consigns.filter(consign => consign.State === 1).length,
+                consigns.filter(consign => consign.State === 2).length,
+                consigns.filter(consign => consign.State === 3).length,
+                consigns.filter(consign => consign.State === 4).length,
+                consigns.filter(consign => consign.State === 5).length,
+            ],
+            backgroundColor: ["#91caff", "#b7eb8f", "#ffd591", "#d3adf7", "#ffa39e"],
+            hoverOffset: 4,
+        }]
+    };
+    const howManyStateCorpondeToEachDATES = (acc, cur) => {
+        const date = new Date(cur.ConsignCreateDate).toLocaleDateString();
+        const state = cur.State;
+
+      
+        if (!acc[date]) {
+            acc[date] = {};
+        }
+
+    
+        acc[date][state] = (acc[date][state] || 0) + 1;
+
+        return acc;
+    }
+
+
+    const aggregatedData = consigns.reduce(howManyStateCorpondeToEachDATES, {});
+
+    const sortedDates = Object.keys(aggregatedData)
+        .map(dateStr => new Date(dateStr))
+        .sort((a, b) => a - b)
+        .map(dateObj => dateObj.toLocaleDateString());
+
+    
+    const lineData = {
+        labels: sortedDates, 
+        datasets: [
+            {
+                label: 'Yêu Cầu Ký Gửi',
+                data: sortedDates.map(date => aggregatedData[date]?.[1] || 0),
+                borderColor: "#91caff",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Kiểm Tra Koi',
+                data: sortedDates.map(date => aggregatedData[date]?.[2] || 0),
+                borderColor: "#b7eb8f",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Thương Thảo Hơp Đồng',
+                data: sortedDates.map(date => aggregatedData[date]?.[3] || 0),
+                borderColor: "#ffd591",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Tìm Người Mua',    
+                data: sortedDates.map(date => aggregatedData[date]?.[4] || 0),
+                borderColor: "#d3adf7",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đã Bán Thành Công',
+                data: sortedDates.map(date => aggregatedData[date]?.[5] || 0),
+                borderColor: "#ffa39e",
+                fill: false,
+                tension: 0.3,
+            },
+        ]
     };
 
     const filteredConsignes = getFilteredConsign();
@@ -104,6 +184,28 @@ export default function Profiles() {
             setIsCheckingDetail(true);
         }
     };
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    boxWidth: 12,
+                    padding: 10,
+                },
+            },
+            tooltip: {
+                callbacks: {
+                    label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw}`,
+                },
+            },
+        },
+        layout: {
+            padding: 20,
+        },
+    };
+
+
 
     return (
         <Layout>
@@ -111,76 +213,51 @@ export default function Profiles() {
                 <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản Lý Ký Gửi</Typography.Title>
             </Header>
             <Content style={{ padding: '24px' }}>
-            <Row gutter={[24, 24]}>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số ký gửi</Typography.Title>}
-                            value={consigns.length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số yêu cầu ký gửi</Typography.Title>}
-                            value={consigns.filter(consign => consign.State === 1).length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số ký gửi đang kiểm tra</Typography.Title>}
-                            value={consigns.filter(consign => consign.State === 2).length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số ký gửi đang thương thảo hợp đồng</Typography.Title>}
-                            value={consigns.filter(consign => consign.State === 3).length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số ký gửi đang tìm người mua</Typography.Title>}
-                            value={consigns.filter(consign => consign.State === 4).length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} md={8} lg={6} xl={4}>
-                    <Card hoverable style={{ height: "100%" }}>
-                        <Statistic
-                            title={<Typography.Title level={4}>Tổng số ký gửi đã bán thành công</Typography.Title>}
-                            value={consigns.filter(consign => consign.State === 5).length}
-                            precision={0}
-                        />
-                    </Card>
-                </Col>
-            </Row>
-                <Row gutter={6} style={{ marginTop: '2rem' }} className='Black-Strip'>
-                    <Col span={12}>
-                        <Space align='center' style={{ paddingLeft: '3rem' }} wrap='true' >
-                            {
-                                isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Go Back</Button> : <Tabs
-                                    defaultActiveKey="1"
-                                    items={Tab}
-                                    size='small'
-                                    tabBarGutter={42}
-                                    onChange={key => setActiveTab(key)}
+                <Row style={{ paddingLeft: '3rem' }} gutter={[24, 24]} >
+                    <Col style={{ padding: '0' }} span={6}>
+                        <Card bodyStyle={{ height: '340px' }} title={'Thống kê trạng thái'} >
+                            <Card.Grid hoverable={false} style={{ width: '60%', height: '100%' }}>
+                                <Doughnut data={doughnutData}
+                                    options={chartOptions}
                                 />
-                            }
-                        </Space>
+                            </Card.Grid>
+                            <Card.Grid hoverable={false} style={{ width: '40%', height: '100%', overflowY: 'auto' }}>
+                                <Space size={'large'} direction='vertical' style={{ overflow: 'hidden' }} >
+                                    <Statistic title='Tổng số ký gửi' value={consigns.length} />
+                                    <Statistic title='Đang chờ' value={consigns.filter(consign => consign.State === 1).length} />
+                                    <Statistic title='Đang kiểm tra' value={consigns.filter(consign => consign.State === 2).length} />
+                                    <Statistic title='Đang thương thảo' value={consigns.filter(consign => consign.State === 3).length} />
+                                    <Statistic title='Đang tìm mua' value={consigns.filter(consign => consign.State === 4).length} />
+                                    <Statistic title='Đã bán' value={consigns.filter(consign => consign.State === 5).length} />
+                                </Space>
+                            </Card.Grid>
+                        </Card>
                     </Col>
+                    <Col span={12}>
+                        <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ky gửi theo thời gian'} >
+                            <Line data={lineData}
+                                options={
+                                    {
+                                        responsive: true,
+                                        maintainAspectRatio: false
+                                    }
+                                }
+                            />
+                        </Card>
+                    </Col>
+                </Row>
+                <Row gutter={24}>
+                    <Space align='center' style={{ paddingLeft: '3rem', marginTop: '3rem' }} wrap='true' >
+                        {
+                            isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Go Back</Button> : <Tabs
+                                defaultActiveKey="1"
+                                items={Tab}
+                                size='small'
+                                tabBarGutter={42}
+                                onChange={key => setActiveTab(key)}
+                            />
+                        }
+                    </Space>
                 </Row>
                 <Layout style={{ background: '#f0f0f0', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 12px 8px rgba(0, 0, 0, 0.1)' }}>
                     <Header style={{ background: '#f5f5f5', borderBottom: '1px solid #d9d9d9', padding: '20px', borderRadius: '12px 12px 0 0', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', border: '1px #bfbfbf solid ' }}>

@@ -30,6 +30,8 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
   const showUpdateModal = (supplier) => {
+    setCreate(false);
+    form.resetFields();
     setCurrentSupplier(supplier);
     console.log("supplier", supplier);
     setIsModalVisible(true);
@@ -74,6 +76,8 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
         message.error("Cập nhật thất bại. Vui lòng thử lại.");
       } finally {
         setUploading(false);
+        ResetTable(),
+        form.resetFields();
       }
     }
     else {
@@ -188,7 +192,6 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
       key: 'Country',
       filters: [
         { text: 'Nhật', value: 'Nhật' },
-        { text: 'Trung Quốc', value: 'Trung Quốc' },
         { text: 'Việt Nam', value: 'Việt Nam' },
       ],
       onFilter: (value, record) => record.Country === value,

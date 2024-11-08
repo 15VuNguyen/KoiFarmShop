@@ -147,7 +147,7 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>{card.KoiName || "N/A"}</Text>
+                <Text strong>{card.KoiName || "Cá Koi chưa được đặt tên"}</Text>
                 <br />
                 {card.Status === 1 && <Text>Số lượng : {count}</Text>}
                 {card.Status === 2 && <Text>Số lượng : {count}</Text>}
@@ -163,9 +163,7 @@ const CardGrid = ({ cardData }) => {
                 {card.Status === 4 && <Text>Ký Gửi</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
-                  {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                  {card.Price ? `${card.Price.toLocaleString()} đ` : "Liên Hệ"}
                 </Text>
               </Card>
             </Col>
@@ -251,7 +249,7 @@ const CardGrid = ({ cardData }) => {
                 }
               >
                 <Text strong>
-                  {card.KoiName || "N/A"} ({count})
+                  {card.KoiName || "Cá Koi chưa được đặt tên"} ({count})
                 </Text>
                 <Text>Số lượng : ({count})</Text>
                 <br />
@@ -302,7 +300,7 @@ const CardGrid = ({ cardData }) => {
                 }
               >
                 <Text strong>
-                  {card.KoiName || "N/A"} ({count})
+                  {card.KoiName || "Cá Koi chưa được đặt tên"} ({count})
                 </Text>
                 <br />
                 <Text>Số lượng ({count})</Text>

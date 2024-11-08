@@ -20,6 +20,7 @@ import DonKyGuiPage from "./Donkygui";
 import ChangePassword from "./ChangePassword";
 import TrackingOrderPage from "./trackingOrderPage";
 import UpdateProfile from "./UpdateProfile";
+import LoyaltyCardInfo from "./LoyaltyCardInfo";
 // Firebase config
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -457,6 +458,19 @@ export default function Profile() {
                     Đơn ký gửi
                   </Button>
                 </li>
+                <li>
+                  <Button
+                    type="link"
+                    onClick={() => handleClick("loyaltycard")}
+                    style={{
+                      color: activeButton === "loyaltycard" ? "orange" : "black",
+                      marginTop: "15px",
+                    }}
+                  >
+                    <ShopOutlined style={{ marginRight: "5px" }} />
+                    Thẻ tích điểm
+                  </Button>
+                </li>
                 {/* Bạn có thể thêm các liên kết khác ở đây */}
               </ul>
             </div>
@@ -486,6 +500,13 @@ export default function Profile() {
             <Col span={16}>
               <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
                 <TrackingOrderPage />
+              </div>
+            </Col>
+          )}
+          {currentComponent === "loyaltycard" && (
+            <Col span={16}>
+              <div style={{ marginBottom: "20px", marginLeft: "100px" }}>
+                <LoyaltyCardInfo />
               </div>
             </Col>
           )}

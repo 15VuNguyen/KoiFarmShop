@@ -143,7 +143,6 @@ export default function Navbar() {
               </Dropdown.Menu>
             </CSSTransition>
           </Dropdown>
-
           <Dropdown
             className="nav-dropdown"
             onMouseEnter={() => setShowDropdown2(true)}
@@ -164,7 +163,15 @@ export default function Navbar() {
               mountOnEnter
               unmountOnExit
             >
-              <Dropdown.Menu className="custom-menu">
+              <Dropdown.Menu
+                className="custom-menu"
+                style={{
+                  maxHeight: "200px", // Adjust the height as needed
+                  overflowY: "auto",
+                  msOverflowStyle: "none", // IE and Edge
+                  scrollbarWidth: "none", // Firefox
+                }}
+              >
                 {[
                   "Kohaku",
                   "Ogon",

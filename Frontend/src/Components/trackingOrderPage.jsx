@@ -97,7 +97,7 @@ export default function TrackingOrderPage() {
           paddingTop: "36px",
         }}
       >
-        Đơn mua hang thành công
+        Đơn mua hàng thành công
       </Title>
       {/* Conditional rendering for orders */}
       {orders.length === 0 ? (

@@ -8,7 +8,7 @@ export default function Koikohaku() {
     <>
       <Layout>
         <Navbar />
-        <div style={{ paddingTop: "100px" }}>
+        <div style={{ paddingTop: "100px", backgroundColor: "#470101" }}>
           <Kohaku />
         </div>
         <Footer />

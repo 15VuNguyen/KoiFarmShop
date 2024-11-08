@@ -1,13 +1,14 @@
 import { useState, useContext, createContext, useEffect } from "react";
 import axios from "axios";
 import axiosInstance from "../An/Utils/axiosJS";
+import { fetchLoginUserData } from "../services/userService";
 ;
 const AuthContext = createContext();
 export function useAuth() {
   return useContext(AuthContext);
 }
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem("userInfo")) || null);
   const [loading, setLoading] = useState(false); // cái này đụng vào sau 
   
  
@@ -31,7 +32,11 @@ export function AuthProvider({ children }) {
     if (response.status === 200) {
       localStorage.setItem("accessToken", response.data.result.access_token);
       localStorage.setItem("refreshToken", response.data.result.refresh_token);
-      
+      const { data } = await fetchLoginUserData();
+        if (data && data.result) {
+          setCurrentUser(data.result)
+          localStorage.setItem("userInfo", JSON.stringify(data.result))
+        }
       return true;
     }
     return false;
@@ -43,6 +48,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("accessToken"); //xóa access token trong localStorage
     localStorage.removeItem("refreshToken"); //xóa refresh token trong localStorage
+    localStorage.removeItem("userInfo"); 
     window.location.reload(); //reload lại trang
   };
   const setAuthenticatedUser = async (access_token,refresh_token) => {
@@ -75,6 +81,7 @@ export function AuthProvider({ children }) {
   const googleAuthUrl = getGoogleAuthUrl();
    const value = {
     currentUser,
+    setCurrentUser,
     logout,
     googleAuthUrl, // dùng link này để login với google,
     register,

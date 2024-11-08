@@ -260,7 +260,10 @@ export default function Kyguikoi() {
     <Container>
       <div>
         {loading ? (
-          <Spin size="large" style={{ display: "block", margin: "auto" }} />
+          <Spin
+            size="large"
+            style={{ display: "block", margin: "auto", paddingBottom: "100px" }}
+          />
         ) : (
           <Form
             style={{ maxWidth: "800px", margin: "auto" }}
@@ -268,7 +271,9 @@ export default function Kyguikoi() {
             form={form}
           >
             <div style={{ color: "black" }}>
-              <Title level={3}>Thông tin khách hàng</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông tin khách hàng
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "48%" }}>
                   <div>
@@ -364,7 +369,9 @@ export default function Kyguikoi() {
                 </div>
               </div>
               <hr />
-              <Title level={3}>Thông Tin Ký Gửi</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông Tin Ký Gửi
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div style={{ width: "50%" }}>
                   <div>
@@ -510,7 +517,9 @@ export default function Kyguikoi() {
                 </Form.Item>
               </div>
               <hr />
-              <Title level={3}>Thông Tin Koi Muốn Ký Gửi</Title>
+              <Title level={3} style={{ color: "red" }}>
+                Thông Tin Koi Muốn Ký Gửi
+              </Title>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div
                   style={{
@@ -732,6 +741,7 @@ export default function Kyguikoi() {
                       placeholder="Nhập kích thước(cm)"
                       min={5}
                       max={150}
+                      addonAfter="cm"
                     />
                   </Form.Item>
                 </div>
@@ -824,6 +834,7 @@ export default function Kyguikoi() {
                       min={1}
                       step={1}
                       max={100}
+                      addonAfter="g/ngày"
                     />
                   </Form.Item>
                 </div>
@@ -872,6 +883,7 @@ export default function Kyguikoi() {
                       max={100}
                       step={1}
                       min={1}
+                      addonAfter="%"
                     />
                   </Form.Item>
                 </div>
@@ -978,6 +990,7 @@ export default function Kyguikoi() {
                 htmlType="submit"
                 loading={loading}
                 disabled={loading}
+                style={{ marginBottom: "50px" }}
               >
                 Ký Gửi
               </Button>

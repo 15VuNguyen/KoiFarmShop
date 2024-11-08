@@ -11,7 +11,7 @@ export default function Gioithieupage() {
     <>
       <div>
         <Navbar />
-        <div style={{ backgroundColor: "whitesmoke" }}>
+        <div style={{}}>
           <NguonGocCuaIKoi />
           <GioiThieuVeKoiNhat />
           <GioiThieuVeKoiF1 />

@@ -49,17 +49,25 @@ export default function GioiThieuVeKoiF1() {
           paddingTop: "100px",
         }}
       >
-        <div style={{ textAlign: "center", color: "red" }}>
+        <div style={{ textAlign: "center", color: "rgb(255, 178, 0)" }}>
           <h1>Giới thiệu về Koi F1</h1>
         </div>
         <div style={{ paddingTop: "50px" }}>
           <div style={{ textAlign: "center" }}>
-            <h3 style={{ fontWeight: "600", fontSize: "30px" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                fontSize: "30px",
+                color: "rgb(255, 178, 0)",
+              }}
+            >
               Cá Koi F1 Là Gì? Đặc Điểm, Cách Phân Biệt Với Cá Koi Nhật Bản
             </h3>
           </div>
           <div>
-            <Paragraph style={{ fontSize: "20px", fontWeight: "bold" }}>
+            <Paragraph
+              style={{ fontSize: "20px", fontWeight: "bold", color: "#e4cfb1" }}
+            >
               Cá Koi F1 là một thuật ngữ phổ biến trong làng yêu cá Koi, nhưng
               không phải ai cũng hiểu rõ về nó. Trong khi cá Koi Nhật Bản thường
               được biết đến như là những con cá có giá trị cao và được nuôi
@@ -71,10 +79,16 @@ export default function GioiThieuVeKoiF1() {
             </Paragraph>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                color: "red",
+                color: "rgb(255, 178, 0)",
+              }}
+            >
               1. Cá Koi F1 Là Gì ?
             </h3>
-            <Paragraph style={{ fontSize: "20px" }}>
+            <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
               Cá Koi F1 là một biến thể đặc biệt, được tạo ra từ cá Koi Nhật Bản
               sau khi chúng đã được nhập khẩu và sinh sống tại Việt Nam trong
               một khoảng thời gian nhất định. Dòng cá này giữ nguyên nhiều đặc
@@ -86,15 +100,15 @@ export default function GioiThieuVeKoiF1() {
               dạng cơ thể, do cá đã phải thích nghi với môi trường mới để tồn
               tại và phát triển tốt nhất.
             </Paragraph>
-            <div>
-              <img src={img1} />
+            <div style={{ textAlign: "center" }}>
+              <img src={img1} style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
               2.Quy trình tạo ra cá Koi F1 theo phong cách Nhật Bản tại Việt Nam
             </h3>
-            <Paragraph style={{ fontSize: "20px" }}>
+            <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
               Để tạo ra một đàn cá Koi F1 chất lượng, trại nuôi cần lựa chọn
               những con cá bố mẹ thuần chủng, thường là từ cùng một lứa để đảm
               bảo sức khỏe và điều kiện thích nghi tương đương. Cả bố mẹ cần
@@ -116,15 +130,15 @@ export default function GioiThieuVeKoiF1() {
               cần thiết, chúng sẽ sẵn sàng để được chuyển đến các ao cá, tiểu
               cảnh, sông, hồ, và tiếp tục phát triển.
             </Paragraph>
-            <div>
-              <img src={img2} />
+            <div style={{ textAlign: "center" }}>
+              <img src={img2} style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
               3.Hướng dẫn phân biệt cá koi F1 và cá koi thuần chủng
             </h3>
-            <Paragraph style={{ fontSize: "20px" }}>
+            <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
               Để phân biệt giữa cá Koi F1 và cá Koi thuần chủng, bạn có thể tuân
               theo một số hướng dẫn dưới đây. Việc này không quá khó khăn và có
               thể được thực hiện thông qua sự quan sát kỹ lưỡng về màu sắc, hình
@@ -133,12 +147,15 @@ export default function GioiThieuVeKoiF1() {
             </Paragraph>
             <ul>
               <li>
-                <span id="31" style={{ fontSize: "20px" }}>
+                <span
+                  id="31"
+                  style={{ fontSize: "20px", color: "rgb(255, 178, 0)" }}
+                >
                   3.1 Màu Sắc
                 </span>
                 <ul>
                   <li>
-                    <Paragraph style={{ fontSize: "20px" }}>
+                    <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
                       Đối với cá Koi thuần chủng, màu sắc trên thân cá thường
                       rất rõ nét và đậm. Mảng màu trắng sẽ trắng như tuyết,
                       khoang đen sẽ đen sì và mịn, phần mảng màu đỏ sẽ tươi như
@@ -146,13 +163,13 @@ export default function GioiThieuVeKoiF1() {
                       lờ mờ hay nhạt màu. Đối với cá Koi trắng và vàng, màu sắc
                       hiện lên với ánh bạc bắt mắt.
                     </Paragraph>
-                    <div>
-                      <img src={img3} />
+                    <div style={{ textAlign: "center" }}>
+                      <img src={img3} style={{ width: "50%" }} />
                     </div>
                   </li>
                   <li>
                     {" "}
-                    <Paragraph style={{ fontSize: "20px" }}>
+                    <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
                       Đối với cá Koi dòng F1, các mảng màu thường mờ hơn, chẳng
                       hạn phần màu đỏ có thể chuyển sang màu cam, vùng đen trở
                       nên xám và vùng trắng mờ hơn. Những màu sắc này không đậm
@@ -165,37 +182,88 @@ export default function GioiThieuVeKoiF1() {
               </li>
               <li>
                 {" "}
-                <span id="32" style={{ fontSize: "20px" }}>
+                <span
+                  id="32"
+                  style={{ fontSize: "20px", color: "rgb(255, 178, 0)" }}
+                >
                   3.2 Hình Dáng
                 </span>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Tiêu Chí</th>
-                      <th>Cá Koi Thuần Chủng</th>
-                      <th>Cá Koi F1</th>
+                      <th
+                        style={{
+                          color: "rgb(255, 178, 0)",
+                          backgroundColor: "#470101",
+                        }}
+                      >
+                        Tiêu Chí
+                      </th>
+                      <th
+                        style={{
+                          color: "rgb(255, 178, 0)",
+                          backgroundColor: "#470101",
+                        }}
+                      >
+                        Cá Koi Thuần Chủng
+                      </th>
+                      <th
+                        style={{
+                          color: "rgb(255, 178, 0)",
+                          backgroundColor: "#470101",
+                        }}
+                      >
+                        Cá Koi F1
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.criteria}</td>
-                        <td>{item.purebred}</td>
-                        <td>{item.f1}</td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                            color: "#e4cfb1",
+                            backgroundColor: "#470101",
+                          }}
+                        >
+                          {item.criteria}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                            color: "#e4cfb1",
+                            backgroundColor: "#470101",
+                          }}
+                        >
+                          {item.purebred}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                            color: "#e4cfb1",
+                            backgroundColor: "#470101",
+                          }}
+                        >
+                          {item.f1}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                <div>
-                  <img src={img4} />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img4} style={{ width: "50%" }} />
                 </div>
               </li>
               <li>
                 {" "}
-                <span id="33" style={{ fontSize: "20px" }}>
+                <span
+                  id="33"
+                  style={{ fontSize: "20px", color: "rgb(255, 178, 0)" }}
+                >
                   3.3 Chi phí của cá Koi
                 </span>
-                <Paragraph style={{ fontSize: "20px" }}>
+                <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
                   Giá của cá Koi F1 thường rẻ hơn so với cá Koi thuần chủng, và
                   giá thành là một trong những yếu tố quan trọng để phân biệt
                   giữa chúng. Thông thường, dòng cá Koi F1 được bán với giá thấp
@@ -209,17 +277,17 @@ export default function GioiThieuVeKoiF1() {
                   chuyên nghiệp là quan trọng để đảm bảo mua được sản phẩm phù
                   hợp với ngân sách của bạn.
                 </Paragraph>
-                <div>
-                  <img src={img5} />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img5} style={{ width: "50%" }} />
                 </div>
               </li>
             </ul>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
               4.Nên Mua Cá Koi Nhật Hay Cá Koi F1
             </h3>
-            <Paragraph style={{ fontSize: "20px" }}>
+            <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
               Nên chọn mua Koi Nhật hay Koi F1 là một quyết định phụ thuộc vào
               quan điểm cá nhân của người nuôi. Quan trọng nhất là đảm bảo hồ cá
               có cảnh quan hài hòa và tinh tế. Về mặt kinh tế, cá Koi F1 thường
@@ -234,8 +302,8 @@ export default function GioiThieuVeKoiF1() {
               thể chọn lựa theo sở thích và điều kiện kinh tế của mình. Đừng
               ngần ngại liên hệ để được tư vấn và lựa chọn chú cá phù hợp.
             </Paragraph>
-            <div>
-              <img src={img6} />
+            <div style={{ textAlign: "center" }}>
+              <img src={img6} style={{ width: "50%" }} />
             </div>
           </div>
         </div>

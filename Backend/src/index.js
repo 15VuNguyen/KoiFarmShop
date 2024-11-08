@@ -32,6 +32,7 @@ import bodyParser from 'body-parser'
 import { app, server } from './Socket/socket.js'
 import { removeAllItemsDetailController } from './controllers/orderDetailController.js'
 import chatRouter from './routes/chat.routes.js'
+import loyaltyCardRouter from './routes/loyaltycard.routes.js'
 
 config()
 // const app = express()
@@ -66,6 +67,8 @@ app.use('/kois/:CategoryID', wrapAsync(getKoiByCategoryIDController))
 app.use('/getAllKoi', wrapAsync(wrapAsync(getAllKoiController)))
 app.use('/order', orderRouter)
 app.use('/chat', chatRouter)
+app.use('/loyaltyCard', loyaltyCardRouter)
+
 
 app.post('/authorization', accessTokenValidator, wrapAsync(authorizationController))
 

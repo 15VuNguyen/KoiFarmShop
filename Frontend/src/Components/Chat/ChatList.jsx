@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useMessage } from '../../Context/MessageContext'
 import { useChat } from '../../Context/ChatContext'
 import { useSocketContext } from '../../Context/SocketContext'
@@ -9,6 +9,7 @@ import "./ManagerChat.css"
 const ChatList = (props) => {
     const { show, setIsShowStaffChat, setCustomer, customer } = props
     const [listChat, setListChat] = useState([])
+    const listChatRef = useRef(listChat) 
     const { messageList, setMessageList } = useMessage()
     const { setSelectedChat } = useChat()
     const { socket } = useSocketContext()
@@ -18,6 +19,7 @@ const ChatList = (props) => {
         if (data) {
             console.log("list chat: ", data.result)
             setListChat(data.result)
+            listChatRef.current = data.result 
         }
     }
 
@@ -35,50 +37,48 @@ const ChatList = (props) => {
     useEffect(() => {
         const handleNewMessage = async (newMessage) => {
             setListChat(prevChats => {
-                const chatExists = prevChats.some(chat => chat._id === newMessage.ChatId)
-
-                if (chatExists) {
-                    return prevChats.map(chat => {
-                        if (chat._id.toString() == newMessage.ChatId.toString()) {
-                            return {
-                                ...chat,
-                                Messages: [...chat.Messages, newMessage]
-                            }
+                const existingChat = prevChats.find(chat => chat._id === newMessage.ChatId);
+                if (existingChat) {
+                    // If chat exists, append the new message to it
+                    return prevChats.map(chat => 
+                        chat._id === newMessage.ChatId
+                            ? { ...chat, Messages: [...chat.Messages, newMessage] }
+                            : chat
+                    );
+                } else {
+                    // Fetch new user's data if it's a new chat
+                    fetchUser(newMessage.SenderId).then(({ data: userData }) => {
+                        if (userData) {
+                            setListChat(currChats => [
+                                ...currChats,
+                                {
+                                    _id: newMessage.ChatId,
+                                    OtherUser: userData.result,
+                                    Messages: [newMessage]
+                                }
+                            ]);
                         }
-                        return chat
-                    })
+                    }).catch(error => console.error("Failed to fetch user data:", error));
+                    return prevChats;
                 }
-                return prevChats
-            })
+            });
+        };
+        
 
-            const existingChat = listChat.find(chat => chat._id === newMessage.ChatId)
-            if (!existingChat) {
-                const { data: userData } = await fetchUser(newMessage.SenderId)
-                if (userData) {
-                    setListChat(prevChats => [
-                        ...prevChats,
-                        {
-                            _id: newMessage.chatId,
-                            OtherUser: userData,
-                            Messages: [newMessage]
-                        }
-                    ])
-                }
-            }
-        }
-
-        socket?.on('newMessage', handleNewMessage)
+        socket?.on('newMessage', handleNewMessage);
 
         return () => {
-            socket?.off('newMessage', handleNewMessage)
-        }
-    }, [socket, listChat])
+            socket?.off('newMessage', handleNewMessage);
+        };
+    }, [socket]);
+
+    useEffect(() => {
+        listChatRef.current = listChat; // Update the ref whenever listChat changes
+    }, [listChat]);
 
     return (
-        <div
-            className={`list-chat ${show ? "" : "hide"}`}
-        >
-            {listChat && listChat.length > 0 ?
+        <div className={`list-chat ${show ? "" : "hide"}`}>
+            {listChat && listChat.length > 0 ? (
                 listChat.map(c => (
                     <div
                         key={c._id}
@@ -89,20 +89,19 @@ const ChatList = (props) => {
                             ? <img className='avatar' src={c.OtherUser?.picture ? c.OtherUser.picture : c.OtherUser.Image} alt='avatar' />
                             : <i className="avatar fa-solid fa-user"></i>
                         }
-
                         <div className='content'>
                             <p className='name'>{c.OtherUser.name}</p>
-                            <p className='lastMess'>{c.Messages.length > 0
-                                ? c.Messages[c.Messages.length - 1].Content
-                                : "No messages yet"}</p>
+                            <p className='lastMess'>
+                                {c.Messages.length > 0 ? c.Messages[c.Messages.length - 1].Content : "No messages yet"}
+                            </p>
                         </div>
                     </div>
                 ))
-                :
+            ) : (
                 <p style={{ padding: "30px" }}>FIND SOMEONE TO CHAT</p>
-            }
+            )}
         </div>
-    )
+    );
 }
 
-export default ChatList
+export default ChatList;

@@ -11,7 +11,6 @@ export default function VerifyEmail() {
       console.log("Token found:", token);
       localStorage.setItem("email_verify_token", token);
       console.log("Navigating to /profile");
-
       navigate("/Login");
     } else {
       console.log("No token found.");
