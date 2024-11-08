@@ -129,6 +129,8 @@ usersRouter.patch(
     'ShippedDate',
     'ReceiptDate',
     'Detail',
+    'AddressConsignKoi',
+    'PhoneNumberConsignKoi',
     'CategoryID',
     'KoiName',
     'Age',

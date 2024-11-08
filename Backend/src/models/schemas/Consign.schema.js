@@ -30,7 +30,7 @@ export default class ConsignSchema {
     this.PositionCare = consign.PositionCare || ''
     this.Commission = consign.Commission || ''
     this.TotalPrice = consign.TotalPrice || ''
-    this.TotaAddressConsignKoilPrice = consign.AddressConsignKoi || ''
+    this.AddressConsignKoi = consign.AddressConsignKoi || ''
     this.PhoneNumberConsignKoi = consign.PhoneNumberConsignKoi || ''
   }
 }
