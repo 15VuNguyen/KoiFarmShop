@@ -1,7 +1,9 @@
 import React from "react";
 import axiosInstance from "../../Utils/axiosJS";
+import { func } from "prop-types";
 export default function useFetchConsigns() {
   const [consigns, setConsigns] = React.useState([]);
+  const [reset, setReset] = React.useState(false);
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -15,7 +17,9 @@ export default function useFetchConsigns() {
       }
     };
     fetchData();
-  }, []);
-
-  return consigns;
+  }, [reset]);
+  function Refresher () {
+    setReset(!reset);
+  }
+  return { consigns, Refresher };
 }

@@ -476,7 +476,7 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
                   if (typeof value === 'string') {
                     const attepmtToParseInt = parseInt(value);
                     if (isNaN(attepmtToParseInt)) {
-                      return Promise.reject('Số điện không được chứa chữ cái');
+                      return Promise.reject('Số điện thoại không được chứa chữ cái');
                     }
                   }
 

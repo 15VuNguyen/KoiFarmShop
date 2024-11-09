@@ -1,4 +1,4 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space,Select } from "antd";
 import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
@@ -104,7 +104,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       title: 'Ngày Tạo Hồ Sơ',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (text) => moment(text).format('YYYY-MM-DD'),
+      render: (text) => moment(text).format('DD-MM-YYYY'),
       sorter: (a, b) => moment(a.date_of_birth).unix() - moment(b.date_of_birth).unix(),
       filters: [
         { text: '7 Ngày qua', value: '7d' },
@@ -198,7 +198,24 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       ))}
     </Menu>
   );
+  const OPTIONS = [
+    { label: 'ID', value: '_id' },
+    { label: 'Tên', value: 'name' },
+    { label: 'Email', value: 'email' },
+    { label: 'Địa chỉ', value: 'address' },
+    { label: 'Ngày Tạo Hồ Sơ', value: 'created_at' },
+    { label: 'Email đã xác minh', value: 'verify' },
+    { label: 'Hành động', value: 'Status' },
+    { label: 'Ảnh đại diện', value: 'picture' },
+  
+  ];
+  const handleChange = selectedItems => {
+    const selectedValues = selectedItems.map(item => item.value); 
+    setVisibleColumns(selectedValues);
+};
 
+
+const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
   return (
     <div>
       <Space size={"middle"}>
@@ -211,14 +228,35 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
          {/* 
         <Button onClick={() => setShowColumnSelector(true)}>Select Columns</Button>
       </p> */}
-      <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
+      {/* <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
         <Button style={{ marginBottom: 16 }}>
           Chọn cột <DownOutlined />
         </Button>
-      </Dropdown>
+      </Dropdown> */}
       {/* {activeFilters.map((filter, index) => (
         // <FilterTag key={index} filter={filter} onRemove={removeFilter} />
       ))} */}
+       <Tooltip title="Chọn cột hiển thị">
+                <Select
+                    labelInValue
+                    allowClear
+                    mode="multiple"
+                    placeholder="Lựa chọn cột"
+                    value={visibleColumns.map(col => ({ value: col, label: OPTIONS.find(opt => opt.value === col)?.label }))}
+                    onChange={handleChange}
+                    style={{
+                        transform: "translateY(-8px)",
+                        width: '100%',
+                        minWidth: 200
+                    }}
+                >
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item.value} value={item.value}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+                </Tooltip>
       </Space>
       <Table
         columns={filteredColumns}
@@ -228,7 +266,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
         onChange={handleTableChange}
       />
 
-      <Modal
+      {/* <Modal
         title="Chọn cột"
         visible={showColumnSelector}
         onCancel={() => setShowColumnSelector(false)}
@@ -244,7 +282,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
           </Checkbox>
         ))}
         <Button onClick={resetColumns}>Đặt lại tất cả</Button>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

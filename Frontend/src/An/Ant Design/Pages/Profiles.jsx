@@ -6,9 +6,9 @@ import InvoiceChartModal from '../Components/Modal/InvoiceChartModal';
 import useFetchProfiles from '../../Ant Design/Hooks/useFetchProfiles';
 import ProfileTable from '../Components/Table/ProfileTable';
 import { SearchOutlined } from '@ant-design/icons';
-import ProfileModal from '../Components/Modal/ProfileModal';
+// import ProfileModal from '../Components/Modal/ProfileModal';
 import axiosInstance from '../../Utils/axiosJS';
-
+import ViewProfile from '../Components/Modal/ProfileModal'
 export default function Profiles() {
   const { Header, Content } = Layout;
   const [activeTab, setActiveTab] = React.useState('1');
@@ -128,7 +128,7 @@ export default function Profiles() {
   return (
     <Layout >
       <InvoiceChartModal visible={openChartModal} onClose={ handleCancelChartModal}  data={ChartDATA} whichType={whatIs}  />
-      <ProfileModal actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
+      <ViewProfile actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
       <Header style={{ background: '#f5f5f5' }}>
         <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Hồ Sơ</Typography.Title>
       </Header>

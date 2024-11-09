@@ -1,6 +1,6 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Menu, Dropdown, Space } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Menu, Dropdown, Space, Select } from "antd";
 import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
-import React from 'react';
+import React, { lazy } from 'react';
 import moment from 'moment';
 
 export default function ConsignTable({ data, handleActionClick, Search }) {
@@ -8,7 +8,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
     const [selectedColumns, setSelectedColumns] = React.useState({ 'UserID': true, 'KoiID': true, 'Description': true });
     const [showColumnSelector, setShowColumnSelector] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [visibleColumns, setVisibleColumns] = React.useState([ '_id', 'ShippedDate', 'ReceiptDate', 'State', 'Method', 'Commission', 'TotalPrice', 'action']);
+    const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'ShippedDate', 'ReceiptDate', 'State', 'Commission', 'TotalPrice', 'action', 'PhoneNumberConsignKoi']);
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         message.success("ID đã được sao chép vào clipboard!");
@@ -139,8 +139,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             title: 'Ngày Nhận Hàng',
             dataIndex: 'ReceiptDate',
             key: 'ReceiptDate',
-            sorter: (a, b) => 
-            {
+            sorter: (a, b) => {
                 if (!a.ReceiptDate && !b.ReceiptDate) return 0;
                 if (!a.ReceiptDate) return -1;
                 if (!b.ReceiptDate) return 1;
@@ -149,10 +148,41 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             render: text => text ? moment(text).format('DD-MM-YYYY') : <Tag color="red">Không Cung Cấp</Tag>
         },
         {
+            title: 'Ngày Tạo Đơn Ký Gửi',
+            dataIndex: 'ConsignCreateDate',
+            key: 'ConsignCreateDate',
+            sorter: (a, b) => {
+                if (!a.ConsignCreateDate && !b.ConsignCreateDate) return 0;
+                if (!a.ConsignCreateDate) return -1;
+                if (!b.ConsignCreateDate) return 1;
+                return moment(a.ConsignCreateDate).diff(moment(b.ConsignCreateDate));
+            },
+            render: text => text ? moment(text).format('DD-MM-YYYY') : <Tag color="red">Không Cung Cấp</Tag>
+        },
+        {
+            title: 'Địa Chỉ Nhận Hàng',
+            dataIndex: 'AddressConsignKoi',
+            key: 'AddressConsignKoi',
+            sorter: (a, b) => a.AddressConsignKoi.localeCompare(b.AddressConsignKoi),
+            render: text => text || <Tag color="red">Không Cung Cấp</Tag>,
+
+        }, {
+            title: 'Số Điện Thoại',
+            dataIndex: 'PhoneNumberConsignKoi',
+            key: 'PhoneNumberConsignKoi',
+            sorter: (a, b) => {
+                if (!a.PhoneNumberConsignKoi && !b.PhoneNumberConsignKoi) return 0;
+                if (!a.PhoneNumberConsignKoi) return -1;
+                if (!b.PhoneNumberConsignKoi) return 1;
+                return a.PhoneNumberConsignKoi.localeCompare(b.PhoneNumberConsignKoi);
+            },
+            render: text => text || <Tag color="red">Không Cung Cấp</Tag>,
+        },
+        {
             title: 'Mô Tả',
-            dataIndex: 'Description',
-            key: 'Description',
-            sorter: (a, b) => (a.Description || '').localeCompare(b.Description || ''),
+            dataIndex: 'Detail',
+            key: 'Detail',
+            sorter: (a, b) => (a.Detail || '').localeCompare(b.Detail || ''),
             render: text => text || <Tag color="red">Không Cung Cấp</Tag>,
         },
         {
@@ -222,42 +252,83 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 </div>
             ),
         }
-    ].map(col => ({...col, visible: visibleColumns.includes(col.key)}));
+    ].map(col => ({ ...col, visible: visibleColumns.includes(col.key) }));
     const handleColumnVisibility = (key, visible) => {
         setVisibleColumns(prev =>
-          visible ? [...prev, key] : prev.filter(colKey => colKey !== key)
+            visible ? [...prev, key] : prev.filter(colKey => colKey !== key)
         );
-      };
+    };
+    const OPTIONS = [
+        { value: '_id', label: 'ID' },
+        { value: 'UserID', label: 'Mã Người Dùng' },
+        { value: 'KoiID', label: 'Mã Koi' },
+        { value: 'ShippedDate', label: 'Ngày Vận Chuyển' },
+        { value: 'ReceiptDate', label: 'Ngày Nhận Hàng' },
+        { value: 'State', label: 'Trạng Thái' },
+        { value: 'Commission', label: 'Tỷ Lệ Hoa Hồng' },
+        { value: 'TotalPrice', label: 'Tổng Giá' },
+        { value: 'ConsignCreateDate', label: 'Ngày Tạo Đơn Ký Gửi' },
+        { value: 'AddressConsignKoi', label: 'Địa Chỉ Nhận Hàng' },
+        { value: 'PhoneNumberConsignKoi', label: 'Số Điện Thoại' },
+        {value: 'Detail', label: 'Mô Tả'},
+        { value: 'Method', label: 'Phương Thức' },
+        { value: 'PositionCare', label: 'Vị Trí Chăm Sóc' },
+        { value: 'action', label: 'Hành Động' },
+
+    ];
     const filteredColumns = columns.filter(col => col.visible);
-    const columnSelectionMenu = (
-        <Menu>
-          {columns.map(col => (
-            <Menu.Item key={col.key}>
-              <Checkbox
-                checked={visibleColumns.includes(col.key)}
-                onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
-              >
-                {col.title}
-              </Checkbox>
-            </Menu.Item>
-          ))}
-        </Menu>
-      );
+    // const columnSelectionMenu = (
+    //     <Menu multiple>
+    //         {columns.map(col => (
+    //             <Menu.Item key={col.key}>
+    //                 <Checkbox
+    //                     checked={visibleColumns.includes(col.key)}
+    //                     onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
+    //                 >
+    //                     {col.title}
+    //                 </Checkbox>
+    //             </Menu.Item>
+    //         ))}
+    //     </Menu>
+    // );
+    const handleChange = selectedItems => {
+        const selectedValues = selectedItems.map(item => item.value); 
+        setVisibleColumns(selectedValues);
+    };
+   
+
+    const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
     return (
         <div>
-            <Space>
+            <Space style={{ width: "100%" }} size={"large"}>
+                
                 <Input
                     placeholder="Tìm kiếm..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ width: 200, marginBottom: 16 }}
                 />
-
-                <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
-                    <Button style={{ marginBottom: 16 }}>
-                        Chọn Cột <DownOutlined />
-                    </Button>
-                </Dropdown>
+    <Tooltip title="Chọn cột hiển thị">
+                <Select
+                    labelInValue
+                    allowClear
+                    mode="multiple"
+                    placeholder="Lựa chọn cột"
+                    value={visibleColumns.map(col => ({ value: col, label: OPTIONS.find(opt => opt.value === col)?.label }))}
+                    onChange={handleChange}
+                    style={{
+                        transform: "translateY(-8px)",
+                        width: '100%',
+                        minWidth: 200
+                    }}
+                >
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item.value} value={item.value}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+                </Tooltip>
                 {/* <Button onClick={() => setShowColumnSelector(true)} >Select Columns</Button>{activeFilters.map((filter, index) => (
                 <FilterTag key={index} filter={filter} onRemove={removeFilter} />
                 ))} */}

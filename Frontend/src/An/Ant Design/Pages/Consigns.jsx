@@ -10,7 +10,7 @@ export default function Profiles() {
     const { Header, Content } = Layout;
     const [activeTab, setActiveTab] = React.useState('1');
 
-    const consigns = useFetchConsigns();
+    const {consigns,Refresher} = useFetchConsigns();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedProfile, setSelectedProfile] = React.useState(null);
     const [isCheckingDetail, setIsCheckingDetail] = React.useState(false);
@@ -35,7 +35,7 @@ export default function Profiles() {
         }
     };
     const doughnutData = {
-        labels: [ "Đang chờ", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
+        labels: [ "Yêu Cầu Ký Gửi", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
         datasets: [{
             data: [
            
@@ -186,9 +186,10 @@ export default function Profiles() {
     };
     const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'right',
+                
                 labels: {
                     boxWidth: 12,
                     padding: 10,
@@ -214,14 +215,14 @@ export default function Profiles() {
             </Header>
             <Content style={{ padding: '24px' }}>
                 <Row style={{ paddingLeft: '3rem' }} gutter={[24, 24]} >
-                    <Col style={{ padding: '0' }} span={6}>
+                    <Col style={{ padding: '0' }} span={10}>
                         <Card bodyStyle={{ height: '340px' }} title={'Thống kê trạng thái'} >
-                            <Card.Grid hoverable={false} style={{ width: '60%', height: '100%' }}>
+                            {/* <Card.Grid hoverable={false} style={{ width: '60%', height: '100%' }}> */}
                                 <Doughnut data={doughnutData}
                                     options={chartOptions}
                                 />
-                            </Card.Grid>
-                            <Card.Grid hoverable={false} style={{ width: '40%', height: '100%', overflowY: 'auto' }}>
+                            {/* </Card.Grid> */}
+                            {/* <Card.Grid hoverable={false} style={{ width: '40%', height: '100%', overflowY: 'auto' }}>
                                 <Space size={'large'} direction='vertical' style={{ overflow: 'hidden' }} >
                                     <Statistic title='Tổng số ký gửi' value={consigns.length} />
                                     <Statistic title='Đang chờ' value={consigns.filter(consign => consign.State === 1).length} />
@@ -230,10 +231,10 @@ export default function Profiles() {
                                     <Statistic title='Đang tìm mua' value={consigns.filter(consign => consign.State === 4).length} />
                                     <Statistic title='Đã bán' value={consigns.filter(consign => consign.State === 5).length} />
                                 </Space>
-                            </Card.Grid>
+                            </Card.Grid> */}
                         </Card>
                     </Col>
-                    <Col span={12}>
+                    <Col span={14}>
                         <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ký gửi theo thời gian'} >
                             <Line data={lineData}
                                 options={
@@ -247,9 +248,9 @@ export default function Profiles() {
                     </Col>
                 </Row>
                 <Row gutter={24}>
-                    <Space align='center' style={{ paddingLeft: '3rem', marginTop: '3rem' }} wrap='true' >
+                    <Space align='center' style={{ paddingLeft: '3rem', marginTop: '3rem', marginBottom:'1rem' }} wrap='true' >
                         {
-                            isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Go Back</Button> : <Tabs
+                            isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Quay Trở Lại</Button> : <Tabs
                                 defaultActiveKey="1"
                                 items={Tab}
                                 size='small'
@@ -264,7 +265,7 @@ export default function Profiles() {
                     </Header>
                     <Content className='fix-Table' style={{ border: '1px #bfbfbf solid ', padding: '20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
                         {isCheckingDetail ?
-                            <ConsignDetail consignID={consignDetail} /> : <ConsignTable data={filteredConsignes} handleActionClick={handleActionClick} />
+                            <ConsignDetail reset={Refresher} consignID={consignDetail} /> : <ConsignTable data={filteredConsignes} handleActionClick={handleActionClick} />
                         }
                     </Content>
                 </Layout>

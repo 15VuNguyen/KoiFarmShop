@@ -24,7 +24,8 @@ export default function Suppliers() {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get('/manager/manage-supplier/get-all');
-                setSuppliers(response.data.result);
+                let reverseArray = response.data.result.reverse();
+                setSuppliers(reverseArray);
                 console.log(response.data.result);
 
             } catch (error) {
@@ -61,6 +62,7 @@ export default function Suppliers() {
           return acc;
         }
           , {});
+          
           setChartData(howManyCreateEachDate);
           console.log(ChartDATA);
           setOpenChartModal(true);

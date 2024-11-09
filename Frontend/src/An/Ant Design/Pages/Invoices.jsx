@@ -67,7 +67,7 @@ export default function Invoices() {
           const invoiceList = InReponse.data.invoices;
           setSupplier(supplierList);
           setCatagory(categoryList);
-          setInvoices(invoiceList);
+          setInvoices(invoiceList.reverse());
         }).catch(error => {
           console.error(error);
         });

@@ -142,7 +142,7 @@ export default function AnTopBar({ children, name, role }) {
                             items,
                         }} trigger={['click']} className="menu-dropdown">
                             <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ color: 'white' }}>
-                                Menu Quản Lý
+                                Danh Mục Quản Lý
                             </a>
                         </Dropdown>
                         <Dropdown menu={{ items: chartMenu }} trigger={['click']} className="menu-dropdown">
