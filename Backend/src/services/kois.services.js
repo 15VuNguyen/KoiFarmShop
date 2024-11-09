@@ -88,8 +88,8 @@ class KoisService {
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${this.getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng', true)}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${this.getField(consignResult.ReceiptDate, 'ngày nhận lại Koi', true)}</li>
                 <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${this.getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi', false, true)}</li>
-                <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi', true)}</li>
-                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi', true)}</li>
+                <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi')}</li>
+                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${this.getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${this.getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${this.getField(consignResult.Detail, 'chi tiết')}</li>
@@ -171,8 +171,8 @@ class KoisService {
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${this.getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng', true)}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${this.getField(consignResult.ReceiptDate, 'ngày nhận lại Koi', true)}</li>
                 <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${this.getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi', false, true)}</li>
-                 <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi', true)}</li>
-                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi', true)}</li>
+                 <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi')}</li>
+                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${this.getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${this.getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${this.getField(consignResult.Detail, 'chi tiết')}</li>
@@ -268,8 +268,8 @@ class KoisService {
                 <li><strong>Ngày Koi được nhận tại cửa hàng:</strong> ${this.getField(consignResult.ShippedDate, 'ngày Koi được nhận tại cửa hàng', true)}</li>
                 <li><strong>Ngày nhận lại Koi:</strong> ${this.getField(consignResult.ReceiptDate, 'ngày nhận lại Koi', true)}</li>
                 <li><strong>Ngày tạo đơn ký gửi Koi:</strong> ${this.getField(consignResult.ConsignCreateDate, 'ngày tạo đơn ký gửi Koi', false, true)}</li>
-                 <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi', true)}</li>
-                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi', true)}</li>
+                 <li><strong>Địa chỉ thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.AddressConsignKoi, 'địa chỉ thực hiện của đơn kí gửi Koi')}</li>
+                <li><strong>Số điện thoại thực hiện của đơn kí gửi Koi:</strong> ${this.getField(consignResult.PhoneNumberConsignKoi, 'số điện thoại thực hiện của đơn kí gửi Koi')}</li>
                 <li><strong>Vị trí chăm sóc:</strong> ${this.getField(consignResult.PositionCare, 'vị trí chăm sóc')}</li>
                 <li><strong>Phương thức kí gửi:</strong> ${this.getField(consignResult.Method, 'phương thức kí gửi')}</li>
                 <li><strong>Chi tiết về đơn ký gửi:</strong> ${this.getField(consignResult.Detail, 'chi tiết')}</li>
