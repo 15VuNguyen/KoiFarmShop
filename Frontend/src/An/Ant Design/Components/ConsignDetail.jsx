@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 dayjs.extend(utc);
 import moment from 'moment';
 
-export default function ConsignDetail({ consignID }) {
+export default function ConsignDetail({ consignID,reset }) {
   const [consignData, setConsignData] = React.useState({});
   const [imageList, setImageList] = React.useState([]);
   const [video, setVideo] = React.useState(null);
@@ -184,7 +184,7 @@ export default function ConsignDetail({ consignID }) {
   const { user, consign, koi } = consignData;
 
   const toggleEdit = (field, initialValue) => {
-    if (field === 'ShippedDate' || field === 'ReceiptDate') {
+    if (field === 'ShippedDate' || field === 'ReceiptDate' || field === 'ConsignCreateDate') {
       if (field === 'ShippedDate') {
         if (consign.ShippedDate === null || consign.ShippedDate === undefined || consign.ShippedDate === '') {
           initialValue = dayjs().utc(true);
@@ -201,8 +201,23 @@ export default function ConsignDetail({ consignID }) {
           initialValue = dayjs().utc(true);
           setEditField(field);
           setEditValue(initialValue);
-        } else {
+        }
+
+        else {
           initialValue = dayjs(consign.ReceiptDate).utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        }
+      }
+      else if (field === 'ConsignCreateDate') {
+        if (consign.ConsignCreateDate === null || consign.ConsignCreateDate === undefined || consign.ConsignCreateDate === '') {
+          initialValue = dayjs().utc(true);
+          setEditField(field);
+          setEditValue(initialValue);
+        }
+
+        else {
+          initialValue = dayjs(consign.ConsignCreateDate).utc(true);
           setEditField(field);
           setEditValue(initialValue);
         }
@@ -211,12 +226,12 @@ export default function ConsignDetail({ consignID }) {
     else if (field === 'Price') {
       setEditField(field);
       setEditValue(koi.Price);
-    }  else if (field === 'address') {
+    } else if (field === 'address') {
       console.log('Address');
       setSearchText(editValue);
       setEditField(field);
       setEditValue(initialValue);
-      
+
     }
     else {
 
@@ -286,8 +301,8 @@ export default function ConsignDetail({ consignID }) {
     Origin: 'Nguồn gốc',
     ShippingDate: 'Ngày vận chuyển',
     ReceiptDate: 'Ngày nhận',
-    Price : 'Giá',
-    State : 'Trạng thái',
+    Price: 'Giá',
+    State: 'Trạng thái',
     Commission: 'Hoa Hồng',
     Breed: 'Giống',
     Description: 'Mô tả',
@@ -295,7 +310,9 @@ export default function ConsignDetail({ consignID }) {
     FilteringRatio: 'Tỉ lệ lọc (%)',
     CertificateID: 'ID Chứng chỉ',
     Size: 'Kích thước (cm)',
-    
+    consignCreateDate: 'Ngày tạo đơn',
+    AddressConsignKoi : 'Địa chỉ đơn ký gửi',
+    PhoneNumberConsignKoi : 'Số điện thoại đơn ký gửi',
   }
   const saveEdit = (field) => {
     Modal.confirm({
@@ -303,7 +320,7 @@ export default function ConsignDetail({ consignID }) {
       content: `Bạn có chắc chắn muốn lưu thay đổi cho ${fieldMapping[field]}?`,
       onOk: async () => {
         try {
-          let updatedFields 
+          let updatedFields
           if (field === 'State' && editValue === 4 && koi.Price == 0 || consign.Price === null) {
             message.error("Vui lòng nhập giá trước khi cập nhật trạng thái thành 'Đang tìm người mua'.");
             return;
@@ -312,11 +329,11 @@ export default function ConsignDetail({ consignID }) {
             const newReceiptDate = add30Days(editValue);
             console.log(newReceiptDate);
             updatedFields = { ...validFieldForUpdate, [field]: editValue, ReceiptDate: newReceiptDate };
-          } 
+          }
           else if (field === 'Status') {
             updatedFields = { ...validFieldForUpdate, [field]: editValue.toString() };
           }
-        
+
           else {
             updatedFields = { ...validFieldForUpdate, [field]: editValue };
           }
@@ -328,6 +345,7 @@ export default function ConsignDetail({ consignID }) {
           message.success(`${field} đã được cập nhật thành công`);
           setTrigger(trigger + 1);
           console.log(reponse)
+          reset();
         } catch (error) {
           console.error('Error saving changes:', error);
           message.error(`Cập nhật ${field} thất bại`);
@@ -362,7 +380,17 @@ export default function ConsignDetail({ consignID }) {
               <Select.Option value={4}>Đang tìm người mua</Select.Option>
               <Select.Option value={5}>Đã bán thành công</Select.Option>
             </Select>
-          ) : inputType === 'SelectStatus' ? (
+          ) : 
+          
+            inputType === 'selectConsignCreateDate' ? (
+              <DatePicker
+                value={editValue}
+                onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                format={'DD-MM-YYYY'}
+                
+              />
+            ) :
+          inputType === 'SelectStatus' ? (
             <Select style={{ minWidth: '7rem' }} value={editValue} onChange={(value) => setEditValue(value)}>
               <Select.Option value={'0'}>Hết Hàng</Select.Option>
               <Select.Option value={'1'}>Nhập Khẩu</Select.Option>
@@ -383,13 +411,13 @@ export default function ConsignDetail({ consignID }) {
               ) : inputType === 'selectPrice' ? (
 
                 consign.State === 3 || consign.State === '3' ? (
-                  <InputNumber  min={1000} required value={editValue} onChange={(value) => setEditValue(value)}
-                  formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  style={{ width: '25%' }} suffix={"đ"}
+                  <InputNumber min={1000} required value={editValue} onChange={(value) => setEditValue(value)}
+                    formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '25%' }} suffix={"đ"}
                   />
                 ) : (
-                  <InputNumber min={0}  value={editValue} onChange={(value) => setEditValue(value)} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={(value) => value?.replace(/\$\s?|(,*)/g, '')}  style={{ width: '20%' }} suffix={"đ"}
+                  <InputNumber min={0} value={editValue} onChange={(value) => setEditValue(value)} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '20%' }} suffix={"đ"}
                   />
                 )
 
@@ -408,7 +436,7 @@ export default function ConsignDetail({ consignID }) {
                 <Form.Item label={
                   <Space>
                     <span>Ngày vận chuyển</span>
-                    <Tooltip title="Ngày vận chuyển phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng"> 
+                    <Tooltip title="Ngày vận chuyển phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng">
                       <QuestionCircleOutlined />
                     </Tooltip>
                   </Space>
@@ -419,9 +447,9 @@ export default function ConsignDetail({ consignID }) {
                     value={editValue}
                     onChange={(date) => setEditValue(date ? date.utc(true) : null)}
                     disabledDate={(current) => current && current > dayjs(consign.ReceiptDate).startOf('day')}
-                    format={'YYYY-MM-DD'}
+                    format={'DD-MM-YYYY'}
                     {
-                      ...consign.State === 4 ? { disabled: true } : {}
+                    ...consign.State === 4 ? { disabled: true } : {}
                     }
                   />
                 </Form.Item>
@@ -443,15 +471,16 @@ export default function ConsignDetail({ consignID }) {
                       disabledDate={(current) =>
                         current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
                       }
+                      format={'DD-MM-YYYY'}
                     />
                   </Form.Item>
                 ) : inputType === 'selectAddress' ? (
                   <AutoComplete
-                  allowClear
+                    allowClear
                     value={editValue}
                     onChange={(value) => {
                       setSearchText(value);
-                      setEditValue(value); 
+                      setEditValue(value);
                     }}
                     options={recommendations.map((address) => ({ value: address }))}
                     style={{ width: '100%' }}
@@ -469,23 +498,23 @@ export default function ConsignDetail({ consignID }) {
                         <Select.Option value={'Home'} >Home</Select.Option>
                       </Select>) :
 
-                        inputType === 'selectBreed' ? (
-                          <Select value={editValue} onChange={(value) => setEditValue(value)}>
-                            <Select.Option value={'Nhat'} >Nhập Khẩu Nhật</Select.Option>
-                            <Select.Option value={'Viet'} >IKOI Việt</Select.Option>                           
-                            <Select.Option value={'F1'} >IKOIF1</Select.Option>
-                          </Select>
-                        ) : inputType === 'selectFood' ? (
-                          <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                        ) : inputType === 'selectFilter' ? (
-                          <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                        ) :
+                      inputType === 'selectBreed' ? (
+                        <Select value={editValue} onChange={(value) => setEditValue(value)}>
+                          <Select.Option value={'Nhat'} >Nhập Khẩu Nhật</Select.Option>
+                          <Select.Option value={'Viet'} >IKOI Việt</Select.Option>
+                          <Select.Option value={'F1'} >IKOIF1</Select.Option>
+                        </Select>
+                      ) : inputType === 'selectFood' ? (
+                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                      ) : inputType === 'selectFilter' ? (
+                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                      ) :
 
 
 
-                          (
-                            <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-                          )}
+                        (
+                          <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                        )}
           <Button icon={<CheckOutlined />} type="link" onClick={() => saveEdit(field)} />
           <Button icon={<CloseOutlined />} type="link" onClick={cancelEdit} />
         </>
@@ -496,7 +525,7 @@ export default function ConsignDetail({ consignID }) {
           }
           {/* <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} /> */}
           {
-            (consign.State == 5)? (
+            (consign.State == 5) ? (
               <></>
             ) : (
               <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} />
@@ -525,21 +554,30 @@ export default function ConsignDetail({ consignID }) {
         <Divider />
 
         <Descriptions title="Thông tin ký gửi" bordered>
+          {renderEditableItem("Ngày tạo đơn ", consign.ConsignCreateDate ? dayjs(consign.ConsignCreateDate).utc().format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag>, "ConsignCreateDate", 'selectConsignCreateDate')}
+          {renderEditableItem("Ngày vận chuyển", consign.ShippedDate ? dayjs(consign.ShippedDate).utc().format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag>, "ShippedDate", "selectReceivedDate")}
+          {renderEditableItem("Ngày nhận", consign.ReceiptDate ? moment.utc(consign.ReceiptDate).format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag>, "ReceiptDate", "selectReceiptDate")}
           {renderEditableItem("Phương thức", consign.Method, "Method", "selectMethod")}
           {renderEditableItem("Vị trí chăm sóc", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
-          {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
-          {renderEditableItem("Ngày vận chuyển", consign.ShippedDate ? dayjs(consign.ShippedDate).utc().format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag> , "ShippedDate", "selectReceivedDate")}
-    
-          {renderEditableItem("Ngày nhận", consign.ReceiptDate ?  moment.utc(consign.ReceiptDate).format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag> , "ReceiptDate", "selectReceiptDate")}
-
-
-          {renderEditableItem("Hoa Hồng", consign.Commission, "Commission", "selectCommission")}
+          {renderEditableItem("Số điện thoại đơn ký gửi", consign.PhoneNumberConsignKoi)}
           {renderEditableItem("Chi tiết kí gửi", consign.Detail, "Detail")}
+          {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
+        {renderEditableItem("Địa chỉ đơn ký gửi", consign.AddressConsignKoi, "AddressConsignKoi",'selectAddress')}
+
+
+
+
+          {renderEditableItem("Hoa Hồng(%)", consign.Commission == 0 || isNaN(consign.Commission) ? (
+            <Tag color="red">Chưa cung cấp</Tag>
+          ) : (
+            consign.Commission 
+          ), "Commission", "selectCommission")}
+
           <Descriptions.Item label="Tổng Giá">
             {consign.TotalPrice == 0 ? (
               <Tag color="red">Chưa cung cấp</Tag>
             ) : (
-             formatCurrency(consign.TotalPrice) 
+              formatCurrency(consign.TotalPrice)
             )}
           </Descriptions.Item>
         </Descriptions>
@@ -554,7 +592,7 @@ export default function ConsignDetail({ consignID }) {
           {renderEditableItem("Kích thước (cm)", koi.Size, "Size", 'selectSize')}
           {renderEditableItem("Giống", koi.Breed, "Breed", 'selectBreed')}
           {renderEditableItem("ID Chứng chỉ", koi.CertificateID, "CertificateID")}
-          {renderEditableItem("Giá", formatCurrency(koi.Price)  , "Price", "selectPrice")}
+          {renderEditableItem("Giá", formatCurrency(koi.Price), "Price", "selectPrice")}
           {renderEditableItem("Lượng thức ăn đơn vị g/ngày", koi.DailyFoodAmount, "DailyFoodAmount", 'selectFood')}
           {renderEditableItem("Tỉ lệ lọc (%)", koi.FilteringRatio, "FilteringRatio", 'selectFilter')}
           {renderEditableItem("Trạng thái", koi.Status, "Status", "SelectStatus")}

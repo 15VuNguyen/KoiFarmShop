@@ -17,12 +17,18 @@ export default function Chart() {
         profileChartData,
         orderData,
         combineData,
+        unFilteredProfileChartData,
+        unFilteredorderData,
+        unFilteredConsignData,
+        consignData,
         filterProfileData,
         filterOrderData,
         filterCombinedData,
         filterRevuenueData,
-        RevenuedataSet,
-        RevuenueData
+        filterConsignData,
+        RevuenueData,
+        RevenuedataSet
+        
     } = useChartData();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -31,24 +37,27 @@ export default function Chart() {
     const [filteredCombinedData, setFilteredCombinedData] = useState(combineData());
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [filterRevuenueDataR, setFilterRevuenueDataR] = useState(RevuenueData);
-
+    const [filterConsignDataR, setFilterConsignDataR] = useState(consignData);
     useEffect(() => {
         setIsLoading(false);
         setFilterRevuenueDataR(RevuenueData);
         setFilteredProfileData(profileChartData);
         setFilteredOrderData(orderData);
+        setFilterConsignDataR(consignData);
         setFilteredCombinedData(combineData());
-    }, [profileChartData, orderData, RevuenueData]);
+    }, [profileChartData, orderData, RevuenueData,consignData]);
 
     const handleFilterChange = (filter) => {
         const newProfileData = filterProfileData(filter);
         const newOrderData = filterOrderData(filter);
         const newCombinedData = filterCombinedData(filter);
         const newRevuenueData = filterRevuenueData(filter);
+        const newConsignData = filterConsignData(filter);
         setFilterRevuenueDataR(newRevuenueData);
         setFilteredProfileData(newProfileData);
         setFilteredOrderData(newOrderData);
         setFilteredCombinedData(newCombinedData);
+        setFilterConsignDataR(newConsignData);
         setSelectedFilter(filter);
     };
 
@@ -93,7 +102,7 @@ export default function Chart() {
                             )}
                         </Col>
                         <Col xs={24} md={12}>
-                            <RevunueChart types={chartType} chartDATA={filterRevuenueDataR} DATA={RevenuedataSet} />
+                            <RevunueChart types={chartType} chartDATA={filterConsignDataR} DATA={RevenuedataSet} />
                         </Col>
                     </Row>
                 </>

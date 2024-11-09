@@ -9,7 +9,9 @@ export default function useFetchProfiles() {
     const fetchData = async () => {
       try {
         const response = await axiosInstance.get('manager/manage-user/get-all');
-        setProfiles(response.data.result);
+        let array = response.data.result;
+        array = array.reverse();
+        setProfiles(array);
       } catch (error) {
         console.error('Error fetching data', error);
       }

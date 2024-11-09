@@ -47,13 +47,26 @@ export default function InvoiceChartModal({ visible, onClose, data, whichType,te
         const formattedLabels = Object.keys(filteredData).map(date =>
             dayjs(date).format('DD/MM/YYYY')
         );
-
+        let sortedLables = formattedLabels.sort((a, b) => {
+            return dayjs(a, 'DD/MM/YYYY').diff(dayjs(b, 'DD/MM/YYYY'));
+        });
+        let SortedDateOfFilterData = Object.keys(filteredData).sort((a, b) => {
+            return dayjs(a, 'DD/MM/YYYY').diff(dayjs(b, 'DD/MM/YYYY'));
+        });
+        console.log(Object.values(filteredData));
+       
+        const sortedDates = Object.keys(filteredData).sort((a, b) => new Date(a) - new Date(b));
+        const sortedValues = sortedDates.map(date => data[date]);
+        console.log(sortedDates);
+        console.log(sortedValues);
+        
+        console.log(filteredData)
         setChartData({
-            labels: formattedLabels,
+            labels: sortedLables,   
             datasets: [
                 {
                     label: whichTypeMapper[whichType],
-                    data: Object.values(filteredData),
+                    data: sortedValues,
                     borderColor: 'rgba(75,192,192,1)',
                     fill: false,
                 },

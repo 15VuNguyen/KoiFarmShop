@@ -44,7 +44,21 @@ export default function useAddress() {
   const [recommendations, setRecommendations] = React.useState([]);
   const [debouncedSearch, setDebouncedSearch] = React.useState(searchText);
   
+  function removeDuplicateParts(address) {
+
+    const parts = address.split(',').map(part => part.trim());
   
+
+    let uniqueParts = [];
+    parts.forEach((part, index) => {
+      if (index === 0 || part !== parts[index - 1]) {
+        uniqueParts.push(part);
+      }
+    });
+  
+    
+    return uniqueParts.join(', ');
+  }
   React.useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchText);
@@ -84,8 +98,10 @@ export default function useAddress() {
           }
         });
         const VNdata = VNresponse.data.results;
+       
         const JPdata = JPReponse.data.suggestions;
-        const addresses = VNdata.map(item => item.address.freeformAddress);
+        let addresses = VNdata.map(item => item.address.freeformAddress);
+        addresses = addresses.map(removeDuplicateParts);
         const addressesJP = JPdata.map(item => item.name);
         addresses.push(...addressesJP);
     

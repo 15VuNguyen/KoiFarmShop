@@ -1,20 +1,22 @@
 import { Container, Modal, Image } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+
 import { HiLink } from "react-icons/hi";
 import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import message from "antd/lib/message";
+import { Button } from "antd";
 import "../../../Css/Modal.css";
 import React from 'react'
-import { SelfCheckContext } from '../../../Ant Design/Components/ANTDTopbar';
+
 import axiosInstance from "../../../Utils/axiosJS";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
+import create from "@ant-design/icons/lib/components/IconFont";
 export default function ViewProfile({ actions, setactions, id }) {
-  const setIsCheckingSelf = React.useContext(SelfCheckContext);
+  const [isLoading, setIsLoading] = React.useState(false);
   const handleClose = () => {
     setactions(false);
-    setIsCheckingSelf(false);
+
   }
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
@@ -47,16 +49,17 @@ export default function ViewProfile({ actions, setactions, id }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         setIsSubmitting(true);
         const res = await axiosInstance.get(`manager/manage-user/user${id}`);
         console.log(res.data.result);
-        const { _id, name, email, date_of_birth, verify, bio, location, website, username, Image, cover_photo, address, picture } = res.data.result;
-        const formattedDateOfBirth = date_of_birth ? date_of_birth.split('T')[0] : '';
-        setUser({ _id, name, email, date_of_birth, verify, bio, location, website, username, Image, cover_photo, address, picture });
+        const { _id, name, email, created_at, verify, bio, location, website, username, Image, cover_photo, address, picture } = res.data.result;
+        const formattedDateOfBirth = created_at ? created_at.split('T')[0] : '';
+        setUser({ _id, name, email, created_at, verify, bio, location, website, username, Image, cover_photo, address, picture });
         setFormData({
           name: name || '',
           address: address || '',
-          date_of_birth: formattedDateOfBirth || '',
+          created_at: formattedDateOfBirth || '',
           email: email || '',
           user_id: _id || '',
           selectedAvatar: Image || ''
@@ -86,12 +89,13 @@ export default function ViewProfile({ actions, setactions, id }) {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const updatedData = {
         name: formData.name,
         role: formData.role,
-        date_of_birth: formData.date_of_birth,
+        created_at: formData.created_at,
         email: formData.email,
         address: formData.address,
         Image: formData.selectedAvatar
@@ -123,11 +127,13 @@ export default function ViewProfile({ actions, setactions, id }) {
     //  alert('Cập nhật hồ sơ thành công');
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Modal show={actions} onHide={handleClose} centered dialogClassName="modal-30w">
+    <Modal show={actions} onHide={handleClose} centered dialog ClassName="modal-30w">
       <Modal.Header className="bg-light">
         <Modal.Title>Hồ sơ</Modal.Title>
       </Modal.Header>
@@ -185,11 +191,11 @@ export default function ViewProfile({ actions, setactions, id }) {
           </Form.Group>
           {/* Date of Birth */}
           <Form.Group className="mb-3">
-            <Form.Label>Ngày sinh</Form.Label>
+            <Form.Label>Ngày Tạo Hồ Sơ</Form.Label>
             <Form.Control
               type="date"
-              name="date_of_birth"
-              value={formData.date_of_birth}
+              name="created_at"
+              value={formData.created_at}
               onChange={handleInputChange}
             />
           </Form.Group>
@@ -222,7 +228,7 @@ export default function ViewProfile({ actions, setactions, id }) {
         <Button variant="secondary" onClick={handleClose}>
           Hủy
         </Button>
-        <Button variant="primary" onClick={handleSubmit} disabled={isSubmitting}>
+        <Button type="primary"  loading={isLoading} onClick={handleSubmit} disabled={isSubmitting}>
           Lưu thay đổi
         </Button>
       </Modal.Footer>
