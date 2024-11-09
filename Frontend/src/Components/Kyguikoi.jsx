@@ -16,11 +16,15 @@ import {
   Spin,
   Select,
   Button,
+  Alert,
+  AutoComplete,
 } from "antd";
-
+import useAddress from "../An/Ant Design/Components/useAddress";
 import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
+import axios from "axios";
 const { Title } = Typography;
+const { Option } = Select;
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -42,7 +46,7 @@ export default function Kyguikoi() {
 
     // Check localStorage for toast state
   }, [isLoggedIn]);
-
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -62,6 +66,11 @@ export default function Kyguikoi() {
     Gender: "",
     Size: 0,
     Breed: "",
+    AddressConsignKoi: "",
+    province: "",
+    district: "",
+    ward: "",
+    PhoneNumberConsignKoi: "",
     DailyFoodAmount: 0,
     FilteringRatio: 0,
     CertificateID: "",
@@ -69,10 +78,14 @@ export default function Kyguikoi() {
     Video: null,
   });
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [provinces, setProvinces] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [error, setError] = useState(null);
+  const { searchText, setSearchText, recommendations } = useAddress();
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const loggedIn = !!accessToken; // Kiểm tra nếu có accessToken
@@ -93,19 +106,31 @@ export default function Kyguikoi() {
   const handleDateChange = (key, date) => {
     // Kiểm tra nếu date không phải là null
     const formattedDate = date ? date.format("DD/MM/YYYY") : null;
-
     // In ra giá trị formattedDate để kiểm tra
     console.log(`${key} date:`, formattedDate);
-
     setFormData((prevData) => ({ ...prevData, [key]: formattedDate }));
   };
 
+  const handleAddressChange = (value) => {
+    setSearchText(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      AddressConsignKoi: value,
+    }));
+  };
+
+  // Handle select suggestion
+  const handleSelect = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      AddressConsignKoi: value,
+    }));
+  };
+  // Log formData whenever it changes
+  useEffect(() => {
+    console.log("Updated formData:", formData);
+  }, [formData]);
   const handleSubmit = async (values) => {
-    setFormData({
-      ...formData,
-      Description: "",
-      Detail: "",
-    });
     setLoading(true);
     try {
       const formatDateToISO = (dateString) => {
@@ -161,6 +186,8 @@ export default function Kyguikoi() {
         DailyFoodAmount: parseFloat(formData.DailyFoodAmount),
         FilteringRatio: parseFloat(formData.FilteringRatio),
         Age: parseInt(formData.Age, 10),
+        AddressConsignKoi: formData.AddressConsignKoi.toString || "",
+        PhoneNumberConsignKoi: formData.PhoneNumberConsignKoi || "",
         ShippedDate: shippedDateObj ? shippedDateObj.toISOString() : null,
         ReceiptDate: receiptDateObj ? receiptDateObj.toISOString() : null,
       };
@@ -185,12 +212,40 @@ export default function Kyguikoi() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.status === 200) {
-        setTimeout(() => {
-          if (isLoggedIn) {
-            navigate("/donkyguipage");
-          }
-        }, 3000);
+        // setTimeout(() => {
+        //   if (isLoggedIn) {
+        //     navigate("/donkyguipage");
+        //   }
+        // }, 3000);
         toast.success(response.data.message);
+        setFormData({
+          ...formData,
+          Description: "",
+          Detail: "",
+          email: "",
+          name: "",
+          address: "",
+          phone_number: "",
+          ShipAddress: "",
+          PositionCare: "",
+          Method: "",
+          shippedDate: null,
+          receiptDate: null,
+          AddressConsignKoi: "",
+          PhoneNumberConsignKoi: "",
+          CategoryID: "",
+          KoiName: "",
+          Age: 1,
+          Origin: "",
+          Gender: "",
+          Size: 0,
+          Breed: "",
+          DailyFoodAmount: 0,
+          FilteringRatio: 0,
+          CertificateID: "",
+          Image: null,
+          Video: null,
+        });
       } else {
         toast.error(`Có lỗi xảy ra: ${response.data.message}`);
       }
@@ -255,6 +310,24 @@ export default function Kyguikoi() {
 
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <Spin
+        size="large"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      />
+    );
+  }
+
+  if (error) {
+    return <Alert message="Error" description={error} type="error" />;
+  }
 
   return (
     <Container>
@@ -498,6 +571,56 @@ export default function Kyguikoi() {
                   </div>
                 </div>
               </div>
+              <div style={{ display: "flex" }}>
+                <div style={{ width: "50%", paddingRight: "25px" }}>
+                  <label
+                    htmlFor="AddressConsignKoi"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    Địa chỉ nhận koi
+                  </label>
+                  <Form.Item
+                    name="AddressConsignKoi"
+                    rules={[
+                      {
+                        required: true,
+                        type: "string",
+                        message: "Vui lòng nhập địa chỉ",
+                      },
+                    ]}
+                  >
+                    <AutoComplete
+                      name="AddressConsignKoi"
+                      onSearch={handleAddressChange}
+                      onSelect={handleSelect}
+                      value={formData.AddressConsignKoi}
+                      placeholder="Nhập địa chỉ để IKoi đến lấy koi"
+                      options={recommendations.map((address) => ({
+                        value: address,
+                      }))}
+                    />
+                  </Form.Item>
+                </div>
+                <div style={{ width: "50%" }}>
+                  <label
+                    htmlFor="PhoneNumberConsignKoi"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    Số điện thoại người ký gửi
+                  </label>
+                  <Form.Item name="PhoneNumberConsignKoi">
+                    <Input
+                      name="PhoneNumberConsignKoi"
+                      type="text"
+                      value={formData.PhoneNumberConsignKoi}
+                      onChange={handleChange}
+                      placeholder="Nhập số điên thoại"
+                    />
+                  </Form.Item>
+                </div>
+              </div>
+
               <div>
                 <label
                   htmlFor="Detail"

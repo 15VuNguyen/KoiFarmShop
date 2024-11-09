@@ -213,7 +213,8 @@ export const confirmConsignInformationController = async (req, res) => {
           console.log('Email sent: ' + info.response)
         }
       })
-      res.redirect(process.env.CONFIRM_CONSIGN_INFORMATION)
+      const successMessage = encodeURIComponent('Ký gửi đơn hàng thành công')
+      res.redirect(`${process.env.CONFIRM_CONSIGN_INFORMATION}?message=${successMessage}`)
     } else {
       res.status(400).send('Không tìm thấy đơn ký gửi hoặc không thể cập nhật trạng thái.')
     }

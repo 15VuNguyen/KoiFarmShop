@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Footer from "./Footer";
-import Navbar from "./Navbar/Navbar";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Typography,
@@ -11,16 +10,19 @@ import {
   Row,
   Col,
   Tooltip,
-  message,
   Modal,
 } from "antd";
 import { HomeOutlined, CopyOutlined } from "@ant-design/icons";
 import axiosInstance from "../An/Utils/axiosJS";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const { Title, Text } = Typography;
 
 export default function DonKyGui() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const message_ConFirm = queryParams.get("message");
   const [consignList, setConsignList] = useState([]);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -101,6 +103,9 @@ export default function DonKyGui() {
       />
     );
   if (error) return <Alert message="Error" description={error} type="error" />;
+  if (message_ConFirm) {
+    toast.success(message_ConFirm);
+  }
 
   return (
     <div
