@@ -88,7 +88,7 @@ export const callback = async (req, res) => {
         result.returncode = -1
         result.returnmessage = 'No order data found in embed_data'
       } else {
-        const result = await saveOrderToDatabase(reqOrderDetails, reqOrder)
+        const result = await saveOrderToDatabase(reqOrderDetails, reqOrder, reqLoyaltyCard)
 
         await databaseService.order.findOneAndUpdate(
           { _id: new ObjectId(result.order._id) },
@@ -151,9 +151,9 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
   }
 
   if (reqOrderCookie.UserID instanceof ObjectId) {
-    console.log('user._id là ObjectID');
+    console.log('user._id là ObjectID')
   } else {
-    console.log('user._id không phải là ObjectID');
+    console.log('user._id không phải là ObjectID')
   }
   const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: reqOrderCookie.UserID })
   if (loyaltyCard) {
@@ -166,7 +166,8 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
           ...reqLoyaltyCard,
           Point: Math.round(reqLoyaltyCard.Point)
         }
-      })
+      }
+    )
     return { orderDT, order: newOrder, loyaltyCard: updatedLoyaltyCard }
   }
   return { orderDT, order: newOrder }

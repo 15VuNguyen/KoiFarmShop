@@ -376,7 +376,7 @@ const OrderPage = () => {
                         color: "red",
                       }}
                     >
-                      {selectedItem.Size > 20 && (
+                      {selectedItem.Size > 20 && selectedItem.Status !== 4 && (
                         <label>
                           <strong>Quantity: </strong>
                           <InputNumber
@@ -419,23 +419,9 @@ const OrderPage = () => {
                             }}
                             type="number"
                             value={selectedQuantity}
-                            onChange={(value) => {
-                              if (value >= 1) {
-                                if (value <= maxQuantity) {
-                                  setSelectedQuantity(value);
-                                } else {
-                                  message.error("Cá trong kho không đủ");
-                                }
-                              }
-                            }}
+                            disabled
                             min={1}
                             max={100}
-                            onKeyPress={(e) => {
-                              // Ngăn nhập ký tự "e"
-                              if (e.key === "e" || e.key === "E") {
-                                e.preventDefault();
-                              }
-                            }}
                           />
                         </label>
                       )}
