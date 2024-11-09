@@ -9,7 +9,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   const [selectedColumns, setSelectedColumns] = React.useState({});
   const [showColumnSelector, setShowColumnSelector] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'address', 'date_of_birth', 'verify', 'Status']);
+  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'address', 'created_at', 'verify', 'Status']);
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     message.success("ID đã được sao chép vào clipboard!");
