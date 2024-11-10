@@ -258,6 +258,35 @@ class ConsignsService {
     }
   }
 
+  async userCancelConsign(consignID) {
+    //tìm consign dựa vào consignID
+    const consignObjectID = new ObjectId(consignID)
+    const consign = await databaseService.consigns.findOne({ _id: consignObjectID })
+    if (consign == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.CONSIGN_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    const consignUpdate = await databaseService.consigns.updateOne({ _id: new ObjectId(consign._id) }, [
+      {
+        $set: {
+          ShippedDate: consign.ShippedDate || '',
+          ReceiptDate: consign.ReceiptDate || '',
+          ConsignCreateDate: consign.ConsignCreateDate || '',
+          AddressConsignKoi: consign.AddressConsignKoi || '',
+          PhoneNumberConsignKoi: consign.PhoneNumberConsignKoi || '',
+          Detail: consign.Detail || '',
+          Method: consign.Method || '',
+          PositionCare: consign.PositionCare || '',
+          State: -1
+        }
+      }
+    ])
+    return { consign: consign, consignUpdate: consignUpdate }
+  }
+
   async userUpdateConsign(consignID, payload) {
     //tìm consign dựa vào consignID
     const consignObjectID = new ObjectId(consignID)

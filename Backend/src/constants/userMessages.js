@@ -79,7 +79,7 @@ export const USERS_MESSAGES = {
   ADDRESS_LENGTH_MUST_BE_FROM_1_TO_200: 'Address length must be from 1 to 200',
   //phone number
   PHONE_NUMBER_IS_REQUIRED: 'Phone number is required',
-  PHONE_NUMBER_LENGTH_MUST_BE_FROM_1_TO_20: 'Phone number length must be from 1 to 20',
+  PHONE_NUMBER_LENGTH_MUST_BE_FROM_10_TO_20: 'Phone number length must be from 10 to 20',
   PHONE_NUMBER_MUST_BE_NUMERIC: 'Phone number must be numeric',
   //position care
   POSITION_CARE_IS_REQUIRED: 'Position care is required',
@@ -177,7 +177,20 @@ export const USERS_MESSAGES = {
   KOI_IMAGE_IS_REQUIRED: 'Koi image is required',
   KOI_VIDEO_IS_REQUIRED: 'Koi video is required',
   //update consign
-  UPDATE_CONSIGN_SUCCESS: 'Update consign success'
+  UPDATE_CONSIGN_SUCCESS: 'Update consign success',
+  ADDRESS_CONSIGN_KOI_IS_REQUIRED: 'Address consign koi is required',
+  ADDRESS_CONSIGN_KOI_MUST_BE_A_STRING: 'Address consign koi must be a string',
+  PHONE_NUMBER_CONSIGN_KOI_IS_REQUIRED: 'Phone number consign koi is required',
+  PHONE_NUMBER_CONSIGN_KOI_LENGTH_MUST_BE_FROM_10_TO_20: 'Phone number consign koi length must be from 10 to 20',
+  KOI_AGE_MUST_BE_BETWEEN_1_AND_50: 'Tuổi của cá Koi phải nằm trong khoảng từ 1 đến 50',
+  KOI_SIZE_MUST_BE_NUMERIC: 'Kích thước của cá Koi phải là số',
+  KOI_SIZE_MUST_BE_BETWEEN_5_AND_200: 'Kích thước của cá Koi phải nằm trong khoảng từ 5 đến 200',
+  KOI_DAILY_FOOD_AMOUNT_MUST_BE_NUMERIC: 'Lượng thức ăn hàng ngày của cá Koi phải là số',
+  KOI_DAILY_FOOD_AMOUNT_MUST_BE_BETWEEN_1_AND_100:
+    'Lượng thức ăn hàng ngày của cá Koi phải nằm trong khoảng từ 1 đến 100',
+  KOI_FILTERING_RATIO_MUST_BE_NUMERIC: 'Tỷ lệ lọc của cá Koi phải là số',
+  KOI_FILTERING_RATIO_MUST_BE_BETWEEN_1_AND_100: 'Tỷ lệ lọc của cá Koi phải nằm trong khoảng từ 1 đến 100',
+  CANCEL_CONSIGN_SUCCESS: 'Cancel consign success'
 }
 export const ADMINS_MESSAGES = {
   ADD_KOI_SUCCESS: 'Add Fish success',
