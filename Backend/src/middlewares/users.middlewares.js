@@ -158,6 +158,30 @@ const phoneNumberSchema = {
   }
 }
 
+const addressConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_MUST_BE_A_STRING
+  },
+  trim: true
+}
+
+const phoneNumberConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_IS_REQUIRED
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 10,
+      max: 20
+    },
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_LENGTH_MUST_BE_FROM_10_TO_20
+  }
+}
+
 const positionCareSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.POSITION_CARE_IS_REQUIRED
@@ -387,7 +411,6 @@ export const accessTokenValidator = validate(
             //ta sẽ tách chuỗi đó ra để lấy access_token bằng cách split
             const accessToken = value.split(' ')[1]
 
-            
             //nếu nó có truyền lên , mà lại là chuỗi rỗng thì ta sẽ throw error
             if (!accessToken) {
               //throw new Error(USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED)  //này trả ra 422(k hay)
@@ -550,8 +573,6 @@ export const verifyForgotPasswordTokenValidator = validate(
               })
               //sau khi verify thành công ta đc payload của email_verify_token: decoded_email_verify_token
               req.decoded_forgot_password_token = decoded_forgot_password_token
-
-              
             } catch (error) {
               if (error instanceof JsonWebTokenError) {
                 //
@@ -602,12 +623,12 @@ export const updateMeValidator = validate(
         ...nameSchema, //phân rã nameSchema ra
         notEmpty: undefined //ghi đè lên notEmpty của nameSchema
       },
-      address:{
+      address: {
         optional: true,
         ...addressSchema,
         notEmpty: undefined
       },
-      phone_number:{
+      phone_number: {
         optional: true,
         ...phoneNumberSchema,
         notEmpty: undefined
@@ -652,7 +673,7 @@ export const updateMeValidator = validate(
           }
         }
       },
-      picture: imageSchema,
+      picture: imageSchema
     },
     ['body']
   )
@@ -661,101 +682,108 @@ export const updateMeValidator = validate(
 export const updateConsignValidator = validate(
   checkSchema(
     {
+      AddressConsignKoi: {
+        optional: true, //đc phép có hoặc k
+        ...addressConsignKoiSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
+      PhoneNumberConsignKoi: {
+        optional: true, //đc phép có hoặc k
+        ...phoneNumberConsignKoiSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
       PositionCare: {
         optional: true, //đc phép có hoặc k
         ...positionCareSchema, //phân rã nameSchema ra
         notEmpty: undefined //ghi đè lên notEmpty của nameSchema
       },
-      Method:{
+      Method: {
         optional: true,
         ...methodSchema,
         notEmpty: undefined
       },
-      ShippedDate:{
+      ShippedDate: {
         optional: true,
         notEmpty: undefined
       },
-      ReceiptDate:{
+      ReceiptDate: {
         optional: true,
         notEmpty: undefined
       },
-      Detail:{
+      Detail: {
         optional: true,
         ...detailSchema,
         notEmpty: undefined
       },
-      CategoryID:{
+      CategoryID: {
         optional: true,
         ...categoryIDSchema,
         notEmpty: undefined
       },
-      KoiName:{
+      KoiName: {
         optional: true,
         ...koiNameSchema,
         notEmpty: undefined
       },
-      Age:{
+      Age: {
         optional: true,
         ...ageSchema,
         notEmpty: undefined
       },
-      Origin:{
+      Origin: {
         optional: true,
         ...originSchema,
         notEmpty: undefined
       },
-      Gender:{
+      Gender: {
         optional: true,
         ...genderSchema,
         notEmpty: undefined
       },
-      Size:{
+      Size: {
         optional: true,
         ...sizeSchema,
         notEmpty: undefined
       },
-      Breed:{
+      Breed: {
         optional: true,
         ...breedSchema,
         notEmpty: undefined
       },
-      Description:{
+      Description: {
         optional: true,
         ...descriptionSchema,
         notEmpty: undefined
       },
-      DailyFoodAmount:{
+      DailyFoodAmount: {
         optional: true,
         ...dailyFoodAmountSchema,
         notEmpty: undefined
       },
-      FilteringRatio:{
+      FilteringRatio: {
         optional: true,
         ...filteringRatioSchema,
         notEmpty: undefined
       },
-      CertificateID:{
+      CertificateID: {
         optional: true,
         ...certificateIDSchema,
         notEmpty: undefined
       },
-      Image:{
+      Image: {
         optional: true,
         ...imageKoiSchema,
         notEmpty: undefined
       },
-      Video:{
+      Video: {
         optional: true,
         ...videoKoiSchema,
         notEmpty: undefined
-      },
+      }
     },
     ['body']
   )
 )
-
-
-
 
 export const changePasswordValidator = validate(
   checkSchema(
