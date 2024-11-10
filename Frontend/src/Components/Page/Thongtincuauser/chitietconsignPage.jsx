@@ -17,13 +17,14 @@ import {
   Typography,
   Spin,
   Select,
+  AutoComplete,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Footer from "../../Footer";
 import Navbar from "../../Navbar/Navbar";
 import dayjs from "dayjs";
 import moment from "moment";
-
+import useAddress from "../../../An/Ant Design/Components/useAddress";
 const { Title } = Typography;
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -41,16 +42,27 @@ export default function Chitietconsignpage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const { consign } = location.state || {}; // Access the passed state
+  const { setSearchText, recommendations } = useAddress();
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const loggedIn = !!accessToken; // Kiểm tra nếu có accessToken
     setIsLoggedIn(loggedIn);
     // Check localStorage for toast state
   }, [isLoggedIn]);
-  const [initialFormData, setInitialFormData] = useState({
-    Image: null, // Hoặc giá trị ban đầu nếu có
-    Video: null, // Hoặc giá trị ban đầu nếu có
-  });
+  const handleAddressChange = (value) => {
+    setSearchText(value);
+    setFormData((prevData) => ({
+      ...prevData,
+      AddressConsignKoi: value,
+    }));
+  };
+  // Handle select suggestion
+  const handleSelect = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      AddressConsignKoi: value,
+    }));
+  };
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -70,6 +82,8 @@ export default function Chitietconsignpage() {
     Gender: "",
     Size: 0,
     Breed: "",
+    AddressConsignKoi: "",
+    PhoneNumberConsignKoi: "",
     DailyFoodAmount: 0,
     FilteringRatio: 0,
     CertificateID: "",
@@ -102,10 +116,8 @@ export default function Chitietconsignpage() {
   const handleDateChange = (key, date) => {
     // Kiểm tra nếu date không phải là null
     const formattedDate = date ? date.format("DD/MM/YYYY") : null;
-
     // In ra giá trị formattedDate để kiểm tra
     console.log(`${key} date:`, formattedDate);
-
     setFormData((prevData) => ({ ...prevData, [key]: formattedDate }));
   };
 
@@ -210,19 +222,16 @@ export default function Chitietconsignpage() {
         : null;
       const currentDate = new Date();
       currentDate.setUTCHours(0, 0, 0, 0); // Đặt currentDate về UTC 00:00:00
-
       // Log the dates for debugging
       console.log("Shipped Date:", shippedDateObj);
       console.log("Receipt Date:", receiptDateObj);
       console.log("Current Date:", currentDate);
-
       // Kiểm tra ngày tháng trước khi gửi
       if (shippedDateObj && receiptDateObj && shippedDateObj > receiptDateObj) {
         toast.error("Ngày gửi không được sau ngày nhận!");
         setLoading(false);
         return; // Dừng lại nếu ngày không hợp lệ
       }
-
       if (
         shippedDateObj &&
         receiptDateObj &&
@@ -333,6 +342,8 @@ export default function Chitietconsignpage() {
     ReceiptDate: consignData?.ReceiptDate
       ? dayjs(consignData.ReceiptDate)
       : null,
+    AddressConsignKoi: consignData?.AddressConsignKoi || "",
+    PhoneNumberConsignKoi: consignData?.PhoneNumberConsignKoi || "",
     Detail: consignData?.Detail || "",
     CategoryID: koiData?.CategoryID || "",
     KoiName: koiData?.KoiName || "",
@@ -592,6 +603,55 @@ export default function Chitietconsignpage() {
                           />
                         </Form.Item>
                       </div>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <div style={{ width: "50%", paddingRight: "25px" }}>
+                      <label
+                        htmlFor="AddressConsignKoi"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
+                        <span style={{ color: "red" }}>* </span>
+                        Địa chỉ nhận koi
+                      </label>
+                      <Form.Item
+                        name="AddressConsignKoi"
+                        rules={[
+                          {
+                            required: true,
+                            type: "string",
+                            message: "Vui lòng nhập địa chỉ",
+                          },
+                        ]}
+                      >
+                        <AutoComplete
+                          name="AddressConsignKoi"
+                          onSearch={handleAddressChange}
+                          onSelect={handleSelect}
+                          value={formData.AddressConsignKoi}
+                          placeholder="Nhập địa chỉ để IKoi đến lấy koi"
+                          options={recommendations.map((address) => ({
+                            value: address,
+                          }))}
+                        />
+                      </Form.Item>
+                    </div>
+                    <div style={{ width: "50%" }}>
+                      <label
+                        htmlFor="PhoneNumberConsignKoi"
+                        style={{ fontWeight: "bold", fontSize: "15px" }}
+                      >
+                        Số điện thoại người ký gửi
+                      </label>
+                      <Form.Item name="PhoneNumberConsignKoi">
+                        <Input
+                          name="PhoneNumberConsignKoi"
+                          type="text"
+                          value={formData.PhoneNumberConsignKoi}
+                          onChange={handleChange}
+                          placeholder="Nhập số điên thoại"
+                        />
+                      </Form.Item>
                     </div>
                   </div>
                   <div>

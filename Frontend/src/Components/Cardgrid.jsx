@@ -72,7 +72,9 @@ const CardGrid = ({ cardData }) => {
         orientation="left"
         style={{ margin: "0", marginBottom: "40px", cursor: "pointer" }}
       >
-        <Text style={{ fontSize: "24px", fontWeight: "bold" }}>
+        <Text
+          style={{ fontSize: "24px", fontWeight: "bold", color: "#efa709" }}
+        >
           {category === "kygui"
             ? "Cá Ký Gửi"
             : category === "ikoi"
@@ -85,7 +87,7 @@ const CardGrid = ({ cardData }) => {
       <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#efa709" }}
             onClick={() => handleCategoryChange("All")}
           >
             Tất cả
@@ -93,7 +95,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#efa709" }}
             onClick={() => handleCategoryChange("kygui")}
           >
             Cá Ký Gửi
@@ -101,7 +103,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#efa709" }}
             onClick={() => handleCategoryChange("ikoi")}
           >
             Cá Ikoi
@@ -109,7 +111,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", color: "#efa709" }}
             onClick={() => handleCategoryChange("nhat")}
           >
             Cá Koi Nhật
@@ -162,8 +164,22 @@ const CardGrid = ({ cardData }) => {
                 {card.Status === 3 && <Text>Việt</Text>}
                 {card.Status === 4 && <Text>Ký Gửi</Text>}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  {card.Price ? `${card.Price.toLocaleString()} đ` : "Liên Hệ"}
+                <Text strong style={{ color: "red" }}>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "red",
+                      fontSize: "16px",
+                    }}
+                  >
+                    Tổng tiền{" "}
+                  </span>
+                  {card.TotalPrice
+                    ? new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.TotalPrice)
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
@@ -303,14 +319,12 @@ const CardGrid = ({ cardData }) => {
                   {card.KoiName || "Cá Koi chưa được đặt tên"} ({count})
                 </Text>
                 <br />
-                <Text>Số lượng ({count})</Text>
+                <Text>Số lượng {count}</Text>
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Origin}
                 </Text>
-                <br />
-                Xuất xứ : {""}
-                {card.Status === 1 && <Text>Nhật Nhập Khẩu</Text>}
+                Xuất xứ : {card.Status === 1 && <Text>Nhật Nhập Khẩu</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price

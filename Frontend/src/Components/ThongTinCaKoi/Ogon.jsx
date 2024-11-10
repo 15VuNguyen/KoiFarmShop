@@ -262,16 +262,20 @@ export default function Ogon() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2 style={{ fontWeight: "bold", color: "red" }}>
-                  Nội Dung Bài Viết
-                </h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <h2 style={{ color: "#920202" }}>Nội Dung Bài Viết</h2>
+                <ul style={{ marginTop: "10px", listStyleType: "none" }}>
                   <li style={{ paddingTop: "10px" }}>
                     <span
                       onClick={handleScroll1}
                       className="contentBox"
-                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       1. Nguồn gốc lịch sử của giống cá Koi Ogon
                     </span>
@@ -280,7 +284,10 @@ export default function Ogon() {
                     <span
                       onClick={handleScroll2}
                       className="contentBox"
-                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       2. Đặc điểm của Koi ogon
                     </span>
@@ -289,18 +296,21 @@ export default function Ogon() {
                     <span
                       onClick={handleScroll3}
                       className="contentBox"
-                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       3. Những dòng cá Koi ogon phổ biến hiện nay
                     </span>
-                    <ul>
+                    <ul style={{ listStyleType: "none" }}>
                       <li style={{ paddingTop: "10px" }}>
                         <span
                           onClick={handleScroll31}
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
                         >
                           3.1 Giá cá Koi Ogon F1
@@ -312,7 +322,7 @@ export default function Ogon() {
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
                         >
                           3.2 Giá cá Koi Ogon Nhật chuẩn
@@ -324,7 +334,7 @@ export default function Ogon() {
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
                         >
                           3.3 Cá Koi Hi Ogon
@@ -336,7 +346,7 @@ export default function Ogon() {
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
                         >
                           3.4 Cá Koi Orenji Ogon
@@ -348,7 +358,7 @@ export default function Ogon() {
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
                         >
                           3.5 Cá Koi Mukashi Ogon
@@ -360,8 +370,9 @@ export default function Ogon() {
                           className="contentBox"
                           style={{
                             cursor: "pointer",
-                            color: "rgb(255, 178, 0)",
+                            color: "#920202",
                           }}
+                          s
                         >
                           3.6 Cá Nezu Ogon Koi
                         </span>
@@ -372,7 +383,10 @@ export default function Ogon() {
                     <span
                       onClick={handleScroll4}
                       className="contentBox"
-                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       4. Cách nuôi cá Koi ogon khỏe mạnh, phát triển tốt
                     </span>
@@ -381,7 +395,10 @@ export default function Ogon() {
                     <span
                       onClick={handleScroll5}
                       className="contentBox"
-                      style={{ cursor: "pointer", color: "rgb(255, 178, 0)" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       5. Địa chỉ bán cá Koi Ogon đẹp, uy tín
                     </span>
@@ -390,7 +407,12 @@ export default function Ogon() {
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2
+                  className="noidungchitiet"
+                  style={{ color: "rgb(255, 178, 0)", paddingTop: "20px" }}
+                >
+                  Nội dung chi tiết
+                </h2>
                 <div style={{ fontSize: "15px", fontWeight: "400" }}>
                   <Paragraph
                     className="paragraph-Style"
@@ -711,7 +733,7 @@ export default function Ogon() {
                 </ul>
               </div>
               <div id="4">
-                <h3        style={{ color: "rgb(255, 178, 0)" }}>
+                <h3 style={{ color: "rgb(255, 178, 0)" }}>
                   4. Cách nuôi cá Koi ogon khỏe mạnh, phát triển tốt
                 </h3>
                 <Paragraph className="paragraph-Style">

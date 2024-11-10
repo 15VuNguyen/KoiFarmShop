@@ -186,7 +186,7 @@ export default function Kyguikoi() {
         DailyFoodAmount: parseFloat(formData.DailyFoodAmount),
         FilteringRatio: parseFloat(formData.FilteringRatio),
         Age: parseInt(formData.Age, 10),
-        AddressConsignKoi: formData.AddressConsignKoi.toString || "",
+        AddressConsignKoi: formData.AddressConsignKoi.toString() || "",
         PhoneNumberConsignKoi: formData.PhoneNumberConsignKoi || "",
         ShippedDate: shippedDateObj ? shippedDateObj.toISOString() : null,
         ReceiptDate: receiptDateObj ? receiptDateObj.toISOString() : null,
@@ -841,9 +841,9 @@ export default function Kyguikoi() {
                             return Promise.resolve(); // If the value is empty, resolve the promise
                           }
                           const numericValue = Number(value); // Convert to a number
-                          if (numericValue < 1) {
+                          if (numericValue < 5) {
                             return Promise.reject(
-                              new Error("Kích Thước phải lớn hơn hoặc bằng 1.")
+                              new Error("Kích Thước phải lớn hơn hoặc bằng 5.")
                             );
                           }
                           if (numericValue > 200) {
@@ -862,8 +862,6 @@ export default function Kyguikoi() {
                       onChange={handleChange}
                       type="number"
                       placeholder="Nhập kích thước(cm)"
-                      min={5}
-                      max={150}
                       addonAfter="cm"
                     />
                   </Form.Item>
