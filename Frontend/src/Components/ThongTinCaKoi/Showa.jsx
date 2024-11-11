@@ -7,6 +7,17 @@ import "../Css/koiStyle.css";
 const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
 import img1 from "../../assets/Koi-Showa/ca-koi-showa-9.webp";
+import img2 from "../../assets/Koi-shusui/showa5.jpg";
+import img3 from "../../assets/Koi-Showa/content_hi-showa__1_.jpg";
+import img4 from "../../assets/Koi-Showa/kindai-showa.webp";
+import img5 from "../../assets/Koi-Showa/tancho-showa.png";
+import img6 from "../../assets/Koi-Showa/maruten-showa.jpg";
+import img7 from "../../assets/Koi-Showa/boke-showa.webp";
+import img8 from "../../assets/Koi-Showa/doistu-showa.jpg";
+import img9 from "../../assets/Koi-Showa/ca-koi-showa-9.webp";
+import img10 from "../../assets/Koi-Showa/ca-koi-showa-7.webp";
+import img11 from "../../assets/img_4.png";
+import img12 from "../../assets/img_5.png";
 export default function Showa() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -472,6 +483,7 @@ export default function Showa() {
                   dưới đây để hiểu hơn về loài Cá Showa này nhé!
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
+                  {/* //img0 */}
                   <img
                     src="src/assets/Koi-Showa/ca-koi-showa-5.webp"
                     style={{ width: "50%" }}
@@ -555,10 +567,7 @@ export default function Showa() {
                   </ul>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-shusui/showa5.jpg"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img2} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text
                       className="text-Style"
@@ -606,7 +615,7 @@ export default function Showa() {
                       </Paragraph>
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
                         <img
-                          src="src/assets/Koi-Showa/content_hi-showa__1_.jpg"
+                          src={img3}
                           style={{ width: "30%", objectFit: "cover" }}
                         />
                         <div style={{ textAlign: "center" }}>
@@ -637,10 +646,8 @@ export default function Showa() {
                         khớp ngực.
                       </Paragraph>
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                        <img
-                          src="src/assets/Koi-Showa/kindai-showa.webp"
-                          style={{ width: "30%" }}
-                        />
+                        {/* img4 */}
+                        <img src={img4} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -664,10 +671,8 @@ export default function Showa() {
                       </span>
                       có nhiều màu đen trên thân cá và ít màu đỏ và trắng.
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                        <img
-                          src="src/assets/Koi-Showa/tancho-showa.png"
-                          style={{ width: "30%" }}
-                        />
+                        {/* /img5 */}
+                        <img src={img5} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -695,10 +700,8 @@ export default function Showa() {
                         các chấm đỏ khác trên thân cá
                       </Paragraph>
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                        <img
-                          src="src/assets/Koi-Showa/tancho-showa.png"
-                          style={{ width: "30%" }}
-                        />
+                        {/* img6 */}
+                        <img src={img6} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -723,10 +726,8 @@ export default function Showa() {
                       </span>
                       có các chấm đen mờ hơn.
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                        <img
-                          src="src/assets/Koi-Showa/boke-showa.webp"
-                          style={{ width: "30%" }}
-                        />
+                        {/* img7 */}
+                        <img src={img7} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -753,10 +754,8 @@ export default function Showa() {
                         không có vảy, da trơn, các bệt màu xen kẽ đẹp mắt.
                       </Paragraph>
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                        <img
-                          src="src/assets/Koi-Showa/doistu-showa.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        {/* img8 */}
+                        <img src={img8} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -911,10 +910,8 @@ export default function Showa() {
                           được phong là một trong tam vương của làng cá Koi.
                         </Paragraph>
                         <div style={{ textAlign: "center" }}>
-                          <img
-                            src="src/assets/Koi-Showa/ca-koi-showa-9.webp"
-                            style={{ width: "50%" }}
-                          />
+                          {/* img9 */}
+                          <img src={img9} style={{ width: "50%" }} />
                           <Paragraph
                             className="paragraph-Style"
                             style={{
@@ -1028,10 +1025,8 @@ export default function Showa() {
                         trên vây đuôi.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Showa/ca-koi-showa-7.webp"
-                          style={{ width: "50%" }}
-                        />
+                        {/* img10 */}
+                        <img src={img10} style={{ width: "50%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text
                             className="text-Style"
@@ -1180,11 +1175,13 @@ export default function Showa() {
             </div>
             <div style={{ display: "flex" }}>
               <div>
-                <img src="src/assets/img_4.png" />
+                {/* img11 */}
+                <img src={img11} />
               </div>
               <div style={{ textAlign: "center" }}>
+                {/* img12 */}
                 <img
-                  src="src/assets/img_5.png"
+                  src={img12}
                   style={{ objectFit: "cover", width: "100%" }}
                 />
               </div>

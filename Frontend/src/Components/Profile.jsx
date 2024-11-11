@@ -383,7 +383,7 @@ export default function Profile() {
                       width: "100px",
                     }}
                   >
-                    {userData ? userData.username : "Tài khoản"}
+                    {userData ? userData.name : "Tài khoản"}
                   </h4>
                   <h6
                     style={{
@@ -463,7 +463,8 @@ export default function Profile() {
                     type="link"
                     onClick={() => handleClick("loyaltycard")}
                     style={{
-                      color: activeButton === "loyaltycard" ? "orange" : "black",
+                      color:
+                        activeButton === "loyaltycard" ? "orange" : "black",
                       marginTop: "15px",
                     }}
                   >

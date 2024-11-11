@@ -40,14 +40,7 @@ const OrderPage = () => {
   const [comboQuantity, setComboQuantity] = useState(1); // Track combo quantity
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   console.log(selectedItem);
-  useEffect(() => {
-    if (selectedQuantity > maxQuantity) {
-      setIsButtonDisabled(true);
-      toast.error(`Dòng koi này hết hàng chỉ còn ${maxQuantity} con`);
-    } else {
-      setIsButtonDisabled(false);
-    }
-  }, [selectedQuantity, maxQuantity]);
+
   useEffect(() => {
     // Cuộn lên đầu trang khi component được mount
     window.scrollTo(0, 0);
@@ -279,19 +272,21 @@ const OrderPage = () => {
                     alt={selectedItem.KoiName}
                     style={{
                       width: "100%",
-                      objectFit: "container",
+                      height: "450px", // Đặt chiều cao cố định
+                      objectFit: "cover", // Đảm bảo ảnh được cắt đúng cách
                       borderRadius: "8px",
-                      maxHeight: "400px",
+                      maxWidth: "500px",
                     }}
                   />
                   <video
                     controls
                     style={{
                       width: "100%",
-                      objectFit: "cover",
+                      height: "300px", // Đặt chiều cao cố định
+                      objectFit: "cover", // Đảm bảo video được cắt đúng cách
                       marginTop: "10px",
-                      maxHeight: "300px",
                       borderRadius: "8px",
+                      maxWidth: "500px",
                     }}
                   >
                     <source src={selectedItem.Video} type="video/mp4" />

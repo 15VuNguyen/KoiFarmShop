@@ -6,8 +6,15 @@ import axios from "axios";
 import { Layout } from "antd";
 import { Typography } from "antd";
 import "../Css/koiStyle.css";
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Tancho/ca-koi-tancho-nhat.jpg";
+import img2 from "../../assets/Koi-Tancho/08e242e22db6eae8b3a7-225x300.jpg";
+import img3 from "../../assets/Koi-Tancho/Tancho-Sanke.png";
+import img4 from "../../assets/Koi-Tancho/Tancho-Showa.png";
+import img5 from "../../assets/Koi-Tancho/Tancho-Kohaku-Sanke-Showa.jpg";
+import img6 from "../../assets/img_4.png";
+import img7 from "../../assets/img_5.png";
 export default function Tancho() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -284,63 +291,156 @@ export default function Tancho() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage ">
-                <h2 style={{ color: "red" }}>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage "
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu cá Koi Tancho
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Các loại cá koi Tancho đẹp
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll21} className="contentBox">
+                        <span
+                          onClick={handleScroll21}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           2.1 Tancho Kohaku
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll22} className="contentBox">
+                        <span
+                          onClick={handleScroll22}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           2.2 Tancho Sanke
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll23} className="contentBox">
+                        <span
+                          onClick={handleScroll23}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           2.3 Tancho Showa
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Phân biệt các loại cá koi Tancho có trên thị trường
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chọn cá koi tancho
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Cách chăm sóc cá koi tancho
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Cách chăm sóc Koi Kohaku
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll61} className="contentBox">
+                        <span
+                          onClick={handleScroll61}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           6.1 Giá cá koi Tancho F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll62} className="contentBox">
+                        <span
+                          onClick={handleScroll62}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           6.2 Tại sao nên mua Tancho koi tại IKoi?
                         </span>
                       </li>
@@ -348,7 +448,14 @@ export default function Tancho() {
                   </li>
 
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll7} className="contentBox">
+                    <span
+                      onClick={handleScroll7}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       7. Tại sao nên mua Koi Tancho tại IKoi
                     </span>
                   </li>
@@ -356,7 +463,12 @@ export default function Tancho() {
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2
+                  className="noidungchitiet"
+                  style={{ color: "red", paddingTop: "20px" }}
+                >
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style">
                   Hiện nay, cá koi là dòng cá được ưa chuộng để làm cảnh cũng
                   như trang trí cho không gian sống của bạn. Cá koi có nhiều
@@ -368,7 +480,15 @@ export default function Tancho() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu cá Koi Tancho </h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu cá Koi Tancho{" "}
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Tancho hiện đang là sự chú ý của nhiều dân chơi cá,
@@ -382,14 +502,27 @@ export default function Tancho() {
                     sẽ không rẻ
                   </Paragraph>
                   <div style={{ textAlign: "center" }}>
-                    <img src="src/assets/Koi-Tancho/ca-koi-tancho-nhat.jpg" />
-                    <Text>Đàn cá Koi Tancho đẹp</Text>
+                    {/* img1 */}
+                    <img src={img1} style={{ width: "50%" }} />
+                    <div style={{ textAlign: "center" }}>
+                      <Text className="text-Style" style={{ color: "#efa709" }}>
+                        Đàn cá Koi Tancho đẹp
+                      </Text>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>2. Các loại cá koi Tancho đẹp</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2. Các loại cá koi Tancho đẹp
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Bạn có thể phân biệt cá Koi Tancho với một số những giống cá
@@ -405,7 +538,11 @@ export default function Tancho() {
                 <div>
                   <ul>
                     <li>
-                      <span id="21" className="span-Style">
+                      <span
+                        id="21"
+                        className="span-Style"
+                        style={{ color: "rgb(146, 2, 2)" }}
+                      >
                         2.1 Tancho Kohaku
                       </span>
                       <br />
@@ -416,12 +553,24 @@ export default function Tancho() {
                         đỏ lớn trên đầu.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img src="src/assets/Koi-Tancho/08e242e22db6eae8b3a7-225x300.jpg" />
-                        <Text>Tancho Kohaku</Text>
+                        {/* img2 */}
+                        <img src={img2} style={{ width: "50%" }} />
+                        <div style={{ textAlign: "center" }}>
+                          <Text
+                            className="text-Style"
+                            style={{ color: "#efa709" }}
+                          >
+                            Tancho Kohaku
+                          </Text>
+                        </div>
                       </div>
                     </li>
                     <li>
-                      <span id="22" className="span-Style">
+                      <span
+                        id="22"
+                        className="span-Style"
+                        style={{ color: "rgb(146, 2, 2)" }}
+                      >
                         2.2 Tancho Sanke
                       </span>
                       <br />
@@ -433,12 +582,24 @@ export default function Tancho() {
                         tancho sanke chỉ có chấm đen rất nhỏ trên chấm đỏ.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img src="src/assets/Koi-Tancho/Tancho-Sanke.png" />
-                        <Text>Tancho Sanke</Text>
+                        {/* img3 */}
+                        <img src={img3} style={{ width: "50%" }} />
+                        <div style={{ textAlign: "center" }}>
+                          <Text
+                            style={{ color: "#efa709" }}
+                            className="text-Style"
+                          >
+                            Tancho Sanke
+                          </Text>
+                        </div>
                       </div>
                     </li>
                     <li>
-                      <span id="23" className="span-Style">
+                      <span
+                        id="23"
+                        className="span-Style"
+                        style={{ color: "rgb(146, 2, 2)" }}
+                      >
                         2.3 Tancho Showa
                       </span>
                       <br />
@@ -453,42 +614,77 @@ export default function Tancho() {
                         màu trắng.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img src="src/assets/Koi-Tancho/Tancho-Showa.png" />
-                        <Text>Tancho Showa</Text>
+                        {/* img4 */}
+                        <img src={img4} style={{ width: "50%" }} />
+                        <div style={{ textAlign: "center" }}>
+                          <Text
+                            style={{ color: "#efa709" }}
+                            className="text-Style"
+                          >
+                            Tancho Showa
+                          </Text>
+                        </div>
                       </div>
                     </li>
                   </ul>
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   3. Phân biệt các loại cá koi Tancho có trên thị trường
                 </h3>
                 <Table striped bordered hover responsive>
                   <thead style={{ fontSize: "15px", fontWeight: "400" }}>
                     <tr>
                       <th>
-                        <span className="span-Style">Tiêu chí</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Tiêu chí
+                        </span>
                       </th>
                       <th>
-                        <span className="span-Style">
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
                           Tancho Nhật thuần chủng
                         </span>
                       </th>
                       <th>
-                        <span className="span-Style">
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
                           Tancho Nhật nuôi vỗ ao bùn
                         </span>
                       </th>
                       <th>
-                        <span className="span-Style">Tancho F1</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Tancho F1
+                        </span>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <span className="span-Style">Nguồn gốc</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Nguồn gốc
+                        </span>
                       </td>
                       <td>
                         <Paragraph className="paragraph-Style">
@@ -511,7 +707,12 @@ export default function Tancho() {
                     </tr>
                     <tr>
                       <td>
-                        <span className="span-Style">Hình dáng</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Hình dáng
+                        </span>
                       </td>
                       <td>
                         <Paragraph className="paragraph-Style">
@@ -533,7 +734,12 @@ export default function Tancho() {
                     </tr>
                     <tr>
                       <td>
-                        <span className="span-Style">Màu sắc</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Màu sắc
+                        </span>
                       </td>
                       <td>
                         <Paragraph className="paragraph-Style">
@@ -555,7 +761,12 @@ export default function Tancho() {
                     </tr>
                     <tr>
                       <td>
-                        <span className="span-Style">Giá cả</span>
+                        <span
+                          className="span-Style"
+                          style={{ color: "rgb(146, 2, 2)" }}
+                        >
+                          Giá cả
+                        </span>
                       </td>
                       <td>
                         <Paragraph className="paragraph-Style">
@@ -577,7 +788,15 @@ export default function Tancho() {
                 </Table>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chọn cá koi tancho</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chọn cá koi tancho
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Đối với những người chơi Tancho koi đều mong muốn cá của
@@ -626,7 +845,15 @@ export default function Tancho() {
                 </div>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>5. Cách chăm sóc cá koi tancho</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  5. Cách chăm sóc cá koi tancho
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Tancho được nuôi trong một môi trường từ 18 - 26 độ
@@ -642,12 +869,19 @@ export default function Tancho() {
                     nghiệm của người đi trước để có cách chăm sóc tốt nhất.
                   </Paragraph>
                   <div style={{ textAlign: "center" }}>
-                    <img src="src/assets/Koi-Tancho/Tancho-Kohaku-Sanke-Showa.jpg" />
+                    {/* img5 */}
+                    <img src={img5} />
                   </div>
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6. Giá cá koi Tancho bao nhiêu?
                 </h3>
                 <div>
@@ -661,7 +895,11 @@ export default function Tancho() {
                 <div>
                   <ul>
                     <li>
-                      <span id="61" className="span-Style">
+                      <span
+                        id="61"
+                        className="span-Style"
+                        style={{ color: "rgb(146, 2, 2)" }}
+                      >
                         6.1 Giá cá koi Tancho F1
                       </span>
                       <br />
@@ -676,7 +914,11 @@ export default function Tancho() {
                       </Paragraph>
                     </li>
                     <li>
-                      <span id="62" className="span-Style">
+                      <span
+                        id="62"
+                        className="span-Style"
+                        style={{ color: "rgb(146, 2, 2)" }}
+                      >
                         6.2 Giá cá koi Tancho Nhật chuẩn
                       </span>
                       <br />
@@ -695,7 +937,13 @@ export default function Tancho() {
                 </div>
               </div>
               <div id="7">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   7. Tại sao nên mua Tancho koi tại IKoi?
                 </h3>
                 <div>
@@ -705,16 +953,16 @@ export default function Tancho() {
                     những người mới bắt đầu chơi dòng cá này sẽ khá khó khăn khi
                     lựa chọn địa chỉ uy tín.
                     <br />
-                    Siêu thị Cá Koi VN được biết đến là một trong những địa chỉ
-                    uy tín để bạn có thể lựa chọn và cung cấp thiết kế hồ cá Koi
-                    độc đáo cho những dân chơi cá. Siêu thị Cá Koi VN tự hào là
-                    nơi mang đến cho bạn những dòng cá koi tancho đẹp hiện nay.
-                    Với giá thành tốt, phù hợp và cạnh tranh trên thị trường.
-                    Bên cạnh đó, IKoi có đội ngũ chuyên gia nhiều kinh nghiệm sẽ
-                    tư vấn và hỗ trợ cho bạn lựa chọn mua cũng như chăm sóc cá
-                    Koi đúng cách. Vậy nên, nếu bạn có nhu cầu tư vấn hoặc muốn
-                    tìm hiểu các loại Tancho koi khác. Hãy liên hệ với chúng tôi
-                    để được hỗ trợ và giải đáp nhanh chóng.
+                    IKoi được biết đến là một trong những địa chỉ uy tín để bạn
+                    có thể lựa chọn và cung cấp thiết kế hồ cá Koi độc đáo cho
+                    những dân chơi cá. IKoi tự hào là nơi mang đến cho bạn những
+                    dòng cá koi tancho đẹp hiện nay. Với giá thành tốt, phù hợp
+                    và cạnh tranh trên thị trường. Bên cạnh đó, IKoi có đội ngũ
+                    chuyên gia nhiều kinh nghiệm sẽ tư vấn và hỗ trợ cho bạn lựa
+                    chọn mua cũng như chăm sóc cá Koi đúng cách. Vậy nên, nếu
+                    bạn có nhu cầu tư vấn hoặc muốn tìm hiểu các loại Tancho koi
+                    khác. Hãy liên hệ với chúng tôi để được hỗ trợ và giải đáp
+                    nhanh chóng.
                     <br />
                     Trên đây là những thông tin giúp bạn có thêm thông tin hữu
                     ích về Tancho koi . Hy vọng điều này sẽ giúp bạn có thêm
@@ -727,13 +975,12 @@ export default function Tancho() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              {/* img6 */}
+              <img src={img6} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              {/* img7 */}
+              <img src={img7} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>

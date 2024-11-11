@@ -11,12 +11,14 @@ import {
   Col,
   Tooltip,
   Modal,
+  message,
 } from "antd";
-import { HomeOutlined, CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined } from "@ant-design/icons";
 import axiosInstance from "../An/Utils/axiosJS";
 import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
 const { Title, Text } = Typography;
 
 export default function DonKyGui() {
@@ -32,6 +34,7 @@ export default function DonKyGui() {
   const showModal = () => {
     setIsModalVisible(true);
   };
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,12 +76,24 @@ export default function DonKyGui() {
   useEffect(() => {
     fetchUserData();
   }, []);
-  const handleOk = () => {
-    // Thực hiện hành động xóa
-    navigate(`/xoa`, {
-      state: { consign },
-    });
-    setIsModalVisible(false);
+  const handleOk = async () => {
+    try {
+      const response = await axiosInstance.patch(
+        `/users/huy-don-ki-gui/${consign._id}`
+      );
+      if (response.status === 200) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+        toast.success("Đã xóa thành công");
+        window.location.reload();
+        setIsModalVisible(false);
+      } else {
+        toast.error("Failed to delete consignment");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    }
   };
 
   const handleCancel = () => {
@@ -119,8 +134,9 @@ export default function DonKyGui() {
                 level={4}
                 style={{
                   textAlign: "left",
-                  marginBottom: "55px",
+                  marginBottom: "25px",
                   marginLeft: "15px",
+                  marginTop:'55px'
                 }}
               >
                 Danh Sách Ký Gửi Của Khách Hàng
@@ -162,39 +178,55 @@ export default function DonKyGui() {
                           <Text style={{ fontWeight: "bold" }}>
                             <span
                               style={{
-                                color: "red",
                                 fontWeight: "bold",
                                 fontSize: "16px",
                               }}
                             >
-                              Age{" "}
+                              Tuổi:{" "}
                             </span>
-                            {koi?.Age ?? "N/A"} years
+                            <span
+                              style={{
+                                fontWeight: "normal", // Bỏ chữ đậm cho Age
+                                color: "black", // Màu đen cho giá trị Age
+                              }}
+                            >
+                              {koi?.Age ?? "N/A"} năm
+                            </span>
                           </Text>
                           <div style={{ marginBottom: "8px" }}></div>
                           <Text style={{ fontWeight: "bold" }}>
                             <span
                               style={{
-                                color: "red",
                                 fontWeight: "bold",
                                 fontSize: "16px",
                               }}
                             >
-                              Price{" "}
+                              Giá:{" "}
                             </span>
-                            {koi?.Price || "Chờ bên shop định giá"}
+                            <span
+                              style={{
+                                fontWeight: "normal", // Bỏ chữ đậm cho giá trị Price
+                                color: "black", // Màu đen cho giá trị Price
+                              }}
+                            >
+                              {koi?.Price
+                                ? new Intl.NumberFormat("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }).format(koi.Price)
+                                : "Chờ bên shop định giá"}
+                            </span>
                           </Text>
                         </div>
                         <div style={{ marginLeft: "300px", marginTop: "22px" }}>
                           <Text>
                             <span
                               style={{
-                                color: "red",
                                 fontWeight: "bold",
                                 fontSize: "16px",
                               }}
                             >
-                              Tình trạng{" "}
+                              Tình trạng:{" "}
                             </span>
                             {(() => {
                               const statusText = [
@@ -203,19 +235,27 @@ export default function DonKyGui() {
                                 "Đang thương thảo hợp đồng",
                                 "Đang tìm người mua",
                                 "Đã bán",
-                              ][consign.State - 1];
+                                "Đã Hủy", // Add this for the -1 state
+                              ];
 
                               let color;
+                              let text;
                               if (
                                 consign.State === 1 ||
                                 consign.State === 2 ||
                                 consign.State === 3
                               ) {
                                 color = "blue";
+                                text = statusText[consign.State - 1];
                               } else if (consign.State === 4) {
                                 color = "";
+                                text = statusText[consign.State - 1];
                               } else if (consign.State === 5) {
                                 color = "green";
+                                text = statusText[consign.State - 1];
+                              } else if (consign.State === -1) {
+                                color = "red";
+                                text = statusText[5]; // Use the last element for the -1 state
                               }
 
                               return (
@@ -228,43 +268,55 @@ export default function DonKyGui() {
                             <Text strong style={{ color: "black" }}>
                               <span
                                 style={{
-                                  color: "red",
                                   fontWeight: "bold",
                                   fontSize: "16px",
                                 }}
                               >
-                                Ngày giao hàng{" "}
+                                Ngày giao hàng:{" "}
                               </span>
-                              {consign.ShippedDate
-                                ? new Date(
-                                    consign.ShippedDate
-                                  ).toLocaleDateString("vi-VN", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                  })
-                                : "Không yêu cầu"}
+                              <span
+                                style={{
+                                  fontWeight: "normal", // Chữ thường cho ngày giao hàng
+                                  color: "black", // Màu đen cho ngày giao hàng
+                                }}
+                              >
+                                {consign.ShippedDate
+                                  ? new Date(
+                                      consign.ShippedDate
+                                    ).toLocaleDateString("vi-VN", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    })
+                                  : "Không yêu cầu"}
+                              </span>
                             </Text>
                             <br />
                             <Text strong style={{ color: "black" }}>
                               <span
                                 style={{
-                                  color: "red",
                                   fontWeight: "bold",
                                   fontSize: "16px",
                                 }}
                               >
-                                Ngày nhận hàng{" "}
+                                Ngày nhận hàng:{" "}
                               </span>
-                              {consign.ReceiptDate
-                                ? new Date(
-                                    consign.ReceiptDate
-                                  ).toLocaleDateString("vi-VN", {
-                                    day: "2-digit",
-                                    month: "2-digit",
-                                    year: "numeric",
-                                  })
-                                : "Không yêu cầu"}
+                              <span
+                                style={{
+                                  fontWeight: "normal", // Chữ thường cho ngày nhận hàng
+                                  color: "black", // Màu đen cho ngày nhận hàng
+                                }}
+                              >
+                                {consign.ReceiptDate
+                                  ? new Date(
+                                      consign.ReceiptDate
+                                    ).toLocaleDateString("vi-VN", {
+                                      day: "2-digit",
+                                      month: "2-digit",
+                                      year: "numeric",
+                                    })
+                                  : "Không yêu cầu"}
+                              </span>
                             </Text>
                           </div>
                         </div>
@@ -379,9 +431,16 @@ export default function DonKyGui() {
                                 fontSize: "16px",
                               }}
                             >
-                              Tên người ký gửi{" "}
+                              Tên người ký gửi:{" "}
                             </span>
-                            {userData?.name ?? "N/A"}
+                            <span
+                              style={{
+                                fontWeight: "normal", // Chữ thường cho tên người ký gửi
+                                color: "black", // Màu đen cho tên người ký gửi
+                              }}
+                            >
+                              {userData?.name ?? "N/A"}
+                            </span>
                           </Text>
                           <div style={{ marginBottom: "8px" }}></div>
                           <Text style={{ fontWeight: "bold" }}>
@@ -392,9 +451,16 @@ export default function DonKyGui() {
                                 fontSize: "16px",
                               }}
                             >
-                              Email{" "}
+                              Email:{" "}
                             </span>
-                            {userData?.email ?? "N/A"}
+                            <span
+                              style={{
+                                fontWeight: "normal", // Chữ thường cho email
+                                color: "black", // Màu đen cho email
+                              }}
+                            >
+                              {userData?.email ?? "N/A"}
+                            </span>
                           </Text>
                         </div>
                         <div style={{ marginLeft: "220px", marginTop: "22px" }}>
@@ -406,10 +472,17 @@ export default function DonKyGui() {
                                 fontSize: "16px",
                               }}
                             >
-                              Số điện thoại của người ký gửi{" "}
+                              Số điện thoại của người ký gửi:{" "}
                             </span>
-                            {consign?.PhoneNumberConsignKoi ??
-                              "Người dùng chưa cung cấp SĐT"}
+                            <span
+                              style={{
+                                fontWeight: "normal", // Chữ thường cho số điện thoại
+                                color: "black", // Màu đen cho số điện thoại
+                              }}
+                            >
+                              {consign?.PhoneNumberConsignKoi ??
+                                "Người dùng chưa cung cấp SĐT"}
+                            </span>
                           </Text>
                           <div style={{ marginTop: "10px" }}>
                             <Text style={{ fontWeight: "bold" }}>
@@ -420,10 +493,16 @@ export default function DonKyGui() {
                                   fontSize: "16px",
                                 }}
                               >
-                                Địa chỉ ký gửi{" "}
+                                Địa chỉ ký gửi:{" "}
                               </span>
-                              {""}
-                              {consign?.AddressConsignKoi ?? "N/A"}
+                              <span
+                                style={{
+                                  fontWeight: "normal", // Chữ thường cho địa chỉ ký gửi
+                                  color: "black", // Màu đen cho địa chỉ ký gửi
+                                }}
+                              >
+                                {consign?.AddressConsignKoi ?? "N/A"}
+                              </span>
                             </Text>
                           </div>
                         </div>

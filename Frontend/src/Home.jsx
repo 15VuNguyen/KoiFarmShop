@@ -206,7 +206,7 @@ export default function Home() {
 
   return (
     <>
-      <div style={{ backgroundColor: "#470101" }}>
+      <div>
         <div>
           <Navbar menu={menu} setMenu={setMenu} />
         </div>
@@ -219,7 +219,7 @@ export default function Home() {
               marginTop: "40px",
               marginLeft: "10%",
               marginBottom: "40px",
-              color: "rgb(255, 178, 0)",
+              color: 'red',
             }}
           >
             Các loài cá bên chúng tôi cung cấp:
@@ -248,7 +248,7 @@ export default function Home() {
                           className="carousel-image"
                           loading="lazy"
                         />
-                        <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                        <h3 style={{ color: 'grey', marginTop:'30px' }}>
                           Koi{" "}
                           {koi.name.charAt(0).toUpperCase() + koi.name.slice(1)}
                         </h3>
@@ -308,7 +308,7 @@ export default function Home() {
               marginTop: "60px",
               marginLeft: "10%",
               marginBottom: "40px",
-              color: "rgb(255, 178, 0)",
+              color: "red",
             }}
           >
             Các nhà cung cấp hàng đầu
@@ -357,7 +357,7 @@ export default function Home() {
               marginTop: "60px",
               marginLeft: "9%",
               marginBottom: "40px",
-              color: "rgb(255, 178, 0)",
+              color: "red",
             }}
           >
             Các loại cá mới
@@ -394,7 +394,6 @@ export default function Home() {
                             opacity: 0.7,
                             marginTop: "20px",
                             fontSize: "16px",
-                            color: "rgb(255, 178, 0)",
                             textAlign: "center",
                           }}
                         >
@@ -416,7 +415,7 @@ export default function Home() {
                 style={{
                   fontSize: "40px",
                   textAlign: "center",
-                  color: "rgb(255, 178, 0)",
+                  color: "red",
                 }}
               >
                 Ký Gửi Cá Koi Bên IKoi

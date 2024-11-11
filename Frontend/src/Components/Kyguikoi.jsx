@@ -391,12 +391,23 @@ export default function Kyguikoi() {
                     <Form.Item
                       name="address"
                       rules={[
-                        { required: true, message: "Vui lòng nhập địa chỉ." },
+                        {
+                          required: true,
+                          type: "string",
+                          message: "Vui lòng nhập địa chỉ",
+                        },
                       ]}
                     >
-                      <Input
-                        placeholder="Nhập địa chỉ"
+                      <AutoComplete
+                        name="address"
+                        onSearch={handleAddressChange}
+                        onSelect={handleSelect}
                         disabled={userData?.address}
+                        value={formData.address}
+                        placeholder="Nhập địa chỉ để IKoi đến lấy koi"
+                        options={recommendations.map((address) => ({
+                          value: address,
+                        }))}
                       />
                     </Form.Item>
                   </div>
@@ -613,9 +624,19 @@ export default function Kyguikoi() {
                     htmlFor="PhoneNumberConsignKoi"
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
+                    <span style={{ color: "red" }}>* </span>
                     Số điện thoại người ký gửi
                   </label>
-                  <Form.Item name="PhoneNumberConsignKoi">
+                  <Form.Item
+                    name="PhoneNumberConsignKoi"
+                    rules={[
+                      {
+                        required: true,
+                        type: "string",
+                        message: "Vui lòng nhập SĐT",
+                      },
+                    ]}
+                  >
                     <Input
                       name="PhoneNumberConsignKoi"
                       type="text"
