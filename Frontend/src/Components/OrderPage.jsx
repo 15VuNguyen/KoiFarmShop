@@ -40,14 +40,7 @@ const OrderPage = () => {
   const [comboQuantity, setComboQuantity] = useState(1); // Track combo quantity
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   console.log(selectedItem);
-  useEffect(() => {
-    if (selectedQuantity > maxQuantity) {
-      setIsButtonDisabled(true);
-      toast.error(`Dòng koi này hết hàng chỉ còn ${maxQuantity} con`);
-    } else {
-      setIsButtonDisabled(false);
-    }
-  }, [selectedQuantity, maxQuantity]);
+
   useEffect(() => {
     // Cuộn lên đầu trang khi component được mount
     window.scrollTo(0, 0);
