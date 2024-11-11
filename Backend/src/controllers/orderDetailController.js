@@ -109,7 +109,6 @@ export const removeItemsDetailController = async (req, res) => {
 export const removeAllItemsDetailController = async (req, res) => {
   try {
     const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {} // Lấy từ cookie orderDT
-
     const orderDetailID = reqOrderDTCookie._id
 
     const Order = await databaseService.order.findOne({OrderDetailID: new ObjectId(orderDetailID)})
@@ -118,6 +117,7 @@ export const removeAllItemsDetailController = async (req, res) => {
     if (Order) {
       res.clearCookie('order')
       res.clearCookie('orderDT')
+      res.clearCookie('loyaltyCard')
 
       return res.json({
         message: USERS_MESSAGES.REMOVE_ITEM_SUCCESS,

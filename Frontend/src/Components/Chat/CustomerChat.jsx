@@ -25,11 +25,13 @@ const CustomerChatButton = () => {
 
   return (
     <div className="chat-container">
+      { isShow && manager &&
       <BoxChat
         show={isShow}
         receiver={manager}
         setShow={setIsShow}
       />
+}
       <ChatButton show={isShow} setShow={setIsShow} receiver={manager} />
     </div>
   );

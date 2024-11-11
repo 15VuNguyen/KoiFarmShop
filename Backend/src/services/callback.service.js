@@ -101,6 +101,7 @@ export const callback = async (req, res) => {
         } else {
           res.clearCookie('order', { path: 'localhost:3000/' })
           res.clearCookie('orderDT', { path: 'localhost:3000/' })
+          res.clearCookie('loyaltyCard', { path: 'localhost:3000/' })
           result.returncode = 1
           result.returnmessage = 'Payment successful.'
           return res.json({ success: true, message: 'Payment successful.' })
@@ -119,7 +120,6 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
   if (!reqOrderDetailCookie || !reqOrderCookie || !reqLoyaltyCard) {
     return { error: 'No order data found in cookies' }
   }
-
   const newOrderDT = {
     _id: new ObjectId(reqOrderDetailCookie._id),
     Items: reqOrderDetailCookie.Items,
@@ -133,10 +133,14 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
     return 'Fail to save'
   }
 
+  console.log("req cookie order: ", reqOrderCookie)
+
   const newOrder = {
     _id: new ObjectId(),
-    UserID: reqOrderCookie.UserID,
+    UserID: new ObjectId(reqOrderCookie.UserID),
     OrderDetailID: newOrderDT?._id,
+    Name: reqOrderCookie.Name,
+    PhoneNumber: reqOrderCookie.PhoneNumber,
     ShipAddress: reqOrderCookie.ShipAddress,
     Description: reqOrderCookie.Description,
     OrderDate: reqOrderCookie.OrderDate || new Date(),
@@ -150,25 +154,36 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
     return 'Fail to save'
   }
 
-  if (reqOrderCookie.UserID instanceof ObjectId) {
-    console.log('user._id là ObjectID')
-  } else {
-    console.log('user._id không phải là ObjectID')
-  }
-  const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: reqOrderCookie.UserID })
+  const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(reqOrderCookie.UserID) })
+  console.log('card: ', loyaltyCard)
+  console.log('cookieCard: ', reqLoyaltyCard)
+  let updatedLoyaltyCard
   if (loyaltyCard) {
-    const updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
+    if(loyaltyCard.RankName !== reqLoyaltyCard.RankName){
+      updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
+        {
+          UserID: new ObjectId(reqOrderCookie.UserID)
+        },
+        {
+          $set: {
+            RankName : reqLoyaltyCard.RankName,
+            SalePercent: reqLoyaltyCard.SalePercent
+          },
+          $inc: {
+            Point: reqLoyaltyCard.Point // Cộng dồn Point
+          }
+        }
+    )
+  }
+    updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
       {
-        UserID: reqOrderCookie.UserID
+        UserID: new ObjectId(reqOrderCookie.UserID)
       },
       {
-        $set: {
-          ...reqLoyaltyCard,
-          Point: Math.round(reqLoyaltyCard.Point)
-        }
+        $inc: { Point: reqLoyaltyCard.Point}
       }
     )
-    return { orderDT, order: newOrder, loyaltyCard: updatedLoyaltyCard }
+    return { orderDT, order, loyaltyCard: updatedLoyaltyCard }
   }
-  return { orderDT, order: newOrder }
+  return { orderDT, order}
 }

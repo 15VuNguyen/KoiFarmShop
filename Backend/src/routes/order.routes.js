@@ -12,7 +12,7 @@ import {
   removeItemsDetailController,
   updateOrderDetailController
 } from '../controllers/orderDetailController.js'
-import { createOrderController, getOrderController, saveOrderController } from '../controllers/order.controllers.js'
+import { createOrderController, getOrderController, removeOrderCookieController, saveOrderController } from '../controllers/order.controllers.js'
 import { accessTokenValidator } from '../middlewares/users.middlewares.js'
 import { wrapAsync } from '../utils/handle.js'
 import { checkCartController } from '../controllers/common.controllers.js'
@@ -31,6 +31,7 @@ orderRouter.get('/detail/removeAll', removeAllItemsDetailController)
 //Order
 orderRouter.post('/create',accessTokenValidator, wrapAsync(createOrderController))
 orderRouter.get('/',accessTokenValidator, wrapAsync(getOrderController))
+orderRouter.get('/cookie/remove',accessTokenValidator, wrapAsync(removeOrderCookieController))
 //Price
 orderRouter.post('/detail/price/minmax', getMinMaxPriceController)
 orderRouter.post('/detail/koi', getKoiByPriceController)
