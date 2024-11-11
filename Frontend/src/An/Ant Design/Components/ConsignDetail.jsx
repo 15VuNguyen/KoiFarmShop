@@ -9,8 +9,8 @@ import useAddress from './useAddress';
 import dayjs from 'dayjs';
 dayjs.extend(utc);
 import moment from 'moment';
-
-export default function ConsignDetail({ consignID,reset }) {
+import { parsePhoneNumberFromString, isValidPhoneNumber } from 'libphonenumber-js';
+export default function ConsignDetail({ consignID, reset }) {
   const [consignData, setConsignData] = React.useState({});
   const [imageList, setImageList] = React.useState([]);
   const [video, setVideo] = React.useState(null);
@@ -242,6 +242,7 @@ export default function ConsignDetail({ consignID,reset }) {
 
   function StateMapping(State) {
     const stateMap = {
+      '-1': 'Đã hủy',
       1: 'Yêu cầu ký gửi',
       2: 'Đang kiểm tra Koi',
       3: 'Đang thương thảo hợp đồng',
@@ -249,6 +250,8 @@ export default function ConsignDetail({ consignID,reset }) {
       5: 'Đã bán thành công',
     };
     switch (State) {
+      case -1:
+        return <Tag color="red">{stateMap[State]}</Tag>;
       case 1:
         return <Tag color="blue">{stateMap[State]}</Tag>;
       case 2:
@@ -311,8 +314,11 @@ export default function ConsignDetail({ consignID,reset }) {
     CertificateID: 'ID Chứng chỉ',
     Size: 'Kích thước (cm)',
     consignCreateDate: 'Ngày tạo đơn',
-    AddressConsignKoi : 'Địa chỉ đơn ký gửi',
-    PhoneNumberConsignKoi : 'Số điện thoại đơn ký gửi',
+    AddressConsignKoi: 'Địa chỉ đơn ký gửi',
+    PhoneNumberConsignKoi: 'Số điện thoại đơn ký gửi',
+    Detail: 'Chi tiết kí gửi'
+
+
   }
   const saveEdit = (field) => {
     Modal.confirm({
@@ -342,7 +348,7 @@ export default function ConsignDetail({ consignID,reset }) {
           console.log(updatedFields)
           setEditField(null);
           const reponse = await axiosInstance.put(`manager/manage-ki-gui/${consignID}`, updatedFields);
-          message.success(`${field} đã được cập nhật thành công`);
+          message.success(`${fieldMapping[field]} đã được cập nhật thành công`);
           setTrigger(trigger + 1);
           console.log(reponse)
           reset();
@@ -372,149 +378,208 @@ export default function ConsignDetail({ consignID,reset }) {
               <Select.Option value="Online">Online</Select.Option>
               <Select.Option value="Offline">Offline</Select.Option>
             </Select>
-          ) : inputType === 'selectState' ? (
-            <Select value={editValue} onChange={(value) => setEditValue(value)}>
-              <Select.Option value={1}>Yêu cầu ký gửi</Select.Option>
-              <Select.Option value={2}>Đang kiểm tra Koi</Select.Option>
-              <Select.Option value={3}>Đang thương thảo hợp đồng</Select.Option>
-              <Select.Option value={4}>Đang tìm người mua</Select.Option>
-              <Select.Option value={5}>Đã bán thành công</Select.Option>
-            </Select>
-          ) : 
-          
-            inputType === 'selectConsignCreateDate' ? (
-              <DatePicker
-                value={editValue}
-                onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                format={'DD-MM-YYYY'}
-                
-              />
-            ) :
-          inputType === 'SelectStatus' ? (
-            <Select style={{ minWidth: '7rem' }} value={editValue} onChange={(value) => setEditValue(value)}>
-              <Select.Option value={'0'}>Hết Hàng</Select.Option>
-              <Select.Option value={'1'}>Nhập Khẩu</Select.Option>
-              <Select.Option value={'2'}>F1</Select.Option>
-              <Select.Option value={'3'}>Việt Nam</Select.Option>
-              <Select.Option value={'4'}>Ký Gửi</Select.Option>
-            </Select>
-          )
-            :
-            inputType === 'selectSize' ? (
-              <InputNumber min={0} max={200} required value={editValue} onChange={(value) => setEditValue(value)} />
-            )
-
-
-
-              : inputType === 'selectCommission' ? (
-                <InputNumber min={0} max={99} required value={editValue} onChange={(value) => setEditValue(value)} suffix={"%"} />
-              ) : inputType === 'selectPrice' ? (
-
-                consign.State === 3 || consign.State === '3' ? (
-                  <InputNumber min={1000} required value={editValue} onChange={(value) => setEditValue(value)}
-                    formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '25%' }} suffix={"đ"}
-                  />
-                ) : (
-                  <InputNumber min={0} value={editValue} onChange={(value) => setEditValue(value)} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '20%' }} suffix={"đ"}
-                  />
-                )
-
-              ) : inputType === 'selectCategory' ? (
-                <Select value={editValue} onChange={(value) => setEditValue(value)}>
-                  {catagoryList.map((category) => (
-                    <Select.Option key={category._id} value={category._id}>
-                      {category.CategoryName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              ) : inputType === 'selectAge' ? (
-                <InputNumber min={1} max={50} required value={editValue} onChange={(value) => setEditValue(value)} />
-
-              ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
-                <Form.Item label={
-                  <Space>
-                    <span>Ngày vận chuyển</span>
-                    <Tooltip title="Ngày vận chuyển phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng">
-                      <QuestionCircleOutlined />
-                    </Tooltip>
-                  </Space>
-                }>
-                  <DatePicker
-                    // getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
-                    // onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                    value={editValue}
-                    onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                    disabledDate={(current) => current && current > dayjs(consign.ReceiptDate).startOf('day')}
-                    format={'DD-MM-YYYY'}
-                    {
-                    ...consign.State === 4 ? { disabled: true } : {}
+          ) :
+            inputType === 'selectPhone' ? (
+              <Form.Item
+              label="Số Điện Thoại"
+              rules={[
+                {
+                  validator(_, value) {
+                    
+                    if (typeof value === 'undefined' || value === '') {
+                      return Promise.reject('Số điện thoại không được để trống');
                     }
-                  />
-                </Form.Item>
+            
+                    
+                    if (typeof value === 'string') {
+                      const attemptToParseInt = parseInt(value);
+                      if (isNaN(attemptToParseInt)) {
+                        return Promise.reject('Số điện thoại không được chứa chữ cái');
+                      }
+                    }
+            
+                
+                    const phoneNumberVN = parsePhoneNumberFromString(value, 'VN');
+                    const phoneNumberJP = parsePhoneNumberFromString(value, 'JP');
+                    if (
+                      (!phoneNumberVN || !phoneNumberVN.isValid()) &&
+                      (!phoneNumberJP || !phoneNumberJP.isValid())
+                    ) {
+                      return Promise.reject('Số điện thoại phải là số điện thoại Nhật hoặc Việt');
+                    }
+            
+                    
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              <Input
+                value={editValue}
+                onChange={(e) => {
+                  const input = e.target.value;
+            
+                  
+                  const phoneNumberVN = parsePhoneNumberFromString(input, 'VN');
+                  const phoneNumberJP = parsePhoneNumberFromString(input, 'JP');
+            
+                  if (phoneNumberVN && phoneNumberVN.isValid()) {
+                    setEditValue(phoneNumberVN.formatInternational());
+                  } else if (phoneNumberJP && phoneNumberJP.isValid()) {
+                    setEditValue(phoneNumberJP.formatInternational());
+                  } else {
+                    setEditValue(input);
+                  }
+                }}
+              />
+            </Form.Item>
+
+            ) :
+              inputType === 'selectState' ? (
+                <Select style={{ minWidth: '9rem' }} value={editValue} onChange={(value) => setEditValue(value)}>
+                  <Select.Option value={-1}>Đã Hủy</Select.Option>
+                  <Select.Option value={1}>Yêu cầu ký gửi</Select.Option>
+                  <Select.Option value={2}>Đang kiểm tra Koi</Select.Option>
+                  <Select.Option value={3}>Đang thương thảo hợp đồng</Select.Option>
+                  <Select.Option value={4}>Đang tìm người mua</Select.Option>
+                  <Select.Option value={5}>Đã bán thành công</Select.Option>
+                </Select>
               ) :
 
-                inputType === 'selectReceiptDate' && field === 'ReceiptDate' ? (
-                  <Form.Item label={
-                    <Space>
-                      <span>Ngày nhận</span>
-                      <Tooltip title="Ngày nhận phải ít nhất 30 ngày sau ngày vận chuyển">
-                        <QuestionCircleOutlined />
-                      </Tooltip>
-                    </Space>
-                  } >
-                    <DatePicker
-
-                      value={editValue}
-                      onChange={(date) => setEditValue(date ? date.utc(true) : null)}
-                      disabledDate={(current) =>
-                        current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
-                      }
-                      format={'DD-MM-YYYY'}
-                    />
-                  </Form.Item>
-                ) : inputType === 'selectAddress' ? (
-                  <AutoComplete
-                    allowClear
+                inputType === 'selectConsignCreateDate' ? (
+                  <DatePicker
                     value={editValue}
-                    onChange={(value) => {
-                      setSearchText(value);
-                      setEditValue(value);
-                    }}
-                    options={recommendations.map((address) => ({ value: address }))}
-                    style={{ width: '100%' }}
+                    onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                    format={'DD-MM-YYYY'}
+
                   />
                 ) :
+                  inputType === 'SelectStatus' ? (
+                    <Select style={{ minWidth: '9rem' }} value={editValue} onChange={(value) => setEditValue(value)}>
 
-                  inputType === 'setGender' ? (
-                    <Select value={editValue} onChange={(value) => setEditValue(value)} >
-                      <Select.Option value={'Male'} >Nam</Select.Option>
-                      <Select.Option value={'Female'} > Nữ</Select.Option>
-                    </Select>) :
-                    inputType === 'SelectPositionCare' ? (
-                      <Select value={editValue} onChange={(value) => setEditValue(value)} style={{ width: '10rem' }}>
-                        <Select.Option value={'IKOI FARM'} >IKOI FARM</Select.Option>
-                        <Select.Option value={'Home'} >Home</Select.Option>
-                      </Select>) :
+                      <Select.Option value={'0'}>Hết Hàng</Select.Option>
+                      <Select.Option value={'1'}>Nhập Khẩu</Select.Option>
+                      <Select.Option value={'2'}>F1</Select.Option>
+                      <Select.Option value={'3'}>Việt Nam</Select.Option>
+                      <Select.Option value={'4'}>Ký Gửi</Select.Option>
+                    </Select>
+                  )
+                    :
+                    inputType === 'selectSize' ? (
+                      <InputNumber min={5} max={200} required value={editValue} onChange={(value) => setEditValue(value)} />
+                    )
 
-                      inputType === 'selectBreed' ? (
+
+
+                      : inputType === 'selectCommission' ? (
+                        <InputNumber min={0} max={99} required value={editValue} onChange={(value) => setEditValue(value)} suffix={"%"} />
+                      ) : inputType === 'selectPrice' ? (
+
+                        consign.State === 3 || consign.State === '3' ? (
+                          <InputNumber min={1000} required value={editValue} onChange={(value) => setEditValue(value)}
+                            formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '25%' }} suffix={"đ"}
+                          />
+                        ) : (
+                          <InputNumber min={0} value={editValue} onChange={(value) => setEditValue(value)} formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} style={{ width: '20%' }} suffix={"đ"}
+                          />
+                        )
+
+                      ) : inputType === 'selectCategory' ? (
                         <Select value={editValue} onChange={(value) => setEditValue(value)}>
-                          <Select.Option value={'Nhat'} >Nhập Khẩu Nhật</Select.Option>
-                          <Select.Option value={'Viet'} >IKOI Việt</Select.Option>
-                          <Select.Option value={'F1'} >IKOIF1</Select.Option>
+                          {catagoryList.map((category) => (
+                            <Select.Option key={category._id} value={category._id}>
+                              {category.CategoryName}
+                            </Select.Option>
+                          ))}
                         </Select>
-                      ) : inputType === 'selectFood' ? (
-                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
-                      ) : inputType === 'selectFilter' ? (
-                        <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                      ) : inputType === 'selectAge' ? (
+                        <InputNumber min={1} max={50} required value={editValue} onChange={(value) => setEditValue(value)} />
+
+                      ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
+                        <Form.Item label={
+                          <Space>
+                            <span>Ngày vận chuyển</span>
+                            <Tooltip title="Ngày vận chuyển phải ở hiện tại hoặc nhỏ hơn ngày nhận hàng">
+                              <QuestionCircleOutlined />
+                            </Tooltip>
+                          </Space>
+                        }>
+                          <DatePicker
+                            // getValueProps={(value) => ({ value: value ? dayjs(value).format('YYYY-MM-DD') : "" })}
+                            // onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                            value={editValue}
+                            onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                            disabledDate={(current) => current && current > dayjs(consign.ReceiptDate).startOf('day')}
+                            format={'DD-MM-YYYY'}
+                            {
+                            ...consign.State === 4 ? { disabled: true } : {}
+                            }
+                          />
+                        </Form.Item>
                       ) :
 
+                        inputType === 'selectReceiptDate' && field === 'ReceiptDate' ? (
+                          <Form.Item label={
+                            <Space>
+                              <span>Ngày nhận</span>
+                              <Tooltip title="Ngày nhận phải ít nhất 30 ngày sau ngày vận chuyển">
+                                <QuestionCircleOutlined />
+                              </Tooltip>
+                            </Space>
+                          } >
+                            <DatePicker
+
+                              value={editValue}
+                              onChange={(date) => setEditValue(date ? date.utc(true) : null)}
+                              disabledDate={(current) =>
+                                current && current < moment(consign.ShippedDate).add(30, 'days').startOf('day')
+                              }
+                              format={'DD-MM-YYYY'}
+                            />
+                          </Form.Item>
+                        ) : inputType === 'selectAddress' ? (
+                          <AutoComplete
+                            allowClear
+                            value={editValue}
+                            onChange={(value) => {
+                              setSearchText(value);
+                              setEditValue(value);
+                            }}
+                            options={recommendations.map((address) => ({ value: address }))}
+                            style={{ width: '100%' }}
+                          />
+                        ) :
+
+                          inputType === 'setGender' ? (
+                            <Select value={editValue} onChange={(value) => setEditValue(value)} >
+                              <Select.Option value={'Male'} >Nam</Select.Option>
+                              <Select.Option value={'Female'} > Nữ</Select.Option>
+                            </Select>) :
+                            inputType === 'SelectPositionCare' ? (
+                              <Select value={editValue} onChange={(value) => setEditValue(value)} style={{ width: '10rem' }}>
+                                <Select.Option value={'IKOI FARM'} >IKOI FARM</Select.Option>
+                                <Select.Option value={'Home'} >Home</Select.Option>
+                              </Select>) :
+
+                              inputType === 'selectBreed' ? (
+                                <Select value={editValue} onChange={(value) => setEditValue(value)}>
+                                  <Select.Option value={'Nhat'} >Nhập Khẩu Nhật</Select.Option>
+                                  <Select.Option value={'Viet'} >IKOI Việt</Select.Option>
+                                  <Select.Option value={'F1'} >IKOIF1</Select.Option>
+                                </Select>
+                              ) : inputType === 'selectFood' ? (
+                                <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                              ) : inputType === 'selectFilter' ? (
+                                <InputNumber min={0} max={100} required value={editValue} onChange={(value) => setEditValue(value)} />
+                              ) :
 
 
-                        (
-                          <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-                        )}
+
+                                (
+                                  <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+                                )}
           <Button icon={<CheckOutlined />} type="link" onClick={() => saveEdit(field)} />
           <Button icon={<CloseOutlined />} type="link" onClick={cancelEdit} />
         </>
@@ -525,7 +590,7 @@ export default function ConsignDetail({ consignID,reset }) {
           }
           {/* <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} /> */}
           {
-            (consign.State == 5) ? (
+            (consign.State == 5 || consign.State == -1) ? (
               <></>
             ) : (
               <Button icon={<EditOutlined />} type="link" onClick={() => toggleEdit(field, value)} />
@@ -535,14 +600,14 @@ export default function ConsignDetail({ consignID,reset }) {
       )}
     </Descriptions.Item>
   );
-
+  
   return (
     <div style={{ padding: '20px' }}>
       <Form layout="vertical">
         <Descriptions title="Thông tin người ký gửi" bordered>
           <Descriptions.Item label="Tên người dùng">{user.name}</Descriptions.Item>
           {renderEditableItem("Địa chỉ", user.address, "address", "selectAddress")}
-          {renderEditableItem("Số điện thoại", user.phone_number, "phone_number")}
+          {renderEditableItem("Số điện thoại", user.phone_number, "phone_number", 'selectPhone')}
           <Descriptions.Item label="Đã xác minh">
             {user.verify ? <Tag color="green">Đã xác minh</Tag> : <Tag color="red">Chưa xác minh</Tag>}
           </Descriptions.Item>
@@ -559,10 +624,10 @@ export default function ConsignDetail({ consignID,reset }) {
           {renderEditableItem("Ngày nhận", consign.ReceiptDate ? moment.utc(consign.ReceiptDate).format('DD-MM-YYYY') : <Tag color='red'>Chưa có dữ liệu</Tag>, "ReceiptDate", "selectReceiptDate")}
           {renderEditableItem("Phương thức", consign.Method, "Method", "selectMethod")}
           {renderEditableItem("Vị trí chăm sóc", consign.PositionCare, "PositionCare", 'SelectPositionCare')}
-          {renderEditableItem("Số điện thoại đơn ký gửi", consign.PhoneNumberConsignKoi)}
+          {renderEditableItem("Số điện thoại đơn ký gửi", consign.PhoneNumberConsignKoi, "PhoneNumberConsignKoi", 'selectPhone')}
           {renderEditableItem("Chi tiết kí gửi", consign.Detail, "Detail")}
           {renderEditableItem("Trạng thái đơn ký gửi", consign.State, "State", "selectState")}
-        {renderEditableItem("Địa chỉ đơn ký gửi", consign.AddressConsignKoi, "AddressConsignKoi",'selectAddress')}
+          {renderEditableItem("Địa chỉ đơn ký gửi", consign.AddressConsignKoi, "AddressConsignKoi", 'selectAddress')}
 
 
 
@@ -570,7 +635,7 @@ export default function ConsignDetail({ consignID,reset }) {
           {renderEditableItem("Hoa Hồng(%)", consign.Commission == 0 || isNaN(consign.Commission) ? (
             <Tag color="red">Chưa cung cấp</Tag>
           ) : (
-            consign.Commission 
+            consign.Commission
           ), "Commission", "selectCommission")}
 
           <Descriptions.Item label="Tổng Giá">
