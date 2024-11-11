@@ -286,9 +286,7 @@ export const getOrderController = async (req, res) => {
   try {
     const { userID } = req.params
 
-    console.log(userID)
-
-    const orders = await databaseService.order.find({ UserID: userID }).toArray()
+    const orders = await databaseService.order.find({ UserID: new ObjectId(userID)}).toArray()
 
     if (orders.length === 0) {
       return res.json({ message: 'Order null' })
