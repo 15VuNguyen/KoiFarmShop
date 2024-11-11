@@ -258,7 +258,7 @@ export default function Kohaku() {
 
   return (
     <>
-      <Layout style={{ backgroundColor: "#470101" }}>
+      <Layout>
         <Container>
           <div>
             <div>
@@ -266,14 +266,17 @@ export default function Kohaku() {
                 className="body_StyleKoiOfPage"
                 style={{ backgroundColor: "#ead8c8" }}
               >
-                <Title level={2} style={{ color: "#920202" }}>
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
                   Nội Dung Bài Viết
                 </Title>
                 <ul
                   style={{
                     marginTop: "10px",
-                    paddingTop: "10px",
                     backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
                     textDecoration: "none",
                     listStyleType: "none",
                   }}
@@ -425,7 +428,7 @@ export default function Kohaku() {
               <div>
                 <h2
                   className="noidungchitiet"
-                  style={{ color: "rgb(255, 178, 0)", paddingTop: "20px" }}
+                  style={{ color: "red", paddingTop: "20px" }}
                 >
                   Nội dung chi tiết
                 </h2>
@@ -433,14 +436,14 @@ export default function Kohaku() {
                   style={{
                     fontSize: "20px",
                     fontWeight: "400",
-                    color: "#e4cfb1",
+                    color: "black",
                   }}
                 >
                   <span
                     style={{
                       fontWeight: "bold",
                       fontSize: "20px",
-                      color: "#efa709",
+                      color: "blue",
                     }}
                   >
                     Cá Koi{" "}
@@ -452,7 +455,7 @@ export default function Kohaku() {
                     style={{
                       fontWeight: "bold",
                       fontSize: "20px",
-                      color: "#efa709",
+                      color: "blue",
                     }}
                   >
                     Cá Koi Kohaku{" "}
@@ -465,8 +468,8 @@ export default function Kohaku() {
                 <h3
                   style={{
                     color: "rgb(146, 2, 2)",
-                    backgroundColor: "#ead8c8",
                     padding: "10px",
+                    backgroundColor: "#ead8c8",
                   }}
                 >
                   1. Giới Thiệu Cá Koi Kohaku
@@ -474,7 +477,7 @@ export default function Kohaku() {
                 <div>
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
                     Kohaku hay Nishikigoi là một loài cá chép Nhật có thân hình
                     hai màu đỏ và trắng. Phần thân màu trắng được gọi là shiro,
@@ -483,7 +486,7 @@ export default function Kohaku() {
                       style={{
                         fontWeight: "600",
                         fontSize: "20px",
-                        color: "#efa709",
+                        color: "red",
                       }}
                     >
                       Kohaku, Sanke
@@ -493,7 +496,7 @@ export default function Kohaku() {
                       style={{
                         fontWeight: "600",
                         fontSize: "20px",
-                        color: "#efa709",
+                        color: "red",
                       }}
                     >
                       Showa
@@ -503,7 +506,7 @@ export default function Kohaku() {
 
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
                     Theo truyền thuyết, Kohaku là giống cá chép đầu tiên được
                     phát triển. Vào năm 1888, Kunizo, một người đàn ông, đã lai
@@ -516,7 +519,7 @@ export default function Kohaku() {
 
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
                     Kohaku là một trong những giống cá chép phổ biến nhất ở Nhật
                     Bản. Các dấu màu đỏ tươi trên thân cá được gọi là hi. Các
@@ -539,7 +542,7 @@ export default function Kohaku() {
                 </h3>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Các tiêu chuẩn này chỉ áp dụng cho các loài cá trưng bày tại
                   triển lãm ở Nhật Bản. Các loài cá được giữ làm vật nuôi tại
@@ -552,12 +555,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Akamuji:{" "}
                     </span>{" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       là một loài cá đỏ thông thường và thường xuất hiện trong
                       quá trình sinh sản của loài Kohaku. Trước đây, ở Nhật Bản,
                       các con cá Akamuji thường bị đánh bại để làm cá bột. Tuy
@@ -571,12 +574,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Shiromuji:
                     </span>{" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Shiromuji đối lập với Akamuji khi có thân hình trắng toàn
                       phần và xuất hiện trong quá trình sinh sản của loài
                       Kohaku. Ở Nhật Bản, các con cá Shiromuji không được coi là
@@ -588,12 +591,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Komoyō:
                     </span>{" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Với loài cá Komoyō, kích thước của các dấu đỏ rất nhỏ, chỉ
                       chiếm ít hơn ¼ chiều dài của chúng. Chúng không được đánh
                       giá cao.
@@ -603,12 +606,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Ōmoyō:
                     </span>{" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Ngược lại với Komoyō, loài cá Ōmoyō có các dấu đỏ lớn, ít
                       nhất là một phần tư chiều dài của cá. Điều này được đánh
                       giá cao và theo lứa tuổi của cá, các dấu hiệu sẽ tách biệt
@@ -619,12 +622,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Dangara:
                     </span>{" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       là một mô hình dấu hiệu tách biệt giống như bước đá trong
                       một hồ bơi. Đây là những giá trị rất lớn trong cạnh tranh.
                       Một sọc đơn từ đầu đến đuôi không có giá trị ở Nhật Bản,
@@ -658,12 +661,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Menkaburi Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : dấu hiệu nhận biết của giống Kohaku này là toàn bộ phần
                       đầu cá được bao phủ bởi màu đỏ, phần đỏ trên đầu sẽ tách
                       biệt với màu đỏ ờ phần thân
@@ -679,12 +682,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Hanatsuke Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : cách để phân biệt giống này cũng khá là đơn giản đó là
                       có màu đỏ ở phần mũi của cá kéo dài lên phần đầu và thân.
                     </Text>
@@ -698,14 +701,16 @@ export default function Kohaku() {
                           objectFit: "cover",
                         }}
                       />
-                      <div style={{ textAlign: "center" }}>
-                        <Text
-                          className="text-Style"
-                          style={{ color: "#e4cfb1" }}
-                        >
-                          Giống Hanatsuke Kohaku Koi
-                        </Text>
-                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <Text
+                        className="text-Style"
+                        style={{
+                          color: "#efa709",
+                        }}
+                      >
+                        Giống Hanatsuke Kohaku Koi
+                      </Text>
                     </div>
                   </li>
 
@@ -719,12 +724,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Inazuma Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Vùng đỏ của giống cá này trải dài từ đầu thới đôi theo
                       hình ziczac vô cùng đặc biệt
                     </Text>
@@ -737,14 +742,16 @@ export default function Kohaku() {
                           objectFit: "cover",
                         }}
                       />
-                      <div style={{ textAlign: "center" }}>
-                        <Text
-                          className="text-Style"
-                          style={{ color: "#e4cfb1" }}
-                        >
-                          Giống Inazuma Kohaku Koi
-                        </Text>
-                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <Text
+                        className="text-Style"
+                        style={{
+                          color: "#efa709",
+                        }}
+                      >
+                        Giống Inazuma Kohaku Koi
+                      </Text>
                     </div>
                   </li>
 
@@ -758,12 +765,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Goten Sakura Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Phần đỏ trên đầu tương đối giống tancho kohaku. Ngoài ra
                       trên thân còn có các đốm đỏ phân bổ đều trên thân
                     </Text>
@@ -772,14 +779,16 @@ export default function Kohaku() {
                         src={img4}
                         style={{ width: "50%", paddingTop: "20px" }}
                       />
-                      <div style={{ textAlign: "center" }}>
-                        <Text
-                          className="text-Style"
-                          style={{ color: "#e4cfb1" }}
-                        >
-                          Giống Goten Kohaku Koi
-                        </Text>
-                      </div>
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <Text
+                        className="text-Style"
+                        style={{
+                          color: "#efa709",
+                        }}
+                      >
+                        Giống Goten Kohaku Koi
+                      </Text>
                     </div>
                   </li>
 
@@ -793,12 +802,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Tancho Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Dòng cá này rất được coi trọng ở nhật vì nó trong giống
                       là quốc kỳ của họ. Toàn thân cá có màu trắng, không có một
                       vết gì, đồng thời trên đầu có khoang đỏ với nhiều hình
@@ -812,7 +821,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Tancho Koi
                         </Text>
@@ -830,12 +841,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Kuchibeni kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : giống cá này đặc biệt ở chỗ khi có một chấm đỏ ở mũi,
                       tách biệt với các khoang đỏ khác trên thân cá. Điều này
                       khác với Hanatsuke Kohaku Koi khi có chấm đỏ ở mũi và kéo
@@ -853,7 +864,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Kuchibeni Koi
                         </Text>
@@ -871,12 +884,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Straight Hi Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Điểm đặc biệt của giống cá này là phần đỏ chiếm nhiều
                       trên thân cá, không ngắt quãng từ phần đầu cho tới phần
                       chân.
@@ -887,7 +900,12 @@ export default function Kohaku() {
                         style={{ width: "30%", paddingTop: "20px" }}
                       />
                       <div style={{ textAlign: "center" }}>
-                        <Text className="text-Style">
+                        <Text
+                          className="text-Style"
+                          style={{
+                            color: "#efa709",
+                          }}
+                        >
                           Giống Straight Hi Kohaku Koi
                         </Text>
                       </div>
@@ -904,12 +922,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Nidan Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Cũng giống như Straight Hi Kohaku khi màu đỏ chiếm đa số
                       trên thân. Tuy nhiên dòng cá này khác biệt ở chỗ sẽ có
                       phần trắng ở giữa thân chia phần đỏ thành 2 phần
@@ -926,7 +944,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Nidan Kohaku Koi
                         </Text>
@@ -944,12 +964,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Sandan Kohaku
                     </span>
-                    <Text text-Style style={{ color: "#e4cfb1" }}>
+                    <Text text-Style style={{ color: "black" }}>
                       : phần màu đỏ sẽ chia thành 3 khoang riêng biệt là đầu,
                       thân và đuôi
                     </Text>
@@ -965,7 +985,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Sandan Kohaku Koi
                         </Text>
@@ -983,12 +1005,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Yondan Kohaku Koi
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Phần khoang đỏ sẽ chia thành 4 phần khác với Sandan Kohaku
                     </Text>
                     <div style={{ textAlign: "center" }}>
@@ -999,7 +1021,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Yondan Kohaku Koi
                         </Text>
@@ -1017,12 +1041,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Kanoko Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Vùng đầu của cá là một khoang màu đỏ sẫm khá đậm, trên
                       thân cá xuất hiện những chấm đỏ li ti.
                     </Text>
@@ -1034,7 +1058,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "rgb(146, 2, 2)",
+                          }}
                         >
                           Giống Kanoko Kohaku Koi
                         </Text>
@@ -1052,12 +1078,12 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Maruten Kohaku
                     </span>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       : Cơ thể giống loài cá này có 3-4 ngăn màu đỏ nằm cách xa
                       nhau hoặc thông với nhau. Chấm đỏ trên đầu không được tiếp
                       giáp với khoang đỏ trên cơ thể.
@@ -1070,7 +1096,9 @@ export default function Kohaku() {
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
-                          style={{ color: "#e4cfb1" }}
+                          style={{
+                            color: "#efa709",
+                          }}
                         >
                           Giống Maruten Kohaku Koi
                         </Text>
@@ -1093,7 +1121,7 @@ export default function Kohaku() {
                   <span
                     className="span-Style"
                     style={{
-                      color: "#efa709",
+                      color: "rgb(146, 2, 2)",
                     }}
                   >
                     Về nguồn gốc Kohaku
@@ -1101,14 +1129,14 @@ export default function Kohaku() {
                 </p>
                 <ul>
                   <li style={{ listStyleType: "none" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Cá koi kohaku nhật nhập khẩu: là dòng cá thuần chủng được
                       nuôi ở các trại cá ở Nhật Bản và được IKoi nhập khẩu trực
                       tiếp về
                     </Text>
                   </li>
                   <li style={{ listStyleType: "none" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Cá koi kohaku F1: là dòng cá được lai tạo từ cặp cá bố mẹ
                       là cá koi nhật thuần chủng và nuôi lớn ỏ Việt Nam theo quy
                       trình của Nhật Bản
@@ -1118,14 +1146,14 @@ export default function Kohaku() {
                 <span
                   className="span-Style"
                   style={{
-                    color: "#efa709",
+                    color: "rgb(146, 2, 2)",
                   }}
                 >
                   Về nguồn gốc
                 </span>
                 <ul>
                   <li style={{ listStyleType: "none" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Kohaku Nhật: Cơ thể có 2 màu trắng đỏ, các khoang đỏ thì
                       có màu đỏ như máu, còn khoang trắng thì màu trắng sáng, có
                       vảy ánh bạc. Màu sắc của cá koi Nhật rất tươi sáng và có
@@ -1134,7 +1162,7 @@ export default function Kohaku() {
                     </Text>
                   </li>
                   <li style={{ listStyleType: "none" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Kohaku koi F1: Màu sắc của các khoang trên cơ thể sẽ nhạt
                       hơn, thường là màu đỏ cam. Ranh giới giữa các ngăn đỏ và
                       trắng bị mờ, không rõ ràng.
@@ -1144,7 +1172,7 @@ export default function Kohaku() {
                 <span
                   className="span-Style"
                   style={{
-                    color: "#efa709",
+                    color: "rgb(146, 2, 2)",
                   }}
                 >
                   Về hình dáng
@@ -1157,7 +1185,7 @@ export default function Kohaku() {
                       listStyleType: "none",
                     }}
                   >
-                    <Text className="text-Style " style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style " style={{ color: "black" }}>
                       Kohaku Nhật có cặp râu dài và cứng, đầu cá hơi gù, Kohaku
                       F1 cũng có râu nhưng nhỏ và ngắn hơn cá koi nhật.
                     </Text>
@@ -1170,17 +1198,23 @@ export default function Kohaku() {
                     }}
                   >
                     {" "}
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Vây ngực, vây lưng và vây đuôi của koi Nhật Bản thường rất
                       dày và mờ đục (ánh sáng không xuyên qua nhiều được), còn
                       Vây của cá F1, nhỏ, ít mềm và dẻo hơn và ánh sáng dễ chiếu
                       qua hơn.
                     </Text>
                   </li>
-                  <li>
+                  <li
+                    style={{
+                      fontWeight: "400",
+                      fontSize: "15px",
+                      listStyleType: "none",
+                    }}
+                  >
                     <Text
                       className="text-Style"
-                      style={{ color: "#e4cfb1", listStyleType: "none" }}
+                      style={{ color: "black", listStyleType: "none" }}
                     >
                       Kohaku Nhật khi nhìn từ trên xuống sẽ mập hơn cá koi F1 ở
                       phần đầu và vai. Nhìn ngang sẽ thấy Koi kohaku Nhật có
@@ -1200,7 +1234,7 @@ export default function Kohaku() {
                 >
                   5. Cách chọn cá koi kohaku
                 </h3>
-                <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                <Text className="text-Style" style={{ color: "black" }}>
                   Cách chọn cá Koi Kohaku đẹp thì bạn cần phải dựa vào màu sắc
                   và dáng bơi để chọn mua cá chuẩn.
                 </Text>
@@ -1209,7 +1243,7 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Màu sắc cá
@@ -1217,7 +1251,7 @@ export default function Kohaku() {
                     <br />
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Đây là yếu tố quan trọng để đánh giá vẻ đẹp của dòng cá
                       Kohaku. Nếu cá Koi có màu sắc rõ ràng, đường ranh giữa các
@@ -1229,7 +1263,7 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Dáng bơi
@@ -1237,7 +1271,7 @@ export default function Kohaku() {
 
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Bơi là hoạt động hàng ngày của Kohaku koi vì thế để chọn
                       cá Koi tốt bạn nên nhìn dáng bơi của chúng phải uyển
@@ -1249,14 +1283,14 @@ export default function Kohaku() {
                     <span
                       className="span-Style"
                       style={{
-                        color: "#efa709",
+                        color: "rgb(146, 2, 2)",
                       }}
                     >
                       Chất lượng da, vảy
                     </span>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Đừng nhầm lẫn màu sắc với da bởi một con cá Kohaku trưởng
                       thành sẽ có màu cam đỏ đậm rất đẹp, còn cá Kohaku nhỏ thì
@@ -1266,43 +1300,40 @@ export default function Kohaku() {
                     </Paragraph>
                   </li>
                 </ul>
-                <Paragraph
-                  className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
-                >
+                <Text className="text-Style" style={{ color: "black" }}>
                   Ngoài ra bạn có thể dựa vào một số đặc điểm sau khi chọn cá
                   Koi Kohaku gồm:
-                </Paragraph>
-                <ul style={{ listStyleType: "none" }}>
+                </Text>
+                <ul style={{ listStyleType: "none", paddingTop: "20px" }}>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Màu rõ ràng là màu trắng tinh như tuyệt, đỏ đậm, lớn
                     </Text>
                   </li>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Chú ý phần đầu phải có 2 màu không thể toàn bộ là đỏ hoặc
                       trắng.
                     </Text>
                   </li>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Màu đỏ ở đầu không nên phủ mắt hoặc chỉ phủ một bên mắt
                     </Text>
                   </li>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Màu mắt của cá Koi Kohaku phải là màu trắng không phải màu
                       xanh.
                     </Text>
                   </li>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Phân bố các khoang màu đỏ đều đặn trên cơ thể
                     </Text>
                   </li>
                   <li style={{ paddingBottom: "10px" }}>
-                    <Text className="text-Style" style={{ color: "#e4cfb1" }}>
+                    <Text className="text-Style" style={{ color: "black" }}>
                       Màu của mũi và vùng chóp đuôi là màu trắng
                     </Text>
                   </li>
@@ -1320,7 +1351,7 @@ export default function Kohaku() {
                 </h3>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Vì Kohaku koi là loài thông minh có thể sống trong nhiều thập
                   kỷ vì thế khi chăm sóc cá Koi Kohaku bạn cần lưu ý về điều
@@ -1331,7 +1362,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Cá koi có thể tồn tại trong nhiều nhiệt độ nước, khả năng
                       chịu lạnh tốt. Tuy nhiên không nên để đáy hồ bị đóng băng
@@ -1341,7 +1372,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Hạn chế để cá Koi Kohaku tiếp xúc trực tiếp với ánh sáng
                       mặt trời, bạn nên tạo không gian thoáng mát để cá koi thư
@@ -1351,7 +1382,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Kohaku koi là dòng ăn tạp nên chúng có thể ăn bất cứ thứ
                       gì như tảo, giun, ốc, côn trùng,.. Tuy nhiên không nên cho
@@ -1362,7 +1393,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Nên theo dõi bể cá Koi thường xuyên để biết cá sinh trưởng
                       thế nào, có gặp vấn đề gì không. Nếu bạn không có nhiều
@@ -1373,7 +1404,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Luôn giữ độ pH trong bể nuôi trong khoảng 7 - 7,5. Nhiệt
                       độ nước: 20 - 27 độ C. Hàm lượng oxy tối thiểu trong bể
@@ -1383,7 +1414,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Nếu trong nước có nồng độ Nitrite quá cao hoặc cần thay
                       nước hồ thì không nên thay một lần mà thay dần dần, cứ sau
@@ -1394,7 +1425,7 @@ export default function Kohaku() {
                   <li>
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Cá koi sinh trưởng và phát triển mạnh trong hồ cá koi có
                       thể tích nước trên 1000 Gallon nước, nền tốt, ít cây thủy
@@ -1411,15 +1442,15 @@ export default function Kohaku() {
                 <h3
                   style={{
                     color: "rgb(146, 2, 2)",
-                    backgroundColor: "#ead8c8",
                     padding: "10px",
+                    backgroundColor: "#ead8c8",
                   }}
                 >
                   7. Giá cá Koi Kohaku bao nhiêu ?{" "}
                 </h3>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Hiện tại IKoi đang cung cấp dòng cá koi Kohaku chuẩn từ cá
                   nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói IKoi là một
@@ -1430,14 +1461,14 @@ export default function Kohaku() {
                   <span
                     className="span-Style"
                     style={{
-                      color: "#efa709",
+                      color: "rgb(146, 2, 2)",
                     }}
                   >
                     7.1 Giá Koi Kohaku F1
                   </span>
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
                     Đối với những con Kohaku f1 có kích thước từ 18cm – 40cm,
                     giá cá koi dao động từ 150.000 – 500.000 VNĐ tùy loại. Cao
@@ -1450,14 +1481,14 @@ export default function Kohaku() {
                   <span
                     className="span-Style"
                     style={{
-                      color: "#efa709",
+                      color: "rgb(146, 2, 2)",
                     }}
                   >
                     7.2 Giá cá koi Kohaku Nhật chuẩn
                   </span>
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
                     Một con cá Koi trưởng thành Nhật Bản như Kohaku koi với kích
                     thước từ 10-15cm sẽ có giá từ 600.000 – 2.000.000VNĐ/con.
@@ -1472,15 +1503,15 @@ export default function Kohaku() {
                 <h3
                   style={{
                     color: "rgb(146, 2, 2)",
-                    backgroundColor: "#ead8c8",
                     padding: "10px",
+                    backgroundColor: "#ead8c8",
                   }}
                 >
                   8. Tại sao nên mua Koi Kohaku ở shop chúng tôi ?{" "}
                 </h3>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Hiện nay có khá nhiều đơn vị cung cấp các dòng Koi Kohaku giá
                   thành và chất lượng trên thị trường. Đặc biệt là người mới bắt

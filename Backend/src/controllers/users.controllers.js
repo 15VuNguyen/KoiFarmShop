@@ -181,6 +181,16 @@ export const userUpdateConsignController = async (req, res) => {
   })
 }
 
+export const userCancelConsignController = async (req, res) => {
+  // const { body } = req.body //nếu để body này thì sẽ bị lỗi vì body đã được dùng rồi
+  const { _id } = req.params
+  const result = await consignsService.userCancelConsign(_id, req.body)
+  return res.json({
+    message: USERS_MESSAGES.CANCEL_CONSIGN_SUCCESS,
+    result
+  })
+}
+
 export const getProfileController = async (req, res) => {
   //tìm user theo username
   const { username } = req.params

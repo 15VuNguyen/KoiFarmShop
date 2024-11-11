@@ -30,6 +30,7 @@ import {
   resendEmailVerifyController,
   resetPasswordController,
   updateMeController,
+  userCancelConsignController,
   userUpdateConsignController,
   verifyForgotPasswordTokenController
 } from '../controllers/users.controllers.js'
@@ -148,5 +149,7 @@ usersRouter.patch(
   updateConsignValidator,
   wrapAsync(userUpdateConsignController)
 )
+
+usersRouter.patch('/huy-don-ki-gui/:_id', accessTokenValidator, filterMiddleware('State'), wrapAsync(userCancelConsignController))
 
 export default usersRouter

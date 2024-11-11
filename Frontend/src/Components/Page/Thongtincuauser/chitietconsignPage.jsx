@@ -888,6 +888,7 @@ export default function Chitietconsignpage() {
                           value={formData.Size}
                           onChange={handleChange}
                           type="number"
+                          addonAfter="cm"
                           placeholder="Nhập kích thước(cm)"
                           min={5}
                           max={150}
@@ -909,7 +910,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng chọn trạng thái.",
+                            message: "Vui lòng chọn giống loài koi của bạn.",
                           },
                         ]}
                       >
@@ -955,7 +956,8 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập lượng thức ăn.",
+                            message:
+                              "Vui lòng nhập lượng thức ăn/ngày koi của bạn.",
                           },
                           {
                             validator: (_, value) => {
@@ -973,7 +975,7 @@ export default function Chitietconsignpage() {
                               if (numericValue > 100) {
                                 return Promise.reject(
                                   new Error(
-                                    "lượng thức ăn phải nhỏ hơn bằng 200"
+                                    "Lượng thức ăn phải nhỏ hơn bằng 200"
                                   )
                                 );
                               }
@@ -987,10 +989,8 @@ export default function Chitietconsignpage() {
                           value={formData.DailyFoodAmount}
                           onChange={handleChange}
                           type="number"
+                          addonAfter="kg/ngày"
                           placeholder="Nhập lượng thức ăn/ngày"
-                          step="1"
-                          min={1}
-                          max={100}
                         />
                       </Form.Item>
                     </div>
@@ -998,7 +998,7 @@ export default function Chitietconsignpage() {
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%", paddingRight: "15px" }}>
                       <label
-                        htmlFor="DailyFoodAmount"
+                        htmlFor="FilteringRatio"
                         style={{ fontWeight: "bold", fontSize: "15px" }}
                       >
                         <span style={{ color: "red" }}>* </span>
@@ -1009,7 +1009,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập tỷ lệ lọc.",
+                            message: "Vui lòng nhập tỷ lệ lọc koi của bạn.",
                           },
                           {
                             validator: (_, value) => {
@@ -1035,6 +1035,7 @@ export default function Chitietconsignpage() {
                           placeholder="Nhập tỷ lệ lọc"
                           min={0.1} // Update min to 0.1
                           max={100}
+                          addonAfter="%"
                           step={0.1}
                         />
                       </Form.Item>
@@ -1053,7 +1054,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập CertificateID.",
+                            message: "Vui lòng nhập CertificateID koi của bạn.",
                           },
                         ]}
                       >
@@ -1179,7 +1180,9 @@ export default function Chitietconsignpage() {
                   ))}
               </Form>
             ) : (
-              <div>No consign data available.</div>
+              <div>
+                <h2>Bạn chưa có đơn ký gửi nào</h2>
+              </div>
             )}
           </div>
         </Container>

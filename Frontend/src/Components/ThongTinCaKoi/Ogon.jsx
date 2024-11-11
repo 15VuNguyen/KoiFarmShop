@@ -4,8 +4,18 @@ import CardGrid from "../Cardgrid";
 import axios from "axios";
 import "../Css/koiStyle.css";
 import { Layout, Typography } from "antd";
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Ogon/ca-koi-platinum-3.webp";
+import img2 from "../../assets/Koi-Ogon-1/bo-5.jpg";
+import img3 from "../../assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg";
+import img4 from "../../assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg";
+import img5 from "../../assets/Koi-Ogon-1/img_0095.png";
+import img6 from "../../assets/Koi-Ogon-1/hi-ogon.jpg";
+import img7 from "../../assets/Koi-Ogon-1/orenji-ogon.jpg";
+import img8 from "../../assets/Koi-Ogon-1/mukashi-ogon.webp";
+import img9 from "../../assets/Koi-Ogon-1/nezu-ogon.jpg";
+import img10 from "../../assets/img_4.png";
 export default function Ogon() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -258,7 +268,7 @@ export default function Ogon() {
   if (error) return <div>Error: {error.message}</div>;
   return (
     <>
-      <Layout style={{ backgroundColor: "#470101" }}>
+      <Layout>
         <Container>
           <div>
             <div>
@@ -266,8 +276,21 @@ export default function Ogon() {
                 className="body_StyleKoiOfPage"
                 style={{ backgroundColor: "#ead8c8" }}
               >
-                <h2 style={{ color: "#920202" }}>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px", listStyleType: "none" }}>
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
                     <span
                       onClick={handleScroll1}
@@ -409,39 +432,48 @@ export default function Ogon() {
               <div>
                 <h2
                   className="noidungchitiet"
-                  style={{ color: "rgb(255, 178, 0)", paddingTop: "20px" }}
+                  style={{ color: "red", paddingTop: "20px" }}
                 >
                   Nội dung chi tiết
                 </h2>
                 <div style={{ fontSize: "15px", fontWeight: "400" }}>
                   <Paragraph
                     className="paragraph-Style"
-                    style={{ color: "#e4cfb1" }}
+                    style={{ color: "black" }}
                   >
-                    <span className="span-Style">Koi Ogon</span> là dòng cá Koi
-                    được yêu thích nhất trên thế giới. Với vẻ ngoài lấp lánh tạo
-                    ra vẻ sang trọng cho không gian nuôi cá Koi. Hãy cùng chúng
-                    tôi tìm hiểu thông tin cụ thể về dòng cá này nhé!
+                    <span className="span-Style" style={{ color: "blue" }}>
+                      Koi Ogon
+                    </span>{" "}
+                    là dòng cá Koi được yêu thích nhất trên thế giới. Với vẻ
+                    ngoài lấp lánh tạo ra vẻ sang trọng cho không gian nuôi cá
+                    Koi. Hãy cùng chúng tôi tìm hiểu thông tin cụ thể về dòng cá
+                    này nhé!
                   </Paragraph>
                 </div>
               </div>
               <div id="1">
-                <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   {" "}
                   1. Nguồn gốc lịch sử của giống cá Koi Ogon
                 </h3>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon/ca-koi-platinum-3.webp"
-                    style={{ width: "50%" }}
-                  />
-                  <Paragraph className="paragraph-Style">
+                  <img src={img1} style={{ width: "50%" }} />
+                  <Paragraph
+                    className="paragraph-Style"
+                    style={{ color: "#efa709" }}
+                  >
                     Giới thiệu về cá Koi Ogon
                   </Paragraph>
                 </div>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Koi Ogon có lịch sử từ 90 năm trước, ông Sawata Aoki tại Nhật
                   Bản đã có ý tưởng lai tạo một giống cá Koi đặc biệt. Có thể
@@ -452,14 +484,17 @@ export default function Ogon() {
                   bán cho ông chú cá cảnh.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-Ogon-1/bo-5.jpg" />
-                  <Paragraph className="paragraph-Style">
+                  <img src={img2} />
+                  <Paragraph
+                    className="paragraph-Style"
+                    style={{ color: "#efa709" }}
+                  >
                     Nguồn gốc lịch sử của giống cá Koi Ogon
                   </Paragraph>
                 </div>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Đây cũng là lúc hành trình nuôi cá của ông bắt đầu, ông đã
                   nuôi dưỡng chú cá suốt 25 năm, trong suốt khoảng thời gian này
@@ -472,12 +507,18 @@ export default function Ogon() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2.Đặc điểm của Koi ogon
                 </h3>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Cá Koi Ogon được coi là một trong những giống cá Koi đẹp nhất
                   và độc đáo nhất trên trái đất với ngoại hình đặc trưng là màu
@@ -494,14 +535,17 @@ export default function Ogon() {
                   lạnh, màu sắc của chúng sẽ trở nên nhạt đi.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg" />
-                  <Paragraph className="paragraph-Style">
+                  <img src={img3} style={{ width: "50%" }} />
+                  <Paragraph
+                    className="paragraph-Style"
+                    style={{ color: "#efa709" }}
+                  >
                     Đặc điểm của Koi ogon
                   </Paragraph>
                 </div>
                 <Paragraph
                   className="paragraph-Style"
-                  style={{ color: "#e4cfb1" }}
+                  style={{ color: "black" }}
                 >
                   Ngoài màu sắc rực rỡ, Koi Ogon cũng được yêu thích bởi vẻ đẹp
                   tinh tế, sang trọng và thon gọn của chúng. Thân cá Koi Ogon
@@ -519,7 +563,13 @@ export default function Ogon() {
                 </Paragraph>
               </div>
               <div id="3">
-                <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   3. Những dòng cá Koi ogon phổ biến hiện nay
                 </h3>
                 <ul>
@@ -534,7 +584,7 @@ export default function Ogon() {
                     <br />
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Cá Koi Platinum Ogon là một trong những dòng cá Koi Ogon
                       đẹp và đặc biệt nhất với màu trắng bạc sang trọng. Loại cá
@@ -555,10 +605,17 @@ export default function Ogon() {
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg"
+                        src={img4}
                         style={{ width: "30%", objectFit: "cover" }}
                       />
-                      <Text className="text-Style ">KOI PLATINUM OGON</Text>
+                    </div>
+                    <div style={{ textAlign: "center", color: "#efa709" }}>
+                      <Text
+                        className="text-Style "
+                        style={{ color: "#efa709" }}
+                      >
+                        KOI PLATINUM OGON
+                      </Text>
                     </div>
                   </li>
                   <li>
@@ -572,7 +629,7 @@ export default function Ogon() {
                     <br />
                     <Paragraph
                       className="paragraph-Style"
-                      style={{ color: "#e4cfb1" }}
+                      style={{ color: "black" }}
                     >
                       Cá Koi Yamabuki Ogon là một trong những giống cá Koi Ogon
                       phổ biến và được ưa chuộng trên khắp thế giới. Đây là một
@@ -595,11 +652,16 @@ export default function Ogon() {
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/Koi-Ogon-1/img_0095.png"
+                        src={img5}
                         style={{ width: "30%", objectFit: "cover" }}
                       />
                       <div style={{ textAlign: "center" }}>
-                        <Text className="text-Style">KOI YAMABUIKI OGON</Text>
+                        <Text
+                          className="text-Style"
+                          style={{ color: "#efa709" }}
+                        >
+                          KOI YAMABUIKI OGON
+                        </Text>
                       </div>
                     </div>
                   </li>
@@ -629,9 +691,14 @@ export default function Ogon() {
                       đẹp nhất để khán giả chiêm ngưỡng và thưởng thức.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/Koi-Ogon-1/hi-ogon.jpg" />
+                      <img src={img6} style={{ width: "50%" }} />
                       <div style={{ textAlign: "center" }}>
-                        <Text className="text-Style">KOI HI OGON </Text>
+                        <Text
+                          className="text-Style"
+                          style={{ color: "#efa709" }}
+                        >
+                          KOI HI OGON{" "}
+                        </Text>
                       </div>
                     </div>
                   </li>
@@ -661,9 +728,14 @@ export default function Ogon() {
                       bảo nhu cầu phát triển của cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/Koi-Ogon-1/orenji-ogon.jpg" />
+                      <img src={img7} />
                       <div style={{ textAlign: "center" }}>
-                        <Text className="text-Style">KOI ORENJI OGON </Text>
+                        <Text
+                          className="text-Style"
+                          style={{ color: "#efa709" }}
+                        >
+                          KOI ORENJI OGON{" "}
+                        </Text>
                       </div>
                     </div>
                   </li>
@@ -690,12 +762,14 @@ export default function Ogon() {
                       cũng có màu vàng tươi, tạo nên sự đồng điệu với thân cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src="src/assets/Koi-Ogon-1/mukashi-ogon.webp"
-                        style={{ width: "30%" }}
-                      />
+                      <img src={img8} style={{ width: "30%" }} />
                       <div>
-                        <Text className="text-Style">KOI MUKASHI OGON </Text>
+                        <Text
+                          className="text-Style"
+                          style={{ color: "#efa709" }}
+                        >
+                          KOI MUKASHI OGON{" "}
+                        </Text>
                       </div>
                     </div>
                   </li>
@@ -721,19 +795,27 @@ export default function Ogon() {
                       điệu và khác biệt đối với chú cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src="src/assets/Koi-Ogon-1/nezu-ogon.jpg"
-                        style={{ width: "30%" }}
-                      />
+                      <img src={img9} style={{ width: "30%" }} />
                       <div>
-                        <Text className="text-Style">KOI NEZU OGON </Text>
+                        <Text
+                          className="text-Style"
+                          style={{ color: "#efa709" }}
+                        >
+                          KOI NEZU OGON{" "}
+                        </Text>
                       </div>
                     </div>
                   </li>
                 </ul>
               </div>
               <div id="4">
-                <h3 style={{ color: "rgb(255, 178, 0)" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách nuôi cá Koi ogon khỏe mạnh, phát triển tốt
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -829,7 +911,14 @@ export default function Ogon() {
                   </li>
                 </ul>
                 <p>
-                  <span className="span-Style">Kiểm tra sức khoẻ</span>
+                  <span
+                    className="span-Style"
+                    style={{
+                      color: "#efa709",
+                    }}
+                  >
+                    Kiểm tra sức khoẻ
+                  </span>
                   <br />
                   <Paragraph className="paragraph-Style">
                     Kiểm tra sức khỏe thường xuyên là vô cùng cần thiết nhằm bảo
@@ -839,7 +928,14 @@ export default function Ogon() {
                   </Paragraph>
                 </p>
                 <p>
-                  <span className="span-Style">Giám sát và quản lý</span>
+                  <span
+                    className="span-Style"
+                    style={{
+                      color: "#efa709",
+                    }}
+                  >
+                    Giám sát và quản lý
+                  </span>
                   <br />
                   <Paragraph className="paragraph-Style">
                     Giám sát và quản lý là một phần cực kỳ cần thiết đối với quá
@@ -851,7 +947,13 @@ export default function Ogon() {
                 </p>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Địa chỉ bán cá Koi Ogon đẹp, uy tín?{" "}
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -898,7 +1000,7 @@ export default function Ogon() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img10} />
             </div>
             <div style={{ textAlign: "center" }}>
               <img
