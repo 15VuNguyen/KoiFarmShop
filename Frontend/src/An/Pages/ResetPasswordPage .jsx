@@ -1,7 +1,9 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Modal, Button, Form, Input, Typography, Spin,message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../Utils/axiosJS';
+
+const { Text } = Typography;
 
 export const ResetPasswordModal = ({ show, handleClose, signInLink }) => {
     const navigate = useNavigate();
@@ -10,23 +12,18 @@ export const ResetPasswordModal = ({ show, handleClose, signInLink }) => {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
     const confirmPasswordRef = useRef(null);
-    const [isWaiting, setIsWaiting] = useState(false); // cais nay dung de cho cai spinner tam thoi de v
     const [forgotPasswordToken, setForgotPasswordToken] = useState(null);
-    // Handle first step: Sending forgot password email
-    const handleEmailSubmit = useCallback(async (e) => {
-        e.preventDefault();
-        setLoading(true);
 
+    // Handle first step: Sending forgot password email
+    const handleEmailSubmit = useCallback(async () => {
+        setLoading(true);
         try {
-            const email = emailRef.current.value.trim();
+            const email = emailRef.current.input.value.trim();
             if (email) {
-                setIsWaiting(true);
-                const response = await axiosInstance.post('/users/forgot-password', { 'email' : email });
-                alert('Reset link has been sent to your email.');
-                
-            
+                const response = await axiosInstance.post('/users/forgot-password', { email });
+               message.success('Vui lòng kiểm tra hộp thư email của bạn để đặt lại mật khẩu.');
             } else {
-                alert("Please enter your email address.");
+                message.error('Vui lòng nhập địa chỉ email của bạn.');
             }
         } catch (error) {
             console.error('Error sending reset email:', error);
@@ -37,20 +34,16 @@ export const ResetPasswordModal = ({ show, handleClose, signInLink }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('forgot_password_secrect_token');
-        console.log('secrect token is'+token);
-
         if (token) {
-            console.log('secrect token is'+token);
             setForgotPasswordToken(token);
             setLoading(true);
             axiosInstance.get('/users/verify-forgot-password', { params: { forgot_password_token: token } })
-                .then((rep) => {
-                    console.log(rep);
-                    setStep(2); 
+                .then(() => {
+                    setStep(2);
                     localStorage.removeItem('forgot_password_secrect_token');
                 })
                 .catch(error => {
-                    alert('Invalid or expired reset token.');
+                    message.error('Token verification failed. Please request a new reset link.');
                     console.error('Token verification error:', error);
                 })
                 .finally(() => {
@@ -58,109 +51,115 @@ export const ResetPasswordModal = ({ show, handleClose, signInLink }) => {
                 });
         }
     }, []);
-
-    
-    const handlePasswordSubmit = useCallback(async (e) => {
-        e.preventDefault();
+    const translateErrorMessage = (error) => {
+        switch (error) {
+            case 'Email already exists':
+                return 'Email đã tồn tại';
+            case 'Password length must be from 8 to 50':
+                return 'Mật khẩu phải từ 8 đến 50 ký tự';
+            case 'Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol':
+                return 'Mật khẩu phải chứa ít nhất một số và một chữ cái viết hoa và viết thường, và ít nhất 8 ký tự';
+            default:
+                return error;
+        }
+    }
+    const handlePasswordSubmit = useCallback(async () => {
         setLoading(true);
-
         try {
-            const password = passwordRef.current.value.trim();
-            const confirmPassword = confirmPasswordRef.current.value.trim();
-            console.log(forgotPasswordToken);
+            const password = passwordRef.current.input.value.trim();
+            const confirmPassword = confirmPasswordRef.current.input.value.trim();
+
             if (password && confirmPassword) {
                 if (password === confirmPassword) {
                     await axiosInstance.post(`/users/reset-password?forgot_password_token=${forgotPasswordToken}`, {
-                        'password':password,
-                        'confirm_password': confirmPassword,
-                        
+                        password,
+                        confirm_password: confirmPassword,
                     });
-                    alert("Password reset successfully!");
-                    handleClose(); 
+                    message.success('Mật khẩu của bạn đã được đặt lại thành công.');
+                    handleClose();
                     localStorage.removeItem('forgot_password_secrect_token');
                     setStep(1);
                     navigate(signInLink);
                 } else {
-                    alert("Passwords do not match.");
+                    message.error('Mật khẩu và xác nhận mật khẩu không khớp.');
                 }
             } else {
-                alert("Please enter both password fields.");
+                message.error('Vui lòng nhập mật khẩu và xác nhận mật khẩu của bạn.');
             }
         } catch (error) {
-            console.error('Error resetting password:', error.data);
+            console.error('Error resetting password:', error);
+
+            if (error.response) {
+                const errorObj = error.response.data.errors
+                if (errorObj.password) {
+                    message.error(translateErrorMessage(errorObj.password));
+                }
+                if (errorObj.errors.email) {
+                    message.error(translateErrorMessage(errorObj.email));
+                }
+            } else {
+                message.error('Đã xảy ra lỗi khi đặt lại mật khẩu.');
+            }
+
+            console.error('Error resetting password:', error);
         } finally {
             setLoading(false);
         }
     }, [forgotPasswordToken, navigate, signInLink, handleClose]);
 
     return (
-        <Modal show={show} onHide={handleClose} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>{step === 1 ? 'Reset Password' : 'Set New Password'}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {step === 1 ? (
-                    <div>
-                        <p>Please enter the email address that you used to register, and we will send you a link to reset your password via email.</p>
-                        <Form onSubmit={handleEmailSubmit}>
-                            <Form.Group controlId="formEmail">
-                                <Form.Label>Email address</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    ref={emailRef}
-                                    disabled={loading}
-                                />
-                            </Form.Group>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                className="mt-3"
-                                disabled={loading}
-                            >
-                                {loading ? 'Sending...' : 'Send Reset Link'}
-                            </Button>
-                        </Form>
-                    </div>
-                ) : (
-                    <div>
-                        <p>Enter your new password and confirm it below:</p>
-                        <Form onSubmit={handlePasswordSubmit}>
-                            <Form.Group controlId="formNewPassword">
-                                <Form.Label>New Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Enter new password"
-                                    ref={passwordRef}
-                                    disabled={loading}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formConfirmPassword" className="mt-3">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Confirm new password"
-                                    ref={confirmPasswordRef}
-                                    disabled={loading}
-                                />
-                            </Form.Group>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                className="mt-3"
-                                disabled={loading}
-                            >
-                                {loading ? 'Resetting...' : 'Reset Password'}
-                            </Button>
-                        </Form>
-                    </div>
-                )}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
+        <Modal
+            open={show}
+            onCancel={handleClose}
+            footer={[
+                <Button key="close" onClick={handleClose}>
+                    Đóng
                 </Button>
-            </Modal.Footer>
+            ]}
+            centered
+            title={step === 1 ? 'Đặt lại mật khẩu' : 'Đặt mật khẩu mới'}
+        >
+            {step === 1 ? (
+                <>
+                    <Text>Vui lòng nhập địa chỉ email mà bạn đã sử dụng để đăng ký, chúng tôi sẽ gửi cho bạn liên kết để đặt lại mật khẩu qua email.</Text>
+                    <Form layout="vertical" onFinish={handleEmailSubmit}>
+                        <Form.Item label="Địa chỉ email" name="email" required>
+                            <Input
+                                type="email"
+                                placeholder="Nhập email của bạn"
+                                ref={emailRef}
+                                disabled={loading}
+                            />
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit" loading={loading} block>
+                            Gửi liên kết đặt lại
+                        </Button>
+                    </Form>
+                </>
+            ) : (
+                <>
+                    <Text>Nhập mật khẩu mới của bạn và xác nhận nó bên dưới:</Text>
+                    <Form layout="vertical" onFinish={handlePasswordSubmit}>
+                        <Form.Item label="Mật khẩu mới" name="password" required>
+                            <Input.Password
+                                placeholder="Nhập mật khẩu mới"
+                                ref={passwordRef}
+                                disabled={loading}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Xác nhận mật khẩu" name="confirmPassword" required>
+                            <Input.Password
+                                placeholder="Xác nhận mật khẩu mới"
+                                ref={confirmPasswordRef}
+                                disabled={loading}
+                            />
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit" loading={loading} block>
+                            Đặt lại mật khẩu
+                        </Button>
+                    </Form>
+                </>
+            )}
         </Modal>
     );
 };

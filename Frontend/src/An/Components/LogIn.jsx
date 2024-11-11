@@ -1,41 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa6";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ResetPasswordModal } from "../Pages/ResetPasswordPage ";
+import "../Css/SignUp.css";
+import { Tooltip, Typography } from "antd";
+
 function SignInForm() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showResetPasswordModal, setShowResetPasswordModal] =
-    React.useState(false);
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const { googleAuthUrl, login, checkRole } = useAuth();
-  const [state, setState] = React.useState({
-    email: "",
-    password: "",
-  });
+  const [state, setState] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
   const handleChange = (evt) => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value,
-    });
+    const { name, value } = evt.target;
+    setState({ ...state, [name]: value });
+    setErrors({ ...errors, [name]: "" });
   };
+
   useEffect(() => {
     const token = localStorage.getItem("forgot_password_secrect_token");
     if (token) {
-      console.log(token);
       setShowResetPasswordModal(true);
-      return;
     }
   }, []);
+
   const handleOnSubmit = async (evt) => {
     evt.preventDefault();
-
     const { email, password } = state;
 
-    // Perform the login and navigate after a successful login
+    const newErrors = {
+      email: email ? "" : "Email là bắt buộc",
+      password: password ? "" : "Mật khẩu là bắt buộc",
+    };
+    setErrors(newErrors);
+
+    if (!email || !password) return;
 
     try {
       const response = await login(email, password);
@@ -43,31 +47,23 @@ function SignInForm() {
         const from = location.state?.from?.pathname || "/";
         const selectedItem = location.state?.selectedItem || null;
         checkRole().then((result) => {
-          if (result === "Staff") {
-            toast.success("Login successfully");
-            navigate("/DashBoard/staff/Profiles");
-          } else if (result === "Manager") {
-            toast.success("Login successfully");
-            navigate("/NewDashBoard/staff/Profiles");
-          }
+          const redirectPath =
+            result === "Staff"
+              ? "/DashBoard/staff/Profiles"
+              : "/NewDashBoard/staff/Profiles";
+          toast.success("Đăng nhập thành công");
+          navigate(redirectPath);
         });
-        toast.success("Login successfully");
         navigate(from, { state: { selectedItem } });
       }
     } catch (error) {
-      console.error("Failed to login", error.data);
-      if (error.response.data.message === "Validation error") {
-        toast.error("Password or Email is required");
+      console.error("Failed to login", error.response);
+      if (error.response.data.errors.email === "Email or password is incorrect") {
+        toast.error('Email hoặc mật khẩu không chính xác');
+        return;
       }
-    }
-
-    // Clear the input fields
-    setState({ email: "", password: "" });
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: "",
-      });
+      if (error.response.data.errors.email)
+        toast.error(error.response.data.errors.email);
     }
   };
 
@@ -75,45 +71,49 @@ function SignInForm() {
     <div className="form-container sign-in-container">
       <ResetPasswordModal
         show={showResetPasswordModal}
-        handleClose={() => {
-          setShowResetPasswordModal(false);
-        }}
+        handleClose={() => setShowResetPasswordModal(false)}
         signInLink="/login"
         buttonLink="/login"
       />
       <form onSubmit={handleOnSubmit}>
-        <h1>Sign in</h1>
+        <h1>Đăng nhập</h1>
+
         <div className="social-container">
-          <Link to={googleAuthUrl} className="social">
-            <FaGoogle />
-          </Link>
+          <Tooltip title="đăng nhập bằng google">
+            <Link to={googleAuthUrl} className="social">
+
+              <FaGoogle />
+
+            </Link>
+          </Tooltip>
         </div>
-        <span>or use your account</span>
+
         <input
           type="email"
-          placeholder="Email"
           name="email"
           value={state.email}
           onChange={handleChange}
+          placeholder={errors.email ? errors.email : "Email"}
+          className={`input-field ${errors.email ? "error-input" : ""}`}
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={state.password}
           onChange={handleChange}
+          placeholder={errors.password ? errors.password : "Mật khẩu"}
+          className={`input-field ${errors.password ? "error-input" : ""}`}
         />
-        <p
-          onClick={() => {
-            setShowResetPasswordModal(true);
-          }}
-        >
-          forgot your password?
-        </p>
-        <button>Sign In</button>
+        <Typography.Link onClick={() => setShowResetPasswordModal(true)}>
+          <Tooltip title="Ấn vào đây để đặt lại mật khẩu">
+
+            Quên mật khẩu?
+          </Tooltip>
+        </Typography.Link>
+        <button>Đăng nhập</button>
       </form>
       <ToastContainer
-        position="bottom-right"
+        position="top-center"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}

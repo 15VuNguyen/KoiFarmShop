@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const useSignUpForm = (initialState) => {
-    
     const [state, setState] = useState(initialState);
     const [errors, setErrors] = useState({});
 
@@ -23,28 +22,29 @@ const useSignUpForm = (initialState) => {
         const newErrors = {};
 
         if (!state.name.trim()) {
-            newErrors.name = "Name is required";
+            newErrors.name = "Tên là bắt buộc";
         }
         if (!state.email.trim() || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(state.email)) {
-            newErrors.email = "Invalid email address";
+            newErrors.email = "Email không hợp lệ";
         }
         if (!state.password.trim()) {
-            newErrors.password = "Password is required";
+            newErrors.password = "Mật khẩu là bắt buộc";
         }
         if (state.password !== state.confirm_password) {
-            newErrors.confirm_password = "Passwords don't match";
+            newErrors.confirm_password = "Mật khẩu không khớp";
         }
-        
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-    
-    const handleSubmit = (onSubmit,e) => {
+
+    const handleSubmit = async (onSubmit, e) => {
         e.preventDefault();
         if (validate()) {
-            onSubmit(state);
-            setState(initialState);
+            const isSuccess = await onSubmit(state); 
+            if (isSuccess) {
+                setState(initialState); 
+            }
         }
     };
 
