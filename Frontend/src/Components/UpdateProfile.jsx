@@ -36,7 +36,7 @@ const storage = getStorage(app);
 const isValidUsername = (username) => /^[a-zA-Z0-9]+$/.test(username);
 const isValidNameOrAddress = (input) =>
   /^[\w\s]+$/.test(input) && !/\s{2,}/.test(input);
-const isValidPhoneNumber = (phone) => /^\d{10,11}$/.test(phone);
+const isValidPhoneNumber = (phone) => /^\d{10,20}$/.test(phone);
 const isValidURL = (urlString) => {
   try {
     new URL(urlString);
@@ -134,7 +134,7 @@ export default function UpdateProfile() {
   const updateUser = async (field, value) => {
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:4000/users/me`,
+        `/users/me`,
         { [field]: String(value) },
         {
           headers: {

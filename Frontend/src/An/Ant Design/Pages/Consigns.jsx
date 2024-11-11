@@ -35,17 +35,17 @@ export default function Profiles() {
         }
     };
     const doughnutData = {
-        labels: [ "Yêu Cầu Ký Gửi", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
+        labels: [ "Đã Hủy", "Yêu Cầu Ký Gửi", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
         datasets: [{
             data: [
-           
+                consigns.filter(consign => consign.State === -1).length,
                 consigns.filter(consign => consign.State === 1).length,
                 consigns.filter(consign => consign.State === 2).length,
                 consigns.filter(consign => consign.State === 3).length,
                 consigns.filter(consign => consign.State === 4).length,
                 consigns.filter(consign => consign.State === 5).length,
             ],
-            backgroundColor: ["#91caff", "#b7eb8f", "#ffd591", "#d3adf7", "#ffa39e"],
+            backgroundColor: ["#ff0000", "#91caff", "#b7eb8f", "#ffd591", "#d3adf7", "#ffa39e"],
             hoverOffset: 4,
         }]
     };
@@ -66,7 +66,7 @@ export default function Profiles() {
 
 
     const aggregatedData = consigns.reduce(howManyStateCorpondeToEachDATES, {});
-
+    console.log(aggregatedData);
     const sortedDates = Object.keys(aggregatedData)
         .map(dateStr => new Date(dateStr))
         .sort((a, b) => a - b)
@@ -76,6 +76,15 @@ export default function Profiles() {
     const lineData = {
         labels: sortedDates, 
         datasets: [
+            {
+                label:"Đã Hủy",
+                data: sortedDates.map(date => aggregatedData[date]?.[-1] || 0),
+                borderColor: "#ff0000",
+                fill: false,
+                tension: 0.3,
+
+
+            },
             {
                 label: 'Yêu Cầu Ký Gửi',
                 data: sortedDates.map(date => aggregatedData[date]?.[1] || 0),

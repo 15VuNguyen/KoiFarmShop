@@ -355,7 +355,7 @@ export default function Kois() {
                         hidden
                         label="Category ID"
                         name="CategoryID"
-                        rules={[{ required: true, message: 'Category ID is required!' }]}>
+                        rules={[{ required: true, message: ' ID Danh Mục cá koi là bắt buộc!' }]}>
 
                         <Input hidden />
                     </Form.Item>
@@ -477,7 +477,7 @@ export default function Kois() {
                                 name="Price"
                             >
                                 <InputNumber formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} min={1000} style={{ width: '100%' }} suffix={"VND"} />
+                                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} min={1000} style={{ width: '100%' }} suffix={"đ"} />
                             </Form.Item>
                         </Col>
                     </Row>

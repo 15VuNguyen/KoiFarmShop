@@ -30,10 +30,8 @@ export default function DonKyGui() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedConsign, setSelectedConsign] = useState(null);
 
-  const showModal = (consign) => {
-    setSelectedConsign(consign); // Set the selected consign for deletion
+  const showModal = () => {
     setIsModalVisible(true);
   };
 
@@ -78,23 +76,24 @@ export default function DonKyGui() {
   useEffect(() => {
     fetchUserData();
   }, []);
-
   const handleOk = async () => {
-    if (selectedConsign) {
-      try {
-        await axiosInstance.delete(
-          `/users/xoa-don-ki-gui/${selectedConsign._id}`
-        );
-        toast.success("Đơn ký gửi đã được xóa!");
-        setConsignList(
-          consignList.filter((item) => item.consign._id !== selectedConsign._id)
-        );
-      } catch (error) {
-        toast.error("Đã xảy ra lỗi khi xóa đơn ký gửi.");
-        console.error("Error deleting consign:", error);
+    try {
+      const response = await axiosInstance.patch(
+        `/users/huy-don-ki-gui/${consign._id}`
+      );
+      if (response.status === 200) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+        toast.success("Đã xóa thành công");
+        window.location.reload();
+        setIsModalVisible(false);
+      } else {
+        toast.error("Failed to delete consignment");
       }
+    } catch (error) {
+      toast.error("An error occurred");
     }
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -236,23 +235,31 @@ export default function DonKyGui() {
                                 "Đang thương thảo hợp đồng",
                                 "Đang tìm người mua",
                                 "Đã bán",
-                              ][consign.State - 1];
+                                "Đã Hủy", // Add this for the -1 state
+                              ];
 
                               let color;
+                              let text;
                               if (
                                 consign.State === 1 ||
                                 consign.State === 2 ||
                                 consign.State === 3
                               ) {
                                 color = "blue";
+                                text = statusText[consign.State - 1];
                               } else if (consign.State === 4) {
                                 color = "";
+                                text = statusText[consign.State - 1];
                               } else if (consign.State === 5) {
                                 color = "green";
+                                text = statusText[consign.State - 1];
+                              } else if (consign.State === -1) {
+                                color = "red";
+                                text = statusText[5]; // Use the last element for the -1 state
                               }
 
                               return (
-                                <Text style={{ color, fontSize:'17px' }}>{statusText}</Text>
+                                <Text style={{ color }}>{statusText}</Text>
                               );
                             })()}
                           </Text>
@@ -385,16 +392,13 @@ export default function DonKyGui() {
                           >
                             Chi tiết
                           </Button>
-                          {/* Render "Xóa đơn ký gửi" only if consign.State !== 5 */}
-                          {consign.State !== 5 && (
-                            <Button
-                              style={{ marginLeft: "10px", color: "red" }}
-                              type="danger"
-                              onClick={() => showModal(consign)}
-                            >
-                              Xóa đơn ký gửi
-                            </Button>
-                          )}
+                          <Button
+                            style={{ marginLeft: "10px", color: "red" }}
+                            type="danger" // This should apply the red color
+                            onClick={showModal}
+                          >
+                            Xóa đơn ký gửi
+                          </Button>
                           <Modal
                             title="Xác nhận xóa"
                             visible={isModalVisible}
