@@ -909,7 +909,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng chọn trạng thái.",
+                            message: "Vui lòng chọn giống loài koi của bạn.",
                           },
                         ]}
                       >
@@ -955,7 +955,8 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập lượng thức ăn.",
+                            message:
+                              "Vui lòng nhập lượng thức ăn/ngày koi của bạn.",
                           },
                           {
                             validator: (_, value) => {
@@ -973,7 +974,7 @@ export default function Chitietconsignpage() {
                               if (numericValue > 100) {
                                 return Promise.reject(
                                   new Error(
-                                    "lượng thức ăn phải nhỏ hơn bằng 200"
+                                    "Lượng thức ăn phải nhỏ hơn bằng 200"
                                   )
                                 );
                               }
@@ -988,9 +989,6 @@ export default function Chitietconsignpage() {
                           onChange={handleChange}
                           type="number"
                           placeholder="Nhập lượng thức ăn/ngày"
-                          step="1"
-                          min={1}
-                          max={100}
                         />
                       </Form.Item>
                     </div>
@@ -1009,7 +1007,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập tỷ lệ lọc.",
+                            message: "Vui lòng nhập tỷ lệ lọc koi của bạn.",
                           },
                           {
                             validator: (_, value) => {
@@ -1053,7 +1051,7 @@ export default function Chitietconsignpage() {
                         rules={[
                           {
                             required: true,
-                            message: "Vui lòng nhập CertificateID.",
+                            message: "Vui lòng nhập CertificateID koi của bạn.",
                           },
                         ]}
                       >
@@ -1179,7 +1177,9 @@ export default function Chitietconsignpage() {
                   ))}
               </Form>
             ) : (
-              <div>No consign data available.</div>
+              <div>
+                <h2>Bạn chưa có đơn ký gửi nào</h2>
+              </div>
             )}
           </div>
         </Container>

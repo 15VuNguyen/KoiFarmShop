@@ -283,6 +283,8 @@ export default function Kyguikoi() {
         address: userData.address || "",
         phone_number: userData.phone_number || "",
         ShipAddress: userData.address || "",
+        AddressConsignKoi: userData.address || "",
+        PhoneNumberConsignKoi: userData.phone_number || "",
       });
       setFormData({
         ...formData,
@@ -291,6 +293,8 @@ export default function Kyguikoi() {
         address: userData.address || "",
         phone_number: userData.phone_number || "",
         ShipAddress: userData.address || "",
+        AddressConsignKoi: userData.address || "",
+        PhoneNumberConsignKoi: userData.phone_number || "",
       });
     }
   }, [userData]);

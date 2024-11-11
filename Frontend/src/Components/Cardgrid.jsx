@@ -171,14 +171,12 @@ const CardGrid = ({ cardData }) => {
                       color: "red",
                       fontSize: "16px",
                     }}
-                  >
-                    Tổng tiền{" "}
-                  </span>
-                  {card.TotalPrice
-                    ? new Intl.NumberFormat("vi-VN", {
+                  ></span>
+                  {card.Price
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
-                      }).format(card.TotalPrice)
+                      }).format(card.Price)}`
                     : "Liên hệ"}
                 </Text>
               </Card>
@@ -228,8 +226,11 @@ const CardGrid = ({ cardData }) => {
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
@@ -264,10 +265,9 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "Cá Koi chưa được đặt tên"} ({count})
-                </Text>
-                <Text>Số lượng : ({count})</Text>
+                <Text strong>{card.KoiName || "Cá Koi chưa được đặt tên"}</Text>
+                <br />
+                <Text>Số lượng : {count}</Text>
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Origin}
@@ -279,8 +279,11 @@ const CardGrid = ({ cardData }) => {
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
@@ -328,8 +331,11 @@ const CardGrid = ({ cardData }) => {
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>

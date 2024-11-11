@@ -4,7 +4,7 @@ import CardGrid from "../Cardgrid";
 import axios from "axios";
 import { Layout, Typography } from "antd";
 import "../Css/koiStyle.css";
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
 export default function Showa() {
   const [cardData, setCardData] = useState([]);
@@ -282,78 +282,183 @@ export default function Showa() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về Cá Koi Showa
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Các giống cá Koi Showa Nhật và cách xách định
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Đặc điểm của cá koi showa
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4.Cách chọn cá Koi Showa đẹp
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll41} className="contentBox">
+                        <span
+                          onClick={handleScroll41}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           4.1 Dựa vào hình dáng:
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll42} className="contentBox">
+                        <span
+                          onClick={handleScroll42}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           4.2 Dựa vào màu sắc:
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Cách chăm sóc cá Koi showa
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Phong thủy cá koi Showa
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll7} className="contentBox">
+                    <span
+                      onClick={handleScroll7}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       7. Tại sao nên mua cá Platinum Koi tại IKoi?
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll71} className="contentBox">
+                        <span
+                          onClick={handleScroll71}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           7.1 Giá cá koi Platinum F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll72} className="contentBox">
+                        <span
+                          onClick={handleScroll72}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           7.2 Giá cá koi Platinum Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll8} className="contentBox">
-                    8. Tại sao nên mua Showa Koi tại IKoi:
+                    <span
+                      onClick={handleScroll8}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
+                      8. Tại sao nên mua Showa Koi tại IKoi:
                     </span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2
+                  className="noidungchitiet"
+                  style={{ color: "red", paddingTop: "20px" }}
+                >
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style">
                   Trên thị trường hiện nay do muốn đáp ứng được nhu cầu của
                   người dân khi muốn sở hữu trong không gian của mình một bể, hồ
@@ -371,14 +476,27 @@ export default function Showa() {
                     style={{ width: "50%" }}
                   />
                   <div style={{ textAlign: "center" }}>
-                    <Text className="text-Style">
+                    <Text
+                      className="text-Style"
+                      style={{
+                        color: "#efa709",
+                      }}
+                    >
                       Cá koi showa theo từng kích thước
                     </Text>
                   </div>
                 </div>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu về Cá Koi Showa:</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu về Cá Koi Showa:
+                </h3>
 
                 <Paragraph className="paragraph-Style">
                   Cá koi Showa là dòng cá được lai tạo ra vào năm 1927 bởi
@@ -444,15 +562,26 @@ export default function Showa() {
                     style={{ width: "50%" }}
                   />
                   <div style={{ textAlign: "center" }}>
-                    <Text className="text-Style">
+                    <Text
+                      className="text-Style"
+                      style={{
+                        color: "#efa709",
+                      }}
+                    >
                       Cá Koi Showa có tên đầy đủ là Showa Sanshoku{" "}
                     </Text>
                   </div>
                 </div>
               </div>
 
-              <div id="2">
-                <h3 style={{ color: "red" }}>
+              <div id="2" style={{ paddingTop: "20px" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2. Các giống cá Koi Showa Nhật và cách xách định{" "}
                 </h3>
                 <div>
@@ -464,7 +593,14 @@ export default function Showa() {
                   </Paragraph>
                   <ul style={{ fontSize: "15px", fontWeight: "400" }}>
                     <li>
-                      <span className="span-Style">Hi Showa</span>{" "}
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Hi Showa
+                      </span>{" "}
                       <Paragraph className="paragraph-Style">
                         là một loại cá koi Showa với phần thân cá chiếm ưu thế
                         bởi màu đỏ, trong khi các bệt đen (Sumi) là nhỏ và xen
@@ -476,12 +612,26 @@ export default function Showa() {
                           style={{ width: "30%", objectFit: "cover" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Hi Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Hi Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
                     <li>
-                      <span className="span-Style">Kindai Showa</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Kindai Showa
+                      </span>
                       <Paragraph className="paragraph-Style">
                         có nhiều khoang màu trắng chủ đạo (40% trở lên) trên
                         thân cá và các bệt màu đỏ phân bổ đầu, thân, và đuôi cá.
@@ -494,12 +644,26 @@ export default function Showa() {
                           style={{ width: "30%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Kindai Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Kindai Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
                     <li>
-                      <span className="span-Style">Tancho Showa </span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Tancho Showa{" "}
+                      </span>
                       có nhiều màu đen trên thân cá và ít màu đỏ và trắng.
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
                         <img
@@ -507,13 +671,27 @@ export default function Showa() {
                           style={{ width: "30%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Tancho Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Tancho Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
                     <li>
                       {" "}
-                      <span className="span-Style">Maruten Showa: {""}</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Maruten Showa: {""}
+                      </span>
                       <Paragraph className="paragraph-Style">
                         giống Tancho Showa với chấm đỏ trên đầu, nhưng có thêm
                         các chấm đỏ khác trên thân cá
@@ -524,13 +702,27 @@ export default function Showa() {
                           style={{ width: "30%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Maruten Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Maruten Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
                     <li>
                       {" "}
-                      <span className="span-Style">Boke Showa: {""}</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Boke Showa: {""}
+                      </span>
                       có các chấm đen mờ hơn.
                       <div style={{ textAlign: "center", paddingTop: "10px" }}>
                         <img
@@ -538,13 +730,27 @@ export default function Showa() {
                           style={{ width: "30%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Boke Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Boke Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
                     <li>
                       {" "}
-                      <Text className="text-Style">Doitsu Showa</Text>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Doitsu Showa: {""}
+                      </span>
                       <Paragraph className="paragraph-Style">
                         không có vảy, da trơn, các bệt màu xen kẽ đẹp mắt.
                       </Paragraph>
@@ -554,7 +760,14 @@ export default function Showa() {
                           style={{ width: "30%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">Doitsu Showa</Text>
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Doitsu Showa
+                          </Text>
                         </div>
                       </div>
                     </li>
@@ -562,7 +775,15 @@ export default function Showa() {
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Đặc điểm của cá koi showa</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Đặc điểm của cá koi showa
+                </h3>
                 <div style={{ fontSize: "15px", fontWeight: "400" }}>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Showa Sankoku là một dòng cá chép Nhật ba màu giống
@@ -570,9 +791,16 @@ export default function Showa() {
                     sự khác biệt đáng kể. Cùng xem những đặc điểm sau của showa
                     koi
                   </Paragraph>
-                  <ul>
+                  <ul style={{ listStyleType: "none" }}>
                     <li style={{ fontSize: "15px", fontWeight: "400" }}>
-                      <span className="span-Style">Đầu cá</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Đầu cá
+                      </span>
                       <Paragraph className="paragraph-Style">
                         Đầu cá Koi Showa Sankoku có nhiều bệt sumi màu đen, và
                         màu đen này có thể lan xuống cả dưới miệng của cá. Trong
@@ -580,7 +808,14 @@ export default function Showa() {
                       </Paragraph>
                     </li>
                     <li>
-                      <span className="span-Style">Phần vai và lưng cá:</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Phần vai và lưng cá:
+                      </span>
                       <Paragraph className="paragraph-Style">
                         Vai và lưng cá Koi Showa Sankoku có màu lưng pha trộn
                         tổng hợp ba màu trắng, đỏ và đen. Màu đen (sumi) là màu
@@ -594,7 +829,14 @@ export default function Showa() {
                       </Paragraph>
                     </li>
                     <li>
-                      <span className="span-Style">Vây cá:</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Vây cá:
+                      </span>
                       <Paragraph className="paragraph-Style">
                         Vây của cá Koi Showa Sankoku có bệt đen sumi và tia đen
                         tejima. Một số cá Koi Sanke vây hoàn toàn là màu đen
@@ -605,94 +847,114 @@ export default function Showa() {
                       </Paragraph>
                     </li>
                     <li>
-                      <span className="span-Style">Hình dáng bên ngoài:</span>
+                      <span
+                        className="span-Style"
+                        style={{
+                          color: "rgb(146, 2, 2)",
+                        }}
+                      >
+                        Hình dáng bên ngoài:
+                      </span>
+                      <Paragraph className="paragraph-Style">
+                        Cá Koi Showa Sankoku có hình dáng bên ngoài giống như cá
+                        chuẩn, với thân mập, vai và lưng tròn trịa, râu dài và
+                        mắt to và linh hoạt. Lớp vẩy trên mình của cá Koi Showa
+                        Sankoku phân bố đều, có màu đục hoặc có ánh kim loại tùy
+                        theo dòng cá.
+                        <Paragraph className="paragraph-Style">
+                          Về cơ bản chúng ta có thể dựa vào các màu sắc trên
+                          đầu, thân, vây, đuôi của cá Showa để nhận biết chúng
+                          thuộc loại nào.
+                        </Paragraph>
+                        <ul
+                          style={{
+                            fontSize: "15px",
+                            fontWeight: "400",
+                            listStyleType: "none",
+                          }}
+                        >
+                          <li>
+                            <Paragraph className="paragraph-Style">
+                              Cá có thân màu đỏ chiếm trên thân cá, các bệt đen
+                              nhỏ xen kẽ là cá Hi Showa.
+                            </Paragraph>
+                          </li>
+                          <li>
+                            <Paragraph className="paragraph-Style">
+                              Nếu cá có các vệt đỏ ở trên đầu, thân, đuôi được
+                              phân bổ đều. Thân cá có nhiều khoang màu trắng (
+                              Kindai Showa).
+                            </Paragraph>
+                          </li>
+                          <li>
+                            <Paragraph className="paragraph-Style">
+                              Các chấm đen trên thân cá mờ hơn ( Boke showa)
+                            </Paragraph>
+                          </li>
+                          <li>
+                            <Paragraph className="paragraph-Style">
+                              Cá da trơn, không vảy, màu xen kẽ hợp lý đẹp mắt (
+                              Doitsu Showa).
+                            </Paragraph>
+                          </li>
+                          <li>
+                            <Paragraph className="paragraph-Style">
+                              Thân cá là các khoang màu trắng – đen xen kẽ; Các
+                              chấm đỏ tròn như mặt trời trên đỉnh đầu cá (
+                              Tancho Showa)….
+                            </Paragraph>
+                          </li>
+                        </ul>
+                        <Paragraph className="paragraph-Style">
+                          Thực tế cho thấy, chơi Cá showa cùng với Tancho Koi
+                          rất khó, kỹ lưỡng nhưng nó lại tạo ra được nhiều điều
+                          muốn khám phá nên rất hấp dẫn những vị khách yêu cá
+                          Koi tò mò và tìm hiểu. Bởi vậy, thị trường cá Koi nó
+                          được phong là một trong tam vương của làng cá Koi.
+                        </Paragraph>
+                        <div style={{ textAlign: "center" }}>
+                          <img
+                            src="src/assets/Koi-Showa/ca-koi-showa-9.webp"
+                            style={{ width: "50%" }}
+                          />
+                          <Paragraph
+                            className="paragraph-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
+                            Về cơ bản chúng ta nhận biết cá Showa dựa vào các
+                            màu sắc trên đầu
+                          </Paragraph>
+                        </div>
+                      </Paragraph>
                     </li>
                   </ul>
-                  <div>
-                    <Paragraph className="paragraph-Style">
-                      Cá Koi Showa Sankoku có hình dáng bên ngoài giống như cá
-                      chuẩn, với thân mập, vai và lưng tròn trịa, râu dài và mắt
-                      to và linh hoạt. Lớp vẩy trên mình của cá Koi Showa
-                      Sankoku phân bố đều, có màu đục hoặc có ánh kim loại tùy
-                      theo dòng cá.
-                      <Paragraph className="paragraph-Style">
-                        Về cơ bản chúng ta có thể dựa vào các màu sắc trên đầu,
-                        thân, vây, đuôi của cá Showa để nhận biết chúng thuộc
-                        loại nào.
-                      </Paragraph>
-                      <ul style={{ fontSize: "15px", fontWeight: "400" }}>
-                        <li>
-                          <Paragraph className="paragraph-Style">
-                            Cá có thân màu đỏ chiếm trên thân cá, các bệt đen
-                            nhỏ xen kẽ là cá Hi Showa.
-                          </Paragraph>
-                        </li>
-                        <li>
-                          <Paragraph className="paragraph-Style">
-                            Nếu cá có các vệt đỏ ở trên đầu, thân, đuôi được
-                            phân bổ đều. Thân cá có nhiều khoang màu trắng (
-                            Kindai Showa).
-                          </Paragraph>
-                          <div style={{ textAlign: "center" }}>
-                            <img
-                              src="src/assets/Koi-Showa/ca-koi-showa-7.webp"
-                              style={{ width: "50%" }}
-                            />
-                            <div style={{ textAlign: "center" }}>
-                              <Text className="text-Style">
-                                Đàn cá Koi Showa đẹp
-                              </Text>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <Paragraph className="paragraph-Style">
-                            Các chấm đen trên thân cá mờ hơn ( Boke showa)
-                          </Paragraph>
-                        </li>
-                        <li>
-                          <Paragraph className="paragraph-Style">
-                            á da trơn, không vảy, màu xen kẽ hợp lý đẹp mắt (
-                            Doitsu Showa).
-                          </Paragraph>
-                        </li>
-                        <li>
-                          <Paragraph className="paragraph-Style">
-                            Thân cá là các khoang màu trắng – đen xen kẽ; Các
-                            chấm đỏ tròn như mặt trời trên đỉnh đầu cá ( Tancho
-                            Showa)….
-                          </Paragraph>
-                        </li>
-                      </ul>
-                      <Paragraph className="paragraph-Style">
-                        Thực tế cho thấy, chơi Cá showa cùng với Tancho Koi rất
-                        khó, kỹ lưỡng nhưng nó lại tạo ra được nhiều điều muốn
-                        khám phá nên rất hấp dẫn những vị khách yêu cá Koi tò mò
-                        và tìm hiểu. Bởi vậy, thị trường cá Koi nó được phong là
-                        một trong tam vương của làng cá Koi.
-                      </Paragraph>
-                      <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Showa/ca-koi-showa-9.webp"
-                          style={{ width: "50%" }}
-                        />
-                        <Paragraph className="paragraph-Style">
-                          Về cơ bản chúng ta nhận biết cá Showa dựa vào các màu
-                          sắc trên đầu
-                        </Paragraph>
-                      </div>
-                    </Paragraph>
-                  </div>
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chọn cá Koi Showa đẹp</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chọn cá Koi Showa đẹp
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Muốn chọn lựa được những chú cá Koi Showa đẹp thì phải dựa vào
                   các tiêu chí sau:
                 </Paragraph>
                 <div id="41">
-                  <span className="span-Style">4.1 Dựa vào hình dáng:</span>
+                  <span
+                    className="span-Style"
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                    }}
+                  >
+                    4.1 Dựa vào hình dáng:
+                  </span>
                   <ul>
                     <li>
                       <Paragraph className="paragraph-Style">
@@ -717,8 +979,15 @@ export default function Showa() {
                   </ul>
                 </div>
                 <div id="42">
-                  <span className="span-Style">4.2 Dựa vào màu sắc:</span>
-                  <ul>
+                  <span
+                    className="span-Style"
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                    }}
+                  >
+                    4.2 Dựa vào màu sắc:
+                  </span>
+                  <ul style={{ listStyleType: "none" }}>
                     <li>
                       <Paragraph className="paragraph-Style">
                         Khi chọn koi Showa dựa vào màu sắc, ta xem xét đầu cá
@@ -766,7 +1035,12 @@ export default function Showa() {
                           style={{ width: "50%" }}
                         />
                         <div style={{ textAlign: "center" }}>
-                          <Text className="text-Style">
+                          <Text
+                            className="text-Style"
+                            style={{
+                              color: "#efa709",
+                            }}
+                          >
                             Nên chọn cá có dáng bơi thẳng có độ uyển chuyển của
                             vây ngực
                           </Text>
@@ -778,7 +1052,15 @@ export default function Showa() {
               </div>
 
               <div id="5">
-                <h3 style={{ color: "red" }}>5. Cách chăm sóc cá Koi showa:</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  5. Cách chăm sóc cá Koi showa:
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Muốn đảm bảo có một bể cá, hồ cá Koi showa đẹp và nó có thể
                   sinh trưởng, phát triển tốt thì hồ cá koi cần có đủ các phụ
@@ -795,7 +1077,15 @@ export default function Showa() {
                 </Paragraph>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>6. Phong thủy cá koi Showa</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  6. Phong thủy cá koi Showa
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Cá koi Showa là dòng cá nổi tiếng với màu sắc đa dạng bao gồm
                   đỏ, trắng và đen. Màu sắc của cá Showa tương sinh với các mệnh
@@ -806,7 +1096,15 @@ export default function Showa() {
                 </Paragraph>
               </div>
               <div id="7">
-                <h3 style={{ color: "red" }}>7. Cách chăm sóc cá Koi showa:</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  7. Cách chăm sóc cá Koi showa:
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Hiện tại IKoi đang cung cấp dòng cá koi Showa chuẩn từ cá nhật
                   đến cá F1 với giá cực kỳ ưu đãi. Có thể nói IKoi là một trong
@@ -815,7 +1113,13 @@ export default function Showa() {
                   sau
                 </Paragraph>
                 <div id="71">
-                  <h4 style={{ color: "red" }}>7.1 Giá cá koi Showa F1</h4>
+                  <h4
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                    }}
+                  >
+                    7.1 Giá cá koi Showa F1
+                  </h4>
                   <Paragraph className="paragraph-Style">
                     Đối với những con Showa f1 có kích thước từ 18cm – 40cm, giá
                     cá koi dao động từ 150.000 – 500.000 VNĐ tùy loại. <br />
@@ -825,7 +1129,11 @@ export default function Showa() {
                   </Paragraph>
                 </div>
                 <div id="72">
-                  <h4 style={{ color: "red" }}>
+                  <h4
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                    }}
+                  >
                     7.2 Giá cá koi Showa Nhật chuẩn
                   </h4>
                   <Paragraph className="paragraph-Style">
@@ -840,7 +1148,13 @@ export default function Showa() {
                 </div>
               </div>
               <div id="8">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   8. Tại sao nên mua Showa Koi tại IKoi:
                 </h3>
                 <Paragraph className="paragraph-Style">
