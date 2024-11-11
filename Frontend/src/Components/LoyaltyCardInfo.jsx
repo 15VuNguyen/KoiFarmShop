@@ -35,14 +35,14 @@ export default function LoyaltyCardInfo() {
       setLoading(true);
       try {
         const {data} = await getCard()
-        console.log("API Response:", data);
+        console.log("card:", data.result.loyaltyCard);
+        console.log("user:", user);
 
         if (data && data.result) {
           setCard(data.result.loyaltyCard);
-          console.log("next rank: ",data.result.nextRank)
           setNextRankValue(data.result.nextRank)
         } else {
-          console.error({message: 'Fail to load card information!'});
+          console.error("Don't have card, register first");
         }
       } catch (error) {
         console.error("Error fetching card information:", error);
@@ -54,7 +54,7 @@ export default function LoyaltyCardInfo() {
     fetchCardInfo();
   }, [currentUser]);
 
-  const handleRegister = async (params) => {
+  const handleRegister = async () => {
     setIsShowRegisterForm(true)
   }
 
@@ -114,6 +114,8 @@ export default function LoyaltyCardInfo() {
         <RegisterLoyaltyCardModals
           show = {isShowRegisterForm}
           handleClose = {handleClose}
+          setCard = {setCard}
+          setLoading = {setLoading}
         />
         <Empty
           description="No data"

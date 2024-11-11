@@ -1,21 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button, Modal, InputGroup } from 'react-bootstrap'
 import "./RegisterLoyaltyCardModals.css"
-import { sendOtpCode } from '../services/loyaltyCardService'
+import { registerLoyaltyCard, sendOtpCode } from '../services/loyaltyCardService'
+import { toast } from 'react-toastify'
 
 const RegisterLoyaltyCardModals = (props) => {
-    const { show, handleClose } = props
+    const { show, handleClose, setCard, setLoading } = props
     const [phoneNumber, setPhoneNumeber] = useState("")
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const [otpCode, setOtpCode] = useState();
     const [isValidate, setIsValidate] = useState(false)
+    const [isRegister, setIsRegister] = useState(false)
+
+    useEffect(()=>{
+        setIsValidate(false)
+    },[])
 
     const handleSendOtpCode = async () => {
         try {
             const {data} = await sendOtpCode(phoneNumber)
-            if(data){
-                console.log("code: ", data)
+            if(data.result && data.result.code){
+                console.log(data.result.code)
                 setOtpCode(data.result.code)
+                setIsValidate(true)
+            }else{
+                console.log(data.message)
             }
         } catch (error) {
             console.error({ message: error.message })
@@ -23,10 +32,20 @@ const RegisterLoyaltyCardModals = (props) => {
     }
 
     const handleRegister = async () => {
+        setLoading(true)
         try {
-
+            const {data} = await registerLoyaltyCard(phoneNumber, otpCode)
+            if(data.result){
+                console.log(data)
+                toast.success("Register successfully")
+                setCard(data.result)
+                setLoading((prev) => !prev)
+            }else{
+                console.log({message: data.message})
+            }
         } catch (error) {
             console.error({ message: error.message })
+
         }
     }
 
@@ -41,12 +60,8 @@ const RegisterLoyaltyCardModals = (props) => {
             document.getElementById(`otp-input-${index + 1}`).focus();
           }
         }
-      };
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(otp.join(''));
-      };
+      };   
+
 
     return (
         <Modal show={show} onHide={handleClose}>
