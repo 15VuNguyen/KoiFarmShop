@@ -75,13 +75,13 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             key: '_id',
             sorter: (a, b) => a._id.localeCompare(b._id),
             render: (text) => (
-                <>
-                    <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Sao chép ID">
-                        <CopyOutlined
-                            style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-                            onClick={() => copyToClipboard(text)}
-                        />
+                <><Tooltip title="Sao chép ID đơn ký gửi">
+                    <Tag icon={<CopyOutlined/>}
+                    onClick={() => copyToClipboard(text)}
+                    style={{ cursor: 'pointer' }}
+                    color="blue">{text}</Tag>
+                    
+                        
                     </Tooltip>
                 </>
             ),
@@ -92,13 +92,14 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             key: 'UserID',
             sorter: (a, b) => a.UserID.localeCompare(b.UserID),
             render: text => (
-                <>
-                    <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Sao chép ID">
-                        <CopyOutlined
-                            style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-                            onClick={() => copyToClipboard(text)}
-                        />
+                <><Tooltip title="Sao chép ID người dùng">
+                    <Tag
+                        icon={<CopyOutlined />}
+                        onClick={() => copyToClipboard(text)}
+                        style={{ cursor: 'pointer' }}
+                    color="blue">{text}</Tag>
+                    
+                        
                     </Tooltip>
 
                 </>
@@ -112,13 +113,14 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             sorter: (a, b) => a.UserID.localeCompare(b.UserID),
             visible: false,
             render: text => (
-                <>
-                    <Tag color="blue">{text}</Tag>
-                    <Tooltip title="Sao chép ID">
-                        <CopyOutlined
-                            style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-                            onClick={() => copyToClipboard(text)}
-                        />
+                <> <Tooltip title="Sao chép ID Koi">
+                    <Tag 
+                        icon={<CopyOutlined />}
+                        onClick={() => copyToClipboard(text)}
+                        style={{ cursor: 'pointer' }}
+                    color="blue">{text}</Tag>
+                   
+                   
                     </Tooltip>
                 </>
             ),
@@ -177,6 +179,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 return a.PhoneNumberConsignKoi.localeCompare(b.PhoneNumberConsignKoi);
             },
             render: text => text || <Tag color="red">Không Cung Cấp</Tag>,
+
         },
         {
             title: 'Mô Tả',
@@ -190,6 +193,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             dataIndex: 'State',
             key: 'State',
             filters: [
+                {text : 'Đã hủy', value: -1},
                 { text: 'Yêu cầu ký gửi', value: 1 },
                 { text: 'Đang kiểm tra Koi', value: 2 },
                 { text: 'Đang thương thảo hợp đồng', value: 3 },
@@ -201,13 +205,15 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
             onFilter: (value, record) => record.State === value,
             render: state => {
                 const stateMap = {
+                    '-1': 'Đã hủy',
                     1: 'Yêu cầu ký gửi',
                     2: 'Đang kiểm tra Koi',
                     3: 'Đang thương thảo hợp đồng',
                     4: 'Đang tìm người mua',
                     5: 'Đã bán thành công',
                 };
-                return <Tag color={["blue", "green", "orange", "purple", "red"][state - 1]}>{stateMap[state]}</Tag> || <Tag color="red">Không xác định</Tag>;
+                
+                return <Tag color={[ "blue", "green", "orange", "purple", "red"][state - 1]}>{stateMap[state]}</Tag> || <Tag color="red">Không xác định</Tag>;
             },
         },
         {
@@ -334,6 +340,8 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 ))} */}
             </Space>
             <Table
+                virtual
+                scroll={{ x: 1300, y: 1500 }}
                 columns={filteredColumns}
                 dataSource={filteredData}
                 rowKey="_id"

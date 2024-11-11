@@ -331,6 +331,19 @@ export default function ConsignDetail({ consignID, reset }) {
             message.error("Vui lòng nhập giá trước khi cập nhật trạng thái thành 'Đang tìm người mua'.");
             return;
           }
+          if (field === 'phone_number' || field === 'PhoneNumberConsignKoi') {
+            if (typeof editValue === 'undefined' || editValue === '') {
+              message.error('Số điện thoại không được để trống');
+              return;
+            }
+          
+            
+          
+          
+            const attemptToParseInt = parseInt(editValue);
+            console.log(attemptToParseInt);
+          }
+          
           if (field === 'ShippedDate' && !isAtLeast30Days(editValue, consign.ReceiptDate)) {
             const newReceiptDate = add30Days(editValue);
             console.log(newReceiptDate);
@@ -379,60 +392,21 @@ export default function ConsignDetail({ consignID, reset }) {
               <Select.Option value="Offline">Offline</Select.Option>
             </Select>
           ) :
-            inputType === 'selectPhone' ? (
-              <Form.Item
-              label="Số Điện Thoại"
-              rules={[
-                {
-                  validator(_, value) {
-                    
-                    if (typeof value === 'undefined' || value === '') {
-                      return Promise.reject('Số điện thoại không được để trống');
-                    }
-            
-                    
-                    if (typeof value === 'string') {
-                      const attemptToParseInt = parseInt(value);
-                      if (isNaN(attemptToParseInt)) {
-                        return Promise.reject('Số điện thoại không được chứa chữ cái');
-                      }
-                    }
-            
-                
-                    const phoneNumberVN = parsePhoneNumberFromString(value, 'VN');
-                    const phoneNumberJP = parsePhoneNumberFromString(value, 'JP');
-                    if (
-                      (!phoneNumberVN || !phoneNumberVN.isValid()) &&
-                      (!phoneNumberJP || !phoneNumberJP.isValid())
-                    ) {
-                      return Promise.reject('Số điện thoại phải là số điện thoại Nhật hoặc Việt');
-                    }
-            
-                    
-                    return Promise.resolve();
-                  },
-                },
-              ]}
-            >
+            inputType === 'selectPhone'? (
               <Input
-                value={editValue}
-                onChange={(e) => {
-                  const input = e.target.value;
+              placeholder="Số điện thoại không được để trống"
+              value={editValue}
+              onChange={(e) => {
+                const value = e.target.value;
+               
+                if (/^[\d]*$/.test(value)) {
+                  setEditValue(value);
+                }
+              }}
+              maxLength={20}
+              style={{ width: '100%' }}
+            />
             
-                  
-                  const phoneNumberVN = parsePhoneNumberFromString(input, 'VN');
-                  const phoneNumberJP = parsePhoneNumberFromString(input, 'JP');
-            
-                  if (phoneNumberVN && phoneNumberVN.isValid()) {
-                    setEditValue(phoneNumberVN.formatInternational());
-                  } else if (phoneNumberJP && phoneNumberJP.isValid()) {
-                    setEditValue(phoneNumberJP.formatInternational());
-                  } else {
-                    setEditValue(input);
-                  }
-                }}
-              />
-            </Form.Item>
 
             ) :
               inputType === 'selectState' ? (

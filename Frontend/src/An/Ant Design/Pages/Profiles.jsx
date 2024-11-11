@@ -136,18 +136,20 @@ export default function Profiles() {
 
         <Row gutter={24}>
 
-          <Col span={6}>
+         
+ <Col span={6}>
             <Card hoverable
-              style={{ height: "100%" }}
+              onClick={handleOpenUpChartModal}
             >
               <Statistic
-                title={<Typography.Title level={4}>Tổng Khách Hàng Hoạt Động</Typography.Title>}
-                value={totalCustomers()}
-                precision={0}
+                title={<Typography.Title level={4}>Thay Đổi Người Dùng Trong 7 Ngày Qua</Typography.Title>}
+                value={userChangePercent + '%'}
+                precision={2}
+                valueStyle={{ color: isPositiveChange ? '#3f8600' : '#cf1322' }}
+                prefix={isPositiveChange ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
               />
             </Card>
           </Col>
-
 
           <Col span={6}>
             <Card hoverable 
@@ -163,19 +165,7 @@ export default function Profiles() {
           </Col>
 
 
-          <Col span={6}>
-            <Card hoverable
-              onClick={handleOpenUpChartModal}
-            >
-              <Statistic
-                title={<Typography.Title level={4}>Thay Đổi Người Dùng Trong 7 Ngày Qua</Typography.Title>}
-                value={userChangePercent + '%'}
-                precision={2}
-                valueStyle={{ color: isPositiveChange ? '#3f8600' : '#cf1322' }}
-                prefix={isPositiveChange ? <ArrowUpOutlined /> : <ArrowDownOutlined />}
-              />
-            </Card>
-          </Col>
+         
         </Row>
 
 

@@ -71,12 +71,14 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       key: '_id',
       render: (text) => (
         <>
-          <Tag color="blue">{text}</Tag>
-          <Tooltip title="Sao chép ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-              onClick={() => copyToClipboard(text)}
-            />
+         <Tooltip title="Sao chép ID">
+          <Tag
+          onClick={() => copyToClipboard(text)}
+          style={{ cursor: 'pointer' }}
+            icon={<CopyOutlined />}
+          color="blue">{text}</Tag>
+         
+            
           </Tooltip>
         </>
       ),
