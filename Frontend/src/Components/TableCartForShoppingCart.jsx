@@ -12,6 +12,7 @@ export default function ShoppingCart() {
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
   const navigate = useNavigate();
+
   const handlePayment = async () => {
     try {
       const res = await axiosInstance.post("/order/checkCart", null, {
@@ -34,24 +35,7 @@ export default function ShoppingCart() {
       }
     }
   };
-  // useEffect(() => {
-  //   const storedKoiList = JSON.parse(localStorage.getItem("koiList")) || [];
-  //   const storedTotalPrice =
-  //     parseFloat(localStorage.getItem("totalPrice")) || 0;
 
-  //   const updatedKoiList = storedKoiList.map((koi) => ({
-  //     ...koi,
-  //     quantity: koi.quantity || 1,
-  //   }));
-
-  //   setKoiList(updatedKoiList);
-  //   setTotalPrice(storedTotalPrice);
-
-  //   // Check if the koi list is empty and orderId is available
-  //   if (updatedKoiList.length === 0 && orderDetail?.orderId) {
-  //     fetchOrderDetails(orderDetail.orderId);
-  //   }
-  // }, [orderDetail]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -74,8 +58,6 @@ export default function ShoppingCart() {
             return koi ? { ...koi, quantity: item.Quantity } : null;
           }).filter((koi) => koi !== null);
           setKoiList(updatedKoiList);
-          // Save to localStorage
-          // localStorage.setItem("koiList", JSON.stringify(updatedKoiList));
           setTotalPrice(TotalPrice);
           console.log("Order details fetched and stored in localStorage.");
         } else {
@@ -83,7 +65,6 @@ export default function ShoppingCart() {
           setError("Failed to fetch order details.");
         }
       } catch (error) {
-        // Log thêm thông tin lỗi
         console.error(
           "Error fetching order details:",
           error.response ? error.response.data : error.message
@@ -95,7 +76,6 @@ export default function ShoppingCart() {
   }, []);
 
   const handleUpdateQuantity = async (koiId, newQuantity) => {
-    // Validate newQuantity
     const quantity = parseInt(newQuantity);
     if (isNaN(quantity) || quantity < 0) {
       setError("Invalid quantity.");
@@ -116,26 +96,21 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         const { result } = response.data;
 
-        // Kiểm tra nếu có thông báo về số lượng không đủ
         if (
           typeof result === "string" &&
           result.includes("available in stock")
         ) {
-          setError(result); // Hiển thị thông điệp từ phản hồi
+          setError(result);
           return;
         }
         const updatedKoiList = koiList.map((koi) =>
           koi._id === koiId ? { ...koi, quantity } : koi
         );
 
-        // Kiểm tra cấu trúc phản hồi để lấy totalPrice
         const { TotalPrice } = response.data.result.orderDT;
         if (TotalPrice !== undefined) {
           setKoiList(updatedKoiList);
           setTotalPrice(TotalPrice);
-          // Lưu dữ liệu đã cập nhật vào localStorage
-          // localStorage.setItem("koiList", JSON.stringify(updatedKoiList));
-          // localStorage.setItem("totalPrice", newTotalPrice.toString());
         } else {
           setError("Failed to retrieve updated total price.");
         }
@@ -144,6 +119,7 @@ export default function ShoppingCart() {
       setError("Error updating quantity: " + error.message);
     }
   };
+
   const handleDeleteKoi = async (koiId) => {
     console.log(`Deleting Koi with ID: ${koiId}`);
     try {
@@ -156,8 +132,7 @@ export default function ShoppingCart() {
       );
       if (response.status === 200) {
         alert(response.data.message || "Deleted successfully");
-        console.log(response);
-        window.location.reload(); // Reload the page
+        window.location.reload();
       }
     } catch (error) {
       console.error(
@@ -166,6 +141,7 @@ export default function ShoppingCart() {
       );
     }
   };
+
   return (
     <div style={{ padding: "20px", width: "100%" }}>
       {error && <p style={{ color: "red" }}>{error}</p>}
@@ -177,7 +153,6 @@ export default function ShoppingCart() {
                 <tr
                   key={koi._id}
                   style={{
-                    // marginBottom: '10px',
                     borderBottom:
                       index < koiList.length - 1
                         ? "1px solid rgba(0, 0, 0, 0.1)"
@@ -191,20 +166,46 @@ export default function ShoppingCart() {
                       fontFamily: "Roboto, sans-serif",
                       fontSize: "15px",
                       padding: "10px 0",
+                      justifyContent: "space-between",
                     }}
                   >
                     <img
                       src={koi.Image}
                       alt="Koi"
-                      style={{ maxWidth: "100px", marginRight: "15px" }}
+                      style={{
+                        maxWidth: "100px",
+                        marginRight: "15px",
+                        objectFit: "contain",
+                      }}
                     />
-                    <span style={{ fontSize: "15px", marginRight: "120px" }}>
+                    <span
+                      style={{
+                        fontSize: "15px",
+                        flex: 1,
+                        minWidth: "150px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
                       {koi.KoiName}
                     </span>
-                    <span style={{ fontSize: "15px", marginRight: "120px" }}>
+                    <span
+                      style={{
+                        fontSize: "15px",
+                        minWidth: "120px",
+                        textAlign: "center",
+                      }}
+                    >
                       {koi.Price.toLocaleString()}đ
                     </span>
-                    <span style={{ fontSize: "15px", marginRight: "120px" }}>
+                    <span
+                      style={{
+                        fontSize: "15px",
+                        minWidth: "120px",
+                        textAlign: "center",
+                      }}
+                    >
                       {koi.Status !== 4 && (
                         <input
                           type="number"
@@ -227,6 +228,7 @@ export default function ShoppingCart() {
                           min={1}
                           value={1}
                           style={{ width: "70px" }}
+                          disabled
                         />
                       )}
                     </span>
@@ -235,7 +237,8 @@ export default function ShoppingCart() {
                         fontSize: "15px",
                         fontFamily: "Roboto, sans-serif",
                         color: "#FF6A00",
-                        marginRight: "120px",
+                        minWidth: "120px",
+                        textAlign: "center",
                       }}
                     >
                       {(koi.Price * koi.quantity).toLocaleString()}đ
@@ -289,13 +292,12 @@ export default function ShoppingCart() {
               >
                 Tổng Tiền:{" "}
                 <span style={{ color: "#FF6A00", fontSize: "20px" }}>
-                  {totalPrice > 0
-                    ? totalPrice.toLocaleString("en-US", {
+                  {totalPrice && totalPrice > 0
+                    ? new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
-                      })
-                    : "0.00"}{" "}
-                  VND
+                      }).format(totalPrice)
+                    : "Chờ bên shop định giá"}
                 </span>
               </h3>
             </div>

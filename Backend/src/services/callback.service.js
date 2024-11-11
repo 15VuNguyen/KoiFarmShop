@@ -40,7 +40,7 @@ export const callback = async (req, res) => {
 
       const flattenedKoiIDs = koiIDsList.flat()
 
-      for (const koiID of flattenedKoiIDs) {
+      for (const koiID of flattenedKoiIDs) {  
         await databaseService.kois.findOneAndUpdate({ _id: koiID }, { $set: { Status: 0 } }, { new: true })
         const stringKoiID = koiID.toString()
         try {
@@ -91,7 +91,7 @@ export const callback = async (req, res) => {
         const result = await saveOrderToDatabase(reqOrderDetails, reqOrder, reqLoyaltyCard)
 
         await databaseService.order.findOneAndUpdate(
-          { _id: new ObjectId(result.order._id) },
+          { _id: result.order.insertedId },
           { $set: { Status: 2 } },
           { new: true }
         )
@@ -133,7 +133,6 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
     return 'Fail to save'
   }
 
-  console.log("req cookie order: ", reqOrderCookie)
 
   const newOrder = {
     _id: new ObjectId(),
@@ -155,8 +154,6 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
   }
 
   const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(reqOrderCookie.UserID) })
-  console.log('card: ', loyaltyCard)
-  console.log('cookieCard: ', reqLoyaltyCard)
   let updatedLoyaltyCard
   if (loyaltyCard) {
     if(loyaltyCard.RankName !== reqLoyaltyCard.RankName){
