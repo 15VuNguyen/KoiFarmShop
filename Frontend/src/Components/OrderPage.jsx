@@ -22,6 +22,7 @@ import Tancho from "./ThongTinCaKoi/Tancho";
 import { Button, Typography, Spin, Layout } from "antd";
 import { Container } from "react-bootstrap";
 import axiosInstance from "../An/Utils/axiosJS";
+import "../Components/Css/orderPage.css";
 const { Title, Text, Paragraph } = Typography;
 
 const OrderPage = () => {
@@ -32,15 +33,21 @@ const OrderPage = () => {
   const [maxQuantity, setMaxQuantity] = useState(1);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const navigate = useNavigate();
-  const [quantityInCart, setQuantityInCart] = useState(0); // Track quantity in cart
-  const [cardData, setCardData] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [quantityInCart, setQuantityInCart] = useState(0); // Track quantity in cart
   const [error, setError] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
   const [categoryName, setCategoryName] = useState();
   const [comboQuantity, setComboQuantity] = useState(1); // Track combo quantity
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   console.log(selectedItem);
-
+  useEffect(() => {
+    if (selectedQuantity > maxQuantity) {
+      setIsButtonDisabled(true);
+      toast.error(`Dòng koi này hết hàng chỉ còn ${maxQuantity} con`);
+    } else {
+      setIsButtonDisabled(false);
+    }
+  }, [selectedQuantity, maxQuantity]);
   useEffect(() => {
     // Cuộn lên đầu trang khi component được mount
     window.scrollTo(0, 0);
@@ -129,12 +136,7 @@ const OrderPage = () => {
       return;
     }
     if (!selectedItem || loading) return;
-    const totalQuantity = quantityInCart + selectedQuantity;
-    // Prevent adding if total exceeds maxQuantity
-    if (totalQuantity > maxQuantity) {
-      toast.error("Số lượng vượt quá giới hạn cho phép.");
-      return;
-    }
+
     setCategoryName(selectedItem.CategoryName);
     try {
       let requestData = {
@@ -148,7 +150,6 @@ const OrderPage = () => {
         requestData.Breed = selectedItem.Breed;
         requestData.CategoryID = selectedItem.CategoryID;
       }
-
       const response = await axiosInstance.post(
         "/order/detail/makes",
         requestData,
@@ -174,6 +175,7 @@ const OrderPage = () => {
           return;
         }
         console.log("Add to cart successful: " + response.data.message);
+        setMaxQuantity((prevMaxQuantity) => prevMaxQuantity - selectedQuantity); // Cập nhật maxQuantity
       }
 
       toast.success("Đã thêm vào giỏ hàng!");
@@ -184,6 +186,7 @@ const OrderPage = () => {
       setLoading(false);
     }
   };
+
   const handleOrderNow = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -191,6 +194,7 @@ const OrderPage = () => {
       return;
     }
     if (!selectedItem || loading) return;
+
     setLoading(true);
     setCategoryName(selectedItem.CategoryName);
     try {
@@ -225,6 +229,7 @@ const OrderPage = () => {
           return;
         }
         console.log("Add to cart successful: " + response.data.message);
+        setMaxQuantity((prevMaxQuantity) => prevMaxQuantity - selectedQuantity); // Cập nhật maxQuantity
       }
 
       setTimeout(() => {
@@ -238,7 +243,6 @@ const OrderPage = () => {
       setLoading(false);
     }
   };
-
   return (
     <>
       <Navbar />
@@ -315,13 +319,13 @@ const OrderPage = () => {
                   <hr style={{ margin: "10px 0" }} />
                   <Paragraph style={{ paddingTop: "18px" }}>
                     <h3 style={{ fontSize: "25px", textAlign: "left" }}>
-                      Price:{" "}
                       <span style={{ fontSize: "25px", color: "red" }}>
-                        {" "}
-                        {new Intl.NumberFormat("vi-VN").format(
-                          selectedItem.Price
-                        )}{" "}
-                        đ
+                        {selectedItem.Price
+                          ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(selectedItem.Price)}`
+                          : "Liên hệ"}
                       </span>
                     </h3>
                     <Text>
@@ -350,11 +354,6 @@ const OrderPage = () => {
                       Ưu đãi:
                     </Text>
                     <ul>
-                      <li>
-                        Mua nhiều tặng nhiều: Mua 20 tặng 5; Mua 12 tặng 3; Mua
-                        30 tặng 9 (áp dụng với cá Koi Việt , Koi F1 phụ thuộc
-                        vào size).
-                      </li>
                       <li>
                         Giá trị đơn hàng từ 1.500.000đ tặng kèm 1 chai vi sinh
                         (không hợp nhất với combo khác).
@@ -388,16 +387,18 @@ const OrderPage = () => {
                             type="number"
                             value={selectedQuantity}
                             onChange={(value) => {
-                              if (value >= 1) {
+                              if (value >= 0) {
                                 if (value <= maxQuantity) {
                                   setSelectedQuantity(value);
+                                  setIsButtonDisabled(false); // Enable buttons when value is valid
                                 } else {
-                                  message.error("Cá trong kho không đủ");
+                                  toast.error(
+                                    `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
+                                  );
+                                  setIsButtonDisabled(true); // Disable buttons when value is invalid
                                 }
                               }
                             }}
-                            min={1}
-                            max={100}
                             onKeyPress={(e) => {
                               // Ngăn nhập ký tự "e"
                               if (e.key === "e" || e.key === "E") {
@@ -425,14 +426,7 @@ const OrderPage = () => {
                           />
                         </label>
                       )}
-                      {selectedQuantity > maxQuantity && (
-                        <div>
-                          <span style={{ color: "red" }}>
-                            Cá trong kho không đủ
-                          </span>
-                        </div>
-                      )}
-                      {selectedItem.Size < 20 && (
+                      {selectedItem.Size < 20 && selectedItem.Status !== 4 && (
                         <label>
                           <strong>Quantity: </strong>
                           <input
@@ -443,18 +437,19 @@ const OrderPage = () => {
                               width: "48%",
                             }}
                             value={selectedQuantity}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (
-                                !isNaN(value) &&
-                                value >= 1 &&
-                                value <= maxQuantity
-                              ) {
-                                setSelectedQuantity(value);
+                            onChange={(value) => {
+                              if (value >= 0) {
+                                if (value <= maxQuantity) {
+                                  setSelectedQuantity(value);
+                                  setIsButtonDisabled(false); // Enable buttons when value is valid
+                                } else {
+                                  toast.error(
+                                    `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
+                                  );
+                                  setIsButtonDisabled(true); // Disable buttons when value is invalid
+                                }
                               }
                             }}
-                            min="1"
-                            max={maxQuantity}
                             disabled={selectedItem.Size < 20}
                             onKeyPress={(e) => {
                               // Ngăn nhập ký tự "e"
@@ -562,7 +557,7 @@ const OrderPage = () => {
                       {maxQuantity < selectedQuantity && (
                         <div>
                           <span style={{ color: "red" }}>
-                            Cá trong kho không đủ
+                            Cá Koi trong kho không đủ
                           </span>
                         </div>
                       )}
@@ -576,98 +571,46 @@ const OrderPage = () => {
                   </Paragraph>
                   {error && <p style={{ color: "red" }}>{error}</p>}
                   <Paragraph>
-                    <div
-                      style={{
-                        display: "flex",
-                        paddingTop: "20px",
-                        gap: "10px",
-                      }}
-                    >
+                    <div className="button-container">
                       <Button
                         type="primary"
                         danger
                         size="large"
                         onClick={handleOrderNow}
-                        disabled={!!error} // Disable if there's an error
-                        style={{
-                          flex: "0 1 40%", // Adjust width
-                          padding: "10px", // Reduce padding
-                          borderRadius: "8px",
-                          fontSize: "18px", // Reduce font size
-                          fontWeight: "bold",
-                        }}
+                        disabled={!!error || isButtonDisabled}
+                        className={`order-button ${
+                          isAddedToCart ||
+                          selectedQuantity > maxQuantity ||
+                          !!error
+                            ? "disabled"
+                            : ""
+                        }`}
+                        loading={loading}
                       >
                         Mua Ngay
                       </Button>
                       <Button
-                        style={{
-                          flex: "1 1 60%", // Adjust width
-                          padding: "20px", // Increase padding
-                          borderRadius: "8px",
-                          fontSize: "22px", // Increase font size
-                          fontWeight: "bold",
-                          backgroundColor:
-                            isAddedToCart ||
-                            quantityInCart + selectedQuantity > maxQuantity ||
-                            !!error
-                              ? "#f0f0f0"
-                              : "#ffffff", // Change color when disabled
-                          color:
-                            isAddedToCart ||
-                            quantityInCart + selectedQuantity > maxQuantity ||
-                            !!error
-                              ? "#a0a0a0"
-                              : "red", // Change text color when disabled
-                          border: "2px solid red", // Border color
-                          transition: "background-color 0.3s, transform 0.2s", // Transition effect
-                          cursor:
-                            isAddedToCart ||
-                            quantityInCart + selectedQuantity > maxQuantity ||
-                            !!error
-                              ? "not-allowed"
-                              : "pointer", // Change cursor
-                          opacity:
-                            isAddedToCart ||
-                            quantityInCart + selectedQuantity > maxQuantity ||
-                            !!error
-                              ? 0.6
-                              : 1, // Reduce opacity when disabled
-                        }}
+                        className={`cart-button ${
+                          isAddedToCart ||
+                          selectedQuantity > maxQuantity ||
+                          !!error
+                            ? "disabled"
+                            : ""
+                        }`}
                         onClick={handleAddToCart}
                         loading={loading}
                         size="large"
-                        disabled={!!error} // Disable if there's an error
-                        onMouseEnter={(e) => {
-                          if (
-                            !(
-                              isAddedToCart ||
-                              quantityInCart + selectedQuantity > maxQuantity ||
-                              !!error
-                            )
-                          ) {
-                            e.currentTarget.style.backgroundColor = "red"; // Hover background color
-                            e.currentTarget.style.color = "#FFFFFF"; // Hover text color
-                            e.currentTarget.style.transform = "scale(1.05)"; // Hover scale
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (
-                            !(
-                              isAddedToCart ||
-                              quantityInCart + selectedQuantity > maxQuantity ||
-                              !!error
-                            )
-                          ) {
-                            e.currentTarget.style.backgroundColor = "#FFFFFF"; // Reset background
-                            e.currentTarget.style.color = "red"; // Reset text color
-                            e.currentTarget.style.transform = "scale(1)"; // Reset scale
-                          }
-                        }}
+                        disabled={!!error || isButtonDisabled}
                       >
-                        <FaCartPlus style={{ marginRight: "8px" }} />
-                        {isAddedToCart ? "Đã Thêm" : "Thêm Vào Giỏ Hàng"}
+                        <div
+                          style={{ textAlign: "center", paddingLeft: "50px" }}
+                        >
+                          <FaCartPlus
+                            style={{ marginRight: "8px", marginBottom: "3px" }}
+                          />
+                          {isAddedToCart ? "Đã Thêm" : "Thêm Vào Giỏ Hàng"}
+                        </div>
                       </Button>
-                      {}
                     </div>
                   </Paragraph>
                 </>

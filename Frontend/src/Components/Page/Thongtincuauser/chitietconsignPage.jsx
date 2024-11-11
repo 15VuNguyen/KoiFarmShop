@@ -888,6 +888,7 @@ export default function Chitietconsignpage() {
                           value={formData.Size}
                           onChange={handleChange}
                           type="number"
+                          addonAfter="cm"
                           placeholder="Nhập kích thước(cm)"
                           min={5}
                           max={150}
@@ -988,6 +989,7 @@ export default function Chitietconsignpage() {
                           value={formData.DailyFoodAmount}
                           onChange={handleChange}
                           type="number"
+                          addonAfter="kg/ngày"
                           placeholder="Nhập lượng thức ăn/ngày"
                         />
                       </Form.Item>
@@ -996,7 +998,7 @@ export default function Chitietconsignpage() {
                   <div style={{ display: "flex" }}>
                     <div style={{ width: "50%", paddingRight: "15px" }}>
                       <label
-                        htmlFor="DailyFoodAmount"
+                        htmlFor="FilteringRatio"
                         style={{ fontWeight: "bold", fontSize: "15px" }}
                       >
                         <span style={{ color: "red" }}>* </span>
@@ -1033,6 +1035,7 @@ export default function Chitietconsignpage() {
                           placeholder="Nhập tỷ lệ lọc"
                           min={0.1} // Update min to 0.1
                           max={100}
+                          addonAfter="%"
                           step={0.1}
                         />
                       </Form.Item>

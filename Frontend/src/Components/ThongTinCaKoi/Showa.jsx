@@ -6,6 +6,7 @@ import { Layout, Typography } from "antd";
 import "../Css/koiStyle.css";
 const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Showa/ca-koi-showa-9.webp";
 export default function Showa() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -520,10 +521,7 @@ export default function Showa() {
                   là “Kindai”.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Showa/ca-koi-showa-9.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                 </div>
                 <div>
                   <p style={{ fontSize: "20px", fontWeight: "600" }}>

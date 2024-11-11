@@ -246,6 +246,8 @@ export default function Kyguikoi() {
           Image: null,
           Video: null,
         });
+        form.resetFields();
+        fetchUserData();
       } else {
         toast.error(`Có lỗi xảy ra: ${response.data.message}`);
       }
@@ -425,7 +427,7 @@ export default function Kyguikoi() {
                   </div>
                   <div>
                     <label
-                      htmlFor="phone_number"
+                      htmlFor="name"
                       style={{ fontWeight: "bold", fontSize: "15px" }}
                     >
                       <span style={{ color: "red" }}>* </span>
@@ -866,6 +868,7 @@ export default function Kyguikoi() {
                       onChange={handleChange}
                       type="number"
                       placeholder="Nhập kích thước(cm)"
+                      style={{ paddingRight: "40px" }} // Adjust padding to make space for the unit
                       addonAfter="cm"
                     />
                   </Form.Item>

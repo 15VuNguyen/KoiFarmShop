@@ -6,6 +6,16 @@ import "../Css/koiStyle.css";
 import { Layout, Typography } from "antd";
 const { Text, Paragraph, Title } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Ogon/ca-koi-platinum-3.webp";
+import img2 from "../../assets/Koi-Ogon-1/bo-5.jpg";
+import img3 from "../../assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg";
+import img4 from "../../assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg";
+import img5 from "../../assets/Koi-Ogon-1/img_0095.png";
+import img6 from "../../assets/Koi-Ogon-1/hi-ogon.jpg";
+import img7 from "../../assets/Koi-Ogon-1/orenji-ogon.jpg";
+import img8 from "../../assets/Koi-Ogon-1/mukashi-ogon.webp";
+import img9 from "../../assets/Koi-Ogon-1/nezu-ogon.jpg";
+import img10 from "../../assets/img_4.png";
 export default function Ogon() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -453,10 +463,7 @@ export default function Ogon() {
                   1. Nguồn gốc lịch sử của giống cá Koi Ogon
                 </h3>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon/ca-koi-platinum-3.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <Paragraph
                     className="paragraph-Style"
                     style={{ color: "#efa709" }}
@@ -477,7 +484,7 @@ export default function Ogon() {
                   bán cho ông chú cá cảnh.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-Ogon-1/bo-5.jpg" />
+                  <img src={img2} />
                   <Paragraph
                     className="paragraph-Style"
                     style={{ color: "#efa709" }}
@@ -528,10 +535,7 @@ export default function Ogon() {
                   lạnh, màu sắc của chúng sẽ trở nên nhạt đi.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img3} style={{ width: "50%" }} />
                   <Paragraph
                     className="paragraph-Style"
                     style={{ color: "#efa709" }}
@@ -601,7 +605,7 @@ export default function Ogon() {
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/Koi-Ogon-1/image14-1661495518-730-width801height889.jpg"
+                        src={img4}
                         style={{ width: "30%", objectFit: "cover" }}
                       />
                     </div>
@@ -648,7 +652,7 @@ export default function Ogon() {
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/Koi-Ogon-1/img_0095.png"
+                        src={img5}
                         style={{ width: "30%", objectFit: "cover" }}
                       />
                       <div style={{ textAlign: "center" }}>
@@ -687,10 +691,7 @@ export default function Ogon() {
                       đẹp nhất để khán giả chiêm ngưỡng và thưởng thức.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src="src/assets/Koi-Ogon-1/hi-ogon.jpg"
-                        style={{ width: "50%" }}
-                      />
+                      <img src={img6} style={{ width: "50%" }} />
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
@@ -727,7 +728,7 @@ export default function Ogon() {
                       bảo nhu cầu phát triển của cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/Koi-Ogon-1/orenji-ogon.jpg" />
+                      <img src={img7} />
                       <div style={{ textAlign: "center" }}>
                         <Text
                           className="text-Style"
@@ -761,10 +762,7 @@ export default function Ogon() {
                       cũng có màu vàng tươi, tạo nên sự đồng điệu với thân cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src="src/assets/Koi-Ogon-1/mukashi-ogon.webp"
-                        style={{ width: "30%" }}
-                      />
+                      <img src={img8} style={{ width: "30%" }} />
                       <div>
                         <Text
                           className="text-Style"
@@ -797,10 +795,7 @@ export default function Ogon() {
                       điệu và khác biệt đối với chú cá.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img
-                        src="src/assets/Koi-Ogon-1/nezu-ogon.jpg"
-                        style={{ width: "30%" }}
-                      />
+                      <img src={img9} style={{ width: "30%" }} />
                       <div>
                         <Text
                           className="text-Style"
@@ -1005,7 +1000,7 @@ export default function Ogon() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img10} />
             </div>
             <div style={{ textAlign: "center" }}>
               <img

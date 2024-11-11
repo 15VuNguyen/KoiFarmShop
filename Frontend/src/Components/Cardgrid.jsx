@@ -217,12 +217,18 @@ const CardGrid = ({ cardData }) => {
                   Farm:{""}
                   {card.Origin}
                 </Text>
+                <Text strong style={{ color: "#FF5722" }}>
+                  Size:{""}
+                  {card.Size}
+                </Text>
                 <br />
                 <Text strong>Số lượng : 1</Text>
                 <br />
                 {card.Status === 4 && <Text> Cá Ký Gửi</Text>}
                 <br />
-                {card.Breed === "Nhat" && <Text> Xuất xứ : {""}Nhật</Text>}
+                {card.Breed === "Viet" && <Text> Giống loài : {""}Việt</Text>}
+                {card.Breed === "F1" && <Text> Giống loài : {""}F1</Text>}
+                {card.Breed === "Nhat" && <Text> Giống loài : {""}Nhật</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
@@ -269,13 +275,13 @@ const CardGrid = ({ cardData }) => {
                 <br />
                 <Text>Số lượng : {count}</Text>
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  {card.Origin}
+                <Text strong style={{}}>
+                  Size : {card.Size} cm
                 </Text>
                 <br />
-                Xuất xứ : {""}
-                {card.Status === 2 && <Text>F1</Text>}
-                {card.Status === 3 && <Text>Việt</Text>}
+                {card.Breed === "Nhat" && <Text> Giống loài : {""}Nhật</Text>}
+                {card.Breed === "Viet" && <Text> Giống loài : {""}Việt</Text>}
+                {card.Breed === "F1" && <Text> Giống loài : {""}F1</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
@@ -318,16 +324,15 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "Cá Koi chưa được đặt tên"} ({count})
-                </Text>
+                <Text strong>{card.KoiName || "Cá Koi chưa được đặt tên"}</Text>
                 <br />
                 <Text>Số lượng {count}</Text>
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  {card.Origin}
+                <Text strong style={{}}>
+                  Size : {card.Size} cm
                 </Text>
-                Xuất xứ : {card.Status === 1 && <Text>Nhật Nhập Khẩu</Text>}
+                <br />
+                Giống loài : {card.Status === 1 && <Text>Nhật Nhập Khẩu</Text>}
                 <br />
                 <Text strong style={{ color: "#FF5722" }}>
                   {card.Price
