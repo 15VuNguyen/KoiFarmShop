@@ -18,7 +18,6 @@ const BoxChat = (props) => {
   const lastMessageRef = useRef();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-
   const sendMessage = async () => {
     if(!message.trim()) return;
     try {
@@ -26,7 +25,6 @@ const BoxChat = (props) => {
       setMessage("");
       const { data } = await sendMessages(receiver._id, message);
       if (data) {
-        console.log("send message: ", data.result);
         setLoading(false);
         setMessageList([...messageList, data.result]);
       }
@@ -43,7 +41,6 @@ const BoxChat = (props) => {
       const { data } = await getMessages(receiver._id);
       if (data) {
         setLoading(false);
-        console.log("get message: ", data.result);
         setMessageList(data.result);
         setIsFirstLoad(false);
       }
@@ -75,15 +72,12 @@ const BoxChat = (props) => {
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage) => {
-      console.log("new message.chatID: ", newMessage.ChatId);
-      console.log("selected chat ID: ", selectedChat?._id);
-      if (newMessage.ChatId === selectedChat?._id) {
-        setMessageList((prevMessage) => [...prevMessage, newMessage]);
-      } else {
-        console.log("message from another box");
-      }
+        if (newMessage.ChatId === selectedChat?._id) {
+          setMessageList((prevMessage) => [...prevMessage, newMessage]);
+        } else {
+          console.log("message from another box");
+        }
     });
-
     return () => socket?.off("newMessage");
   }, [socket, selectedChat?._id]);
 

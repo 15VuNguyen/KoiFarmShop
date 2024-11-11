@@ -68,7 +68,8 @@ const PaymentMethod = () => {
         console.log(response);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
-          const { Items, TotalPrice } = orderDT;
+          const { Items, TotalPrice, salePercent } = orderDT;
+          const sale = salePercent ? salePercent : 0
           const koiMap = new Map(koiList.map((koi) => [koi._id, koi]));
           const updatedKoiList = Items.map((item) => {
             const koi = koiMap.get(item.KoiID);
@@ -77,7 +78,7 @@ const PaymentMethod = () => {
           setKoiList(updatedKoiList);
           // Save to localStorage
           // localStorage.setItem("koiList", JSON.stringify(updatedKoiList));
-          setTotalPrice(TotalPrice);
+          setTotalPrice(Math.round(((100-sale)/100)*TotalPrice));
           console.log("Order details fetched and stored in localStorage.");
         } else {
           console.error(`API request failed with status: ${response.status}`);
@@ -94,7 +95,28 @@ const PaymentMethod = () => {
     };
 
     fetchOrderDetails();
+
+    // const removeOrderCookie = async () => {
+    //   try {
+    //     await axiosInstance.get("http://localhost:4000/order/cookie/remove", {
+    //       withCredentials: true,
+    //     });
+    //     console.log("Order cookie successfully removed");
+    //   } catch (error) {
+    //     console.error("Error removing order cookie:", { message: error.message });
+    //   }
+    // };
+
+    // window.onbeforeunload = () => {
+    //   removeOrderCookie();
+    // };
+
+    // return () => {
+    //   removeOrderCookie();
+    //   window.onbeforeunload = null; 
+    // };
   }, []);
+  
   return (
     <>
       <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>

@@ -4,18 +4,6 @@ import databaseService from "../services/database.service.js";
 
 const otpCache = new Map();
 
-// export function setOTP(phoneNumber, code) {
-//   otpCache.set(phoneNumber, { code, expiresAt: Date.now() + 5 * 60 * 1000 });
-// }
-
-// export function getOTP(phoneNumber) {
-//   return otpCache.get(phoneNumber);
-// }
-
-// export function deleteOTP(phoneNumber) {
-//   otpCache.delete(phoneNumber);
-// }
-
 const validatePhoneNumber = (phoneNumber) => {
   const parsedNumber = parsePhoneNumberFromString(phoneNumber, 'VN'); // Sử dụng mã quốc gia VN
   if (parsedNumber && parsedNumber.isValid()) {
@@ -33,21 +21,23 @@ export async function sendOTPCode(user, payload) {
   if(validatedPhoneNumber.message){
     return {message: validatedPhoneNumber.message}
   }
+  console.log("user id: ", user._id)
   const existedAccount = await databaseService.loyaltyCard.findOne({ UserID: user._id })
   const existedPhoneNumber = await databaseService.users.findOne({
-    phone_number: payload.PhoneNumber,
+    phone_number: validatedPhoneNumber,
     _id: { $ne: user._id }
   });
   
-  console.log("existedAccount: ", existedAccount)
   if (existedAccount) {
     return { message: "The user has a loyalty card already!" }
   }
   if (existedPhoneNumber) {
     return { message: "An account already exists for this phone number!" }
   }
-  let userPhoneNumber = user.phone_number
-  if (userPhoneNumber && validatedPhoneNumber != userPhoneNumber) {
+  let userPhoneNumber = validatePhoneNumber(user.phone_number).message ? "" : validatePhoneNumber(user.phone_number)
+  console.log(userPhoneNumber)
+  console.log(validatedPhoneNumber)
+  if (!userPhoneNumber.trim && validatedPhoneNumber !== userPhoneNumber) {
     return { message: "Please use the phone number associated with this account!" }
   }
   userPhoneNumber = validatedPhoneNumber
@@ -65,7 +55,7 @@ export async function sendOTPCode(user, payload) {
 
 // Hàm kiểm tra mã OTP
 export function verifyOTPCode(phoneNumber, userCode) {
-  const otpEntry = otpCache.get(phoneNumber);
+  const otpEntry = otpCache.get(validatePhoneNumber(phoneNumber).toString());
   if (!otpEntry) {
     return { valid: false, message: "Mã OTP không tồn tại hoặc đã hết hạn" };
   }

@@ -11,7 +11,6 @@ const ChatButton = (props) => {
     const showBoxChat = () => {
         setShow(!show)
     }
-
     const findChat = async() => {
         try {
             const {data} = await createNewChats(receiver._id)
@@ -24,7 +23,6 @@ const ChatButton = (props) => {
             console.error({ message: error.message })
         }
     }
-
     useEffect(() => {
         const savedChat = localStorage.getItem('selectedChat');
         if (savedChat) {
@@ -33,8 +31,6 @@ const ChatButton = (props) => {
             findChat();
         }
     }, [show, receiver]);
-    
-
     return (
         <div className='btn-container'>
             <i

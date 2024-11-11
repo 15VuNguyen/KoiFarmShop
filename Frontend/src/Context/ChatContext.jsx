@@ -7,7 +7,7 @@ export const useChat = () => {
 }
 
 export const ChatContextProvider = ({children})=>{
-    const [selectedChat, setSelectedChat] = useState(null)
+    const [selectedChat, setSelectedChat] = useState({})
 
     return(
         <ChatContext.Provider value={{selectedChat,setSelectedChat}}>

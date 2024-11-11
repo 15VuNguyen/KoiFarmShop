@@ -371,14 +371,20 @@ class UsersService {
   async updateMe(user_id, payload) {
     const _payload = payload
 
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    // const date = localTime.replace('Z', '+07:00')
     //cập nhật _payload lên db
+
     const user = await databaseService.users.findOneAndUpdate(
       { _id: new ObjectId(user_id) },
       [
         {
           $set: {
             ..._payload,
-            updated_at: '$$NOW'
+            updated_at: localTime
           }
         }
       ],
@@ -560,7 +566,7 @@ class UsersService {
 
   async getManagerInfoForChat() {
     try {
-      const manager = await databaseService.users.findOne({roleid: 3})
+      const manager = await databaseService.users.findOne({ roleid: 3 })
       return manager
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -570,16 +576,13 @@ class UsersService {
 
   async getUserInfoForChat(reqParams) {
     try {
-      const user = await databaseService.users.findOne({_id: new ObjectId(reqParams.userID)})
+      const user = await databaseService.users.findOne({ _id: new ObjectId(reqParams.userID) })
       return user
     } catch (error) {
       console.error('Error fetching users:', error)
       throw error
     }
   }
-
-  
-
 }
 
 const usersService = new UsersService()

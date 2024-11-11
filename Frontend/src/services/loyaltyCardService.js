@@ -9,9 +9,17 @@ const registerLoyaltyCard = async (PhoneNumber, OTPCode) => {
 const sendOtpCode = async (PhoneNumber) => {
     return await axiosInstance.post(`/loyaltyCard/otpCode/send`,{PhoneNumber})
 }
+const checkDiscountPrice = async (ApplyDiscount) => {
+    return await axiosInstance.post(`/loyaltyCard/checkPrice`,{ApplyDiscount},{withCredentials:true})
+}
+const getCardList = async () => {
+    return await axiosInstance.get(`/loyaltyCard/allAbove`)
+}
 
 export {
     getCard,
     registerLoyaltyCard,
-    sendOtpCode
+    sendOtpCode,
+    checkDiscountPrice,
+    getCardList
 }
