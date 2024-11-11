@@ -577,7 +577,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="31"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.1 Cá Koi Platinum Ogon
                     </span>
@@ -622,7 +624,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="32"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.2 Cá Koi Yamabuki Ogon
                     </span>
@@ -670,7 +674,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="33"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.3 Cá Koi Hi Ogon
                     </span>
@@ -707,7 +713,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="34"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.4 Cá Koi Orenji Ogon
                     </span>
@@ -743,7 +751,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="35"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.5 Cá Koi Mukashi Ogon
                     </span>
@@ -777,7 +787,9 @@ export default function Ogon() {
                     <span
                       className="span-Style"
                       id="36"
-                      style={{ color: "rgb(255, 178, 0)" }}
+                      style={{
+                        color: "rgb(146, 2, 2)",
+                      }}
                     >
                       3.6 Nezu Ogon Koi
                     </span>
@@ -914,7 +926,7 @@ export default function Ogon() {
                   <span
                     className="span-Style"
                     style={{
-                      color: "#efa709",
+                      color: "rgb(146, 2, 2)",
                     }}
                   >
                     Kiểm tra sức khoẻ
@@ -931,7 +943,7 @@ export default function Ogon() {
                   <span
                     className="span-Style"
                     style={{
-                      color: "#efa709",
+                      color: "rgb(146, 2, 2)",
                     }}
                   >
                     Giám sát và quản lý

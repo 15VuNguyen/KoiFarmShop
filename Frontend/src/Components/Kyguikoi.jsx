@@ -613,6 +613,7 @@ export default function Kyguikoi() {
                     htmlFor="PhoneNumberConsignKoi"
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
+                    <span style={{ color: "red" }}>* </span>
                     Số điện thoại người ký gửi
                   </label>
                   <Form.Item name="PhoneNumberConsignKoi">
