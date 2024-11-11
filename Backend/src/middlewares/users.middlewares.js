@@ -131,14 +131,7 @@ const addressSchema = {
   isString: {
     errorMessage: USERS_MESSAGES.ADDRESS_MUST_BE_A_STRING
   },
-  trim: true,
-  isLength: {
-    options: {
-      min: 1,
-      max: 200
-    },
-    errorMessage: USERS_MESSAGES.ADDRESS_LENGTH_MUST_BE_FROM_1_TO_200
-  }
+  trim: true
 }
 
 const phoneNumberSchema = {
