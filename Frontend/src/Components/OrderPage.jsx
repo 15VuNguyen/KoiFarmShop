@@ -53,6 +53,7 @@ const OrderPage = () => {
           Breed: selectedItem.Breed,
           CategoryID: selectedItem.CategoryID,
           Status: selectedItem.Status,
+          GroupKoiID: selectedItem.GroupKoiID,
         });
         //
         if (response.status === 200) {
@@ -698,7 +699,7 @@ const OrderPage = () => {
                         onClick={() => {
                           if (
                             !isAddedToCart &&
-                            selectedQuantity <= maxQuantity &&
+                            selectedQuantity > maxQuantity &&
                             !error &&
                             !isButtonDisabled
                           ) {

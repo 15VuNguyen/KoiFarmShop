@@ -9,6 +9,10 @@ import { Layout, Typography } from "antd";
 import "../Css/koiStyle.css";
 const { Title, Text, Paragraph } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-shusui/ca-koi-shusui-1.webp";
+import img2 from "../../assets/Koi-shusui/ca-koi-shusui-2.webp";
+import img3 from "../../assets/img_4.png";
+import img4 from "../../assets/img_5.png";
 export default function Shusui() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -218,48 +222,119 @@ export default function Shusui() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span className="contentBox">
+                    <span
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về Cá Koi Shusui
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết Cá Koi Shusui
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách chọn Cá Koi Shusui
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc Cá Koi Shusui
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Giá cá koi Shusui bao nhiêu?
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll51} className="contentBox">
+                        <span
+                          onClick={handleScroll51}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.1 Giá cá koi Shusui F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll52} className="contentBox">
+                        <span
+                          onClick={handleScroll52}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.2 Giá cá koi Shusui Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Tại sao nên mua Cá Koi Shusui tại IKoi?
                     </span>
                   </li>
@@ -267,7 +342,13 @@ export default function Shusui() {
               </div>
 
               <div>
-                <h2 style={{ textAlign: "center", color: "red" }}>
+                <h2
+                  style={{
+                    textAlign: "center",
+                    color: "red",
+                    paddingTop: "20px",
+                  }}
+                >
                   Nội dung chi tiết
                 </h2>
                 <div>
@@ -283,7 +364,15 @@ export default function Shusui() {
                 </div>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu về Cá Koi Shusui</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu về Cá Koi Shusui
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Shusui là dòng cá Koi đẹp đến từ Nhật Bản và có chất
@@ -405,7 +494,13 @@ export default function Shusui() {
               </div>
 
               <div id="detailed-content">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2. Cách nhận biết Cá Koi Shusui
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -459,7 +554,7 @@ export default function Shusui() {
                   không bị mờ nhòe.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-shusui/ca-koi-shusui-1.webp" />
+                  <img src={img1} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">
                       Cá Shusui độc đáo, mới lạ
@@ -468,7 +563,15 @@ export default function Shusui() {
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn Cá Koi Shusui</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn Cá Koi Shusui
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Đối với người Nhật, Shusui Koi là từ ngữ đẹp, tượng trưng cho
                   may mắn, sức khỏe, sự nghiệp và tiền bạc. Cùng với Platinum
@@ -485,11 +588,23 @@ export default function Shusui() {
                   xứng của hai vẩy phải cân bằng.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-shusui/ca-koi-shusui-2.webp" />
+                  <img
+                    src={img2}
+                    style={{ width: "50%", paddingBottom: "20px" }}
+                  />
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chăm sóc Cá Koi Shusui</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    paddingTop: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chăm sóc Cá Koi Shusui
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Đây là dòng cá có nguồn gốc từ Nhật Bản và mang lại giá trị
                   cao sang cho ngôi nhà của bạn. Nhưng chắc hẳn ít ai biết được
@@ -540,15 +655,22 @@ export default function Shusui() {
                 </ul>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    paddingTop: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Giá cá koi Shusui bao nhiêu?
                 </h3>
                 <Paragraph className="paragraph-Style">
-                  Hiện tại Siêu thị Cá Koi Vn đang cung cấp dòng cá koi Shusui
-                  chuẩn từ cá nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói
-                  Siêu thị Cá Koi VN là một trong những đơn vị cung cấp cá koi
-                  với giá rẻ nhất thị trường, mà chất lượng cũng rất đảm bảo.
-                  Giá cá koi nhật và f1 như sau
+                  Hiện tại IKoi đang cung cấp dòng cá koi Shusui chuẩn từ cá
+                  nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói Siêu thị Cá
+                  Koi VN là một trong những đơn vị cung cấp cá koi với giá rẻ
+                  nhất thị trường, mà chất lượng cũng rất đảm bảo. Giá cá koi
+                  nhật và f1 như sau
                 </Paragraph>
                 <ul style={{ fontWeight: "400", fontSize: "15px" }}>
                   <li>
@@ -580,17 +702,23 @@ export default function Shusui() {
                 </ul>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    paddingTop: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6. Tại sao nên mua Cá Koi Shusui tại IKoi?
                 </h3>
                 <Paragraph className="paragraph-Style">
-                  Về loại Cá Koi tại siêu thị Cá Koi Việt Nam, thì những con cá
-                  đều được cấp giấy chứng nhận sức khỏe đầy đủ. Mua tại siêu thị
-                  Cá Koi Việt Nam sẽ được đảm bảo chất lượng và giảm thiểu chi
-                  phí vận chuyển. Tại đây, các chuyên gia có chế độ chăm sóc đặc
-                  biệt để đảm bảo cho sức khỏe và chất lượng cá được tốt nhất.
-                  Khi mua cá tại đây, các bạn sẽ được hướng dẫn chăm sóc và nuôi
-                  dưỡng lâu dài.
+                  Về loại Cá Koi tại IKoi, thì những con cá đều được cấp giấy
+                  chứng nhận sức khỏe đầy đủ. Mua tại Ikoi sẽ được đảm bảo chất
+                  lượng và giảm thiểu chi phí vận chuyển. Tại đây, các chuyên
+                  gia có chế độ chăm sóc đặc biệt để đảm bảo cho sức khỏe và
+                  chất lượng cá được tốt nhất. Khi mua cá tại đây, các bạn sẽ
+                  được hướng dẫn chăm sóc và nuôi dưỡng lâu dài.
                 </Paragraph>
                 <Paragraph className="paragraph-Style">
                   Không chỉ giá thành phải chăng mà khi đến với IKoi VN, bạn sẽ
@@ -614,13 +742,10 @@ export default function Shusui() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img3} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              <img src={img4} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>
