@@ -18,7 +18,7 @@ const CardGrid = ({ cardData }) => {
     return cardData
       .filter((card) => card.Status === status)
       .reduce((acc, card) => {
-        const key = `${card.Size}-${card.Breed}-${card.Status}`; // Create a unique key
+        const key = `${card.Size}-${card.Breed}-${card.Status}-${card.Price}`; // Include price in the unique key
         if (!acc[key]) {
           acc[key] = { count: 0, card }; // Initialize if key doesn't exist
         }
