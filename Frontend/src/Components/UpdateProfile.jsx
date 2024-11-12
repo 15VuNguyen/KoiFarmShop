@@ -284,6 +284,10 @@ export default function UpdateProfile() {
                     name="name"
                     rules={[
                       { required: true, message: "Vui lòng nhập họ và tên." },
+                      {
+                        pattern: /^[a-zA-Z\s]+$/,
+                        message: "Tên không được chứa ký tự đặc biệt.",
+                      },
                     ]}
                   >
                     <Input
@@ -305,6 +309,7 @@ export default function UpdateProfile() {
                     name="address"
                     rules={[
                       { required: true, message: "Vui lòng nhập địa chỉ" },
+                      { max: 200, message: "Địa chỉ phải dưới 200 chữ cái." },
                     ]}
                   >
                     <AutoComplete
@@ -333,6 +338,10 @@ export default function UpdateProfile() {
                         required: true,
                         message: "Vui lòng nhập số điện thoại.",
                       },
+                      {
+                        pattern: /^[0-9]{5,20}$/,
+                        message: "Số điện thoại phải là chữ số có từ 5-20 số.",
+                      },
                     ]}
                   >
                     <Input
@@ -354,6 +363,10 @@ export default function UpdateProfile() {
                     name="website"
                     rules={[
                       { required: true, message: "Vui lòng nhập website." },
+                      {
+                        type: "url",
+                        message: "Website phải là link URL hợp lệ.",
+                      },
                     ]}
                   >
                     <Input

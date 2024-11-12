@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Typography } from "antd";
+import { Typography, Modal, Empty } from "antd";
 import axiosInstance from "../An/Utils/axiosJS";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ export default function ShoppingCart() {
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
+  const [visible, setVisible] = useState(false); // Modal visibility state
+  const [koiIdToDelete, setKoiIdToDelete] = useState(null); // Store the KoiID to delete
   const navigate = useNavigate();
 
   const handlePayment = async () => {
@@ -20,7 +22,7 @@ export default function ShoppingCart() {
       });
 
       if (res.status === 200) {
-        navigate("/formfillinformation",{state:{ totalPrice }});
+        navigate("/formfillinformation", { state: { totalPrice } });
       }
     } catch (error) {
       if (error.response) {
@@ -48,7 +50,7 @@ export default function ShoppingCart() {
             withCredentials: true,
           }
         );
-        console.log(response);
+        console.log("koilist", response.data.result);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
           const { Items, TotalPrice } = orderDT;
@@ -59,7 +61,6 @@ export default function ShoppingCart() {
           }).filter((koi) => koi !== null);
           setKoiList(updatedKoiList);
           setTotalPrice(TotalPrice);
-          console.log("Order details fetched and stored in localStorage.");
         } else {
           console.error(`API request failed with status: ${response.status}`);
           setError("Failed to fetch order details.");
@@ -98,11 +99,13 @@ export default function ShoppingCart() {
 
         if (
           typeof result === "string" &&
-          result.includes("available in stock")
+          result.includes("Số lượng còn lại trong giỏ hàng")
         ) {
-          setError(result);
+          const remainingQuantity = parseInt(result.match(/\d+/)[0]);
+          setError(`Số lượng cá trong kho chỉ còn ${remainingQuantity}`);
           return;
         }
+
         const updatedKoiList = koiList.map((koi) =>
           koi._id === koiId ? { ...koi, quantity } : koi
         );
@@ -120,18 +123,21 @@ export default function ShoppingCart() {
     }
   };
 
-  const handleDeleteKoi = async (koiId) => {
-    console.log(`Deleting Koi with ID: ${koiId}`);
+  const showDeleteConfirm = (koiId) => {
+    setKoiIdToDelete(koiId);
+    setVisible(true);
+  };
+
+  const handleDeleteKoi = async () => {
     try {
       const response = await axiosInstance.post(
         "http://localhost:4000/order/detail/remove",
-        { KoiID: koiId.toString() },
+        { KoiID: koiIdToDelete.toString() },
         {
           withCredentials: true,
         }
       );
       if (response.status === 200) {
-        alert(response.data.message || "Deleted successfully");
         window.location.reload();
       }
     } catch (error) {
@@ -140,14 +146,44 @@ export default function ShoppingCart() {
         error.response ? error.response.data : error.message
       );
     }
+    setVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
   };
 
   return (
-    <div style={{ padding: "20px", width: "100%" }}>
+    <div style={{ padding: "20px", width: "100%", minHeight: "50vh" }}>
       {error && <p style={{ color: "red" }}>{error}</p>}
       {koiList.length > 0 ? (
         <>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ padding: "10px", textAlign: "left" }}>Hình ảnh</th>
+                <th style={{ padding: "10px" }}>Tên sản phẩm</th>
+                <th style={{ padding: "10px", textAlign: "center" }}>
+                  Đơn giá
+                </th>
+                <th style={{ padding: "10px", textAlign: "center" }}>
+                  Số lượng
+                </th>
+                <th style={{ padding: "10px", textAlign: "center" }}>
+                  Thành tiền
+                </th>
+                <th style={{ padding: "10px" }}>Xóa</th>
+              </tr>
+            </thead>
+            <hr
+              style={{
+                width: "600%", 
+                height: "1px", 
+                background: "rgba(0, 0, 0, 0.3)", 
+                border: "none", 
+                margin: "20px 0", 
+              }}
+            />
             <tbody>
               {koiList.map((koi, index) => (
                 <tr
@@ -178,96 +214,90 @@ export default function ShoppingCart() {
                         objectFit: "contain",
                       }}
                     />
-                    <span
-                      style={{
-                        fontSize: "15px",
-                        flex: 1,
-                        minWidth: "150px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {koi.KoiName}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "15px",
-                        minWidth: "120px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {koi.Price.toLocaleString()}đ
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "15px",
-                        minWidth: "120px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {koi.Status !== 4 && (
-                        <input
-                          type="number"
-                          min={1}
-                          value={koi.quantity}
-                          onChange={(e) => {
-                            const newQuantity = parseInt(e.target.value, 10);
-                            if (!isNaN(newQuantity) && newQuantity >= 1) {
-                              handleUpdateQuantity(koi._id, newQuantity);
-                            } else {
-                              handleUpdateQuantity(koi._id, 1);
-                            }
-                          }}
-                          style={{ width: "70px" }}
-                        />
-                      )}
-                      {koi.Status === 4 && (
-                        <input
-                          type="number"
-                          min={1}
-                          value={1}
-                          style={{ width: "70px" }}
-                          disabled
-                        />
-                      )}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "15px",
-                        fontFamily: "Roboto, sans-serif",
-                        color: "#FF6A00",
-                        minWidth: "120px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {(koi.Price * koi.quantity).toLocaleString()}đ
-                    </span>
-                    <span>
-                      <button
-                        style={{
-                          cursor: "pointer",
-                          marginLeft: "10px",
-                          background: "none",
-                          border: "none",
-                          padding: "0",
-                          outline: "none",
+                  </td>
+                  <td
+                    style={{
+                      fontSize: "15px",
+                      flex: 1,
+                      minWidth: "150px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {koi.KoiName}
+                  </td>
+                  <td
+                    style={{
+                      fontSize: "15px",
+                      minWidth: "120px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {koi.Price.toLocaleString()}đ
+                  </td>
+                  <td
+                    style={{
+                      fontSize: "15px",
+                      minWidth: "120px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {koi.Status !== 4 && (
+                      <input
+                        type="number"
+                        min={1}
+                        value={koi.quantity}
+                        onChange={(e) => {
+                          const newQuantity = parseInt(e.target.value, 10);
+                          if (!isNaN(newQuantity) && newQuantity >= 1) {
+                            handleUpdateQuantity(koi._id, newQuantity);
+                          } else {
+                            handleUpdateQuantity(koi._id, 1);
+                          }
                         }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.firstChild.style.color = "red")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.firstChild.style.color = "#D3D3D3")
-                        }
-                        onClick={() => handleDeleteKoi(koi._id)} // Use a function wrapper to avoid immediate invocation
-                      >
-                        <i
-                          className="fa fa-trash"
-                          aria-hidden="true"
-                          style={{ fontSize: "20px", color: "#D3D3D3" }}
-                        ></i>
-                      </button>
-                    </span>
+                        style={{ width: "70px" }}
+                      />
+                    )}
+                    {koi.Status === 4 && (
+                      <input
+                        type="number"
+                        min={1}
+                        value={1}
+                        style={{ width: "70px" }}
+                        disabled
+                      />
+                    )}
+                  </td>
+                  <td
+                    style={{
+                      fontSize: "15px",
+                      fontFamily: "Roboto, sans-serif",
+                      color: "#FF6A00",
+                      minWidth: "120px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {(koi.Price * koi.quantity).toLocaleString()}đ
+                  </td>
+                  <td>
+                    <button
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: "10px",
+                        background: "none",
+                        border: "none",
+                        padding: "0",
+                        outline: "none",
+                      }}
+                      onClick={() => showDeleteConfirm(koi._id)}
+                    >
+                      <i
+                        className="fa fa-trash"
+                        aria-hidden="true"
+                        style={{ fontSize: "20px", color: "#D3D3D3" }}
+                      ></i>
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -312,8 +342,20 @@ export default function ShoppingCart() {
         <Text style={{ color: "#FF6A00" }}>
           {error ||
             "Bạn chưa có thêm cá vào trong giỏ hàng. Xin vui lòng quay lại sau!."}
+          <Empty style={{ marginTop: "60px" }} />
         </Text>
       )}
+
+      <Modal
+        title="Xác nhận xóa"
+        visible={visible}
+        onOk={handleDeleteKoi}
+        onCancel={handleCancel}
+        okText="Xóa"
+        cancelText="Hủy"
+      >
+        <p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?</p>
+      </Modal>
     </div>
   );
 }

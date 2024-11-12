@@ -8,8 +8,8 @@ export const callback = async (req, res) => {
   console.log(req.body)
   try {
     const config = {
-      app_id: '2554',
-      key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'
+      app_id: '554',
+      key2: 'uUfsWgfLkRLzq6W2uNXTCxrfxs51auny'
     }
 
     let dataStr = req.body.data
@@ -40,7 +40,7 @@ export const callback = async (req, res) => {
 
       const flattenedKoiIDs = koiIDsList.flat()
 
-      for (const koiID of flattenedKoiIDs) {  
+      for (const koiID of flattenedKoiIDs) {
         await databaseService.kois.findOneAndUpdate({ _id: koiID }, { $set: { Status: 0 } }, { new: true })
         const stringKoiID = koiID.toString()
         try {
@@ -88,9 +88,9 @@ export const callback = async (req, res) => {
         result.returncode = -1
         result.returnmessage = 'No order data found in embed_data'
       } else {
-        console.log("db check")
+        console.log('db check')
         const result = await saveOrderToDatabase(reqOrderDetails, reqOrder, reqLoyaltyCard)
-        console.log("result db: ")
+        console.log('result db: ')
 
         await databaseService.order.findOneAndUpdate(
           { _id: result.order.insertedId },
@@ -135,7 +135,6 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
     return 'Fail to save'
   }
 
-
   const newOrder = {
     _id: new ObjectId(),
     UserID: new ObjectId(reqOrderCookie.UserID),
@@ -158,31 +157,85 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
   const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(reqOrderCookie.UserID) })
   let updatedLoyaltyCard
   if (loyaltyCard) {
-    if(loyaltyCard.RankName !== reqLoyaltyCard.RankName){
+    if (loyaltyCard.RankName !== reqLoyaltyCard.RankName) {
       updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
         {
           UserID: new ObjectId(reqOrderCookie.UserID)
         },
         {
           $set: {
-            RankName : reqLoyaltyCard.RankName,
+            RankName: reqLoyaltyCard.RankName,
             SalePercent: reqLoyaltyCard.SalePercent
           },
           $inc: {
             Point: reqLoyaltyCard.Point // Cộng dồn Point
           }
         }
-    )
-  }
+      )
+    }
     updatedLoyaltyCard = await databaseService.loyaltyCard.updateOne(
       {
         UserID: new ObjectId(reqOrderCookie.UserID)
       },
       {
-        $inc: { Point: reqLoyaltyCard.Point}
+        $inc: { Point: reqLoyaltyCard.Point }
       }
     )
     return { orderDT, order: newOrder, loyaltyCard: updatedLoyaltyCard }
   }
-  return { orderDT, order: newOrder}
+  return { orderDT, order: newOrder }
+}
+
+export const updateCallBack = async (reqOrderDetails) => {
+  const koiIDsList = await Promise.all(
+    reqOrderDetails.Items.map(async (item) => {
+      const samePropertiesKoiList = (await orderDetailService.getSamePropertiesKoi(item.KoiID)).filter(
+        (koi) => koi.Status != 0
+      )
+      const koiList = samePropertiesKoiList.slice(0, item.Quantity).map((koi) => koi._id)
+      return koiList
+    })
+  )
+
+  const flattenedKoiIDs = koiIDsList.flat()
+
+  for (const koiID of flattenedKoiIDs) {
+    await databaseService.kois.findOneAndUpdate({ _id: koiID }, { $set: { Status: 0 } }, { new: true })
+    const stringKoiID = koiID.toString()
+    try {
+      const consignkoi = await databaseService.consigns.findOne({ KoiID: stringKoiID })
+
+      if (consignkoi) {
+        await databaseService.consigns.findOneAndUpdate({ KoiID: stringKoiID }, { $set: { State: 5 } }, { new: true })
+      } else {
+        console.log(`No consign found for KoiID: ${stringKoiID}`)
+      }
+    } catch (error) {
+      console.error('Error updating consign state: ', error)
+    }
+  }
+
+  try {
+    const groupKoi = await databaseService.groupKois.find().toArray()
+
+    if (groupKoi.length > 0) {
+      const groupKoiID = groupKoi.map((groupkoi) => groupkoi._id.toString())
+
+      for (const groupKoi of groupKoiID) {
+        const Koi = await databaseService.kois.find({ GroupKoiID: groupKoi }).toArray()
+
+        const allStatusZero = Koi.every((koi) => koi.Status === 0)
+
+        if (allStatusZero) {
+          await databaseService.invoices.findOneAndUpdate(
+            { GroupKoiIDInvoice: groupKoi },
+            { $set: { Status: 2 } },
+            { new: true }
+          )
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error occurred:', error)
+  }
 }

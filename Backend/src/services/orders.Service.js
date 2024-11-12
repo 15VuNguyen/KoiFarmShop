@@ -1,7 +1,7 @@
 import databaseService from "./database.service.js"
 import { verifyOTPCode } from "../PhoneNumberValidate/phoneNumber.validate.js"
 import { ObjectId } from "mongodb"
-import { saveOrderToDatabase } from "./callback.service.js"
+import { saveOrderToDatabase, updateCallBack } from "./callback.service.js"
 
 class OrdersService {
     async createOrder(payload, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount, paymentMethod) {
@@ -33,7 +33,10 @@ class OrdersService {
             }
         }
         if(paymentMethod == "cash"){
-            return await saveOrderToDatabase(reqOrderDTCookie, reqOrderCookie, reqOrderDiscount)
+            return await Promise.all([
+                saveOrderToDatabase(reqOrderDTCookie, reqOrderCookie, reqOrderDiscount),
+                updateCallBack(reqOrderDTCookie)
+            ])
         }
         return {
             user, order: reqOrderCookie,
