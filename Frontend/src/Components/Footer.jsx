@@ -302,40 +302,6 @@ const FooterComponent = () => {
               Lô Koi mới về
             </a>
           </div>
-          <span
-            style={{
-              borderBottom: "3px solid white",
-              fontWeight: "bold",
-              fontSize: "15px",
-              paddingRight: "45px",
-            }}
-          >
-            Chính sách
-          </span>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách mua hàng
-            </a>
-          </div>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách bảo mật
-            </a>
-          </div>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách vận chuyển
-            </a>
-          </div>
         </div>
         <div
           style={{
