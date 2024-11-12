@@ -111,7 +111,7 @@ export default function OrdersNext() {
             title: 'Ngày Đặt Hàng',
             dataIndex: 'OrderDate',
             key: 'OrderDate',
-            render: (text) => new dayjs(text).format('DD/MM/YYYY'),
+            render: (text) => new dayjs(text).format('DD/MM/YYYY:HH:mm'),
             sorter: (a, b) => dayjs(a.OrderDate) - dayjs(b.OrderDate)
         },
         {
@@ -120,10 +120,10 @@ export default function OrdersNext() {
             key: 'Status',
             render: (status) => {
               if (status === 1) {
-                return <Tag icon={<SyncOutlined spin />} color="success">Đang Giao</Tag>
+                return <Tag icon  = {< SyncOutlined spin />} color="warning">Đang Chờ Thanh Toán</Tag>
               }
                 if (status === 2) {
-                    return <Tag icon={< CheckOutlined  />} color="processing">Giao thành công</Tag>
+                    return <Tag icon={< CheckOutlined  />} color="processing">Đã Thanh Toán</Tag>
                 }
                 else {
                     return <Tag icon={< CheckOutlined  />} color="error">Đã Hủy</Tag>
@@ -165,7 +165,7 @@ export default function OrdersNext() {
                         </Card>
                     </Col>
                 </Row>
-                <Space direction="vertical" style={{ width: '100%' }}>
+                {/* <Space direction="vertical" style={{ width: '100%' }}>
                     <Table
                         columns={columns}
                         dataSource={orders}
@@ -176,10 +176,22 @@ export default function OrdersNext() {
                         pagination={{ pageSize: 5 }}
                         l
                     />
-                </Space>
-                {selectedOrder && (
-                    <OrderDetail orderId={selectedOrder} onClose={handleCloseDetails} currentStatus={currentStatus}  />
-                )}
+                </Space> */}
+                {selectedOrder ?(
+                   <Space direction="vertical" style={{ width: '100%', marginTop:'3rem' }}><OrderDetail orderId={selectedOrder} onClose={handleCloseDetails} currentStatus={currentStatus}  /> </Space>
+                ) : <Space direction="vertical" style={{ width: '100%' }}>
+                <Table
+                    columns={columns}
+                    dataSource={orders}
+                    rowKey={(record) => record._id}
+                    loading={loading}
+                    
+                    bordered
+                    pagination={{ pageSize: 15 }}
+                    l
+                />
+            </Space>}
+                
             </Content>
         </Layout>
     );
