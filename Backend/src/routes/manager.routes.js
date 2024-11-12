@@ -109,7 +109,7 @@ managerRouter.post(
 managerRouter.post(
   '/manage-user/disable-enable/:UserID',
   accessTokenValidator,
-  accessTokenValidator,
+  isAdminValidator,
   wrapAsync(updateStatusUserController)
 )
 

@@ -160,9 +160,17 @@ class AdminsService {
 
   async updateStatusUser(UserID) {
     try {
+      const user = await databaseService.users.findOne({ _id: new ObjectId(UserID) })
+
+      if (!user) {
+        return { success: false, message: 'User not found' }
+      }
+
+      const newStatus = user.Status === 1 ? -1 : 1
+
       const result = await databaseService.users.findOneAndUpdate(
         { _id: new ObjectId(UserID) },
-        { $bit: { Status: { xor: 1 } } },
+        { $set: { Status: newStatus } },
         { new: true }
       )
 
@@ -170,9 +178,10 @@ class AdminsService {
         return { success: false, message: 'User not found' }
       }
 
-      return { success: true, message: MESSAGES.UPDATE_USER_SUCCESS }
+      return { success: true, message: 'User status updated successfully' }
     } catch (error) {
-      return { success: false, message: 'User not found' }
+      console.error(error) 
+      return { success: false, message: 'An error occurred while updating user status' }
     }
   }
 

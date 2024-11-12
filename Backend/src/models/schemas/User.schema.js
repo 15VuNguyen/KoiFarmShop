@@ -17,6 +17,7 @@ export default class UserSchema {
   name = ''
   address = ''
   phone_number = ''
+  StatusUser = 1
   constructor(user) {
     const currentDate = new Date()
     const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
@@ -38,5 +39,6 @@ export default class UserSchema {
     this.name = user.name || '' // nếu người dùng tạo mà k truyền ta sẽ để rỗng
     this.address = user.address || ''
     this.phone_number = user.phone_number || ''
+    this.StatusUser = user.StatusUser || 1
   }
 }
