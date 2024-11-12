@@ -370,7 +370,6 @@ export default function Home() {
             marginRight: "50px",
             marginBottom: "50px",
           }}
-          dots={false}
         >
           {Array.from({ length: Math.ceil(koidata.length / 6) }).map(
             (_, index) => (
@@ -476,7 +475,7 @@ export default function Home() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: "-20px", // Adjust this value to move it closer
+            marginTop: "-20px", 
           }}
         >
           <div
