@@ -23,9 +23,10 @@ export default function LoyaltyCardInfo() {
   const [nextRankValue, setNextRankValue] = useState(null);
   const [user, setUser] = useState(null);
   const [maxPoint, setMaxPoint] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [imgName, setImgName] = useState("Silver");
   const [isShowRegisterForm, setIsShowRegisterForm] = useState(false);
+  const [refresh, setRefresh] = useState(false)
   const {currentUser} = useAuth()
 
   useEffect(()=>{
@@ -74,7 +75,7 @@ export default function LoyaltyCardInfo() {
     };
 
     fetchCardInfo();
-  }, []);
+  }, [refresh]);
 
   const handleRegister = async () => {
     setIsShowRegisterForm(true)
@@ -83,6 +84,10 @@ export default function LoyaltyCardInfo() {
   const handleClose = () => {
     setIsShowRegisterForm(false)
   }
+
+  const handleRefresh = () => {
+    setRefresh(!refresh); 
+  };
 
   if (loading) {
     return (
@@ -123,9 +128,9 @@ export default function LoyaltyCardInfo() {
             </div>
             <div className="progressBar text-center">
               <ProgressBarFormat 
-                now={Math.round(card.Point * 100 / nextRankValue.maxPoints)}
+                now={Math.round(card.Point * 100 / maxPoint)}
               />
-              <p>Thêm {maxPoint - card.Point} điểm để đạt thành viên {nextRankValue.name}</p>
+              <p>Thêm {maxPoint - card.Point} điểm để đạt thành viên {nextRankValue?.name}</p>
             </div>
           {/* </div> */}
         </div>
@@ -137,6 +142,7 @@ export default function LoyaltyCardInfo() {
           show = {isShowRegisterForm}
           handleClose = {handleClose}
           setCard = {setCard}
+          onRegisterSuccess = {handleRefresh}
         />
         <Empty
           description="No data"

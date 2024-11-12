@@ -1,7 +1,7 @@
 import React from "react";
-import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button } from "antd";
+import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button, Tooltip } from "antd";
 import { RxAvatar } from "react-icons/rx";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate,useLocation } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
 
 import 'antd/dist/reset.css';
@@ -12,7 +12,8 @@ const SelfCheckContext = React.createContext();
 
 export default function AnTopBar({ children, name, role }) {
     const [isCheckingSelf, setIsCheckingSelf] = React.useState(false);
-
+    const navigate = useNavigate();
+    const location  = useLocation();
     const useAuthCheck = () => {
         const navigate = useNavigate();
         const { checkRole } = useAuth();
@@ -36,7 +37,12 @@ export default function AnTopBar({ children, name, role }) {
 
         return null;
     };
-
+    React.useEffect(() => {
+        if (location.pathname === "/NewDashBoard") {
+            
+            navigate("/NewDashBoard/staff/Profiles");
+        }
+    }, [])
     const { logout } = useAuth();
 
     const chartMenu = [
@@ -97,7 +103,9 @@ export default function AnTopBar({ children, name, role }) {
         },{
             key : '7',
             label : (
-                <Button type="primary" onClick={logout}>Đăng Xuất</Button>
+            
+                <Typography.Link onClick={logout}> Đăng Xuất </Typography.Link>
+                
             )
         }
     ];
@@ -145,11 +153,9 @@ export default function AnTopBar({ children, name, role }) {
                                 Danh Mục Quản Lý
                             </a>
                         </Dropdown>
-                        <Dropdown menu={{ items: chartMenu }} trigger={['click']} className="menu-dropdown">
-                            <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ color: 'white' }}>
-                                Báo Cáo
-                            </a>
-                        </Dropdown>
+                        <Typography.Link style={{ color: "white" }} 
+                            href="/NewDashBoard/staff/Report"
+                        >Báo Cáo</Typography.Link>
                     </Space>
                     <div className="topbar-right" style={{ float: "right" }}>
                         <Typography.Text style={{ color: "white", marginRight: "10px" }}>
