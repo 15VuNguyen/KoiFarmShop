@@ -317,7 +317,8 @@ export const getOrderController = async (req, res) => {
           Items: orderDetail.Items.map((order) => ({
             ...order,
             KoiInfo: koiMap[order.KoiID]
-          }))
+          })),
+          Status: order.Status
         })
       }
     }

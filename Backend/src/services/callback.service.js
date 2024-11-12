@@ -88,7 +88,9 @@ export const callback = async (req, res) => {
         result.returncode = -1
         result.returnmessage = 'No order data found in embed_data'
       } else {
+        console.log("db check")
         const result = await saveOrderToDatabase(reqOrderDetails, reqOrder, reqLoyaltyCard)
+        console.log("result db: ")
 
         await databaseService.order.findOneAndUpdate(
           { _id: result.order.insertedId },
@@ -180,7 +182,7 @@ export const saveOrderToDatabase = async (reqOrderDetailCookie, reqOrderCookie, 
         $inc: { Point: reqLoyaltyCard.Point}
       }
     )
-    return { orderDT, order, loyaltyCard: updatedLoyaltyCard }
+    return { orderDT, order: newOrder, loyaltyCard: updatedLoyaltyCard }
   }
-  return { orderDT, order}
+  return { orderDT, order: newOrder}
 }

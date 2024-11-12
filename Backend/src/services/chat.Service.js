@@ -71,7 +71,6 @@ class ChatService {
         })
 
         if (!chat) {
-            console.log("new chat")
             chat = {
                 _id: new ObjectId(),
                 Participants: [

@@ -107,6 +107,7 @@ export default function TableCartForm() {
           koi._id === koiId ? { ...koi, quantity } : koi
         );
 
+
         // Kiểm tra cấu trúc phản hồi để lấy totalPrice
         const { TotalPrice } = response.data.result.orderDT;
         if (TotalPrice !== undefined) {

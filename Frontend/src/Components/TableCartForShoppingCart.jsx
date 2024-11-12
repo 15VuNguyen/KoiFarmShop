@@ -20,7 +20,7 @@ export default function ShoppingCart() {
       });
 
       if (res.status === 200) {
-        navigate("/formfillinformation");
+        navigate("/formfillinformation",{state:{ totalPrice }});
       }
     } catch (error) {
       if (error.response) {

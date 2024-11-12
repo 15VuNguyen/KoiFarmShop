@@ -39,7 +39,6 @@ const RegisterLoyaltyCardModals = (props) => {
                 console.log(data)
                 toast.success("Register successfully")
                 setCard(data.result)
-                setLoading((prev) => !prev)
             }else{
                 console.log({message: data.message})
             }
