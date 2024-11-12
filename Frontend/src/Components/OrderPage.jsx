@@ -92,6 +92,7 @@ const OrderPage = () => {
       }
     };
     sendOrderDetails();
+    console.log("Test" + maxQuantity);
   }, [selectedItem]);
 
   useEffect(() => {
@@ -121,7 +122,51 @@ const OrderPage = () => {
     }
     console.log("categoryName" + categoryName);
   }, [selectedItem, categoryData]);
+  // Hàm này dùng để kiểm tra coi số lượng cá trong kho còn không
+  const checkStockAvailability = async () => {
+    if (!selectedItem || !selectedQuantity) return;
+    let requestData = {
+      Quantity: parseInt(selectedQuantity),
+    };
+    if (selectedItem.Status === 4 || selectedItem.Status === 1) {
+      requestData.KoiID = selectedItem._id;
+    } else {
+      requestData.Size = parseInt(selectedItem.Size);
+      requestData.Breed = selectedItem.Breed;
+      requestData.CategoryID = selectedItem.CategoryID;
+    }
+    try {
+      const response = await axiosInstance.post(
+        "/order/detail/makes",
+        requestData,
+        {
+          withCredentials: true,
+        }
+      );
 
+      if (response.status === 200) {
+        const { result } = response.data;
+        if (
+          typeof result === "string" &&
+          result.includes("0 available in stock")
+        ) {
+          setError(result);
+          setIsButtonDisabled(true);
+        } else {
+          setError("");
+          setIsButtonDisabled(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Có lỗi xảy ra! " + (error.response?.data?.message || ""));
+      setIsButtonDisabled(true);
+    }
+  };
+  useEffect(() => {
+    checkStockAvailability();
+  }, [selectedItem, selectedQuantity]);
+  // Hàm này dùng để thêm cá koi vào giỏ hàng
   const handleAddToCart = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -152,23 +197,26 @@ const OrderPage = () => {
       );
 
       if (response.status === 200) {
-        const { result } = response.data; // Lấy thuộc tính 'result' từ phản hồi
+        const { result } = response.data;
         console.log(result);
+        setMaxQuantity(maxQuantity - selectedQuantity);
+
         if (
           typeof result === "string" &&
           result.includes("0 available in stock")
         ) {
-          setError(result); // Hiển thị thông điệp từ phản hồi
+          setError(result);
+          setIsButtonDisabled(true);
           return;
         } else if (
           typeof result === "string" &&
           result.includes("available in stock")
         ) {
-          toast.success(result); // Hiển thị thông điệp từ phản hồi nếu có lỗi số lượng
+          toast.success(result);
           return;
         }
         console.log("Add to cart successful: " + response.data.message);
-        setMaxQuantity((prevMaxQuantity) => prevMaxQuantity - selectedQuantity); // Cập nhật maxQuantity
+        setMaxQuantity((prevMaxQuantity) => prevMaxQuantity - selectedQuantity);
       }
 
       toast.success("Đã thêm vào giỏ hàng!");
@@ -179,7 +227,7 @@ const OrderPage = () => {
       setLoading(false);
     }
   };
-
+  // Hàm này dùng để order
   const handleOrderNow = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -213,8 +261,17 @@ const OrderPage = () => {
 
       if (response.status === 200) {
         const { result } = response.data; // Lấy thuộc tính 'result' từ phản hồi
+        setMaxQuantity(maxQuantity - selectedQuantity);
+        console.log(maxQuantity);
         console.log(result);
         if (
+          typeof result === "string" &&
+          result.includes("0 available in stock")
+        ) {
+          setError(result); // Hiển thị thông điệp từ phản hồi
+          setIsButtonDisabled(true);
+          return;
+        } else if (
           typeof result === "string" &&
           result.includes("available in stock")
         ) {
@@ -370,40 +427,80 @@ const OrderPage = () => {
                         color: "red",
                       }}
                     >
-                      {selectedItem.Size > 20 && selectedItem.Status !== 4 && (
-                        <label>
-                          <strong>Quantity: </strong>
-                          <InputNumber
-                            style={{
-                              fontSize: "14px",
-                              color: "red",
-                              width: "48%",
-                            }}
-                            type="number"
-                            value={selectedQuantity}
-                            onChange={(value) => {
-                              if (value >= 0) {
-                                if (value <= maxQuantity) {
-                                  setSelectedQuantity(value);
-                                  setIsButtonDisabled(false); // Enable buttons when value is valid
-                                } else {
-                                  toast.error(
-                                    `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
-                                  );
-                                  setIsButtonDisabled(true); // Disable buttons when value is invalid
+                      {selectedItem.Size > 20 &&
+                        selectedItem.Status !== 4 &&
+                        maxQuantity == 1 && (
+                          <label>
+                            <strong>Quantity: </strong>
+                            <InputNumber
+                              style={{
+                                fontSize: "14px",
+                                color: "red",
+                                width: "48%",
+                              }}
+                              type="number"
+                              min={1}
+                              max={1}
+                              value={selectedQuantity}
+                              onChange={(value) => {
+                                if (value >= 0) {
+                                  if (value <= maxQuantity) {
+                                    setSelectedQuantity(value);
+                                    setIsButtonDisabled(false); // Enable buttons when value is valid
+                                  } else {
+                                    toast.error(
+                                      `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
+                                    );
+                                    setIsButtonDisabled(true); // Disable buttons when value is invalid
+                                  }
                                 }
-                              }
-                            }}
-                            onKeyPress={(e) => {
-                              // Ngăn nhập ký tự "e"
-                              if (e.key === "e" || e.key === "E") {
-                                e.preventDefault();
-                              }
-                            }}
-                          />
-                        </label>
-                      )}
-
+                              }}
+                              onKeyPress={(e) => {
+                                // Ngăn nhập ký tự "e"
+                                if (e.key === "e" || e.key === "E") {
+                                  e.preventDefault();
+                                }
+                              }}
+                            />
+                          </label>
+                        )}
+                      {selectedItem.Size > 20 &&
+                        selectedItem.Status !== 4 &&
+                        maxQuantity > 1 && (
+                          <label>
+                            <strong>Quantity: </strong>
+                            <InputNumber
+                              style={{
+                                fontSize: "14px",
+                                color: "red",
+                                width: "48%",
+                              }}
+                              type="number"
+                              min={1}
+                              max={maxQuantity}
+                              value={selectedQuantity}
+                              onChange={(value) => {
+                                if (value >= 0) {
+                                  if (value <= maxQuantity) {
+                                    setSelectedQuantity(value);
+                                    setIsButtonDisabled(false); // Enable buttons when value is valid
+                                  } else {
+                                    toast.error(
+                                      `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
+                                    );
+                                    setIsButtonDisabled(true); // Disable buttons when value is invalid
+                                  }
+                                }
+                              }}
+                              onKeyPress={(e) => {
+                                // Ngăn nhập ký tự "e"
+                                if (e.key === "e" || e.key === "E") {
+                                  e.preventDefault();
+                                }
+                              }}
+                            />
+                          </label>
+                        )}
                       {selectedItem.Status === 4 && (
                         <label>
                           <strong>Quantity: </strong>
@@ -649,7 +746,7 @@ const OrderPage = () => {
                   }}
                 >
                   <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Size:{" "}
+                    Kích thước:{" "}
                   </span>
                   {selectedItem.Size}
                 </li>
@@ -697,7 +794,7 @@ const OrderPage = () => {
                   }}
                 >
                   <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Certificate ID:{" "}
+                    Chứng Chỉ:{" "}
                   </span>
                   {selectedItem.CertificateID}
                 </li>
@@ -710,22 +807,22 @@ const OrderPage = () => {
                 >
                   {selectedItem.Status === 4 && (
                     <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                      Status: Ký Gửi
+                      Cá Koi Ký Gửi
                     </span>
                   )}
                   {selectedItem.Status === 1 && (
                     <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                      Status: Nhập Nhập Khẩu
+                      Cá Koi Nhập Nhập Khẩu
                     </span>
                   )}
                   {selectedItem.Status === 2 && (
                     <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                      Status: F1
+                      Cá Koi F1
                     </span>
                   )}
                   {selectedItem.Status === 3 && (
                     <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                      Status: Việt
+                      Cá Koi Việt
                     </span>
                   )}
                 </li>

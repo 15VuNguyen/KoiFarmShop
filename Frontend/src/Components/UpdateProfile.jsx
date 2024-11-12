@@ -1,24 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Row, Col, Input, Button, Modal, Form, Spin } from "antd";
+import { Row, Col, Input, Button, Modal, Form } from "antd";
 import axiosInstance from "../An/Utils/axiosJS";
-import Footer from "./Footer";
-import Navbar from "./Navbar/Navbar";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
-import {
-  EditOutlined,
-  UserOutlined,
-  ShoppingCartOutlined,
-  ShopOutlined,
-  LockOutlined,
-} from "@ant-design/icons"; // Import icon bút chì
-import DonKyGuiPage from "./Donkygui";
-import ChangePassword from "./ChangePassword";
-import TrackingOrderPage from "./trackingOrderPage";
 // Firebase config
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -48,18 +36,13 @@ const isValidURL = (urlString) => {
 
 export default function UpdateProfile() {
   const [userData, setUserData] = useState(null);
-  const [activeButton, setActiveButton] = useState(null);
   const [originalUserData, setOriginalUserData] = useState(null); // Lưu trữ dữ liệu gốc
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
   const [showImageModal, setShowImageModal] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [websiteError, setWebsiteError] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
-  const toastIdRef = useRef(null);
-  const [currentComponent, setCurrentComponent] = useState("profile");
-  const navigate = useNavigate();
 
   const maskEmail = (email) => {
     const atIndex = email.indexOf("@");
@@ -70,7 +53,6 @@ export default function UpdateProfile() {
     }
     return email;
   };
-
   // const validateField = (field) => {
   //   const newErrors = {};
   //   switch (field) {
@@ -130,7 +112,6 @@ export default function UpdateProfile() {
       window.location.reload();
     }
   };
-
   const updateUser = async (field, value) => {
     try {
       const response = await axiosInstance.patch(
@@ -166,7 +147,6 @@ export default function UpdateProfile() {
       }
     }
   };
-
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -196,7 +176,6 @@ export default function UpdateProfile() {
     const url = await getDownloadURL(storageRef);
     return url;
   };
-
   const handleImageChange = async () => {
     if (selectedFile) {
       const imageUrl = await handleUploadImage(selectedFile);
@@ -212,11 +191,9 @@ export default function UpdateProfile() {
       toast.error("Vui lòng chọn một tệp ảnh.");
     }
   };
-
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-
   const handleResendVerification = async () => {
     try {
       await axiosInstance.post("users/resend-verify-email", {});
@@ -229,7 +206,6 @@ export default function UpdateProfile() {
       toast.error("Gửi lại email xác minh thất bại.");
     }
   };
-
   const handleUpdateAll = async () => {
     const newErrors = {};
     const fieldsToUpdate = []; // Lưu trữ các trường cần cập nhật
@@ -297,10 +273,6 @@ export default function UpdateProfile() {
 
     // Reload page after update
     window.location.reload();
-  };
-  const handleClick = (componentName) => {
-    setCurrentComponent(componentName);
-    setActiveButton(componentName);
   };
   return (
     <Col

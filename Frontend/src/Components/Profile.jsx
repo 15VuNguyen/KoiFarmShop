@@ -47,7 +47,6 @@ const isValidURL = (urlString) => {
     return false;
   }
 };
-
 export default function Profile() {
   const [userData, setUserData] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
@@ -112,7 +111,6 @@ export default function Profile() {
   //   }
   //   return newErrors;
   // };
-
   const handleUpdate = async (field) => {
     const errors = validateField(field);
 
@@ -132,7 +130,6 @@ export default function Profile() {
       window.location.reload();
     }
   };
-
   const updateUser = async (field, value) => {
     try {
       const response = await axiosInstance.patch(
@@ -168,7 +165,6 @@ export default function Profile() {
       }
     }
   };
-
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -188,7 +184,6 @@ export default function Profile() {
     };
     fetchUserData();
   }, []);
-
   const maskedEmail =
     userData && userData.email ? maskEmail(userData.email) : "";
 
@@ -198,7 +193,6 @@ export default function Profile() {
     const url = await getDownloadURL(storageRef);
     return url;
   };
-
   const handleImageChange = async () => {
     if (userData.verify !== 1) {
       setShowVerificationModal(true);
@@ -214,7 +208,6 @@ export default function Profile() {
       toast.error("Vui lòng chọn một tệp ảnh.");
     }
   };
-
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };

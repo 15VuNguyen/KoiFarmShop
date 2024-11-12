@@ -30,9 +30,10 @@ export default function DonKyGui() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
+  const [consign, setConsign] = useState(null);
+  const showModal = (consign) => {
     setIsModalVisible(true);
+    setConsign(consign);
   };
 
   const navigate = useNavigate();
@@ -136,7 +137,7 @@ export default function DonKyGui() {
                   textAlign: "left",
                   marginBottom: "25px",
                   marginLeft: "15px",
-                  marginTop:'55px'
+                  marginTop: "55px",
                 }}
               >
                 Danh Sách Ký Gửi Của Khách Hàng
@@ -258,9 +259,7 @@ export default function DonKyGui() {
                                 text = statusText[5]; // Use the last element for the -1 state
                               }
 
-                              return (
-                                <Text style={{ color }}>{statusText}</Text>
-                              );
+                              return <Text style={{ color }}>{text}</Text>;
                             })()}
                           </Text>
 
@@ -372,33 +371,53 @@ export default function DonKyGui() {
                                 }).format(consign.TotalPrice)
                               : "Chờ bên shop định giá"}
                           </Text>
-                          <Button
-                            type="primary"
-                            style={{ marginLeft: "10px" }}
-                            onClick={() => {
-                              navigate(`/`);
-                            }}
-                          >
-                            Chat ngay
-                          </Button>
-                          <Button
-                            style={{ marginLeft: "10px" }}
-                            type="default"
-                            onClick={() => {
-                              navigate(`/chitiet`, {
-                                state: { consign },
-                              });
-                            }}
-                          >
-                            Chi tiết
-                          </Button>
-                          <Button
-                            style={{ marginLeft: "10px", color: "red" }}
-                            type="danger" // This should apply the red color
-                            onClick={showModal}
-                          >
-                            Xóa đơn ký gửi
-                          </Button>
+                          {consign.State !== -1 && (
+                            <div>
+                              <Button
+                                type="primary"
+                                style={{ marginLeft: "10px" }}
+                                onClick={() => {
+                                  navigate(`/`);
+                                }}
+                              >
+                                Chat ngay
+                              </Button>
+                              <Button
+                                style={{ marginLeft: "10px" }}
+                                type="default"
+                                onClick={() => {
+                                  navigate(`/chitiet`, {
+                                    state: { consign },
+                                  });
+                                }}
+                              >
+                                Chi tiết
+                              </Button>
+                              <Button
+                                style={{ marginLeft: "10px", color: "red" }}
+                                type="danger" // This should apply the red color
+                                onClick={() => showModal(consign)}
+                              >
+                                Xóa đơn ký gửi
+                              </Button>
+                            </div>
+                          )}
+                          {consign.State === -1 && (
+                            <div>
+                              <Button
+                                style={{
+                                  marginLeft: "10px",
+                                  color: "red",
+                                  cursor: "not-allowed",
+                                  opacity: 0.5,
+                                }}
+                                type="danger"
+                                disabled
+                              >
+                                Đã hủy
+                              </Button>
+                            </div>
+                          )}
                           <Modal
                             title="Xác nhận xóa"
                             visible={isModalVisible}
