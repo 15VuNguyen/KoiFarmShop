@@ -1,4 +1,4 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space,Select } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space,Select,Typography } from "antd";
 import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
@@ -133,7 +133,17 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       dataIndex: 'address',
       key: 'address',
       render: (text) => text || <Tag color="red">Không cung cấp</Tag>,
-    },{
+    },
+    {
+      title: 'website',
+      dataIndex: 'website',
+      key: 'website',
+      render: (text) =>  text ?<Tooltip
+        title={'Trang web của người dùng'}
+      > <Typography.Link href={text} target="_blank">{text}</Typography.Link></Tooltip> : <Tag color="red">Không cung cấp</Tag>,
+
+    },
+    {
       title: 'Email đã xác minh',
       dataIndex: 'verify',
       key: 'verify',
@@ -154,7 +164,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
           <Button
             type="primary"
             style={{ marginRight: 8 }}
-            onClick={() => handleActionClick('update', record._id)}
+            onClick={() => handleActionClick('update', record.username)}
           >
             Cập nhật
           </Button>
@@ -209,6 +219,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
     { label: 'Email đã xác minh', value: 'verify' },
     { label: 'Hành động', value: 'Status' },
     { label: 'Ảnh đại diện', value: 'picture' },
+    { label: 'website', value: 'website' },
   
   ];
   const handleChange = selectedItems => {

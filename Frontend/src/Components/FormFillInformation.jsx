@@ -11,9 +11,14 @@ import { useAuth } from "../Context/AuthContext";
 import { Spin, message, Descriptions } from "antd";
 import { checkDiscountPrice, getCard, getCardList } from "../services/loyaltyCardService";
 import { createOrder, getOrderDetail } from "../services/orderService";
+import { AutoComplete } from "antd";
+import useAddress from "../An/Ant Design/Components/useAddress";
 export default function FormFillInformation() {
   // const orderDetail = useOrder(); // Đảm bảo rằng hàm này trả về giá trị hợp lệ
-
+  const { searchText,
+    setSearchText,
+    recommendations,
+  } = useAddress();
   const navigate = useNavigate();
   const location = useLocation()
   const [userData, setUserData] = useState();
@@ -124,8 +129,8 @@ export default function FormFillInformation() {
 
   const fetchOrderDetail = async () => {
     try {
-      const {data} = await getOrderDetail()
-      if(data){
+      const { data } = await getOrderDetail()
+      if (data) {
         console.log("order detail: ", data.result)
         setOrderDetail(data.result.orderDT)
       }
@@ -161,9 +166,9 @@ export default function FormFillInformation() {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchOrderDetail()
-  },[isApplyDiscount])
+  }, [isApplyDiscount])
 
   useEffect(() => {
     handleApplyDiscount();
@@ -202,7 +207,7 @@ export default function FormFillInformation() {
   //   }
   // }
 
-  const handlePayment = async(e) => {
+  const handlePayment = async (e) => {
     try {
       const orderData = {
         Name: name ? name : userData?.name,
@@ -226,7 +231,7 @@ export default function FormFillInformation() {
         }
       }
     } catch (error) {
-      console.error({message: error.message})
+      console.error({ message: error.message })
     }
   }
 
@@ -280,8 +285,8 @@ export default function FormFillInformation() {
                       <Form.Control 
                         type="text" placeholder="Nhập tên của bạn" required
                         value={userData?.name}
-                        onChange={(e)=> {
-                          handleUpdateUserData('name',e.target.value)
+                        onChange={(e) => {
+                          handleUpdateUserData('name', e.target.value)
                           setName(e.target.value)
                         }}
                       />
@@ -296,8 +301,8 @@ export default function FormFillInformation() {
                       <Form.Control 
                         type="tel" placeholder="Nhập số điện thoại của bạn" required 
                         value={userData?.phone_number}
-                        onChange={(e)=> {
-                          handleUpdateUserData('phone_number',e.target.value)
+                        onChange={(e) => {
+                          handleUpdateUserData('phone_number', e.target.value)
                           setPhoneNumber(e.target.value)
                         }}
                       />
@@ -312,11 +317,16 @@ export default function FormFillInformation() {
                       <Form.Control 
                         type="text" placeholder="Nhập địa chỉ nhận hàng"  required 
                         value={userData?.address}
-                        onChange={(e)=>{
+                        onChange={(e) => {
                           handleUpdateUserData('address', e.target.value)
                           setAddress(e.target.value)
                         }}
-                      />
+                      /> */}
+                      <AutoComplete style={{width:'100%'}} value={userData?.address} onChange={e=>{
+                        handleUpdateUserData('address', e)
+                        setAddress(e)
+                        setSearchText(e)
+                      }} options={recommendations.map((address) => ({ value: address }))} placeholder="Enter your shipping address" />
                     </Col>
                   </Form.Group>
                   {/* <div className="text-center">
@@ -421,7 +431,7 @@ export default function FormFillInformation() {
                     Lưu ý cho người bán:
                   </Form.Label>
                   <Col sm={8}>
-                    <Form.Control 
+                    <Form.Control
                       as="textarea"
                       rows={3}
                       placeholder="Mô tả"
@@ -435,7 +445,7 @@ export default function FormFillInformation() {
                   <h5 className="price-title">Tổng tiền hàng</h5>
                   <p className="price">₫{totalPrice.toLocaleString('vi-VN')}</p>
                 </div>
-                {discount && discount.totalDiscount>0 && (
+                {discount && discount.totalDiscount > 0 && (
                   <div className="voucher price-content">
                     <h5 className="price-title">Tổng mã giảm</h5>
                     <p className="price"><span className="discount-note">({userCard?.RankName + " thành viên " + userCard?.SalePercent}%)</span> -₫{discount.totalDiscount.toLocaleString("vi-VN")}</p>
