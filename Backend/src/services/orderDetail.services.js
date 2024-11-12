@@ -95,7 +95,8 @@ class OrderDetailService {
                 .find({
                     CategoryID: payload.CategoryID,
                     Breed: payload.Breed,
-                    Size: { $lt: 15 }
+                    Size: { $lt: 15 },
+                    GroupKoiID: payload.GroupKoiID
                 })
                 .toArray();
         }
@@ -104,7 +105,8 @@ class OrderDetailService {
                 .find({
                     CategoryID: payload.CategoryID,
                     Breed: payload.Breed,
-                    Size: { $gte: 15, $lt: 18 }
+                    Size: { $gte: 15, $lt: 18 },
+                    GroupKoiID: payload.GroupKoiID
                 })
                 .toArray();
         }
@@ -113,7 +115,8 @@ class OrderDetailService {
                 .find({
                     CategoryID: payload.CategoryID,
                     Breed: payload.Breed,
-                    Size: { $gte: 18, $lt: 20 }
+                    Size: { $gte: 18, $lt: 20 },
+                    GroupKoiID: payload.GroupKoiID
                 })
                 .toArray();
         }
@@ -122,7 +125,8 @@ class OrderDetailService {
                 .find({
                     CategoryID: payload.CategoryID,
                     Breed: payload.Breed,
-                    Size: Number(payload.Size)
+                    Size: Number(payload.Size),
+                    GroupKoiID: payload.GroupKoiID
                 })
                 .toArray();
         }
