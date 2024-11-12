@@ -159,7 +159,20 @@ export default function OrdersNext() {
                 else {
                     return <Tag icon={< CheckOutlined />} color="error">Đã Hủy</Tag>
                 }
-            }
+            },
+            filters: [
+                {
+                    text: 'Đang chờ thanh toán',
+                    value: 1,
+                },
+                {
+                    text: 'Đã thanh toán',
+                    value: 2,
+                },
+            ],
+            filterMultiple: false,
+            onFilter: (value, record) => record.Status === value,
+
         },
         {
             title: 'Hành Động',
