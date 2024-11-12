@@ -113,12 +113,12 @@ export default function OrderDetail({ orderId, onClose, currentStatus }) {
                             </Col>
                                 <Col span={8}>
                                     {currentStatus === 1 ? (
-                                        <Tag icon={<SyncOutlined spin />} color="success" style={{ padding: '8px 16px', fontSize: '14px' }}>
-                                            Đang Giao
+                                        <Tag icon={<SyncOutlined spin />} color="processing" style={{ padding: '8px 16px', fontSize: '14px' }}>
+                                            Đang Chờ Thanh Toán
                                         </Tag>
                                     ) : currentStatus === 2 ? (
-                                        <Tag icon={<CheckOutlined />} color="processing" style={{ padding: '8px 16px', fontSize: '14px' }}>
-                                            Giao thành công
+                                        <Tag icon={<CheckOutlined />} color="green" style={{ padding: '8px 16px', fontSize: '14px' }}>
+                                            Đã Thanh Toán
                                         </Tag>
                                     ) : (
                                         <Tag color="default" style={{ padding: '8px 16px', fontSize: '14px' }}>

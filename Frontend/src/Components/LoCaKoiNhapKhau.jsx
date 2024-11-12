@@ -22,16 +22,15 @@ export default function Locakoinhapkhau() {
         if (response.status === 200) {
           const groupedData = response.data.reduce((acc, group) => {
             const firstKoi = group.result[0];
-            const koiCount = group.result.length;
-
+            const koiCount = group.result.filter(
+              (koi) => koi.Status === 1
+            ).length;
             acc[group.groupId] = {
               firstKoi,
               koiCount,
             };
-
             return acc;
           }, {});
-
           setKoiData(groupedData);
         } else {
           console.error("Unexpected response status:", response.status);
@@ -79,7 +78,14 @@ export default function Locakoinhapkhau() {
               key={groupId}
               hoverable
               cover={
-                <img alt={firstKoi.KoiName || "Koi"} src={firstKoi.Image} />
+                <img
+                  alt={firstKoi.KoiName || "Koi"}
+                  src={firstKoi.Image}
+                  style={{
+                    width: "100%",
+                    height: "300px",
+                  }}
+                />
               }
               style={{
                 borderRadius: "8px",

@@ -11,11 +11,11 @@ export default class LoyaltyCardSchema {
   constructor(loyaltyCard) {
     this._id = loyaltyCard?._id ?? new ObjectId() // tự tạo id
     this.UserID = loyaltyCard.UserID || ''
-    const rankValue = ['Silver', 'Gold', 'Platinum', 'Diamond']
+    const rankValue = ['Bạc', 'Vàng', 'Bạch Kim', 'Kim Cương']
     if(rankValue.includes(loyaltyCard.RankName)){
         this.RankName = loyaltyCard.RankName || ''
     }else{
-        throw new Error(`RankName must be one of ${rankValue.join(', ')}`);
+        throw new Error(`Bậc phải là 1 trong ${rankValue.join(', ')}`);
     }
     this.Point = loyaltyCard.Point || 0
     this.SalePercent = loyaltyCard.SalePercent || 0

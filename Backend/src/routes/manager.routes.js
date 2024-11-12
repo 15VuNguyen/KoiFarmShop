@@ -2,6 +2,7 @@ import {
   createNewInvoiceGroupKoiController,
   createNewServiceController,
   getKoiAllController,
+  getLoyalUserListController,
   getOrdeDetails,
   getProfitController,
   getRevenueController,
@@ -67,6 +68,9 @@ managerRouter.post(
 managerRouter.get('/manage-ki-gui/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getAllConsignController))
 
 managerRouter.get('/manage-ki-gui/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getConsignDetailController))
+
+managerRouter.get('/manage-loyalty-card/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getLoyalUserListController))
+
 
 managerRouter.put(
   '/manage-ki-gui/:_id',

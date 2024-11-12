@@ -4,6 +4,7 @@ import { FaPhone } from "react-icons/fa"; // Separate import for FaPhone
 import { FaLocationDot } from "react-icons/fa6"; // Separate import for FaLocationDot
 import { SiGmail } from "react-icons/si";
 import "./Css/footerStyle.css";
+import img1 from "../assets/logo.png";
 const { Footer } = Layout;
 const { Title, Paragraph } = Typography;
 const accessToken = localStorage.getItem("accessToken");
@@ -47,11 +48,7 @@ const FooterComponent = () => {
             </span>
           </div>
           <div>
-            <img
-              src="src/assets/logo.png"
-              alt="Logo"
-              style={{ maxWidth: "200px" }}
-            />
+            <img src={img1} alt="Logo" style={{ maxWidth: "200px" }} />
           </div>
           <div>
             <span
@@ -303,40 +300,6 @@ const FooterComponent = () => {
               style={{ color: "white", textDecoration: "none" }}
             >
               Lô Koi mới về
-            </a>
-          </div>
-          <span
-            style={{
-              borderBottom: "3px solid white",
-              fontWeight: "bold",
-              fontSize: "15px",
-              paddingRight: "45px",
-            }}
-          >
-            Chính sách
-          </span>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách mua hàng
-            </a>
-          </div>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách bảo mật
-            </a>
-          </div>
-          <div style={{ marginBottom: "8px" }}>
-            <a
-              href="/chinhsachvanchuyen"
-              style={{ color: "white", textDecoration: "none" }}
-            >
-              Chính sách vận chuyển
             </a>
           </div>
         </div>

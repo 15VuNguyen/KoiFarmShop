@@ -9,13 +9,13 @@ const validatePhoneNumber = (phoneNumber) => {
   if (parsedNumber && parsedNumber.isValid()) {
     return parsedNumber.number;  // Trả về số điện thoại chuẩn quốc tế
   } else {
-    return {message: "Invalid Phone Number"};
+    return {message: "Số điện thoại không hợp lệ"};
   }
 };
 
 export async function sendOTPCode(user, payload) {
   if(!payload.PhoneNumber){
-    return {message: "Phone number is required!"}
+    return {message: "Cần nhập số điện thoại"}
   }
   const validatedPhoneNumber = validatePhoneNumber(payload.PhoneNumber)
   if(validatedPhoneNumber.message){
@@ -29,16 +29,16 @@ export async function sendOTPCode(user, payload) {
   });
   
   if (existedAccount) {
-    return { message: "The user has a loyalty card already!" }
+    return { message: "Bạn đã có tài khoản rồi" }
   }
   if (existedPhoneNumber) {
-    return { message: "An account already exists for this phone number!" }
+    return { message: "Số điện thoại đã đăng kí" }
   }
   let userPhoneNumber = validatePhoneNumber(user.phone_number).message ? "" : validatePhoneNumber(user.phone_number)
   console.log(userPhoneNumber)
   console.log(validatedPhoneNumber)
   if (!userPhoneNumber.trim && validatedPhoneNumber !== userPhoneNumber) {
-    return { message: "Please use the phone number associated with this account!" }
+    return { message: "Vui lòng sử dụng số điện thoại đã liên kết với tài khoản của bạn" }
   }
   userPhoneNumber = validatedPhoneNumber
   await databaseService.users.updateOne({ _id: user._id }, { $set: { phone_number: userPhoneNumber } })

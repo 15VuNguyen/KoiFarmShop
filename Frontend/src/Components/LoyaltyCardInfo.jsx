@@ -22,8 +22,11 @@ export default function LoyaltyCardInfo() {
   const [card, setCard] = useState(null);
   const [nextRankValue, setNextRankValue] = useState(null);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [maxPoint, setMaxPoint] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [imgName, setImgName] = useState("Silver");
   const [isShowRegisterForm, setIsShowRegisterForm] = useState(false);
+  const [refresh, setRefresh] = useState(false)
   const {currentUser} = useAuth()
 
   useEffect(()=>{
@@ -40,9 +43,29 @@ export default function LoyaltyCardInfo() {
 
         if (data && data.result) {
           setCard(data.result.loyaltyCard);
+          setMaxPoint(data.result.loyaltyCard.maxPoint)
+          console.log("rank: ", data.result)
+          switch (data.result.loyaltyCard.RankName) {
+            case "Bạc":
+              setImgName("Silver")
+              break;
+            case "Vàng":
+              setImgName("Gold")
+              break;
+            case "Bạch Kim":
+              setImgName("Platinum")
+              break;
+            case "Kim Cương":
+              setImgName("Diamond")
+              break;
+            default:
+              break;
+          }
           setNextRankValue(data.result.nextRank)
+          setLoading(false)
         } else {
           console.error("Don't have card, register first");
+          setLoading(false)
         }
       } catch (error) {
         console.error("Error fetching card information:", error);
@@ -52,7 +75,7 @@ export default function LoyaltyCardInfo() {
     };
 
     fetchCardInfo();
-  }, [currentUser]);
+  }, [refresh]);
 
   const handleRegister = async () => {
     setIsShowRegisterForm(true)
@@ -61,6 +84,10 @@ export default function LoyaltyCardInfo() {
   const handleClose = () => {
     setIsShowRegisterForm(false)
   }
+
+  const handleRefresh = () => {
+    setRefresh(!refresh); 
+  };
 
   if (loading) {
     return (
@@ -93,7 +120,7 @@ export default function LoyaltyCardInfo() {
       {!loading && card && user ? (
         <div className="card-page-container">
         <div className="card-info">
-          <img src={`../src/card_pic/${card.RankName}.png`}/>
+          <img src={`../src/card_pic/${imgName}.png`}/>
           {/* <div className="card-content">   */}
             <div className="cardHeader">
               <span className="content-header">{card.RankName}</span>
@@ -101,9 +128,9 @@ export default function LoyaltyCardInfo() {
             </div>
             <div className="progressBar text-center">
               <ProgressBarFormat 
-                now={Math.round(card.Point * 100 / nextRankValue.maxPoints)}
+                now={Math.round(card.Point * 100 / maxPoint)}
               />
-              <p>Thêm {nextRankValue.maxPoints - card.Point} điểm để đạt member {nextRankValue.name}</p>
+              <p>Thêm {maxPoint - card.Point} điểm để đạt thành viên {nextRankValue?.name}</p>
             </div>
           {/* </div> */}
         </div>
@@ -115,7 +142,7 @@ export default function LoyaltyCardInfo() {
           show = {isShowRegisterForm}
           handleClose = {handleClose}
           setCard = {setCard}
-          setLoading = {setLoading}
+          onRegisterSuccess = {handleRefresh}
         />
         <Empty
           description="No data"

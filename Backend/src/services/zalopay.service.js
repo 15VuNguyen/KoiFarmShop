@@ -1,5 +1,6 @@
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
+import { v1 as uuidv1 } from 'uuid'
 import moment from 'moment'
 
 const zaloPayment = async (req, res) => {
@@ -18,7 +19,7 @@ const zaloPayment = async (req, res) => {
     redirecturl: 'http://localhost:3000/',
     orderDetails: reqOrderDTCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
     order: reqOrderCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
-    loyaltyCard: reqDiscountCookie
+    loyaltyCard: reqDiscountCookie,
   }
 
   const items = [{}]
@@ -33,7 +34,7 @@ const zaloPayment = async (req, res) => {
     amount: req.body.total,
     description: `KOI Shop - Payment for the order + ${Math.floor(100000 + Math.random() * 900000)}`,
     bank_code: '',
-    callback_url: 'https://koi-farm-shop.onrender.com/payment/callback'
+    callback_url: 'https://72d3-171-247-178-74.ngrok-free.app/payment/callback'
   }
 
   // Tạo MAC cho yêu cầu

@@ -6,7 +6,7 @@ export default function Gioithieuvekoif1page() {
   return (
     <div>
       <Navbar />
-      <div style={{ backgroundColor: "#470101" }}>
+      <div>
         <GioiThieuVeKoiF1 />
       </div>
       <CustomerChatButton />

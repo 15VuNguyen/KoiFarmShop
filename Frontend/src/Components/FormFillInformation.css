@@ -55,13 +55,16 @@
     opacity: 1;
     transform: translateY(0);
   }
-  .save-btn{
-    background-color: #fff;
-    border: 1px solid #ccc;
-  }
-  .save-btn:hover{
-    border-color: rgb(119, 180, 254);    
-    color: rgb(119, 180, 254);
+  .change-btn{
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    span{
+        font-size: 12px;
+        padding: 5px;
+        font-family: inherit;
+        font-weight: bold;
+    }
   }
 .product-info{
 
@@ -85,12 +88,17 @@
         opacity: 1;
     }
     .voucher-title{
-    
+        font-size: 20px;
     }
     .voucher-list{
         display: grid;
         grid-template-columns: auto auto auto auto;
         gap: 20px;
+    }
+    .discount-btn{
+        padding: 15px;
+        font-size: 12px;
+        font-weight: bold;
     }
     .voucher-detail{
         /* border: 1px solid #ccc;
@@ -155,10 +163,52 @@
     padding-bottom: 15px;
 }
 .total{
+    .payment-method{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 65% 35%;
+        .payment-detail{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .payment-selector{
+            display: grid;
+            grid-template-columns: 100% 53%;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(0);
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
+            .selector{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .selector p{
+                padding: 10px;
+                border-radius: 2px;
+            }
+            .selector p:hover{
+                background-color: #ffbe6e;
+            }
+            .selector .active{
+                border: 1px solid orange;
+                background-color: orange;
+            }
+        }
+        .payment-selector.show{
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(20px);
+            .selector p{
+               cursor: pointer;
+            }
+        }
+    }
     .total-info-form{
         display: grid;
         grid-template-columns: 60% 40%;
-        padding-top: 20px;
+        padding-top: 20px;  
         .total-detail{
             .price-content{
                 display: grid;
@@ -184,4 +234,12 @@
             }
         }
     }
+}
+.pay-btn{
+    border-radius: 2px;
+
+}
+.pay-btn:hover{
+    background-color: rgba(247, 73, 42,0.7);
+    border-color: rgba(247, 73, 42,0.7);
 }

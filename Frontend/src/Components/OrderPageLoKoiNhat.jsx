@@ -45,59 +45,6 @@ const OrderPage = () => {
     // Cuộn lên đầu trang khi component được mount
     window.scrollTo(0, 0);
   }, []); // Chỉ chạy khi component được mount
-  useEffect(() => {
-    const sendOrderDetails = async () => {
-      try {
-        const response = await axiosInstance.post("/order/detail/price", {
-          Size: selectedItem.Size,
-          Breed: selectedItem.Breed,
-          CategoryID: selectedItem.CategoryID,
-          Status: selectedItem.Status,
-          GroupKoiID: selectedItem.GroupKoiID,
-        });
-        //
-        if (response.status === 200) {
-          let maxQty;
-          if (
-            selectedItem.Size >= 5 &&
-            selectedItem.Size <= 14 &&
-            selectedItem.Status !== 4 &&
-            selectedItem.Status !== 1
-          ) {
-            maxQty = 39;
-            setSelectedQuantity(39); // Default to 39
-            setMaxQuantity(response.data.result.CategoryName.Quantity); // Update maxQuantity
-          } else if (
-            selectedItem.Size >= 15 &&
-            selectedItem.Size <= 17 &&
-            selectedItem.Status !== 4 &&
-            selectedItem.Status !== 1
-          ) {
-            maxQty = 25;
-            setSelectedQuantity(25); // Default to 25
-            setMaxQuantity(response.data.result.CategoryName.Quantity); // Update maxQuantity
-          } else if (
-            selectedItem.Size >= 18 &&
-            selectedItem.Size <= 20 &&
-            selectedItem.Status !== 4 &&
-            selectedItem.Status !== 1
-          ) {
-            maxQty = 12; // Default to 12, with an extra 3
-            setSelectedQuantity(12);
-            setMaxQuantity(response.data.result.CategoryName.Quantity); // Update maxQuantity
-          } else {
-            maxQty = response.data.result.CategoryName.Quantity; // Fallback for other sizes
-            setSelectedQuantity(1); // Default to 1 for other sizes
-            setMaxQuantity(maxQty); // Update maxQuantity
-          }
-        }
-      } catch (error) {
-        console.error("Error sending order details:", error);
-      }
-    };
-    sendOrderDetails();
-    console.log("Test" + maxQuantity);
-  }, [selectedItem]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -565,23 +512,23 @@ const OrderPage = () => {
                               fontSize: "20px",
                               textAlign: "left",
                               color: "red",
-                              paddingTop: "10px",
                             }}
                           >
                             <strong>Combo: </strong>
-                            <InputNumber
+                            <input
+                              type="number"
                               style={{
                                 fontSize: "14px",
                                 color: "red",
                                 width: "48%",
                               }}
                               value={comboQuantity}
-                              onChange={(value) => {
-                                const newValue = Math.max(value, 1);
-                                setComboQuantity(newValue);
-                                setSelectedQuantity(newValue * 25);
+                              onChange={(e) => {
+                                const value = Math.max(e.target.value, 1);
+                                setComboQuantity(value);
+                                setSelectedQuantity(value * 25);
                               }}
-                              min={1}
+                              min="1"
                             />
                           </Paragraph>
                         )}
@@ -594,11 +541,10 @@ const OrderPage = () => {
                               fontSize: "20px",
                               textAlign: "left",
                               color: "red",
-                              paddingTop: "10px",
                             }}
                           >
                             <strong>Combo: </strong>
-                            <InputNumber
+                            <input
                               type="number"
                               style={{
                                 fontSize: "14px",
@@ -624,11 +570,10 @@ const OrderPage = () => {
                                 fontSize: "20px",
                                 textAlign: "left",
                                 color: "red",
-                                paddingTop: "10px",
                               }}
                             >
                               <strong>Combo: </strong>
-                              <InputNumber
+                              <input
                                 type="number"
                                 style={{
                                   fontSize: "14px",
@@ -699,7 +644,7 @@ const OrderPage = () => {
                         onClick={() => {
                           if (
                             !isAddedToCart &&
-                            selectedQuantity > maxQuantity &&
+                            selectedQuantity <= maxQuantity &&
                             !error &&
                             !isButtonDisabled
                           ) {

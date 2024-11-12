@@ -6,7 +6,10 @@ import "../Css/koiStyle.css";
 import { Layout } from "antd";
 import { Typography } from "antd";
 import "../Css/koiStyle.css";
-const { Title, Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
+import img1 from "../../assets/Koi Bekko/ca-koi-bekko.webp";
+import img2 from "../../assets/img_4.png";
+import img3 from "../../assets/img_5.png";
 import { Spin } from "antd"; // Import the Spin component
 export default function Bekko() {
   const [menu, setMenu] = useState("home");
@@ -216,30 +219,81 @@ export default function Bekko() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Cá Koi Bekko là giống cá gì?
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Đặc điểm của cá Koi Bekko
                       <ul>
                         <li style={{ paddingTop: "10px" }}>
-                          <span onClick={handleScroll21} className="contentBox">
+                          <span
+                            onClick={handleScroll21}
+                            className="contentBox"
+                            style={{
+                              cursor: "pointer",
+                              color: "#920202",
+                            }}
+                          >
                             2.1 Giá cá koi Shusui F1
                           </span>
                         </li>
                         <li style={{ paddingTop: "10px" }}>
-                          <span onClick={handleScroll22} className="contentBox">
+                          <span
+                            onClick={handleScroll22}
+                            className="contentBox"
+                            style={{
+                              cursor: "pointer",
+                              color: "#920202",
+                            }}
+                          >
                             2.2 Giá cá koi Shusui Nhật chuẩn
                           </span>
                         </li>
                         <li style={{ paddingTop: "10px" }}>
-                          <span onClick={handleScroll23} className="contentBox">
+                          <span
+                            onClick={handleScroll23}
+                            className="contentBox"
+                            style={{
+                              cursor: "pointer",
+                              color: "#920202",
+                            }}
+                          >
                             2.3 Giá cá koi Shusui Nhật chuẩn
                           </span>
                         </li>
@@ -247,17 +301,38 @@ export default function Bekko() {
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách phân biệt giữa Shiro Bekko và Shiro Utsuri
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách lựa chọn cá Koi Bekko đẹp nhất
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Nên mua cá Koi bekko ở đâu.
                     </span>
                   </li>
@@ -282,7 +357,13 @@ export default function Bekko() {
                 </div>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   1. Cá Koi Bekko là giống cá gì?
                 </h3>
                 <div>
@@ -303,14 +384,22 @@ export default function Bekko() {
                     là: Shi Bekko, Aka Bekko, Ki Bekko
                   </Paragraph>
                   <div style={{ textAlign: "center" }}>
-                    <img src="src/assets/Koi Bekko/ca-koi-bekko.webp" />
+                    <img src={img1} />
                     <Text>Cá Koi Bekko</Text>
                   </div>
                 </div>
               </div>
 
               <div id="detailed-content">
-                <h3 style={{ color: "red" }}>2. Đặc điểm của cá Koi Bekko</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2. Đặc điểm của cá Koi Bekko
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Như ở phần trên đã nói cá Koi Bekko được chia ra làm 3 loại
                   khác nhau. Mỗi loại lại có đặc điểm về thân hình và màu sắc
@@ -318,7 +407,11 @@ export default function Bekko() {
                 </Paragraph>
                 <ul style={{ fontSize: "15px", fontWeight: "400" }}>
                   <li>
-                    <span id="21" className="span-Style">
+                    <span
+                      id="21"
+                      className="span-Style"
+                      style={{ color: "rgb(146, 2, 2)" }}
+                    >
                       2.1 Aka Bekko : {""}
                     </span>
                     <Paragraph className="paragraph-Style">
@@ -332,7 +425,11 @@ export default function Bekko() {
                     </Paragraph>
                   </li>
                   <li>
-                    <span id="22" className="span-Style">
+                    <span
+                      id="22"
+                      className="span-Style"
+                      style={{ color: "rgb(146, 2, 2)" }}
+                    >
                       2.2 Ki Bekko : {""}
                     </span>
                     <Paragraph className="paragraph-Style">
@@ -345,7 +442,11 @@ export default function Bekko() {
                     </Paragraph>
                   </li>
                   <li>
-                    <span id="23" className="span-Style">
+                    <span
+                      id="23"
+                      className="span-Style"
+                      style={{ color: "rgb(146, 2, 2)" }}
+                    >
                       2.3 Shiro Bekko : {""}
                     </span>
                     <Paragraph className="paragraph-Style">
@@ -359,7 +460,13 @@ export default function Bekko() {
                 </ul>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   3. Cách phân biệt giữa Shiro Bekko và Shiro Utsuri
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -380,7 +487,13 @@ export default function Bekko() {
                 </Paragraph>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách lựa chọn cá Koi Bekko đẹp nhất
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -435,14 +548,20 @@ export default function Bekko() {
                 </ul>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Nên mua cá Koi bekko ở đâu.{" "}
                 </h3>
                 <Paragraph className="paragraph-Style">
                   Siêu thị cá Koi là đơn vị cung cấp cá Koi Bekko thuần chủng
-                  chất lượng uy tín trên toàn quốc. Cá Koi Bekko tại có màu
-                  sắc rõ nét vàng, đỏ hoặc trắng, các đốm sumi sậm, phân biệt
-                  hoàn toàn với màu sắc tổng thể của cá. Đặc biệt phần đầu sạch,
+                  chất lượng uy tín trên toàn quốc. Cá Koi Bekko tại có màu sắc
+                  rõ nét vàng, đỏ hoặc trắng, các đốm sumi sậm, phân biệt hoàn
+                  toàn với màu sắc tổng thể của cá. Đặc biệt phần đầu sạch,
                   không xuất hiện bất cứ vệt sumi nào.
                   <br />
                   Bên cạnh đó mã cá đẹp, thân hình to lớn, dáng bơi uyển chuyển,
@@ -466,10 +585,10 @@ export default function Bekko() {
         </Container>
         <div style={{ display: "flex" }}>
           <div>
-            <img src="src/assets/img_4.png" />
+            <img src={img2} />
           </div>
           <div style={{ textAlign: "center" }}>
-            <img src="src/assets/img_5.png" />
+            <img src={img3} />
           </div>
         </div>
         <div>

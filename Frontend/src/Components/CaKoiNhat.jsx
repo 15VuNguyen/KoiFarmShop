@@ -9,7 +9,34 @@ import { Typography } from "antd";
 import { Table } from "react-bootstrap";
 import "./Css/koiStyle.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import img1 from "../assets/CaKoiNhat/1.webp";
+import img2 from "../assets/CaKoiNhat/2.webp";
+import img3 from "../assets/CaKoiNhat/3.webp";
+import img4 from "../assets/CaKoiNhat/4-1.jpg";
+import img5 from "../assets/CaKoiNhat/4-2.png";
+import img6 from "../assets/CaKoiNhat/5.webp";
+import img7 from "../assets/CaKoiNhat/6.jpg";
+import img8 from "../assets/CaKoiNhat/7.jpg";
+import img9 from "../assets/CaKoiNhat/8.jpg";
+import img10 from "../assets/CaKoiNhat/9.webp";
+import img11 from "../assets/CaKoiNhat/10.webp";
+import img12 from "../assets/CaKoiNhat/11.webp";
+import img13 from "../assets/CaKoiNhat/12.webp";
+import img14 from "..//assets/CaKoiNhat/13.webp";
+import img15 from "../assets/CaKoiNhat/14.webp";
+import img16 from "../assets/CaKoiNhat/16.webp";
+import img17 from "../assets/CaKoiNhat/16.webp";
+import img18 from "../assets/CaKoiNhat/17.webp";
+import img19 from "../assets/CaKoiNhat/19.webp";
+import img20 from "../assets/CaKoiNhat/20.webp";
+import img21 from "../assets/CaKoiNhat/21.webp";
+import img22 from "../assets/CaKoiNhat/22.webp";
+import img23 from "../assets/CaKoiNhat/23.jpg";
+import img24 from "../assets/CaKoiNhat/24.webp";
+import img25 from "../assets/CaKoiNhat/25.webp";
+import img26 from "../assets/CaKoiNhat/26.webp";
+import img27 from "../assets/CaKoiNhat/27.webp";
+import img28 from "../assets/CaKoiNhat/28.webp";
 export default function CaKoiNhat() {
   const handleScroll1 = () => {
     const element = document.getElementById("1");
@@ -896,16 +923,30 @@ export default function CaKoiNhat() {
       <Container>
         <div style={{ paddingTop: "100px" }}>
           <div>
-            <div className="body_StyleKoiOfPage">
+            <div
+              className="body_StyleKoiOfPage"
+              style={{ backgroundColor: "#ead8c8" }}
+            >
               <Title level={2} style={{ color: "red" }}>
                 Nội Dung Bài Viết
               </Title>
-              <ul style={{ marginTop: "10px" }}>
+              <ul
+                style={{
+                  marginTop: "10px",
+                  backgroundColor: "#ead8c8",
+                  paddingTop: "10px",
+                  textDecoration: "none",
+                  listStyleType: "none",
+                }}
+              >
                 <li style={{ paddingTop: "10px" }}>
                   <Text
                     onClick={handleScroll1}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     1. Tìm hiểu về cá Koi là cá gì
                   </Text>
@@ -914,7 +955,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll11}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         1.1. Nguồn gốc của cá Koi
                       </Text>
@@ -923,7 +967,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll12}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         1.2. Đặc điểm của cá koi thuần chủng
                       </Text>
@@ -932,7 +979,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll13}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         1.3. Đặc tính sinh sản, sinh trưởng của cá koi
                       </Text>
@@ -941,7 +991,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll14}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         1.4. Phân loại cá koi
                       </Text>
@@ -952,7 +1005,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll2}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     2. Các loại cá Koi phổ biến được ưa chuộng trên thị trường
                   </Text>
@@ -961,7 +1017,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll21}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.1. Tìm hiểu về Cá koi Kohaku
                       </Text>
@@ -970,7 +1029,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll22}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.2. Tìm hiểu về cá koi Chagoi
                       </Text>
@@ -979,7 +1041,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll23}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.3. Tìm hiểu về cá koi Taisho Sanke
                       </Text>
@@ -988,7 +1053,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll24}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.4. Tìm hiểu về cá koi showa sanshoku (showa)
                       </Text>
@@ -997,7 +1065,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll25}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.5. Tìm hiểu về cá koi showa sanshoku (showa)
                       </Text>
@@ -1006,7 +1077,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll26}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.6. Tìm hiểu về cá koi Hikari Utsuri
                       </Text>
@@ -1015,7 +1089,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll27}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.7. Tìm hiểu cá koi Bekko
                       </Text>
@@ -1024,7 +1101,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll28}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.8. Tìm hiểu về cá koi Asagi
                       </Text>
@@ -1033,7 +1113,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll29}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.9. Tìm hiều về cá koi Goshiki
                       </Text>
@@ -1042,7 +1125,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll210}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.10. Tìm hiểu Cá koi Karashi
                       </Text>
@@ -1051,7 +1137,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll211}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.11. Tìm hiểu về cá koi Benigoi (mud pond)
                       </Text>
@@ -1060,7 +1149,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll212}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.12. Cá Koi Hikarimuji mono
                       </Text>
@@ -1069,7 +1161,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll213}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.13. Cá koi Hikarimoyo
                       </Text>
@@ -1078,7 +1173,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll214}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.14. Tìm hiểu về cá koi Shiro Utsuri(Bò Sữa)
                       </Text>
@@ -1087,7 +1185,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll215}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.15. Tìm hiểu về cá koi Shusui
                       </Text>
@@ -1096,7 +1197,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll216}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.16. Cá Koi Tancho
                       </Text>
@@ -1105,7 +1209,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll217}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.17. Tìm hiểu cá koi Bướm
                       </Text>
@@ -1114,7 +1221,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll218}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         2.18. Tìm hiểu về cá koi Kin/Ginrin
                       </Text>
@@ -1125,7 +1235,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll3}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     3. Các giống Koi Kohaku phổ biến nhất
                   </Text>
@@ -1134,7 +1247,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll31}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         3.1. Ý nghĩa của cá Koi trong văn hóa các quốc gia
                       </Text>
@@ -1143,7 +1259,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll32}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         3.2. Ý nghĩa phong thủy của cá Koi
                       </Text>
@@ -1152,7 +1271,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll33}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         3.3. Ý nghĩa của cá chép koi theo màu sắc
                       </Text>
@@ -1163,7 +1285,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll4}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     4. Sự khác nhau giữa Koi Kohaku Nhật, Koi Kohaku F1
                   </Text>
@@ -1172,7 +1297,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll5}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     5. Cách chọn cá Koi Kohaku
                   </Text>
@@ -1181,7 +1309,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll51}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         5.1. Dựa vào nguồn gốc xuất xứ
                       </Text>
@@ -1190,7 +1321,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll52}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         5.2. Dựa trên màu sắc
                       </Text>
@@ -1199,7 +1333,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll53}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         5.3. Dựa trên độ sức khỏe của cá koi
                       </Text>
@@ -1208,7 +1345,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll54}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         5.4. Dựa trên thân hình của cá
                       </Text>
@@ -1219,7 +1359,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll6}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     6. Cách chăm sóc Koi Kohaku
                   </Text>
@@ -1228,7 +1371,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll61}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         6.1. Đặc điểm về màu sắc
                       </Text>
@@ -1237,7 +1383,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll62}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         6.2. Dựa vào hình dáng
                       </Text>
@@ -1246,7 +1395,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll63}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         6.3. Dựa vào đặc tính
                       </Text>
@@ -1257,7 +1409,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll7}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     7. Chăm sóc cá Koi như thế nào cho lên màu đẹp và mau lớn
                   </Text>
@@ -1266,7 +1421,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll71}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         7.1. Hồ nuôi cá koi
                       </Text>
@@ -1275,7 +1433,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll72}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         7.2. Thức ăn của cá koi
                       </Text>
@@ -1284,7 +1445,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll73}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         7.3. Cách chăm sóc và cách nuôi cá koi chuẩn nhất
                       </Text>
@@ -1295,7 +1459,10 @@ export default function CaKoiNhat() {
                   <Text
                     onClick={handleScroll8}
                     className="contentBox"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#920202",
+                    }}
                   >
                     8. Các bệnh thường gặp ở cá koi
                   </Text>
@@ -1304,7 +1471,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll81}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         8.1. Cá Koi bị đỏ mình
                       </Text>
@@ -1313,7 +1483,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll82}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         8.2. Bệnh Cá Koi nằm đáy, co mình, hay nhảy khỏi mặt
                         nước.
@@ -1323,7 +1496,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll83}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         8.3. Cá Koi bị stress
                       </Text>
@@ -1332,7 +1508,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll84}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         8.4. Cá koi bị nhát người
                       </Text>
@@ -1341,7 +1520,10 @@ export default function CaKoiNhat() {
                       <Text
                         onClick={handleScroll85}
                         className="contentBox"
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                          color: "#920202",
+                        }}
                       >
                         8.5. Cá Koi bị đục mắt
                       </Text>
@@ -1351,7 +1533,10 @@ export default function CaKoiNhat() {
                     <Text
                       onClick={handleScroll9}
                       className="contentBox"
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       9. Giá cá Koi bao nhiêu tại IKoi
                     </Text>
@@ -1360,7 +1545,10 @@ export default function CaKoiNhat() {
                     <Text
                       onClick={handleScroll10}
                       className="contentBox"
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
                     >
                       10. Mua cá Koi Nhật ở đâu đẹp, đảm bảo chất lượng uy tín
                     </Text>
@@ -1381,7 +1569,15 @@ export default function CaKoiNhat() {
               </Paragraph>
             </div>
             <div id="1">
-              <h3 style={{ color: "red" }}>1. Tìm hiểu về cá Koi là cá gì</h3>
+              <h3
+                style={{
+                  color: "rgb(146, 2, 2)",
+                  backgroundColor: "#ead8c8",
+                  padding: "10px",
+                }}
+              >
+                1. Tìm hiểu về cá Koi là cá gì
+              </h3>
               <div>
                 <Paragraph className="paragraph-Style">
                   Cá Koi là một tên gọi của một giống cá có quan hệ gần với cá
@@ -1417,7 +1613,7 @@ export default function CaKoiNhat() {
                     hoặc cá chép có nhiều màu sắc.
                   </Paragraph>
                   <div style={{ textAlign: "center" }}>
-                    <img src="src/assets/CaKoiNhat/1.webp" />
+                    <img src={img1} />
                     <Paragraph className="paragraph-Style">
                       Cá Koi có nguồn gốc từ Nhật Bản
                     </Paragraph>
@@ -1490,7 +1686,7 @@ export default function CaKoiNhat() {
                       </li>
                     </ul>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/2.webp" />
+                      <img src={img2} />
                       <Paragraph className="paragraph-Style">
                         Cá Koi có tuổi thọ cao
                       </Paragraph>
@@ -1528,7 +1724,7 @@ export default function CaKoiNhat() {
                     nhiều màu, bị lem hoặc bị biến dạng thì sẽ bị loại và không
                     được chọn.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/3.webp" />
+                      <img src={img3} />
                       <Paragraph className="paragraph-Style">
                         Cá Koi có nhiều loại với vẻ đẹp khác nhau
                       </Paragraph>
@@ -1566,7 +1762,14 @@ export default function CaKoiNhat() {
                 </div>
               </div>
               <div id="detailed-content">
-                <h3 style={{ color: "red" }} id="2">
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    backgroundColor: "#ead8c8",
+                    padding: "10px",
+                  }}
+                  id="2"
+                >
                   2. Các loại cá Koi phổ biến được ưa chuộng trên thị trường
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -1595,7 +1798,7 @@ export default function CaKoiNhat() {
                     một trong những dòng cá có tuổi thọ cao. Chính vì vậy mà nó
                     còn được gọi là “Cá Trường Thọ”.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/4-1.jpg" />
+                      <img src={img4} />
                       <Paragraph>Cá koi Kohaku</Paragraph>
                     </div>
                   </div>
@@ -1620,7 +1823,7 @@ export default function CaKoiNhat() {
                     Giống cá này khá phàm ăn, do đó chúng lớn nhanh chóng và dễ
                     dàng đạt được kích thước lớn sau một thời gian ngắn nuôi.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/4-2.png" />
+                      <img src={img5} />
                       <Paragraph className="paragraph-Style">
                         Cá Koi Chagoi là một dòng cá được nuôi phổ biến
                       </Paragraph>
@@ -1653,7 +1856,7 @@ export default function CaKoiNhat() {
                     sanshoku có phần sumi nhiều hơn, xuất hiện ở đầu xuống tới
                     miệng còn Taisho Sanke thì hoàn toàn không có.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/5.webp" />
+                      <img src={img6} />
                       <Paragraph className="paragraph-Style">
                         Phân biệt cá koi Showa và Sanke
                       </Paragraph>
@@ -1680,7 +1883,7 @@ export default function CaKoiNhat() {
                     trắng hoặc màu sắc trắng sữa, xen lẫn vào là màu đỏ hết sức
                     đặc biệt
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/6.jpg" />
+                      <img src={img7} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Goromo
                       </Paragraph>
@@ -1694,7 +1897,7 @@ export default function CaKoiNhat() {
                     Utsuri thuộc dòng cá kim loại có màu sắc cơ bản bao gồm là
                     đen - vàng, đen - trắng, đen - cam…
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/7.jpg" />
+                      <img src={img8} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Hikari Utsuri
                       </Paragraph>
@@ -1722,7 +1925,7 @@ export default function CaKoiNhat() {
                     cho ra những hậu duệ của giống Asagi Magoi (Narumi là tên
                     của ngôi làng sản sinh ra toàn bộ giống Asagi)..
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/8.jpg" />
+                      <img src={img9} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Asagi
                       </Paragraph>
@@ -1738,7 +1941,7 @@ export default function CaKoiNhat() {
                     này. Nếu thả loại cá koi này vào nước lạnh thì màu của nó có
                     khả năng sẽ tối hơn so với bình thường
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/9.webp" />
+                      <img src={img10} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Goshiki - kẻ đánh cắp ánh đèn sân khấu
                       </Paragraph>
@@ -1758,7 +1961,7 @@ export default function CaKoiNhat() {
                     trị của cá koi Karashi dần dần mới được công nhận, và nhanh
                     chóng trở nên nổi tiếng và được nhiều người yêu thích.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/10.webp" />
+                      <img src={img11} />
                       <Paragraph className="paragraph-Style">
                         Đây là loại cá lớn nhanh, dễ đạt kích cỡ lớn sau 2-3 năm
                         nuôi thích hợp, cá có khả năng thích nghi cao với môi
@@ -1786,7 +1989,7 @@ export default function CaKoiNhat() {
                     là loại cá có khá dễ sống, có khả năng thích nghi cao với
                     môi trường
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/11.webp" />
+                      <img src={img12} />
                       <Paragraph className="paragraph-Style">
                         Koi Benigoi toàn thân màu đỏ như một quả ớt khổng lồ,
                         phần vây có thể phản quang nếu thuộc biến thể Ginrin
@@ -1813,7 +2016,7 @@ export default function CaKoiNhat() {
                     sắc. Có 4 loại cá Koi Hikarimoyo phổ biến nhất tại Việt Nam
                     là Kujaku, Yamatonishiki, Hariwake và Kikusui.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/12.webp" />
+                      <img src={img13} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Hariwake có thân màu trắng ánh kim, điểm thêm màu
                         đỏ, cam hoặc vàng trên cơ thể
@@ -1837,7 +2040,7 @@ export default function CaKoiNhat() {
                     mà koi Shiro Utsuri được giá là thanh cao, thuần túy, màu
                     sắc không bị can thiệp bởi thành phần thức ăn.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/13.webp" />
+                      <img src={img14} />
                       <Paragraph className="paragraph-Style">
                         Koi Shiro Utsuri với tông màu đen trắng nổi bật, còn
                         được gọi với cái tên quen thuộc là koi Bò Sữa
@@ -1859,7 +2062,7 @@ export default function CaKoiNhat() {
                     dọc theo 2 hàng vảy màu xanh đậm, đối xứng nhau, dọc trên
                     sống lưng của cá. Cá có thân hình tròn trịa và da trơn nhẵn.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/14.webp" />
+                      <img src={img15} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Shusui sở hữu tông màu mà diện mạo đẹp, nổi bật
                         với phần vảy màu xanh đậm dọc sống lưng
@@ -1877,7 +2080,7 @@ export default function CaKoiNhat() {
                     các tia vây rõ, màu sáng, mắt to, râu dài và thân tròn, đầu
                     hơi gù.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/15.jpg" />
+                      <img src={img16} />
                       <Paragraph className="paragraph-Style">
                         Cá koi Tancho
                       </Paragraph>
@@ -1903,7 +2106,7 @@ export default function CaKoiNhat() {
                     không có màu giống nhau mà sẽ có các màu khác nhau và pha
                     trộn với nhau khá hài hòa.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/16.webp" />
+                      <img src={img17} />
                       <Paragraph className="paragraph-Style">
                         Cặp cá koi bướm đẹp óng ánh
                       </Paragraph>
@@ -1929,7 +2132,7 @@ export default function CaKoiNhat() {
                     quang được sắp xếp gọn gàng, ngay ngắn, dọc 2 bên lưng cá.
                     Mỗi con có ít nhất 2 hàng vảy, lý tưởng nhất là 3 hàng.
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/17.webp" />
+                      <img src={img18} />
                       <Paragraph className="paragraph-Style">
                         Koi Ginrin có phần vảy ở lưng phát quang lấp lánh và óng
                         ánh, tạo hiệu ứng thẩm mỹ cao, được nhiều người yêu
@@ -1939,7 +2142,13 @@ export default function CaKoiNhat() {
                   </div>
                 </Paragraph>
                 <div id="3">
-                  <h3 style={{ color: "red" }}>
+                  <h3
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     3. Ý nghĩa của cá Koi trong đời sống và văn hóa
                   </h3>
                   <div>
@@ -2022,7 +2231,7 @@ export default function CaKoiNhat() {
                       </li>
                     </ul>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/19.webp" />
+                      <img src={img19} />
                       <Paragraph className="paragraph-Style">
                         Mỗi màu sắc trên thân cá tượng trưng có ý nghĩa phong
                         thủy khác nhau
@@ -2037,7 +2246,13 @@ export default function CaKoiNhat() {
                   </div>
                 </div>
                 <div id="4">
-                  <h3 style={{ color: "red", fontWeight: "600" }}>
+                  <h3
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     4. Cách lựa chọn cá Koi đẹp phù hợp với phong thủy
                   </h3>
                   <Paragraph className="paragraph-Style">
@@ -2078,7 +2293,7 @@ export default function CaKoiNhat() {
                       </li>
                     </ul>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/20.webp" />
+                      <img src={img20} />
                       <Paragraph className="paragraph-Style">
                         Chọn loại cá phù hợp với sở thích người nuôi
                       </Paragraph>
@@ -2086,7 +2301,13 @@ export default function CaKoiNhat() {
                   </Paragraph>
                 </div>
                 <div id="5">
-                  <h3 style={{ color: "red", fontWeight: "600" }}>
+                  <h3
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     5. Lưu ý khi lựa chọn cá koi đẹp, hợp phong thủy
                   </h3>
                   <Paragraph className="paragraph-Style">
@@ -2138,7 +2359,7 @@ export default function CaKoiNhat() {
                       ở trên để không bị nhầm lẫn khi lựa chọn.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/21.webp" />
+                      <img src={img21} />
                       <Paragraph className="paragraph-Style">
                         Dựa vào màu sắc của cá
                       </Paragraph>
@@ -2162,7 +2383,7 @@ export default function CaKoiNhat() {
                       chứng tỏ cá có khả năng phát triển tốt.
                     </Paragraph>
                     <div>
-                      <img src="src/assets/CaKoiNhat/22.webp" />
+                      <img src={img22} />
                       <Paragraph className="paragraph-Style">
                         Dựa vào màu sắc của cá
                       </Paragraph>
@@ -2185,7 +2406,7 @@ export default function CaKoiNhat() {
                       C, D.
                     </Paragraph>
                     <div>
-                      <img src="src/assets/CaKoiNhat/23.jpg" />
+                      <img src={img23} />
                       <Paragraph className="paragraph-Style">
                         Dựa trên thân hình của cá
                       </Paragraph>
@@ -2205,7 +2426,13 @@ export default function CaKoiNhat() {
                   </div>
                 </div>
                 <div id="6">
-                  <h3 style={{ color: "red" }}>
+                  <h3
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     6. Phân biệt cá Koi Nhật thuần chủng và cá Koi Việt Nam
                   </h3>
                   <Paragraph className="paragraph-Style">
@@ -2284,7 +2511,13 @@ export default function CaKoiNhat() {
                   </div>
                 </div>
                 <div id="7">
-                  <h3 style={{ color: "red" }}>
+                  <h3
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     7. Chăm sóc cá Koi như thế nào cho lên màu đẹp và mau lớn
                   </h3>
                   <Paragraph className="paragraph-Style">
@@ -2310,7 +2543,7 @@ export default function CaKoiNhat() {
                       <li>Hàm lượng Oxy tối thiểu trong nước là 2,5mg/l;</li>
                     </ul>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/24.webp" />
+                      <img src={img24} />
                       <Paragraph className="paragraph-Style">
                         Hồ nuôi cá Koi
                       </Paragraph>
@@ -2379,7 +2612,7 @@ export default function CaKoiNhat() {
                       </li>
                     </ul>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/25.webp" />
+                      <img src={img25} />
                       <Paragraph className="paragraph-Style">
                         Chọn thức ăn cho cá phù hợp
                       </Paragraph>
@@ -2434,7 +2667,7 @@ export default function CaKoiNhat() {
                         </li>
                       </ul>
                       <div style={{ textAlign: "center" }}>
-                        <img src="src/assets/CaKoiNhat/26.webp" />
+                        <img src={img26} />
                         <Paragraph className="paragraph-Style">
                           Hồ cá koi cần được trang bị đầy đủ hệ thống lọc
                         </Paragraph>
@@ -2443,7 +2676,13 @@ export default function CaKoiNhat() {
                   </div>
                 </div>
                 <div id="8">
-                  <h4 style={{ color: "red" }}>
+                  <h4
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     8. Các bệnh thường gặp ở cá koi
                   </h4>
                   <Paragraph className="paragraph-Style">
@@ -2462,7 +2701,7 @@ export default function CaKoiNhat() {
                       đã bị nhiễm bệnh trước đó..
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/27.webp" />
+                      <img src={img27} />
                       <Paragraph className="paragraph-Style">
                         Cá Koi bị đỏ mình
                       </Paragraph>
@@ -2508,7 +2747,7 @@ export default function CaKoiNhat() {
                       của cá koi.
                     </Paragraph>
                     <div style={{ textAlign: "center" }}>
-                      <img src="src/assets/CaKoiNhat/28.webp" />
+                      <img src={img28} />
                       <Paragraph className="paragraph-Style">
                         Cá Koi bị stress
                       </Paragraph>
@@ -2571,7 +2810,13 @@ export default function CaKoiNhat() {
                   </div>
                 </div>
                 <div id="9">
-                  <h4 style={{ color: "red" }}>
+                  <h4
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     9. Giá cá Koi bao nhiêu tại IKoi
                   </h4>
                   <Paragraph className="paragraph-Style">
@@ -2610,7 +2855,13 @@ export default function CaKoiNhat() {
                   </Paragraph>
                 </div>
                 <div id="10">
-                  <h4 style={{ color: "red" }}>
+                  <h4
+                    style={{
+                      color: "rgb(146, 2, 2)",
+                      backgroundColor: "#ead8c8",
+                      padding: "10px",
+                    }}
+                  >
                     10. Mua cá Koi Nhật ở đâu đẹp, đảm bảo chất lượng uy tín
                   </h4>
                   <Paragraph className="paragraph-Style">

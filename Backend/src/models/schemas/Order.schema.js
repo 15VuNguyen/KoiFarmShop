@@ -24,6 +24,6 @@ export default class OrdersSchema {
     this.OrderDate = order?.OrderDate ?? new Date()
     this.TotalPrice = order.TotalPrice || 0
     this.Type = order?.Type || 'cart'
-    this.Status = order.Status || "1"
+    this.Status = order.Status || 1
   }
 }

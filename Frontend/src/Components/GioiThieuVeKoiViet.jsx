@@ -52,9 +52,7 @@ export default function GioiThieuVeKoiViet() {
               color: "rgb(255, 178, 0)",
             }}
           >
-            <h1 style={{ color: "rgb(255, 178, 0)" }}>
-              Giới thiệu về Koi Việt
-            </h1>
+            <h1 style={{ color: "#920202" }}>Giới thiệu về Koi Việt</h1>
           </div>
           <div style={{ paddingTop: "50px" }}>
             <div style={{ textAlign: "center" }}>
@@ -62,7 +60,7 @@ export default function GioiThieuVeKoiViet() {
                 style={{
                   fontWeight: "600",
                   fontSize: "30px",
-                  color: "rgb(255, 178, 0)",
+                  color: "#920202",
                 }}
               >
                 Cá Koi Việt Là Gì? Đặc Điểm, Cách Phân Biệt Với Cá Koi Nhật Bản
@@ -73,7 +71,6 @@ export default function GioiThieuVeKoiViet() {
                 style={{
                   fontSize: "20px",
                   fontWeight: "bold",
-                  color: "#e4cfb1",
                 }}
               >
                 Cá Koi Việt đang ngày càng trở thành lựa chọn phổ biến trong
@@ -84,10 +81,10 @@ export default function GioiThieuVeKoiViet() {
               </Paragraph>
             </div>
             <div>
-              <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
+              <h3 style={{ fontWeight: "600", color: "#920202" }}>
                 1. Cá Koi Việt Là Gì?
               </h3>
-              <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+              <Paragraph style={{ fontSize: "20px" }}>
                 Cá Koi Việt là những sản phẩm nuôi trồng tại Việt Nam, có nguồn
                 gốc từ cá Koi Nhật Bản. Chúng được lai tạo và nuôi dưỡng để phù
                 hợp với điều kiện khí hậu và môi trường tại Việt Nam. Cá Koi
@@ -99,10 +96,10 @@ export default function GioiThieuVeKoiViet() {
               </div>
             </div>
             <div>
-              <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
+              <h3 style={{ fontWeight: "600", color: "#920202" }}>
                 2. Quy trình nuôi cá Koi Việt
               </h3>
-              <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+              <Paragraph style={{ fontSize: "20px" }}>
                 Để tạo ra những con cá Koi Việt chất lượng, quy trình nuôi cần
                 đảm bảo từ khâu lựa chọn giống đến chăm sóc. Trại nuôi cần chăm
                 sóc cá bố mẹ cẩn thận để đảm bảo sức khỏe và chất lượng trứng.
@@ -112,21 +109,21 @@ export default function GioiThieuVeKoiViet() {
               </div>
             </div>
             <div>
-              <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
+              <h3 style={{ fontWeight: "600", color: "#920202" }}>
                 3. Hướng dẫn phân biệt cá Koi Việt và cá Koi thuần chủng
               </h3>
-              <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+              <Paragraph style={{ fontSize: "20px" }}>
                 Để phân biệt cá Koi Việt và cá Koi thuần chủng, bạn có thể dựa
                 vào một số tiêu chí như hình dáng, màu sắc và giá cả.
               </Paragraph>
               <ul>
                 <li>
-                  <span id="31" style={{ fontSize: "20px", color: "#e4cfb1" }}>
+                  <span id="31" style={{ fontSize: "20px", color: "#920202" }}>
                     3.1 Màu Sắc
                   </span>
                   <ul>
                     <li>
-                      <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+                      <Paragraph style={{ fontSize: "20px" }}>
                         Cá Koi thuần chủng thường có màu sắc rõ nét và đậm,
                         trong khi cá Koi Việt có thể có màu sắc nhạt hơn và
                         không rõ ràng.
@@ -138,42 +135,30 @@ export default function GioiThieuVeKoiViet() {
                   </ul>
                 </li>
                 <li>
-                  <span
-                    id="32"
-                    style={{ fontSize: "20px", color: "rgb(255, 178, 0)" }}
-                  >
+                  <span id="32" style={{ fontSize: "20px", color: "#920202" }}>
                     3.2 Hình Dáng
                   </span>
-
                   <div style={{ backgroundColor: "#470101" }}>
-                    <Table
-                      striped
-                      bordered
-                      hover
-                      style={{ backgroundColor: "#470101" }}
-                    >
-                      <thead style={{ backgroundColor: "#470101" }}>
+                    <Table striped bordered hover>
+                      <thead>
                         <tr>
                           <th
                             style={{
-                              color: "rgb(255, 178, 0)",
-                              backgroundColor: "#470101",
+                              color: "#920202",
                             }}
                           >
                             Tiêu Chí
                           </th>
                           <th
                             style={{
-                              color: "rgb(255, 178, 0)",
-                              backgroundColor: "#470101",
+                              color: "#920202",
                             }}
                           >
                             Cá Koi Thuần Chủng
                           </th>
                           <th
                             style={{
-                              color: "rgb(255, 178, 0)",
-                              backgroundColor: "#470101",
+                              color: "#920202",
                             }}
                           >
                             Cá Koi Việt
@@ -183,30 +168,9 @@ export default function GioiThieuVeKoiViet() {
                       <tbody>
                         {data.map((item, index) => (
                           <tr key={index}>
-                            <td
-                              style={{
-                                color: "#e4cfb1",
-                                backgroundColor: "#470101",
-                              }}
-                            >
-                              {item.criteria}
-                            </td>
-                            <td
-                              style={{
-                                color: "#e4cfb1",
-                                backgroundColor: "#470101",
-                              }}
-                            >
-                              {item.purebred}
-                            </td>
-                            <td
-                              style={{
-                                color: "#e4cfb1",
-                                backgroundColor: "#470101",
-                              }}
-                            >
-                              {item.viet}
-                            </td>
+                            <td style={{}}>{item.criteria}</td>
+                            <td style={{}}>{item.purebred}</td>
+                            <td style={{}}>{item.viet}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -217,13 +181,10 @@ export default function GioiThieuVeKoiViet() {
                   </div>
                 </li>
                 <li>
-                  <span
-                    id="33"
-                    style={{ fontSize: "20px", color: "rgb(255, 178, 0)" }}
-                  >
+                  <span id="33" style={{ fontSize: "20px", color: "#920202" }}>
                     3.3 Chi phí của cá Koi
                   </span>
-                  <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+                  <Paragraph style={{ fontSize: "20px" }}>
                     Cá Koi Việt thường có giá thành thấp hơn so với cá Koi thuần
                     chủng, điều này làm cho nó trở thành lựa chọn hợp lý cho
                     nhiều người yêu cá. Giá cá Koi Việt có thể dao động tùy
@@ -236,13 +197,13 @@ export default function GioiThieuVeKoiViet() {
               </ul>
             </div>
             <div>
-              <h3 style={{ fontWeight: "600", color: "rgb(255, 178, 0)" }}>
+              <h3 style={{ fontWeight: "600", color: "#920202" }}>
                 4. Nên Mua Cá Koi Nhật Hay Cá Koi Việt
               </h3>
               <div style={{ textAlign: "center" }}>
                 <img src={img6} alt="Koi Viet 6" style={{ width: "30%" }} />
               </div>
-              <Paragraph style={{ fontSize: "20px", color: "#e4cfb1" }}>
+              <Paragraph style={{ fontSize: "20px" }}>
                 Quyết định mua cá Koi Nhật hay cá Koi Việt phụ thuộc vào sở
                 thích và ngân sách của người nuôi. Cá Koi Việt thường có giá rẻ
                 hơn và phù hợp với nhiều người hơn, trong khi cá Koi Nhật lại

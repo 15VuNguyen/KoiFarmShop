@@ -129,8 +129,8 @@ export default function TrackingOrderPage() {
                     ))}
                   </td>
                   <td>{new Date(order.OrderDate).toLocaleString()}</td>
-                  <td>{order.TotalPrice.toLocaleString()} VND</td>
-                  <td style={{ color: "green" }}>Đã thanh toán</td>
+                  <td>{order.TotalPrice.toLocaleString()} ₫</td>
+                  <td>{order.Status == 1 ? <span style={{color:"red"}}>Chưa Thanh Toán</span> : <span style={{color:"green"}}>Đã Thanh Toán</span>}</td>
                 </tr>
               ))
             ) : (

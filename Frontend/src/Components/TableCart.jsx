@@ -8,26 +8,6 @@ export default function ShoppingCart() {
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
-
-
-  // useEffect(() => {
-  //   const storedKoiList = JSON.parse(localStorage.getItem("koiList")) || [];
-  //   const storedTotalPrice =
-  //     parseFloat(localStorage.getItem("totalPrice")) || 0;
-
-  //   const updatedKoiList = storedKoiList.map((koi) => ({
-  //     ...koi,
-  //     quantity: koi.quantity || 1,
-  //   }));
-
-  //   setKoiList(updatedKoiList);
-  //   setTotalPrice(storedTotalPrice);
-
-  //   // Check if the koi list is empty and orderId is available
-  //   if (updatedKoiList.length === 0 && orderDetail?.orderId) {
-  //     fetchOrderDetails(orderDetail.orderId);
-  //   }
-  // }, [orderDetail]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
@@ -91,6 +71,9 @@ export default function ShoppingCart() {
 
       if (response.status === 200) {
         const { result } = response.data;
+
+        console.log("res: ", response)
+
 
         // Kiểm tra nếu có thông báo về số lượng không đủ
         if (
