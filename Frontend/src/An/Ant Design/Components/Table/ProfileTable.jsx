@@ -169,7 +169,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
             Cập nhật
           </Button>
           {
-            record.Status  == 1 ? (
+            record.StatusUser  ===  1 ? (
               <Button
                 type="primary"
                 onClick={() => handleActionClick('disable/enable', record._id,'enable')}

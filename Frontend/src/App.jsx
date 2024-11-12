@@ -60,6 +60,7 @@ import CaKoiNhat from "./Components/CaKoiNhat";
 import OrdersNext from "./An/Ant Design/Pages/Orders";
 import Kois from "./An/Ant Design/Pages/Kois";
 import Gioithieuvekoif1page from "./Components/Page/Gioithieu/gioithieuvekoif1";
+import NotFound from "./An/Ant Design/Components/NotFound";
 //AN
 import Chitietconsignpage from "./Components/Page/Thongtincuauser/chitietconsignPage";
 import Changepasswordpage from "./Components/Page/Thongtincuauser/changepasswordPage";
@@ -72,6 +73,10 @@ import NguongoccuaikoiPage from "./Components/Page/Gioithieu/nguongoccuaikoiPage
 import Profilepage from "./Components/Page/Thongtincuauser/profilePage";
 import Chart from "./An/Ant Design/Pages/Chart";
 const router = createBrowserRouter([
+  {
+    path: "*",
+    element: <NotFound />,
+  },
   {
     path: "/login/oauth",
     element: <Login />,
@@ -274,7 +279,7 @@ const router = createBrowserRouter([
         element: <Kois />,
       },
       {
-        path: "staff/Report/:chartType",
+        path: "staff/Report/",
         element: <Chart />,
       }
     ],
@@ -343,6 +348,9 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        
+      }
     ],
   },
 ]);
