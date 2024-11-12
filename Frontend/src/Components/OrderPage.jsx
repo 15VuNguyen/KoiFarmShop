@@ -123,50 +123,7 @@ const OrderPage = () => {
     console.log("categoryName" + categoryName);
   }, [selectedItem, categoryData]);
   // Hàm này dùng để kiểm tra coi số lượng cá trong kho còn không
-  const checkStockAvailability = async () => {
-    if (!selectedItem || !selectedQuantity) return;
-    let requestData = {
-      Quantity: parseInt(selectedQuantity),
-    };
-    if (selectedItem.Status === 4 || selectedItem.Status === 1) {
-      requestData.KoiID = selectedItem._id;
-    } else {
-      requestData.Size = parseInt(selectedItem.Size);
-      requestData.Breed = selectedItem.Breed;
-      requestData.CategoryID = selectedItem.CategoryID;
-    }
-    try {
-      const response = await axiosInstance.post(
-        "/order/detail/makes",
-        requestData,
-        {
-          withCredentials: true,
-        }
-      );
 
-      if (response.status === 200) {
-        const { result } = response.data;
-        if (
-          typeof result === "string" &&
-          result.includes("0 available in stock")
-        ) {
-          setError(result);
-          setIsButtonDisabled(true);
-        } else {
-          setError("");
-          setIsButtonDisabled(false);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      setError("Có lỗi xảy ra! " + (error.response?.data?.message || ""));
-      setIsButtonDisabled(true);
-    }
-  };
-  useEffect(() => {
-    checkStockAvailability();
-  }, [selectedItem, selectedQuantity]);
-  // Hàm này dùng để thêm cá koi vào giỏ hàng
   const handleAddToCart = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -477,7 +434,6 @@ const OrderPage = () => {
                               }}
                               type="number"
                               min={1}
-                              max={maxQuantity}
                               value={selectedQuantity}
                               onChange={(value) => {
                                 if (value >= 0) {
@@ -668,7 +624,16 @@ const OrderPage = () => {
                         type="primary"
                         danger
                         size="large"
-                        onClick={handleOrderNow}
+                        onClick={() => {
+                          if (
+                            !isAddedToCart &&
+                            selectedQuantity <= maxQuantity &&
+                            !error &&
+                            !isButtonDisabled
+                          ) {
+                            handleOrderNow();
+                          }
+                        }}
                         disabled={!!error || isButtonDisabled}
                         className={`order-button ${
                           isAddedToCart ||
@@ -689,7 +654,16 @@ const OrderPage = () => {
                             ? "disabled"
                             : ""
                         }`}
-                        onClick={handleAddToCart}
+                        onClick={() => {
+                          if (
+                            !isAddedToCart &&
+                            selectedQuantity <= maxQuantity &&
+                            !error &&
+                            !isButtonDisabled
+                          ) {
+                            handleAddToCart();
+                          }
+                        }}
                         loading={loading}
                         size="large"
                         disabled={!!error || isButtonDisabled}
