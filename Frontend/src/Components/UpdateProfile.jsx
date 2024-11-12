@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Row, Col, Input, Button, Modal, Form } from "antd";
+import { Row, Col, Input, Button, Modal, Form, AutoComplete } from "antd";
 import axiosInstance from "../An/Utils/axiosJS";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
+import useAddress from "../An/Ant Design/Components/useAddress";
 // Firebase config
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -43,7 +43,23 @@ export default function UpdateProfile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [websiteError, setWebsiteError] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
-
+  const { searchText, setSearchText, recommendations } = useAddress();
+  const [formData, setFormData] = useState(null);
+  const handleAddressChange = (value) => {
+    setSearchText(value);
+    setUserData((prevData) => ({
+      ...prevData,
+      address: value,
+    }));
+  };
+  const [form] = Form.useForm();
+  // Handle select suggestion
+  const handleSelect = (value) => {
+    setUserData((prevData) => ({
+      ...prevData,
+      address: value,
+    }));
+  };
   const maskEmail = (email) => {
     const atIndex = email.indexOf("@");
     if (atIndex > 2) {
@@ -53,70 +69,22 @@ export default function UpdateProfile() {
     }
     return email;
   };
-  // const validateField = (field) => {
-  //   const newErrors = {};
-  //   switch (field) {
-  //     case "username":
-  //       if (!isValidUsername(userData.username)) {
-  //         newErrors.username = "Tên đăng nhập không được có ký tự đặc biệt.";
-  //       }
-  //       break;
-  //     case "name":
-  //       if (!isValidNameOrAddress(userData.name)) {
-  //         newErrors.name =
-  //           "Tên không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-  //       }
-  //       break;
-  //     case "address":
-  //       if (!isValidNameOrAddress(userData.address)) {
-  //         newErrors.address =
-  //           "Địa chỉ không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-  //       }
-  //       break;
-  //     case "phone_number":
-  //       if (!isValidPhoneNumber(userData.phone_number)) {
-  //         newErrors.phone_number = "Số điện thoại phải từ 10 đến 11 chữ số.";
-  //       }
-  //       break;
-  //     case "website":
-  //       if (userData.website && !isValidURL(userData.website)) {
-  //         setWebsiteError(
-  //           "Website không hợp lệ. Vui lòng nhập một URL hợp lệ."
-  //         );
-  //         return;
-  //       }
-  //       setWebsiteError(""); // Reset lỗi nếu URL hợp lệ
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return newErrors;
-  // };
-
-  const handleUpdate = async (field) => {
-    const errors = validateField(field);
-
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-
-    setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
-
-    if (userData.verify !== 1) {
-      setShowVerificationModal(true);
-      return;
-    } else {
-      await updateUser(field, userData[field]);
-      // Reload page after update
-      window.location.reload();
-    }
-  };
-  const updateUser = async (field, value) => {
+  const handleUpdateUser = async (values) => {
+    setLoading(true);
     try {
+      const dataToSend = {
+        name: formData.name,
+        address: formData.address,
+        phone_number: formData.phone_number,
+        website: formData.website,
+      };
+      if (formData.username !== originalUserData.username) {
+        dataToSend.username = formData.username;
+      }
+      console.log("Data to send:", dataToSend); // In dữ liệu để kiểm tra
       const response = await axiosInstance.patch(
         `/users/me`,
-        { [field]: String(value) },
+        dataToSend, // Send dataToSend directly
         {
           headers: {
             "Content-Type": "application/json",
@@ -145,8 +113,11 @@ export default function UpdateProfile() {
           );
         }
       }
+    } finally {
+      setLoading(false);
     }
   };
+  //Lay UserData từ api
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -154,7 +125,7 @@ export default function UpdateProfile() {
         const response = await axiosInstance.get("users/me");
         if (response.data) {
           setUserData(response.data.result);
-          setOriginalUserData(response.data.result); // Lưu trữ dữ liệu gốc
+          setOriginalUserData(response.data.result);
         } else {
           console.error("Dữ liệu không hợp lệ:", response.data);
         }
@@ -170,6 +141,7 @@ export default function UpdateProfile() {
   const maskedEmail =
     userData && userData.email ? maskEmail(userData.email) : "";
 
+  //Update anh profile
   const handleUploadImage = async (file) => {
     const storageRef = ref(storage, `images/${file.name}`);
     await uploadBytes(storageRef, file);
@@ -194,86 +166,42 @@ export default function UpdateProfile() {
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-  const handleResendVerification = async () => {
-    try {
-      await axiosInstance.post("users/resend-verify-email", {});
-      toast.success(
-        "Email xác minh đã được gửi lại. Sau khi xác nhận vui lòng đăng nhập lại để update"
-      );
-      setShowVerificationModal(false);
-    } catch (error) {
-      console.error("Lỗi khi gửi lại email xác minh:", error);
-      toast.error("Gửi lại email xác minh thất bại.");
+  //
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const handleFinishFailed = ({ errorFields }) => {
+    if (errorFields.length > 0) {
+      const firstErrorField = errorFields[0].name[0];
+      const element = document.getElementsByName(firstErrorField)[0];
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.focus();
+      }
     }
   };
-  const handleUpdateAll = async () => {
-    const newErrors = {};
-    const fieldsToUpdate = []; // Lưu trữ các trường cần cập nhật
-
-    // Kiểm tra tên đăng nhập
-    if (userData.username !== originalUserData.username) {
-      if (!isValidUsername(userData.username)) {
-        newErrors.username = "Tên đăng nhập không được có ký tự đặc biệt.";
-      } else {
-        fieldsToUpdate.push("username");
-      }
+  useEffect(() => {
+    if (userData) {
+      form.setFieldsValue({
+        email: userData.email || "",
+        username: userData.username || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        website: userData.website || "",
+      });
+      setFormData({
+        ...formData,
+        email: userData.email || "",
+        username: userData.username || "",
+        name: userData.name || "",
+        address: userData.address || "",
+        phone_number: userData.phone_number || "",
+        website: userData.website || "",
+      });
     }
-
-    // Kiểm tra tên
-    if (userData.name !== originalUserData.name) {
-      if (!isValidNameOrAddress(userData.name)) {
-        newErrors.name =
-          "Tên không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-      } else {
-        fieldsToUpdate.push("name");
-      }
-    }
-
-    // Kiểm tra địa chỉ
-    if (userData.address !== originalUserData.address) {
-      if (!isValidNameOrAddress(userData.address)) {
-        newErrors.address =
-          "Địa chỉ không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-      } else {
-        fieldsToUpdate.push("address");
-      }
-    }
-
-    // Kiểm tra số điện thoại
-    if (userData.phone_number !== originalUserData.phone_number) {
-      if (!isValidPhoneNumber(userData.phone_number)) {
-        newErrors.phone_number = "Số điện thoại phải từ 10 đến 11 chữ số.";
-      } else {
-        fieldsToUpdate.push("phone_number");
-      }
-    }
-
-    // Kiểm tra website chỉ nếu có giá trị và khác với giá trị gốc
-    if (userData.website && userData.website !== originalUserData.website) {
-      if (!isValidURL(userData.website)) {
-        setWebsiteError("Website không hợp lệ. Vui lòng nhập một URL hợp lệ.");
-        return;
-      }
-      fieldsToUpdate.push("website");
-    }
-
-    // Nếu có lỗi, lưu lại và không thực hiện cập nhật
-    if (Object.keys(newErrors).length > 0) {
-      setValidationErrors(newErrors);
-      return;
-    }
-
-    // Nếu không có lỗi, thực hiện cập nhật
-    setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
-
-    const updatePromises = fieldsToUpdate.map((field) =>
-      updateUser(field, userData[field])
-    );
-    await Promise.all(updatePromises);
-
-    // Reload page after update
-    window.location.reload();
-  };
+  }, [userData]);
   return (
     <Col
       span={16}
@@ -313,132 +241,135 @@ export default function UpdateProfile() {
         {userData ? (
           <Row gutter={16}>
             <Col span={12}>
-              <Form layout="vertical">
+              <Form
+                layout="vertical"
+                onFinish={handleUpdateUser}
+                form={form}
+                initialValues={userData} // Set initial values here
+                onFinishFailed={handleFinishFailed}
+              >
                 <Form.Item label="Email">
                   <Input disabled value={maskedEmail} />
                 </Form.Item>
-                <Form.Item label="Tên đăng nhập">
-                  <Input
-                    value={userData.username}
-                    onChange={(e) => {
-                      const updatedUserData = {
-                        ...userData,
-                        username: e.target.value,
-                      };
-                      setUserData(updatedUserData);
-
-                      // Kiểm tra ngay lập tức khi giá trị thay đổi
-                      const errors = validateField("username");
-                      setValidationErrors((prev) => ({
-                        ...prev,
-                        ...errors,
-                      }));
-                    }}
-                  />
-                  {validationErrors.username && (
-                    <p style={{ color: "red" }}>{validationErrors.username}</p>
-                  )}
-                </Form.Item>
-
-                <Form.Item label="Tên">
-                  <Input
-                    value={userData.name}
-                    onChange={(e) => {
-                      const updatedUserData = {
-                        ...userData,
-                        name: e.target.value,
-                      };
-                      setUserData(updatedUserData);
-
-                      // Kiểm tra ngay lập tức khi giá trị thay đổi
-                      const errors = validateField("name");
-                      setValidationErrors((prev) => ({
-                        ...prev,
-                        ...errors,
-                      }));
-                    }}
-                  />
-                  {validationErrors.name && (
-                    <p style={{ color: "red" }}>{validationErrors.name}</p>
-                  )}
-                </Form.Item>
-
-                <Form.Item label="Address">
-                  <Input
-                    value={userData.address}
-                    onChange={(e) => {
-                      const updatedUserData = {
-                        ...userData,
-                        address: e.target.value,
-                      };
-                      setUserData(updatedUserData);
-
-                      // Kiểm tra ngay lập tức khi giá trị thay đổi
-                      const errors = validateField("address");
-                      setValidationErrors((prev) => ({
-                        ...prev,
-                        ...errors,
-                      }));
-                    }}
-                  />
-                  {validationErrors.name && (
-                    <p style={{ color: "red" }}>{validationErrors.name}</p>
-                  )}
-                </Form.Item>
-
-                <Form.Item label="Số điện thoại">
-                  <Input
-                    value={userData.phone_number}
-                    onChange={(e) => {
-                      const updatedUserData = {
-                        ...userData,
-                        phone_number: e.target.value,
-                      };
-                      setUserData(updatedUserData);
-
-                      // Kiểm tra ngay lập tức khi giá trị thay đổi
-                      const errors = validateField("phone_number");
-                      setValidationErrors((prev) => ({
-                        ...prev,
-                        ...errors,
-                      }));
-                    }}
-                  />
-                  {validationErrors.phone_number && (
-                    <p style={{ color: "red" }}>
-                      {validationErrors.phone_number}
-                    </p>
-                  )}
-                </Form.Item>
-
-                <Form.Item label="Website">
-                  <Input
-                    value={userData.website}
-                    onChange={(e) => {
-                      const updatedUserData = {
-                        ...userData,
-                        website: e.target.value,
-                      };
-                      setUserData(updatedUserData);
-
-                      // Kiểm tra ngay lập tức khi giá trị thay đổi
-                      const errors = validateField("website");
-                      setValidationErrors((prev) => ({
-                        ...prev,
-                        ...errors,
-                      }));
-                    }}
-                  />
-                  {websiteError && (
-                    <p style={{ color: "red" }}>{websiteError}</p>
-                  )}
-                </Form.Item>
-
-                <Form.Item>
-                  <Button type="primary" onClick={handleUpdateAll}>
-                    Cập nhật
-                  </Button>
-                </Form.Item>
+                <div>
+                  <label
+                    htmlFor="username"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    Tên đăng nhập
+                  </label>
+                  <Form.Item
+                    name="username"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập họ và tên." },
+                    ]}
+                  >
+                    <Input
+                      name="username"
+                      placeholder="Nhập họ và tên"
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  <label
+                    htmlFor="name"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    Tên
+                  </label>
+                  <Form.Item
+                    name="name"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập họ và tên." },
+                    ]}
+                  >
+                    <Input
+                      name="name"
+                      placeholder="Nhập họ và tên"
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  <label
+                    htmlFor="address"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    Địa chỉ
+                  </label>
+                  <Form.Item
+                    name="address"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập địa chỉ" },
+                    ]}
+                  >
+                    <AutoComplete
+                      name="address"
+                      onSearch={handleAddressChange}
+                      onSelect={handleSelect}
+                      placeholder="Nhập địa chỉ để IKoi đến lấy koi"
+                      options={recommendations.map((address) => ({
+                        value: address,
+                      }))}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  <label
+                    htmlFor="phone_number"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    SĐT
+                  </label>
+                  <Form.Item
+                    name="phone_number"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập số điện thoại.",
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="phone_number"
+                      placeholder="Nhập SĐT"
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </div>
+                <div>
+                  <label
+                    htmlFor="website"
+                    style={{ fontWeight: "bold", fontSize: "15px" }}
+                  >
+                    <span style={{ color: "red" }}>* </span>
+                    Website
+                  </label>
+                  <Form.Item
+                    name="website"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập website." },
+                    ]}
+                  >
+                    <Input
+                      name="website"
+                      placeholder="Nhập website"
+                      onChange={handleChange}
+                    />
+                  </Form.Item>
+                </div>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginBottom: "50px" }}
+                >
+                  Cập nhật
+                </Button>
               </Form>
             </Col>
             <Col

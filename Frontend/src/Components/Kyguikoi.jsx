@@ -371,7 +371,7 @@ export default function Kyguikoi() {
                       style={{ fontWeight: "bold", fontSize: "15px" }}
                     >
                       <span style={{ color: "red" }}>* </span>
-                      Địa chỉ email
+                      Email
                     </label>
                     <Form.Item
                       name="email"
