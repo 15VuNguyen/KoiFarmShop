@@ -8,8 +8,8 @@ export const callback = async (req, res) => {
   console.log(req.body)
   try {
     const config = {
-      app_id: '2554',
-      key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'
+      app_id: '554',
+      key2: 'uUfsWgfLkRLzq6W2uNXTCxrfxs51auny'
     }
 
     let dataStr = req.body.data

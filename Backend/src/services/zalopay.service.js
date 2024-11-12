@@ -8,9 +8,9 @@ const zaloPayment = async (req, res) => {
   const reqDiscountCookie = req.cookies && req.cookies.loyaltyCard ? JSON.parse(req.cookies.loyaltyCard) : {} // Lấy từ cookie discount
 
   const config = {
-    app_id: '2554',
-    key1: 'sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn',
-    key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf',
+    app_id: '554',
+    key1: '8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn',
+    key2: 'uUfsWgfLkRLzq6W2uNXTCxrfxs51auny',
     endpoint: 'https://sb-openapi.zalopay.vn/v2/create'
   }
 

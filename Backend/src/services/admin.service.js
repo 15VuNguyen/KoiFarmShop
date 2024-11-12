@@ -166,11 +166,11 @@ class AdminsService {
         return { success: false, message: 'User not found' }
       }
 
-      const newStatus = user.Status === 1 ? -1 : 1
+      const newStatus = user.StatusUser === 1 ? -1 : 1
 
       const result = await databaseService.users.findOneAndUpdate(
         { _id: new ObjectId(UserID) },
-        { $set: { Status: newStatus } },
+        { $set: { StatusUser: newStatus } },
         { new: true }
       )
 

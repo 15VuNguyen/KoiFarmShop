@@ -100,7 +100,12 @@ export const getKoiGroupIDController = async (req, res) => {
 
     const GroupKoi = koiInGroupKOI.map((groupKoi) => groupKoi._id.toString())
 
-    const Koi = await databaseService.kois.find({ GroupKoiID: { $in: GroupKoi } }).toArray()
+    const Koi = await databaseService.kois
+      .find({
+        GroupKoiID: { $in: GroupKoi },
+        Status: { $ne: 0 } 
+      })
+      .toArray()
 
     const groupedKoi = Koi.reduce((accumulator, koi) => {
       const groupId = koi.GroupKoiID
