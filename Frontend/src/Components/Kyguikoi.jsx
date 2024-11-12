@@ -334,7 +334,16 @@ export default function Kyguikoi() {
   if (error) {
     return <Alert message="Error" description={error} type="error" />;
   }
-
+  const handleFinishFailed = ({ errorFields }) => {
+    if (errorFields.length > 0) {
+      const firstErrorField = errorFields[0].name[0];
+      const element = document.getElementsByName(firstErrorField)[0];
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.focus();
+      }
+    }
+  };
   return (
     <Container>
       <div>
@@ -348,6 +357,7 @@ export default function Kyguikoi() {
             style={{ maxWidth: "800px", margin: "auto" }}
             onFinish={handleSubmit}
             form={form}
+            onFinishFailed={handleFinishFailed}
           >
             <div style={{ color: "black" }}>
               <Title level={3} style={{ color: "red" }}>

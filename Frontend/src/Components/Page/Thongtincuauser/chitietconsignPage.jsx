@@ -363,6 +363,16 @@ export default function Chitietconsignpage() {
     Video: koiData?.Video || "",
     Description: koiData?.Description || "",
   };
+  const handleFinishFailed = ({ errorFields }) => {
+    if (errorFields.length > 0) {
+      const firstErrorField = errorFields[0].name[0];
+      const element = document.getElementsByName(firstErrorField)[0];
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+        element.focus();
+      }
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -384,6 +394,7 @@ export default function Chitietconsignpage() {
                 style={{ maxWidth: "800px", margin: "auto" }}
                 onFinish={handleSubmit}
                 initialValues={initialValues}
+                onFinishFailed={handleFinishFailed}
               >
                 <div style={{ color: "black" }}>
                   <Title level={3}>Thông tin khách hàng</Title>
@@ -644,7 +655,16 @@ export default function Chitietconsignpage() {
                         <span style={{ color: "red" }}>* </span>
                         Số điện thoại người ký gửi
                       </label>
-                      <Form.Item name="PhoneNumberConsignKoi">
+                      <Form.Item
+                        name="PhoneNumberConsignKoi"
+                        rules={[
+                          {
+                            required: true,
+                            type: "string",
+                            message: "Vui lòng nhập SĐT người ký gửi",
+                          },
+                        ]}
+                      >
                         <Input
                           name="PhoneNumberConsignKoi"
                           type="text"
@@ -660,7 +680,6 @@ export default function Chitietconsignpage() {
                       htmlFor="Detail"
                       style={{ fontWeight: "bold", fontSize: "15px" }}
                     >
-                      <span style={{ color: "red" }}>* </span>
                       Chi tiết về đơn ký gửi
                     </label>
                     <Form.Item name="Detail">

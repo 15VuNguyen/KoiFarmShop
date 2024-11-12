@@ -233,7 +233,7 @@ export default function Doitsu() {
                   </li>
                   <li style={{ paddingTop: "10px" }}>
                     <span onClick={handleScroll7} className="contentBox">
-                      7. Tại sao nên mua Showa Koi tại IKoi:
+                      7. Tại sao nên mua Doitsu Koi tại IKoi:
                     </span>
                   </li>
                 </ul>

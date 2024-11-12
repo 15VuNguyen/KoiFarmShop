@@ -419,7 +419,7 @@ export default function Kohaku() {
                       className="contentBox"
                       style={{ cursor: "pointer", color: "#920202" }}
                     >
-                      8. Tại sao nên mua Koi Kohaku tại KoiVNStore
+                      8. Tại sao nên mua Koi Kohaku tại IKoi
                     </Text>
                   </li>
                 </ul>
