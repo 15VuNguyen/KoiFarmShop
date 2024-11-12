@@ -5,12 +5,11 @@ import { registerLoyaltyCard, sendOtpCode } from '../services/loyaltyCardService
 import { toast } from 'react-toastify'
 
 const RegisterLoyaltyCardModals = (props) => {
-    const { show, handleClose, setCard, setLoading } = props
+    const { show, handleClose, setCard } = props
     const [phoneNumber, setPhoneNumeber] = useState("")
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const [otpCode, setOtpCode] = useState();
     const [isValidate, setIsValidate] = useState(false)
-    const [isRegister, setIsRegister] = useState(false)
 
     useEffect(()=>{
         setIsValidate(false)
@@ -32,7 +31,6 @@ const RegisterLoyaltyCardModals = (props) => {
     }
 
     const handleRegister = async () => {
-        setLoading(true)
         try {
             const {data} = await registerLoyaltyCard(phoneNumber, otpCode)
             if(data.result){

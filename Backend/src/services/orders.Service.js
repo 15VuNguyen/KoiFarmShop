@@ -93,6 +93,7 @@ class OrdersService {
         const allRankAbove = ranks.slice(currentRankIndex, ranks.length)
         return {
             nextRank: ranks[currentRankIndex + 1],
+            maxPoint: ranks[currentRankIndex].maxPoints,
             allRankAbove: allRankAbove
         }
     }
@@ -127,7 +128,10 @@ class OrdersService {
         if (rankObject.message) {
             return { message: rankObject.message }
         }
-        return { loyaltyCard, nextRank: rankObject.nextRank}
+        return { loyaltyCard:{
+            ...loyaltyCard,
+            maxPoint: rankObject.maxPoint
+        }, nextRank: rankObject.nextRank}
     }
     
 
@@ -169,6 +173,26 @@ class OrdersService {
         }
         return {allRank: rankObject.allRankAbove}
     }
+    async getLoyalUserList() {
+        const loyaltyCardList = await databaseService.loyaltyCard.find().toArray()
+        // const userList = await databaseService.users.find().toArray()
+        const memberList = await Promise.all(
+            loyaltyCardList.map(async (c) => {
+              const foundMember = await databaseService.users.findOne({ _id: c.UserID });
+              return {
+                user: foundMember,
+                card: c
+              }; // Trả về `foundMember` hoặc `null` nếu không tìm thấy
+            })
+          );
+          
+          // Lọc bỏ các giá trị `null` (nếu cần)
+          const filteredMemberList = memberList.filter(member => member !== null);
+          
+        console.log("member list: ", filteredMemberList)
+        return filteredMemberList
+    }
+    
     async getOrder(user) {
         const order = await databaseService.order.find({ UserID: new ObjectId(user._id) }).toArray()
         return order
@@ -204,6 +228,7 @@ class OrdersService {
 
         return result
     }
+    
 }
 
 

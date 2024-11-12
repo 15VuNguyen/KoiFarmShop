@@ -1,12 +1,10 @@
 import { Router } from 'express'
 import {
-    buyNowController,
   filterKoiController,
   getKoiByPriceController,
   getKoiQuantityController,
   getMinMaxPriceController,
   getOrderDetailController,
-  makeOrderDetailController,
   makeOrdersDetailController,
   removeAllItemsDetailController,
   removeItemsDetailController,
@@ -20,11 +18,9 @@ import { checkCartController } from '../controllers/common.controllers.js'
 const orderRouter = Router()
 
 //Order Detail
-orderRouter.post('/detail/make', makeOrderDetailController)
 orderRouter.post('/detail/makes', accessTokenValidator ,wrapAsync(makeOrdersDetailController))
-orderRouter.post('/detail/buy', buyNowController)
-orderRouter.get('/detail', getOrderDetailController)
-orderRouter.post('/detail/edit', updateOrderDetailController)
+orderRouter.get('/detail',accessTokenValidator, getOrderDetailController)
+orderRouter.post('/detail/edit',accessTokenValidator, updateOrderDetailController)
 orderRouter.post('/detail/price', getKoiQuantityController)
 orderRouter.post('/detail/remove', removeItemsDetailController)
 orderRouter.get('/detail/removeAll', removeAllItemsDetailController)

@@ -9,6 +9,7 @@ import usersService from '../services/users.services.js'
 import adminService from '../services/admin.service.js'
 import databaseService from '../services/database.service.js'
 import { ObjectId } from 'mongodb'
+import ordersService from '../services/orders.Service.js'
 
 export const getAllUserController = async (req, res) => {
   try {
@@ -598,6 +599,18 @@ export const getOrdeDetails = async (req, res) => {
 
     const orderDetail = await databaseService.orderDetail.findOne({ _id: result.OrderDetailID })
     res.json({ orderDetail })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
+  }
+}
+
+export const getLoyalUserListController = async (req, res) => {
+  try {
+    const result = await ordersService.getLoyalUserList()
+    return res.json({
+      // message: MANAGER_MESSAGES.GET_ALL_INVOICE_SUCCESS,
+      result
+    })
   } catch (error) {
     return res.status(500).json({ error: error.message })
   }
