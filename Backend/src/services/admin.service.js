@@ -252,7 +252,7 @@ class AdminsService {
     try {
       await databaseService.order.findOneAndUpdate(
         { _id: new ObjectId(orderID) },
-        { $inc: { Status: 2 } },
+        { $set: { Status: 2 } },
         { new: true }
       )
 
