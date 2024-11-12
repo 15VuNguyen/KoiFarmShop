@@ -72,6 +72,9 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         const { result } = response.data;
 
+        console.log("res: ", response)
+
+
         // Kiểm tra nếu có thông báo về số lượng không đủ
         if (
           typeof result === "string" &&

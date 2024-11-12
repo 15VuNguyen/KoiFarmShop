@@ -7,6 +7,7 @@ import { sendOTPCode } from '../PhoneNumberValidate/phoneNumber.validate.js';
 
 export const createOrderController = async (req, res) => {
   try {
+    const paymentMethod = req.body.PaymentMethod ?? "cash"
     const reqOrderCookie = req.cookies && req.cookies.order ? JSON.parse(req.cookies.order) : {}
     const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {}
     const reqOrderDiscount = req.cookies && req.cookies.discount ? JSON.parse(req.cookies.discount) : {}
@@ -29,17 +30,19 @@ export const createOrderController = async (req, res) => {
       })
     }
     const applyDiscount = req.body.ApplyDiscount ?? false
-    const result = await ordersService.createOrder(req.body, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount)
-    res.cookie('order', JSON.stringify(result.order), { 
-      httpOnly: true
-    })
-    res.cookie('orderDT', JSON.stringify(result.orderDetail), { 
-      httpOnly: true
-    })
-    if(result.loyaltyCard){
-      res.cookie('loyaltyCard', JSON.stringify(result.loyaltyCard), { 
+    const result = await ordersService.createOrder(req.body, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount, paymentMethod)
+    if(paymentMethod != "cash"){
+      res.cookie('order', JSON.stringify(result.order), { 
         httpOnly: true
       })
+      res.cookie('orderDT', JSON.stringify(result.orderDetail), { 
+        httpOnly: true
+      })
+      if(result.loyaltyCard){
+        res.cookie('loyaltyCard', JSON.stringify(result.loyaltyCard), { 
+          httpOnly: true
+        })
+      }
     }
     if(result.message){
       return res.json({
@@ -118,7 +121,6 @@ export const sendOtpCodeController = async (req, res) => {
       })
     }
     const result = await sendOTPCode(user, req.body)
-    console.log("result: ", result.message)
     if(result.message){
       return res.json({
         message: result.message

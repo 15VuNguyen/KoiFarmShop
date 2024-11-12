@@ -2,83 +2,83 @@ import databaseService from './database.service.js'
 import { ObjectId } from 'mongodb'
 
 class OrderDetailService {
-    async addToCart(payload, reqCookie) {
-        const koi = await databaseService.kois.findOne({ _id: new ObjectId(payload.KoiID) })
-        if (!koi) {
-            throw new Error('Koi not found!')
-        }
+    // async addToCart(payload, reqCookie) {
+    //     const koi = await databaseService.kois.findOne({ _id: new ObjectId(payload.KoiID) })
+    //     if (!koi) {
+    //         throw new Error('Koi not found!')
+    //     }
 
-        let orderDT
-        let newPrice
+    //     let orderDT
+    //     let newPrice
 
-        if (reqCookie && reqCookie.Items) {
-            orderDT = reqCookie
+    //     if (reqCookie && reqCookie.Items) {
+    //         orderDT = reqCookie
 
-            if (!orderDT.Items) {
-                orderDT.Items = []
-            }
+    //         if (!orderDT.Items) {
+    //             orderDT.Items = []
+    //         }
 
-            if (orderDT.TotalPrice == null) {
-                orderDT.TotalPrice = 0 // Khởi tạo nếu null
-            }
+    //         if (orderDT.TotalPrice == null) {
+    //             orderDT.TotalPrice = 0 // Khởi tạo nếu null
+    //         }
 
-            const itemIndex = orderDT.Items.findIndex((item) => item.KoiID === payload.KoiID)
-            if (itemIndex > -1) {
-                // Tăng số lượng
-                orderDT.Items[itemIndex].Quantity++
-                newPrice = Number(koi.Price) // Tính giá trị cho mục hiện tại
-            } else {
-                // Thêm mục mới
-                orderDT.Items.push({ KoiID: payload.KoiID, Quantity: 1 })
-                newPrice = Number(koi.Price) // Tính giá trị cho mục mới
-            }
+    //         const itemIndex = orderDT.Items.findIndex((item) => item.KoiID === payload.KoiID)
+    //         if (itemIndex > -1) {
+    //             // Tăng số lượng
+    //             orderDT.Items[itemIndex].Quantity++
+    //             newPrice = Number(koi.Price) // Tính giá trị cho mục hiện tại
+    //         } else {
+    //             // Thêm mục mới
+    //             orderDT.Items.push({ KoiID: payload.KoiID, Quantity: 1 })
+    //             newPrice = Number(koi.Price) // Tính giá trị cho mục mới
+    //         }
 
-            // Cập nhật TotalPrice
-            orderDT.TotalPrice += newPrice
-        } else {
-            orderDT = {
-                Items: [{ KoiID: payload.KoiID, Quantity: 1 }],
-                TotalPrice: Number(koi.Price) // Khởi tạo với giá của koi
-            }
-        }
-        const savedOrder = await this.saveOrderToDatabase(orderDT)
-        return { orderDT: savedOrder, koi }
-    }
-    async buyNow(payload, reqCookie) {
-        const koiListObject = await this.filterKoiId(payload)
-        if (koiListObject.message) {
-            return 'Koi not found'
-        }
+    //         // Cập nhật TotalPrice
+    //         orderDT.TotalPrice += newPrice
+    //     } else {
+    //         orderDT = {
+    //             Items: [{ KoiID: payload.KoiID, Quantity: 1 }],
+    //             TotalPrice: Number(koi.Price) // Khởi tạo với giá của koi
+    //         }
+    //     }
+    //     const savedOrder = await this.saveOrderToDatabase(orderDT)
+    //     return { orderDT: savedOrder, koi }
+    // }
+    // async buyNow(payload, reqCookie) {
+    //     const koiListObject = await this.filterKoiId(payload)
+    //     if (koiListObject.message) {
+    //         return 'Koi not found'
+    //     }
 
-        const koiID = koiListObject.FirstKoiID
-        const koiList = (await this.getSamePropertiesKoi(koiID)).filter(koi => koi.Status != 0)
-        if (!koiList) {
-            return 'Koi not found'
-        }
+    //     const koiID = koiListObject.FirstKoiID
+    //     const koiList = (await this.getSamePropertiesKoi(koiID)).filter(koi => koi.Status != 0)
+    //     if (!koiList) {
+    //         return 'Koi not found'
+    //     }
 
-        let buyNowDT = reqCookie || {
-            Items: [],
-            TotalPrice: 0
-        }
+    //     let buyNowDT = reqCookie || {
+    //         Items: [],
+    //         TotalPrice: 0
+    //     }
 
-        if (buyNowDT.TotalPrice === null) {
-            buyNowDT.TotalPrice = 0 // Khởi tạo nếu null
-        }
-        const quantity = payload.Quantity ? payload.Quantity : 1
-        if (quantity > koiList.length) {
-            return `${koiList.length} available in stock`
-        }
-        const newPrice = koiList.slice(0, quantity).reduce((total, koi) => {
-            return total + koi.Price
-        }, 0)
+    //     if (buyNowDT.TotalPrice === null) {
+    //         buyNowDT.TotalPrice = 0 // Khởi tạo nếu null
+    //     }
+    //     const quantity = payload.Quantity ? payload.Quantity : 1
+    //     if (quantity > koiList.length) {
+    //         return `Số lượng còn lại trong giỏ hàng (${koiList.length})`
+    //     }
+    //     const newPrice = koiList.slice(0, quantity).reduce((total, koi) => {
+    //         return total + koi.Price
+    //     }, 0)
 
-        buyNowDT = {
-            Items: [{ KoiID: new ObjectId(koiID), Quantity: quantity }],
-            TotalPrice: Number(newPrice) // Khởi tạo với giá của koi
-        }
+    //     buyNowDT = {
+    //         Items: [{ KoiID: new ObjectId(koiID), Quantity: quantity }],
+    //         TotalPrice: Number(newPrice) // Khởi tạo với giá của koi
+    //     }
 
-        return { buyNowDT }
-    }
+    //     return { buyNowDT }
+    // }
     // async saveOrderToDatabase(order) {
 
     //         const result = await databaseService.orderDetail.insertOne(order)
@@ -88,21 +88,10 @@ class OrderDetailService {
     // }
 
     async fetchOrder(reqCookie) {
-        // const result = await databaseService.orderDetail.findOne({ _id: new ObjectId(payload.orderID) })
         let orderDT, koiList
         if (reqCookie && reqCookie.Items) {
             orderDT = reqCookie
             koiList = await Promise.all(orderDT?.Items.map(async (item) => await databaseService.kois.findOne({ _id: new ObjectId(item.KoiID) })))
-            // const items = await Promise.all(result.Items.map(async (item) => {
-            //     const koi = await databaseService.kois.findOne({ _id: new ObjectId(item.KoiID) });
-            //     const category = await databaseService.category.findOne({ _id: new ObjectId(koi.CategoryID) });
-            //     return {
-            //         KoiName: koi.KoiName,
-            //         CategoryName: category.CategoryName,
-            //         Size: koi.Size,
-            //         Image: koi.Image
-            //     };
-            // }));
         } else {
             return 'Order not found'
         }
@@ -146,6 +135,7 @@ class OrderDetailService {
     async updateItemQuantity(payload, reqCookie) {
 
         const koiList = (await this.getSamePropertiesKoi(payload.KoiID)).filter(koi => koi.Status != 0)
+        console.log("koi lít: ", koiList)
         let orderDT
         if (reqCookie && reqCookie.Items) {
             orderDT = reqCookie
@@ -153,7 +143,7 @@ class OrderDetailService {
                 return 'Koi not found'
             }
             if (payload.Quantity > koiList.length) {
-                return `${koiList.length} available in stock`
+                return `Số lượng còn lại trong giỏ hàng (${koiList.length})`
             }
             const foundItem = orderDT.Items.find(item => {
                 return koiList.some(koi => koi._id.toString() === item.KoiID)
@@ -422,7 +412,7 @@ class OrderDetailService {
 
             totalQuantity = (foundItem?.Quantity || 0) + payload.Quantity
             if (totalQuantity > samePropertiesKois.length) {
-                return `${samePropertiesKois.length - (foundItem?.Quantity || 0)} available in stock`
+                return `Số lượng còn lại trong giỏ hàng (${samePropertiesKois.length - (foundItem?.Quantity || 0)})`
             }
 
             if (foundItem) {
@@ -445,7 +435,7 @@ class OrderDetailService {
 
         } else {
             if (payload.Quantity > samePropertiesKois.length) {
-                return `${samePropertiesKois.length} available in stock`
+                return `Số lượng còn lại trong giỏ hàng (${samePropertiesKois.length})`
             }
             koiList = samePropertiesKois.slice(0, payload.Quantity)
             newPrice = koiList?.reduce((total, koi) => {

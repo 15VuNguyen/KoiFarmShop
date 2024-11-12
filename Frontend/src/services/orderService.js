@@ -1,7 +1,7 @@
 import axiosInstance from "../An/Utils/axiosJS";
 
-const createOrder = async (userData, ApplyDiscount) => {
-    return axiosInstance.post('/order/create',{userData, ApplyDiscount},{withCredentials: true})
+const createOrder = async (userData, ApplyDiscount,PaymentMethod) => {
+    return axiosInstance.post('/order/create',{userData, ApplyDiscount, PaymentMethod},{withCredentials: true})
 }
 
 const getOrderDetail = async () => {

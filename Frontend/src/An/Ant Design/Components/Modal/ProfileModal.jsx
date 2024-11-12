@@ -1,23 +1,28 @@
-import { Container, Modal, Image } from "react-bootstrap";
-
+import { Modal, Avatar, Upload } from "antd";
 import { HiLink } from "react-icons/hi";
 import { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
-import message from "antd/lib/message";
-import { Button } from "antd";
+import { Button, Form, Input, AutoComplete, DatePicker, message } from "antd";
 import "../../../Css/Modal.css";
-import React from 'react'
-
+import React from 'react';
 import axiosInstance from "../../../Utils/axiosJS";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import create from "@ant-design/icons/lib/components/IconFont";
+import useAddress from "../useAddress";
+import dayjs from "dayjs";
 export default function ViewProfile({ actions, setactions, id }) {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState({});
+  const [selectedAvatar, setSelectedAvatar] = useState(null);
+  const [previewAvatar, setPreviewAvatar] = useState(null);
+  const [form] = Form.useForm();
+
   const handleClose = () => {
     setactions(false);
+  };
 
-  }
+  const { searchText, setSearchText, recommendations } = useAddress();
+
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
     authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -28,42 +33,24 @@ export default function ViewProfile({ actions, setactions, id }) {
   };
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const savedToClipboard = () => {
-    message.success("ID đã được sao chép vào clipboard!");
-    navigator.clipboard.writeText(user._id);
-  };
-
-  const [user, setUser] = useState({});
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [previewAvatar, setPreviewAvatar] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    date_of_birth: '',
-    email: '',
-    user_id: '',
-    selectedAvatar: ''
-  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         setIsSubmitting(true);
-        const res = await axiosInstance.get(`manager/manage-user/user${id}`);
-        console.log(res.data.result);
-        const { _id, name, email, created_at, verify, bio, location, website, username, Image, cover_photo, address, picture } = res.data.result;
-        const formattedDateOfBirth = created_at ? created_at.split('T')[0] : '';
-        setUser({ _id, name, email, created_at, verify, bio, location, website, username, Image, cover_photo, address, picture });
-        setFormData({
-          name: name || '',
-          address: address || '',
-          created_at: formattedDateOfBirth || '',
-          email: email || '',
-          user_id: _id || '',
-          selectedAvatar: Image || ''
+        const res = await axiosInstance.get(`/manager/manage-user/${id}`);
+        const { _id, name, email, created_at, address, picture } = res.data.result;
+        
+        
+        setUser({ _id, name, email, created_at, address, picture });
+        form.setFieldsValue({
+          name,
+          email,
+          created_at: dayjs(created_at),
+          address,
+          user_id: _id,
         });
+        setPreviewAvatar(picture);
       } catch (error) {
         console.log(error.response);
       } finally {
@@ -73,58 +60,41 @@ export default function ViewProfile({ actions, setactions, id }) {
     fetchData();
   }, [id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
+  const savedToClipboard = () => {
+    message.success("ID đã được sao chép vào clipboard!");
+    navigator.clipboard.writeText(user._id);
   };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
-    setSelectedAvatar(file);
-    setPreviewAvatar(URL.createObjectURL(file));
+  const handleAvatarChange = (info) => {
+    const { file } = info;
+    setSelectedAvatar(file)
+  
+   
+      setPreviewAvatar(URL.createObjectURL(file));
+    
   };
+  
 
-  const handleSubmit = async (e) => {
-    setIsLoading(true);
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      const updatedData = {
-        name: formData.name,
-        role: formData.role,
-        created_at: formData.created_at,
-        email: formData.email,
-        address: formData.address,
-        Image: formData.selectedAvatar
-      };
+      setIsLoading(true);
+      const updatedData = await form.validateFields();
+      
       if (selectedAvatar) {
-        const imgRef = ref(storage, `images/${selectedAvatar.name}`);
+        console.log(selectedAvatar);
+        const imgRef = ref(storage, `images/${selectedAvatar}`);
         await uploadBytes(imgRef, selectedAvatar);
         updatedData.picture = await getDownloadURL(imgRef);
       }
-
-      if (selectedAvatar) {
-        const imgRef = ref(storage, `images/${selectedAvatar.name}`);
-        await uploadBytes(imgRef, selectedAvatar);
-      }
-  
-
-      const response = await axiosInstance.post(`manager/manage-user/updateUser/${id}`, updatedData);
-      console.log(response.data);
-      if (response.data.result.success == true) {
-        console.log('Cập nhật thành công');
+      console.log(updatedData);
+      
+      const response = await axiosInstance.post(`manager/manage-user/updateUser/${user._id}`, updatedData);
+      if (response.data.result.success) {
         message.success('Cập nhật hồ sơ thành công');
-        
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-
       }
-      
-    //  alert('Cập nhật hồ sơ thành công');
     } catch (error) {
       console.log(error);
     } finally {
@@ -133,18 +103,12 @@ export default function ViewProfile({ actions, setactions, id }) {
   };
 
   return (
-    <Modal show={actions} onHide={handleClose} centered dialog ClassName="modal-30w">
-      <Modal.Header className="bg-light">
-        <Modal.Title>Hồ sơ</Modal.Title>
-      </Modal.Header>
+    <Modal title={'Hồ Sơ Người Dùng'} open={actions} onCancel={handleClose} footer={null} centered>
+      
 
-      <Modal.Body>
+      <div className="modal-body">
         <div className="d-flex align-items-center justify-content-between profile-row">
-          {previewAvatar ? (
-            <Image src={previewAvatar} roundedCircle className="profile-avatar" />
-          ) : (
-            <Image src={user.picture || "https://via.placeholder.com/80"} roundedCircle className="profile-avatar" />
-          )}
+          <Avatar src={previewAvatar || "https://via.placeholder.com/80"} size={80} />
           <div className="d-flex flex-column align-items-end">
             <h5>{user.name || 'Amélie Laurent'}</h5>
             <span className="text-muted">{user.email || 'amelie@untitledui.com'}</span>
@@ -155,83 +119,48 @@ export default function ViewProfile({ actions, setactions, id }) {
           </div>
         </div>
 
-        <Form onSubmit={handleSubmit}>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Ảnh hồ sơ</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/*"
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item label="Ảnh hồ sơ">
+            <Upload
+              showUploadList={false}
+              beforeUpload={() => false}
               onChange={handleAvatarChange}
-            />
-          </Form.Group>
+            >
+              <Button>Chọn ảnh</Button>
+            </Upload>
+          </Form.Item>
 
-          {/* Name */}
-          <Form.Group className="mb-3">
-            <Form.Label>Tên</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Nhập tên"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+          <Form.Item label="Tên" name="name" rules={[{ required: true, message: 'Vui lòng nhập tên' }]}>
+            <Input placeholder="Nhập tên" />
+          </Form.Item>
 
-          {/* Address*/}
-          <Form.Group className="mb-3">
-            <Form.Label>Địa chỉ</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Nhập địa chỉ"
-              name="address"
-              value={formData.address}
-              onChange={handleInputChange}
+          <Form.Item label="Địa chỉ" name="address">
+            <AutoComplete
+              options={recommendations.map((address) => ({ value: address }))}
+              onSearch={setSearchText}
             />
-          </Form.Group>
-          {/* Date of Birth */}
-          <Form.Group className="mb-3">
-            <Form.Label>Ngày Tạo Hồ Sơ</Form.Label>
-            <Form.Control
-              type="date"
-              name="created_at"
-              value={formData.created_at}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+          </Form.Item>
 
-          {/* Email */}
-          <Form.Group className="mb-3">
-            <Form.Label>Địa chỉ email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={formData.email}
-              readOnly
-            />
-          </Form.Group>
+          <Form.Item label="Ngày Tạo Hồ Sơ" name="created_at">
+            <DatePicker format="DD-MM-YYYY" style={{ width: '100%' }} />
+          </Form.Item>
 
-          {/* User ID */}
-          <Form.Group className="mb-3">
-            <Form.Label>ID Người dùng</Form.Label>
-            <Form.Control
-              type="text"
-              name="user_id"
-              value={formData.user_id}
-              readOnly
-            />
-          </Form.Group>
+          <Form.Item label="Địa chỉ email" name="email">
+            <Input readOnly />
+          </Form.Item>
+
+          <Form.Item label="ID Người dùng" name="user_id">
+            <Input readOnly />
+          </Form.Item>
         </Form>
-      </Modal.Body>
+      </div>
 
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Hủy
-        </Button>
-        <Button type="primary"  loading={isLoading} onClick={handleSubmit} disabled={isSubmitting}>
+      <div className="modal-footer">
+        <Button onClick={handleClose}>Hủy</Button>
+        <Button type="primary" loading={isLoading} onClick={() => form.submit()}>
           Lưu thay đổi
         </Button>
-      </Modal.Footer>
+      </div>
     </Modal>
   );
 }

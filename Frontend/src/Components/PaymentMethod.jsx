@@ -142,7 +142,7 @@ const PaymentMethod = () => {
           </Space>
           <div style={{ marginTop: "20px", fontSize: "16px", color: "#555" }}>
             <p>
-              Tổng Giá: <strong>{totalPrice.toLocaleString()} VND</strong>
+              Tổng Giá: <strong>{totalPrice.toLocaleString()} ₫</strong>
             </p>
           </div>
         </div>

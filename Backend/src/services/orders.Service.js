@@ -1,11 +1,11 @@
 import databaseService from "./database.service.js"
 import { verifyOTPCode } from "../PhoneNumberValidate/phoneNumber.validate.js"
 import { ObjectId } from "mongodb"
+import { saveOrderToDatabase } from "./callback.service.js"
 
 class OrdersService {
-    async createOrder(payload, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount) {
+    async createOrder(payload, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount, paymentMethod) {
         const orderDT = reqOrderDTCookie
-        // const foundUser = await databaseService.users.findOne({_id: new ObjectId(user._id)})
         reqOrderCookie = {
             UserID: user._id,
             OrderDetailID: orderDT?._id,
@@ -13,7 +13,6 @@ class OrdersService {
             OrderDate: new Date(),
             Status: 1,
         }
-        console.log("order: ", reqOrderCookie)
         const koiList = await Promise.all(
             orderDT.Items.map(item => databaseService.kois.findOne({ _id: new ObjectId(item.KoiID) }))
         );
@@ -21,31 +20,26 @@ class OrdersService {
         if (applyDiscount) {
             const loyaltyCardObject = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(user._id) })
             if (!loyaltyCardObject) {
-                return { message: "Register first!" }
+                return { message: "Bạn chưa có tài khoản tích điểm" }
             }
             const totalPoint = Math.round(loyaltyCardObject.Point + (orderDT.TotalPrice / 1000))
             const saleObject = this.getSaleObject(totalPoint)
             salePercent = saleObject.percent || 0
-            const rankName = saleObject.rankName || "Silver"
+            const rankName = saleObject.rankName || "Bạc"
             reqOrderDiscount = {
                 RankName: rankName,
                 Point: totalPoint,
                 SalePercent: salePercent
             }
-            // const updatedCard = await databaseService.loyaltyCard.updateOne({UserID: new ObjectId(user._id)},{$set:reqOrderDiscount})
-            // if (updatedCard.modifiedCount === 0) {
-            //     return { message: "Failed to update loyalty card!" };
-            // }
         }
-
-        // const totalPrice = Math.round(orderDT.TotalPrice * (100 - salePercent) / 100)
-
+        if(paymentMethod == "cash"){
+            return await saveOrderToDatabase(reqOrderDTCookie, reqOrderCookie, reqOrderDiscount)
+        }
         return {
             user, order: reqOrderCookie,
             orderDetail: {
                 ...orderDT,
                 salePercent: salePercent
-                // TotalPrice: totalPrice
             },
             loyaltyCard: reqOrderDiscount,
             koiList
@@ -54,10 +48,10 @@ class OrdersService {
 
     parsePointToRank(point) {
         const ranks = [
-            { name: "Silver", maxPoints: 10000 },
-            { name: "Gold", maxPoints: 20000 },
-            { name: "Platinum", maxPoints: 50000 },
-            { name: "Diamond", maxPoints: Infinity }
+            { name: "Bạc", maxPoints: 10000 },
+            { name: "Vàng", maxPoints: 20000 },
+            { name: "Bạch Kim", maxPoints: 50000 },
+            { name: "Kim Cương", maxPoints: Infinity }
         ];
 
         const rank = ranks.find(r => point <= r.maxPoints);
@@ -67,10 +61,10 @@ class OrdersService {
     getSaleObject(point) {
         const rank = this.parsePointToRank(point)
         const salePercents = [
-            { rankName: "Silver", percent: 5 },
-            { rankName: "Gold", percent: 10 },
-            { rankName: "Platinum", percent: 15 },
-            { rankName: "Diamond", percent: 20 },
+            { rankName: "Bạc", percent: 5 },
+            { rankName: "Vàng", percent: 10 },
+            { rankName: "Bạch Kim", percent: 15 },
+            { rankName: "Kim Cương", percent: 20 },
         ];
 
         const salePercent = salePercents.find(s => s.rankName == rank)
@@ -79,10 +73,10 @@ class OrdersService {
 
     getNextRank(currentRank) {
         const ranks = [
-            { name: "Silver", salePercent: 5, maxPoints: 10000 },
-            { name: "Gold", salePercent: 10, maxPoints: 20000 },
-            { name: "Platinum", salePercent: 15, maxPoints: 50000 },
-            { name: "Diamond", salePercent: 20, maxPoints: Infinity }
+            { name: "Bạc", salePercent: 5, maxPoints: 10000 },
+            { name: "Vàng", salePercent: 10, maxPoints: 20000 },
+            { name: "Bạch Kim", salePercent: 15, maxPoints: 50000 },
+            { name: "Kim Cương", salePercent: 20, maxPoints: Infinity }
         ];
         if(!currentRank){
             return {
@@ -91,13 +85,12 @@ class OrdersService {
         }
         const currentRankIndex = ranks.findIndex(rank => rank.name == currentRank.RankName)
         if (currentRankIndex === -1) {
-            return { message: "Invalid rank" }
+            return { message: "Bạn chưa có thẻ tích điểm" }
         }
         if (currentRankIndex === ranks.length - 1) {
-            return { message: "You're at highest rank" }
+            return { message: "Bạn hiện tại đang ở bậc cao nhất" }
         }
         const allRankAbove = ranks.slice(currentRankIndex, ranks.length)
-        console.log("all ranks: ", allRankAbove)
         return {
             nextRank: ranks[currentRankIndex + 1],
             allRankAbove: allRankAbove
@@ -107,7 +100,7 @@ class OrdersService {
 
     async registerLoyaltyCard(payload, user) {
         if(!payload.OTPCode){
-            return {message: "OTP code is required!"}
+            return {message: "Cần có mã OTP"}
         }
         const otpCheck = verifyOTPCode(payload.PhoneNumber, payload.OTPCode)
         if (!otpCheck.valid) {
@@ -117,7 +110,7 @@ class OrdersService {
         const newLoyaltyCard = {
             _id: new ObjectId(),
             UserID: user._id,
-            RankName: 'Silver',
+            RankName: 'Bạc',
             Point: 0,
             SalePercent: 5
         }
@@ -128,7 +121,7 @@ class OrdersService {
     async getLoyaltyCard(user) {
         const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(user._id) })
         if (!loyaltyCard) {
-            return { message: "User has not registered for loyalty card!" }
+            return { message: "Bạn chưa có tài khoản tích điểm" }
         }
         const rankObject = this.getNextRank(loyaltyCard)
         if (rankObject.message) {
@@ -142,13 +135,13 @@ class OrdersService {
     async checkOrderPrice(user, applyDiscount, reqOrderDTCookie) {
         console.log(reqOrderDTCookie)
         if(!reqOrderDTCookie){
-            return {message: "Order detail not found"}
+            return {message: "Không tìm thấy đơn hàng trong giỏ"}
         }
         if(reqOrderDTCookie && reqOrderDTCookie.Items){
             let calPrice
             const loyaltyCard = await databaseService.loyaltyCard.findOne({UserID: user._id})
             if(!loyaltyCard){
-                return {message: "Register first"}
+                return {message: "Bạn chưa có tài khoản tích điểm"}
             }
             if(applyDiscount === true){
                 calPrice = reqOrderDTCookie.TotalPrice * loyaltyCard.SalePercent / 100

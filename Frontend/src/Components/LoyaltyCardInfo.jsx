@@ -115,7 +115,6 @@ export default function LoyaltyCardInfo() {
           show = {isShowRegisterForm}
           handleClose = {handleClose}
           setCard = {setCard}
-          setLoading = {setLoading}
         />
         <Empty
           description="No data"

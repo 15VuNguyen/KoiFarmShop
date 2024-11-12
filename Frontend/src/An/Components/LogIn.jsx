@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ResetPasswordModal } from "../Pages/ResetPasswordPage ";
 import "../Css/SignUp.css";
 import { Tooltip, Typography } from "antd";
-
+import { message } from "antd";
 function SignInForm() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,10 +48,10 @@ function SignInForm() {
         const selectedItem = location.state?.selectedItem || null;
         checkRole().then((result) => {
           const redirectPath =
-            result === "Staff"
-              ? "/DashBoard/staff/Profiles"
-              : "/NewDashBoard/staff/Profiles";
-          toast.success("Đăng nhập thành công");
+            result === "Manager"
+              ? "/NewDashBoard/staff/Profiles"
+              : "/profile";
+          message.success("Đăng nhập thành công");
           navigate(redirectPath);
         });
         navigate(from, { state: { selectedItem } });
@@ -59,11 +59,11 @@ function SignInForm() {
     } catch (error) {
       console.error("Failed to login", error.response);
       if (error.response.data.errors.email === "Email or password is incorrect") {
-        toast.error('Email hoặc mật khẩu không chính xác');
+        message.error('Email hoặc mật khẩu không chính xác');
         return;
       }
       if (error.response.data.errors.email)
-        toast.error(error.response.data.errors.email);
+        message.error(error.response.data.errors.email);
     }
   };
 
@@ -112,17 +112,7 @@ function SignInForm() {
         </Typography.Link>
         <button>Đăng nhập</button>
       </form>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      
     </div>
   );
 }
