@@ -6,10 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { message, Typography, Tooltip } from "antd";
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
+import { fetchLoginUserData } from "../../services/userService";
 
 function SignUpForm() {
   const navigate = useNavigate();
-  const { register, googleAuthUrl, setAuthenticatedUser } = useAuth();
+  const { register, googleAuthUrl, setAuthenticatedUser, setCurrentUser } = useAuth();
   const initialState = {
     name: "",
     email: "",
@@ -26,10 +27,15 @@ function SignUpForm() {
   const onSubmit = (e) => {
     setLoading(true);
     register(e.name, e.email, e.password, e.confirm_password)
-      .then((response) => {
+      .then(async(response) => {
         if (response.status === 200) {
           const { access_token, refresh_token } = response.data.result;
           setAuthenticatedUser(access_token, refresh_token);
+          const { data } = await fetchLoginUserData();
+        if (data && data.result) {
+          setCurrentUser(data.result)
+          localStorage.setItem("userInfo", JSON.stringify(data.result))
+        }
           navigate(`/profile`, {
             state: { message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra hộp thư email của bạn để xác minh" },
           });
