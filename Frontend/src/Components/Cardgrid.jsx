@@ -160,7 +160,7 @@ const CardGrid = ({ cardData }) => {
                 <br />
                 <Text strong>Kích thước : {card.Size} cm</Text>
                 <br />
-                Xuất xứ : {""}
+                <Text strong> Giống loài : {""}</Text>
                 {card.Status === 1 && <Text strong>Nhật Nhập Khẩu</Text>}
                 {card.Status === 2 && <Text strong>F1</Text>}
                 {card.Status === 3 && <Text strong>Việt</Text>}
