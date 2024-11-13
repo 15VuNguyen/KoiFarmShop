@@ -11,15 +11,12 @@ export default function ShoppingCart() {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/order/detail",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axiosInstance.get("/order/detail", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log(response);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
@@ -59,7 +56,7 @@ export default function ShoppingCart() {
     }
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/edit",
+        "/order/detail/edit",
         {
           KoiID: koiId,
           Quantity: quantity,
@@ -72,8 +69,7 @@ export default function ShoppingCart() {
       if (response.status === 200) {
         const { result } = response.data;
 
-        console.log("res: ", response)
-
+        console.log("res: ", response);
 
         // Kiểm tra nếu có thông báo về số lượng không đủ
         if (
@@ -107,7 +103,7 @@ export default function ShoppingCart() {
     console.log(`Deleting Koi with ID: ${koiId}`);
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/remove",
+        "/order/detail/remove",
         { KoiID: koiId.toString() },
         {
           withCredentials: true,

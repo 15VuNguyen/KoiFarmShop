@@ -111,29 +111,29 @@ export default function Profile() {
   //   }
   //   return newErrors;
   // };
-  const handleUpdate = async (field) => {
-    const errors = validateField(field);
+  // const handleUpdate = async (field) => {
+  //   const errors = validateField(field);
 
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
+  //   if (Object.keys(errors).length > 0) {
+  //     setValidationErrors(errors);
+  //     return;
+  //   }
 
-    setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
+  //   setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
 
-    if (userData.verify !== 1) {
-      setShowVerificationModal(true);
-      return;
-    } else {
-      await updateUser(field, userData[field]);
-      // Reload page after update
-      window.location.reload();
-    }
-  };
+  //   if (userData.verify !== 1) {
+  //     setShowVerificationModal(true);
+  //     return;
+  //   } else {
+  //     await updateUser(field, userData[field]);
+  //     // Reload page after update
+  //     window.location.reload();
+  //   }
+  // };
   const updateUser = async (field, value) => {
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:4000/users/me`,
+        `/users/me`,
         { [field]: String(value) },
         {
           headers: {
@@ -169,7 +169,7 @@ export default function Profile() {
     const fetchUserData = async () => {
       setLoading(true);
       try {
-        const response = await axiosInstance.get("users/me");
+        const response = await axiosInstance.get("/users/me");
         if (response.data) {
           setUserData(response.data.result);
           setOriginalUserData(response.data.result); // Lưu trữ dữ liệu gốc
@@ -208,96 +208,96 @@ export default function Profile() {
       toast.error("Vui lòng chọn một tệp ảnh.");
     }
   };
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   setSelectedFile(event.target.files[0]);
+  // };
 
-  const handleResendVerification = async () => {
-    try {
-      await axiosInstance.post("users/resend-verify-email", {});
-      toast.success(
-        "Email xác minh đã được gửi lại. Sau khi xác nhận vui lòng đăng nhập lại để update"
-      );
-      setShowVerificationModal(false);
-    } catch (error) {
-      console.error("Lỗi khi gửi lại email xác minh:", error);
-      toast.error("Gửi lại email xác minh thất bại.");
-    }
-  };
+  // const handleResendVerification = async () => {
+  //   try {
+  //     await axiosInstance.post("users/resend-verify-email", {});
+  //     toast.success(
+  //       "Email xác minh đã được gửi lại. Sau khi xác nhận vui lòng đăng nhập lại để update"
+  //     );
+  //     setShowVerificationModal(false);
+  //   } catch (error) {
+  //     console.error("Lỗi khi gửi lại email xác minh:", error);
+  //     toast.error("Gửi lại email xác minh thất bại.");
+  //   }
+  // };
 
-  const handleUpdateAll = async () => {
-    const newErrors = {};
-    const fieldsToUpdate = []; // Lưu trữ các trường cần cập nhật
+  // const handleUpdateAll = async () => {
+  //   const newErrors = {};
+  //   const fieldsToUpdate = []; // Lưu trữ các trường cần cập nhật
 
-    // Kiểm tra tên đăng nhập
-    if (userData.username !== originalUserData.username) {
-      if (!isValidUsername(userData.username)) {
-        newErrors.username = "Tên đăng nhập không được có ký tự đặc biệt.";
-      } else {
-        fieldsToUpdate.push("username");
-      }
-    }
+  //   // Kiểm tra tên đăng nhập
+  //   if (userData.username !== originalUserData.username) {
+  //     if (!isValidUsername(userData.username)) {
+  //       newErrors.username = "Tên đăng nhập không được có ký tự đặc biệt.";
+  //     } else {
+  //       fieldsToUpdate.push("username");
+  //     }
+  //   }
 
-    // Kiểm tra tên
-    if (userData.name !== originalUserData.name) {
-      if (!isValidNameOrAddress(userData.name)) {
-        newErrors.name =
-          "Tên không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-      } else {
-        fieldsToUpdate.push("name");
-      }
-    }
+  //   // Kiểm tra tên
+  //   if (userData.name !== originalUserData.name) {
+  //     if (!isValidNameOrAddress(userData.name)) {
+  //       newErrors.name =
+  //         "Tên không được có ký tự đặc biệt và khoảng cách liên tiếp.";
+  //     } else {
+  //       fieldsToUpdate.push("name");
+  //     }
+  //   }
 
-    // Kiểm tra địa chỉ
-    if (userData.address !== originalUserData.address) {
-      if (!isValidNameOrAddress(userData.address)) {
-        newErrors.address =
-          "Địa chỉ không được có ký tự đặc biệt và khoảng cách liên tiếp.";
-      } else {
-        fieldsToUpdate.push("address");
-      }
-    }
+  //   // Kiểm tra địa chỉ
+  //   if (userData.address !== originalUserData.address) {
+  //     if (!isValidNameOrAddress(userData.address)) {
+  //       newErrors.address =
+  //         "Địa chỉ không được có ký tự đặc biệt và khoảng cách liên tiếp.";
+  //     } else {
+  //       fieldsToUpdate.push("address");
+  //     }
+  //   }
 
-    // Kiểm tra số điện thoại
-    if (userData.phone_number !== originalUserData.phone_number) {
-      if (!isValidPhoneNumber(userData.phone_number)) {
-        newErrors.phone_number = "Số điện thoại phải từ 10 đến 11 chữ số.";
-      } else {
-        fieldsToUpdate.push("phone_number");
-      }
-    }
+  //   // Kiểm tra số điện thoại
+  //   if (userData.phone_number !== originalUserData.phone_number) {
+  //     if (!isValidPhoneNumber(userData.phone_number)) {
+  //       newErrors.phone_number = "Số điện thoại phải từ 10 đến 11 chữ số.";
+  //     } else {
+  //       fieldsToUpdate.push("phone_number");
+  //     }
+  //   }
 
-    // Kiểm tra website chỉ nếu có giá trị và khác với giá trị gốc
-    if (userData.website && userData.website !== originalUserData.website) {
-      if (!isValidURL(userData.website)) {
-        setWebsiteError("Website không hợp lệ. Vui lòng nhập một URL hợp lệ.");
-        return;
-      }
-      fieldsToUpdate.push("website");
-    }
+  //   // Kiểm tra website chỉ nếu có giá trị và khác với giá trị gốc
+  //   if (userData.website && userData.website !== originalUserData.website) {
+  //     if (!isValidURL(userData.website)) {
+  //       setWebsiteError("Website không hợp lệ. Vui lòng nhập một URL hợp lệ.");
+  //       return;
+  //     }
+  //     fieldsToUpdate.push("website");
+  //   }
 
-    // Nếu có lỗi, lưu lại và không thực hiện cập nhật
-    if (Object.keys(newErrors).length > 0) {
-      setValidationErrors(newErrors);
-      return;
-    }
+  //   // Nếu có lỗi, lưu lại và không thực hiện cập nhật
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setValidationErrors(newErrors);
+  //     return;
+  //   }
 
-    // Nếu không có lỗi, thực hiện cập nhật
-    setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
+  //   // Nếu không có lỗi, thực hiện cập nhật
+  //   setValidationErrors({}); // Reset lỗi nếu tất cả đều hợp lệ
 
-    if (userData.verify !== 1) {
-      setShowVerificationModal(true);
-      return;
-    } else {
-      const updatePromises = fieldsToUpdate.map((field) =>
-        updateUser(field, userData[field])
-      );
-      await Promise.all(updatePromises);
+  //   if (userData.verify !== 1) {
+  //     setShowVerificationModal(true);
+  //     return;
+  //   } else {
+  //     const updatePromises = fieldsToUpdate.map((field) =>
+  //       updateUser(field, userData[field])
+  //     );
+  //     await Promise.all(updatePromises);
 
-      // Reload page after update
-      window.location.reload();
-    }
-  };
+  //     // Reload page after update
+  //     window.location.reload();
+  //   }
+  // };
   const handleClick = (componentName) => {
     setCurrentComponent(componentName);
     setActiveButton(componentName);

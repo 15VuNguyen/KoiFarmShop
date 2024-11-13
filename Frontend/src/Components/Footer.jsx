@@ -275,7 +275,7 @@ const FooterComponent = () => {
             }}
           >
             <a
-              href="/dichvu"
+              href="/koidangban"
               style={{ fontWeight: "bold", fontSize: "15px", color: "white" }}
             >
               Dịch vụ

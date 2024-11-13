@@ -34,15 +34,12 @@ export default function TableCartForm() {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/order/detail",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axiosInstance.get("/order/detail", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log(response);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
@@ -82,7 +79,7 @@ export default function TableCartForm() {
     }
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/edit",
+        "/order/detail/edit",
         {
           KoiID: koiId,
           Quantity: quantity,
@@ -107,7 +104,6 @@ export default function TableCartForm() {
           koi._id === koiId ? { ...koi, quantity } : koi
         );
 
-
         // Kiểm tra cấu trúc phản hồi để lấy totalPrice
         const { TotalPrice } = response.data.result.orderDT;
         if (TotalPrice !== undefined) {
@@ -128,7 +124,7 @@ export default function TableCartForm() {
     console.log(`Deleting Koi with ID: ${koiId}`);
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/remove",
+        "/order/detail/remove",
         { KoiID: koiId.toString() },
         {
           withCredentials: true,

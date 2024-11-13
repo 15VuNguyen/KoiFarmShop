@@ -15,9 +15,7 @@ export default function Locakoinhapkhau() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/get-kois-groupKoiID"
-        );
+        const response = await axiosInstance.get("/get-kois-groupKoiID");
 
         if (response.status === 200) {
           const groupedData = response.data.reduce((acc, group) => {

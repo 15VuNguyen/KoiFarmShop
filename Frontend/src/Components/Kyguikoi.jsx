@@ -698,7 +698,10 @@ export default function Kyguikoi() {
                     <Form.Item
                       name="CategoryID"
                       rules={[
-                        { required: true, message: "Vui lòng chọn danh mục." },
+                        {
+                          required: true,
+                          message: "Vui lòng chọn loại cá của bạn.",
+                        },
                       ]}
                     >
                       <Select
@@ -848,14 +851,14 @@ export default function Kyguikoi() {
                         value="Male"
                         style={{ width: "100px" }}
                       >
-                        Male
+                        Đực
                       </Radio>
                       <Radio
                         id="GenderFemale"
                         value="Female"
                         style={{ width: "100px" }}
                       >
-                        Female
+                        Cái
                       </Radio>
                     </Radio.Group>
                   </Form.Item>
@@ -1093,6 +1096,7 @@ export default function Kyguikoi() {
                         handleUploadChange("Image", fileList)
                       }
                       listType="picture"
+                      accept="image/*"
                     >
                       <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
@@ -1118,7 +1122,8 @@ export default function Kyguikoi() {
                       onChange={({ fileList }) =>
                         handleUploadChange("Video", fileList)
                       }
-                      listType="video"
+                      listType="picture"
+                      accept="video/*"
                     >
                       <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>

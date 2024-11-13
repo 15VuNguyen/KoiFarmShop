@@ -41,15 +41,12 @@ export default function ShoppingCart() {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/order/detail",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axiosInstance.get("/order/detail", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log("koilist", response.data.result);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
@@ -84,7 +81,7 @@ export default function ShoppingCart() {
     }
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/edit",
+        "/order/detail/edit",
         {
           KoiID: koiId,
           Quantity: quantity,
@@ -131,7 +128,7 @@ export default function ShoppingCart() {
   const handleDeleteKoi = async () => {
     try {
       const response = await axiosInstance.post(
-        "http://localhost:4000/order/detail/remove",
+        "/order/detail/remove",
         { KoiID: koiIdToDelete.toString() },
         {
           withCredentials: true,
@@ -177,11 +174,11 @@ export default function ShoppingCart() {
             </thead>
             <hr
               style={{
-                width: "600%", 
-                height: "1px", 
-                background: "rgba(0, 0, 0, 0.3)", 
-                border: "none", 
-                margin: "20px 0", 
+                width: "600%",
+                height: "1px",
+                background: "rgba(0, 0, 0, 0.3)",
+                border: "none",
+                margin: "20px 0",
               }}
             />
             <tbody>
