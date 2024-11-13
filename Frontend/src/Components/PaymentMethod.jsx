@@ -5,6 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
+import { toast } from "react-toastify";
 import axiosInstance from "../An/Utils/axiosJS";
 
 const { Title } = Typography;
@@ -24,7 +25,7 @@ const PaymentMethod = () => {
 
       // Gửi yêu cầu thanh toán với số tiền từ localStorage
       if (method === "Zalo Pay") {
-        response = await axios.post(
+        response = await axiosInstance.post(
           `/payment/paymentZalopay`,
           { total: totalPrice }, // Gửi tổng giá trị từ localStorage
           { withCredentials: true }
@@ -50,7 +51,7 @@ const PaymentMethod = () => {
       }
     } catch (error) {
       console.error("Error during payment processing:", error);
-      message.error("Payment processing failed. Please try again.");
+      toast.error("Thanh toán thất bại. Vui lòng thử lại sau.");
     }
   };
   useEffect(() => {
@@ -130,12 +131,6 @@ const PaymentMethod = () => {
                 style={{ width: "15%" }}
               />
             </div>
-            <div onClick={() => handlePaymentMethodSelect("Momo Pay")}></div>
-            <img
-              src="src/assets/MoMo_Logo.png"
-              alt="Momo"
-              style={{ width: "15%" }}
-            />
           </Space>
           <div style={{ marginTop: "20px", fontSize: "16px", color: "#555" }}>
             <p>

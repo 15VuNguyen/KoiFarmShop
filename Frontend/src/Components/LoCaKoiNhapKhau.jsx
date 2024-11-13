@@ -6,7 +6,7 @@ import CustomerChatButton from "./Chat/CustomerChat.jsx";
 import Footer from "./Footer.jsx";
 import Navbar from "../components/Navbar/Navbar.jsx";
 import "./Css/locakoiStyle.css";
-
+import Text from "antd/lib/typography/Text";
 // Card layout đẹp mắt với grid
 export default function Locakoinhapkhau() {
   const [koiData, setKoiData] = useState([]);
@@ -96,14 +96,77 @@ export default function Locakoinhapkhau() {
               }
             >
               <Card.Meta
-                title={firstKoi.KoiName || "Koi không tên"}
                 description={
-                  <div>
-                    <p>Giới Tính: {firstKoi.Gender || "Không xác định"}</p>
-                    <p>Kích Thước: {firstKoi.Size || "Không xác định"} cm</p>
-                    <p>Giống: {firstKoi.Breed || "Không xác định"}</p>
-                    <p>Nguồn Gốc: {firstKoi.Origin || "Không xác định"}</p>
-                    <p>Số Lượng Koi: {koiCount} con</p>
+                  <div style={{ textAlign: "left" }}>
+                    <h5 style={{ color: "red" }}>
+                      {firstKoi.KoiName || "Koi không tên"}
+                    </h5>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "red",
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                        }}
+                      >
+                        Giới tính
+                      </span>{" "}
+                      {firstKoi.Gender || "Không xác định"}
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Kích thươc
+                      </span>{" "}
+                      {firstKoi.Size || "Không xác định"} cm
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Giống:
+                      </span>{" "}
+                      {firstKoi.Breed || "Không xác định"}
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Nguồn gốc
+                      </span>{" "}
+                      {firstKoi.Origin || "Không xác định"}
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Số lượng
+                      </span>{" "}
+                      {koiCount} con
+                    </p>
                   </div>
                 }
               />
