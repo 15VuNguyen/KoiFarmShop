@@ -3,9 +3,8 @@ import { Bar, Line } from 'react-chartjs-2';
 import axiosInstance from '../../Utils/axiosJS';
 import { Layout, Typography, Card, Select, Space, Tooltip, Radio, Switch, Spin, Row, Col, Flex } from 'antd';
 import { BarChartOutlined, LineChartOutlined } from '@ant-design/icons';
-import { object } from 'prop-types';
+import RevenueChart from '../../Pages/Charts/RevunueChart';
 
-const { Option } = Select;
 function sortDate(data, field) {
   return data.sort((a, b) => new Date(a[field]) - new Date(b[field]));
 }
@@ -28,7 +27,7 @@ function ChartCard({ title, data, dateField, chartType, onChartTypeChange, onDat
   return (
     <Card title={title}
       className='reponsive-chart-card'
-      >
+    >
       <Space direction="horizontal" style={{ marginBottom: 16 }}>
         <Radio.Group defaultValue="year" onChange={(e) => onDateRangeChange(e.target.value)}>
           <Radio.Button value="7days">7 Ngày Qua</Radio.Button>
@@ -227,7 +226,7 @@ export default function Dashboard() {
       const filteredData = rawData.filter(item => new Date(item[dateField]) >= startDate);
       return aggregateDataByDate(filteredData, dateField);
     };
-    
+
     if (type === 'accounts' && rawAccountData) {
       const filteredAccountData = filterAndAggregateData(rawAccountData, 'created_at');
       setAccountData({
@@ -269,11 +268,11 @@ export default function Dashboard() {
       const filteredConsignData = rawConsignData.filter(
         item => new Date(item.ConsignCreateDate) >= startDate
       );
-  
-   
+
+
       const consignData = filteredConsignData.reduce(howManyStateCorpondeToEachDATES, {});
       const labels = Object.keys(consignData);
-      
+
       setConsignData({
         labels,
         datasets: [
@@ -328,7 +327,7 @@ export default function Dashboard() {
         ],
       });
     }
-    
+
   };
 
   const handleChartTypeChange = (type) => {
@@ -380,7 +379,7 @@ export default function Dashboard() {
           onDateRangeChange={(value) => handleDateRangeChange('invoices', value)}
         />
       </Flex>
-      <Row style={{width:'100%'}} >
+      <Row style={{ width: '100%'}} >
         <Col span={24}>
           <Flex
             justify='space-around'
@@ -389,9 +388,9 @@ export default function Dashboard() {
             <Card
               bodyStyle={{ height: '500px' }}
               title="Đơn Ký Gửi Theo Trạng Thái"
-              style={{ width: '100%'}}
+              style={{ width: '100%' }}
             >
-           
+
               <Space direction="horizontal" style={{ marginBottom: 16 }}>
                 <Radio.Group
                   defaultValue="year"
@@ -402,7 +401,7 @@ export default function Dashboard() {
                   <Radio.Button value="year">Năm Trước</Radio.Button>
                 </Radio.Group>
 
-                
+
                 <Tooltip title="Chuyển Đổi Loại Biểu Đồ">
                   <Switch
                     checked={consignChartType === 'bar'}
@@ -413,21 +412,27 @@ export default function Dashboard() {
                 </Tooltip>
               </Space>
 
-           
-             { 
-              consignChartType === 'bar' ?
-              <Bar data={consignData} options={{ responsive: true,maintainAspectRatio:false,
-                backgroundColor: [ 'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)' ],
-               }} />
-              :
-              <Line data={consignData} options={{ responsive: true , maintainAspectRatio :false,
+
+              {
+                consignChartType === 'bar' ?
+                  <Bar data={consignData} options={{
+                    responsive: true, maintainAspectRatio: false,
+                    backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                  }} />
+                  :
+                  <Line data={consignData} options={{
+                    responsive: true, maintainAspectRatio: false,
 
 
-               }} />
-             }
+                  }} />
+              }
             </Card>
           </Flex>
-
+          <Row style={{ width: '100%', marginTop:'3rem' }} >
+            <Col span={24}>
+              <RevenueChart />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Layout>
