@@ -385,7 +385,9 @@ export default function Kois() {
                                     label="Tuổi"
                                     name="Age"
                                     placeholder="Tuổi"
+                                    initialValue={new Date().getFullYear() - form.getFieldValue('Age')}
                                     rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
+                                    
                                     <InputNumber placeholder='tuổi' min={1900} max={() => {
                                         return new Date().getFullYear();
                                     }} style={{ width: '100%' }} />
@@ -477,7 +479,7 @@ export default function Kois() {
                             <Form.Item
                                 label=" ID Chứng Nhận"
                                 name="CertificateID"
-                                rules={[{ required: true, message: 'Please input the Certificate ID!' }]}>
+                                rules={[{ required: true, message: 'Hãy nhập ID Chứng Nhận!' }]}>
                                 <Input />
                             </Form.Item>
                         </Col>
