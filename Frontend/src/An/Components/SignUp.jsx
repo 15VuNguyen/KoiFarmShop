@@ -43,13 +43,14 @@ function SignUpForm() {
       })
       .catch((error) => {
         const errorObj = error.response.data;
-        if (errorObj.errors.password === 'Password length must be from 8 to 50') {
-          message.error('Mật khẩu phải từ 8 đến 50 ký tự');
-        } else if (errorObj.errors.password === 'Password must be at least 8 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol') {
-          message.error('Mật khẩu phải chứa ít nhất một số và một chữ cái viết hoa và viết thường, và ít nhất 8 ký tự');
-        } else if (errorObj.errors.email === 'Email already exists') {
-          message.error('Email đã tồn tại');
+        if (errorObj.errors.password ) {
+          message.error(errorObj.errors.password);
+          return
+        } 
+         if (errorObj.errors.email === "Email already exists" ) {
+          message.error("Email đã tồn tại");
         }
+        console.error("Failed to register", errorObj);
       })
       .finally(() => {
         setLoading(false);

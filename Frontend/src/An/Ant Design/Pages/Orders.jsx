@@ -208,8 +208,8 @@ export default function OrdersNext() {
     ];
     return (
         <Layout>
-            <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Đơn Hàng</Typography.Title>
+            <Header style={{ background: '#f5f5f5',marginBottom:'3rem' }}>
+                <Typography.Title style={{ textAlign: 'center' }}  level={1}>Bảng Điều Khiển Đơn Hàng</Typography.Title>
             </Header>
             <Content className='fix-Table' style={{ padding: '24px' }}>
                 <Row gutter={[24, 24]} >
@@ -247,7 +247,8 @@ export default function OrdersNext() {
                         dataSource={orders}
                         rowKey={(record) => record._id}
                         loading={loading}
-
+                        size='middle'
+                        scroll={{ x: 768 }}
                         bordered
                         pagination={{ pageSize: 15 }}
                         l

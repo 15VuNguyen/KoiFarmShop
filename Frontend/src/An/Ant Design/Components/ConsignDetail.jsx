@@ -233,6 +233,10 @@ export default function ConsignDetail({ consignID, reset }) {
       setEditValue(initialValue);
 
     }
+    else if (field === 'Age'){
+      setEditField(field);
+      setEditValue(koi.Age);
+    }
     else {
 
       setEditField(field);
@@ -316,8 +320,8 @@ export default function ConsignDetail({ consignID, reset }) {
     consignCreateDate: 'Ngày tạo đơn',
     AddressConsignKoi: 'Địa chỉ đơn ký gửi',
     PhoneNumberConsignKoi: 'Số điện thoại đơn ký gửi',
-    Detail: 'Chi tiết kí gửi'
-
+    Detail: 'Chi tiết kí gửi',
+    Gender: 'Giới tính',
 
   }
   const saveEdit = (field) => {
@@ -336,7 +340,14 @@ export default function ConsignDetail({ consignID, reset }) {
               message.error('Số điện thoại không được để trống');
               return;
             }
-          
+            if (editValue.length < 10) {
+              message.error('Số điện thoại không hợp lệ');
+              return;
+            }
+            if (editValue.length > 20) {
+              message.error('Số điện thoại không hợp lệ');
+              return;
+            }
             
           
           
@@ -469,8 +480,13 @@ export default function ConsignDetail({ consignID, reset }) {
                           ))}
                         </Select>
                       ) : inputType === 'selectAge' ? (
-                        <InputNumber min={1} max={50} required value={editValue} onChange={(value) => setEditValue(value)} />
-
+                        <Tooltip title="Tuổi phải phải nằm từ năm 1700 đến năm hiện tại">
+                        <InputNumber
+                          
+                        min={1700} max={()=>{
+                          return new Date().getFullYear();
+                        }} required value={editValue} onChange={(value) => setEditValue(value)} />
+                        </Tooltip>
                       ) : inputType === 'selectReceivedDate' && field === 'ShippedDate' ? (
                         <Form.Item label={
                           <Space>
@@ -625,7 +641,7 @@ export default function ConsignDetail({ consignID, reset }) {
 
         <Descriptions title="Thông tin Koi" bordered>
           {renderEditableItem("Tên Koi", koi.KoiName, "KoiName")}
-          {renderEditableItem("Tuổi", koi.Age, "Age", 'selectAge')}
+          {renderEditableItem("Tuổi",  new Date().getFullYear() - koi.Age, "Age", 'selectAge')}
           {renderEditableItem("Nguồn gốc", koi.Origin, "Origin")}
           {renderEditableItem("Giới tính", koi.Gender, "Gender", 'setGender')}
           {renderEditableItem("Kích thước (cm)", koi.Size, "Size", 'selectSize')}

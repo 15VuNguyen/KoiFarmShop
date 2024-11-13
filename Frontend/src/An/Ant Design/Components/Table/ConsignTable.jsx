@@ -8,7 +8,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
     const [selectedColumns, setSelectedColumns] = React.useState({ 'UserID': true, 'KoiID': true, 'Description': true });
     const [showColumnSelector, setShowColumnSelector] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'ShippedDate', 'ReceiptDate', 'State', 'Commission', 'TotalPrice', 'action', 'PhoneNumberConsignKoi']);
+    const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'State', 'Commission', 'TotalPrice', 'action', 'PhoneNumberConsignKoi']);
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
         message.success("ID đã được sao chép vào clipboard!");
@@ -306,7 +306,7 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
     const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
     return (
         <div>
-            <Space style={{ width: "100%" }} size={"large"}>
+            <Space style={{ width: "100%" }} size={"large"} wrap>
                 
                 <Input
                     placeholder="Tìm kiếm..."
@@ -347,6 +347,8 @@ export default function ConsignTable({ data, handleActionClick, Search }) {
                 rowKey="_id"
                 pagination={{ pageSize: 10 }}
                 onChange={handleTableChange}
+        size='small'
+
             />
             <Modal
                 title="Chọn Cột"

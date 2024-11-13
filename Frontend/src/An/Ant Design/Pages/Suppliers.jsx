@@ -88,8 +88,10 @@ export default function Suppliers() {
             key: '1',
             label: (
                 <>
+                <div className='tab tab-1'>
                     Toàn Bộ Nhà Cung Cấp
                     <Badge count={suppliers.length} showZero style={{ marginLeft: 8 }} color='green' />
+                    </div>
                 </>
             ),
         },
@@ -97,8 +99,10 @@ export default function Suppliers() {
             key: '2',
             label: (
                 <>
+                    <div className='tab tab-2'>
                     Nhà Cung Cấp ở Nhật
                     <Badge count={suppliers.filter(supplier => supplier.Country === 'Nhật' || supplier.Country === 'Nhật Bản').length} showZero style={{ marginLeft: 8 }} color='green' />
+                        </div>  
                 </>
             ),
         },
@@ -106,8 +110,10 @@ export default function Suppliers() {
             key: '3',
             label: (
                 <>
+                <div className='tab tab-3'>
                     Nhà Cung Cấp ở Việt Nam
                     <Badge count={suppliers.filter(supplier => supplier.Country == 'Việt Nam').length} style={{ marginLeft: 8 }} showZero color='green' />
+                    </div>
                 </>
             ),
         }
@@ -132,12 +138,12 @@ export default function Suppliers() {
     return (
         <Layout >
             <InvoiceChartModal visible={openChartModal} onClose={handleCancel} data={ChartDATA} whichType='Supplier' tellMeWhatIs={whatIs} />
-            <Header style={{ background: '#f5f5f5' }}>
+            <Header style={{ background: '#f5f5f5', marginBottom:'3rem' }}>
                 <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý thông tin nhà cung cấp cá KOI</Typography.Title>
             </Header>
             <Content style={{ padding: '24px' }}>
                 <Row gutter={24}>
-                    <Col span={6}>
+                    <Col md={8} sm={12} xs={24}>
                         <Card hoverable
                             
                             onClick={handleOpenUpChartModal}
@@ -150,7 +156,7 @@ export default function Suppliers() {
                             />
                         </Card>
                     </Col>
-                    <Col span={6}>
+                    <Col md={8} sm={12} xs={0}>
                         <Card hoverable
                             onClick={() => handleOpenUpChartModalWithCountry('Nhật Bản')}
                         >
@@ -161,8 +167,8 @@ export default function Suppliers() {
                             />
                         </Card>
                     </Col>
-                    <Col span={6}>
-                        <Card hoverabl
+                    <Col md={8} sm={0} xs={0}>
+                        <Card hoverable
                             onClick={() => handleOpenUpChartModalWithCountry('Việt Nam')}
                         >
                             <Statistic
