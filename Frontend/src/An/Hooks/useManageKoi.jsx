@@ -17,11 +17,17 @@ export const useManageKoi = () => {
         const fetchData = async () => {
             try {
                 const response = await axiosInstance.get('manager/manage-koi/get-all');
+                const currentYear = new Date().getFullYear();
                 const catagoryResponse = await axiosInstance.get('getAllKoi');
                 console.log(response.data);
                 const { categoryList } = catagoryResponse.data;
                 const { result } = response.data;
-                setResult(result);
+                const correctAge = result.map((koi) => {
+                    koi.Age = currentYear - koi.Age
+                    return koi;
+                });
+                console.log(correctAge);
+                setResult(correctAge);
                 setCategoryList(categoryList);
             } catch (error) {
                 console.log(error);

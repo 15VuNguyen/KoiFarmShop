@@ -76,7 +76,7 @@ export default function UpdateProfile() {
         name: formData.name,
         address: formData.address,
         phone_number: formData.phone_number,
-        website: formData.website,
+        ...(formData.website && { website: formData.website }), // Conditionally add website
       };
       if (formData.username !== originalUserData.username) {
         dataToSend.username = formData.username;
@@ -125,6 +125,7 @@ export default function UpdateProfile() {
         const response = await axiosInstance.get("users/me");
         if (response.data) {
           setUserData(response.data.result);
+          console.log(userData);
           setOriginalUserData(response.data.result);
         } else {
           console.error("Dữ liệu không hợp lệ:", response.data);
@@ -137,7 +138,9 @@ export default function UpdateProfile() {
     };
     fetchUserData();
   }, []);
-
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
   const maskedEmail =
     userData && userData.email ? maskEmail(userData.email) : "";
 
@@ -356,13 +359,11 @@ export default function UpdateProfile() {
                     htmlFor="website"
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
-                    <span style={{ color: "red" }}>* </span>
                     Website
                   </label>
                   <Form.Item
                     name="website"
                     rules={[
-                      { required: true, message: "Vui lòng nhập website." },
                       {
                         type: "url",
                         message: "Website phải là link URL hợp lệ.",

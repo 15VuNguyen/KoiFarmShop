@@ -46,7 +46,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   };
 
   const searchFunction = (item) => {
-    const searchFields = ['_id', 'name', 'email', 'address'];
+    const searchFields = ['_id', 'name', 'email', 'address', 'created_at', 'website'];
     return searchFields.some(field => 
       item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -231,7 +231,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
 const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
   return (
     <div>
-      <Space size={"middle"}>
+      <Space size={"middle"} wrap>
         <Input
           placeholder="Tìm kiếm..."
           value={searchTerm}
@@ -272,11 +272,14 @@ const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
                 </Tooltip>
       </Space>
       <Table
+      scroll={{ x: 1300 }}
         columns={filteredColumns}
         dataSource={filteredData}
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         onChange={handleTableChange}
+        size='small'
+
       />
 
       {/* <Modal

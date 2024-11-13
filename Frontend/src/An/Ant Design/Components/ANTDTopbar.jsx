@@ -3,7 +3,7 @@ import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button, Tooltip, mes
 import { RxAvatar } from "react-icons/rx";
 import { Link, Outlet, useNavigate,useLocation } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
-
+import "../Css/reponsive.css";
 import 'antd/dist/reset.css';
 import ManagerChat from "../../../Components/Chat/ManagerChat";
 
@@ -163,7 +163,7 @@ export default function AnTopBar({ children, name, role }) {
                         >Báo Cáo</Typography.Link>
                     </Space>
                     <div className="topbar-right" style={{ float: "right" }}>
-                        <Typography.Text style={{ color: "white", marginRight: "10px" }}>
+                        <Typography.Text className="hide-on-mobile" style={{ color: "white", marginRight: "10px" }}>
                             Xin chào {name} Quản Lý {role}
                         </Typography.Text>
                         <Link to='/profile'>

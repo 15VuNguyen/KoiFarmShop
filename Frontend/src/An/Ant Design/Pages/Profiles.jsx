@@ -69,31 +69,32 @@ export default function Profiles() {
     {
       key: '1',
       label: (
-        <>
+        <div className="tab tab-1">
           Tất Cả Hồ Sơ
-          <Badge count={profiles.length} showZero style={{ marginLeft: 8 }} color='green'  />
-        </>
+          <Badge count={profiles.length} showZero style={{ marginLeft: 8 }} color="green" />
+        </div>
       ),
     },
     {
       key: '2',
       label: (
-        <>
+        <div className="tab tab-2">
           Người Dùng Đã Xác Minh
-          <Badge count={totalVerified()} showZero style={{ marginLeft: 8 }} color='green' />
-        </>
+          <Badge count={totalVerified()} showZero style={{ marginLeft: 8 }} color="green" />
+        </div>
       ),
     },
     {
       key: '3',
       label: (
-        <>
+        <div className="tab tab-3">
           Quản Lý
-          <Badge count={totalManager()} style={{ marginLeft: 8 }} color='green' />
-        </>
+          <Badge count={totalManager()} style={{ marginLeft: 8 }} color="green" />
+        </div>
       ),
-    }
+    },
   ];
+  
   const handleSearch = (value) => {
     setSearchTerm(value.target.value);
     console.log('Tìm kiếm:', searchTerm);
@@ -129,7 +130,7 @@ export default function Profiles() {
     <Layout >
       <InvoiceChartModal visible={openChartModal} onClose={ handleCancelChartModal}  data={ChartDATA} whichType={whatIs}  />
       <ViewProfile actions={isModalVisible} setactions={setIsModalVisible} id={selectedProfile} />
-      <Header style={{ background: '#f5f5f5' }}>
+      <Header style={{ background: '#f5f5f5',marginBottom:'1rem' }}>
         <Typography.Title style={{ textAlign: 'center' }} level={1}>Bảng Điều Khiển Hồ Sơ</Typography.Title>
       </Header>
       <Content style={{ padding: '24px' }}>
@@ -137,7 +138,7 @@ export default function Profiles() {
         <Row gutter={24}>
 
          
- <Col span={12}>
+ <Col md={12} xs={24}>
             <Card hoverable
               onClick={handleOpenUpChartModal}
             >
@@ -151,7 +152,7 @@ export default function Profiles() {
             </Card>
           </Col>
 
-          <Col span={12}>
+          <Col md={12} xs={0}>
             <Card hoverable 
               style={{ height: "100%" }}
               onClick={handleOpenUpChartModalWithVerify}

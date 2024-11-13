@@ -13,7 +13,7 @@ export default function Kienthuckoi() {
         </div>
         <Container style={{ paddingTop: "150px" }}>
           <div>
-            <h1 style={{ textAlign: "center", color: "red" }}>
+            <h1 style={{ textAlign: "center", color: "#920202" }}>
               Kiến thức nuôi cá Koi cơ bản cho người mới bắt đầu
             </h1>
             <div>
@@ -34,7 +34,9 @@ export default function Kienthuckoi() {
           </div>
 
           <div>
-            <h2 style={{ color: "red" }}>Nguồn gốc cá Koi</h2>
+            <h2 style={{ color: "#920202", paddingTop: "20px" }}>
+              Nguồn gốc cá Koi
+            </h2>
             <Paragraph style={{ fontSize: "20px" }}>
               Cá Koi được bắt nguồn từ Nhật Bản, cụ thể tại Niigata mỗi dịp mùa
               đông đến nơi đây thường có lượng tuyết rơi rất dày và mọi thứ đều
@@ -53,7 +55,7 @@ export default function Kienthuckoi() {
             </Paragraph>
           </div>
           <div>
-            <h3 style={{ color: "red" }}>Tiêu chuẩn của hồ nuôi cá Koi</h3>
+            <h3 style={{ color: "#920202" }}>Tiêu chuẩn của hồ nuôi cá Koi</h3>
             <Paragraph style={{ fontSize: "20px" }}>
               Cá Koi được bắt nguồn từ Nhật Bản, cụ thể tại Niigata mỗi dịp mùa
               đông đến nơi đây thường có lượng tuyết rơi rất dày và mọi thứ đều
@@ -64,10 +66,14 @@ export default function Kienthuckoi() {
               trồng lúa, và đến mùa Thu họ bắt những chú cá này để muối và chỉ
               chừa lại vài con để duy trì giống nồi đến mùa xuân.
             </Paragraph>
-            <ul>
+            <ul style={{ listStyleType: "none" }}>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Bóng mát:{" "}
                 </span>
@@ -80,7 +86,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Hệ thống tạo Oxy:{" "}
                 </span>
@@ -94,7 +104,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Thảm thực vật trong hồ:{" "}
                 </span>
@@ -109,7 +123,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Nguồn thức ăn:{" "}
                 </span>
@@ -126,7 +144,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Yếu tố mật độ:{" "}
                 </span>

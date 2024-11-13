@@ -26,7 +26,9 @@ function ChartCard({ title, data, dateField, chartType, onChartTypeChange, onDat
   const ChartComponent = chartType === 'bar' ? Bar : Line;
 
   return (
-    <Card title={title} style={{ width: '30%' }}>
+    <Card title={title}
+      className='reponsive-chart-card'
+      >
       <Space direction="horizontal" style={{ marginBottom: 16 }}>
         <Radio.Group defaultValue="year" onChange={(e) => onDateRangeChange(e.target.value)}>
           <Radio.Button value="7days">7 Ngày Qua</Radio.Button>
@@ -352,7 +354,7 @@ export default function Dashboard() {
   return (
     <Layout>
       <Typography.Title style={{ textAlign: 'center' }}>Bảng Điều Khiển</Typography.Title>
-      <Flex justify='space-around' wrap='wrap'>
+      <Flex justify='space-around' wrap>
         <ChartCard
           title="Tài Khoản Được Tạo theo Ngày"
           data={accountData}
@@ -378,16 +380,16 @@ export default function Dashboard() {
           onDateRangeChange={(value) => handleDateRangeChange('invoices', value)}
         />
       </Flex>
-      <Row >
+      <Row style={{width:'100%'}} >
         <Col span={24}>
           <Flex
             justify='space-around'
-            style={{ marginTop: 16, padding: '3rem' }}
+            style={{ marginTop: 16, padding: '' }}
           >
             <Card
               bodyStyle={{ height: '500px' }}
               title="Đơn Ký Gửi Theo Trạng Thái"
-              style={{ width: '100%', minHeight: '600px' }}
+              style={{ width: '100%'}}
             >
            
               <Space direction="horizontal" style={{ marginBottom: 16 }}>

@@ -374,6 +374,7 @@ export default function Profile() {
                       whiteSpace: "nowrap",
                       textOverflow: "ellipsis",
                       width: "100px",
+                      opacity: 0.8,
                     }}
                   >
                     {userData ? userData.name : "Tài khoản"}

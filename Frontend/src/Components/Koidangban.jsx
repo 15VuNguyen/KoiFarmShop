@@ -122,7 +122,7 @@ export default function Koidangban() {
                 value="All"
                 style={{ display: "block", marginBottom: "10px" }}
               >
-                All ({cardData.length})
+                Tất cả ({cardData.length})
               </Radio>
               {categoryData.map((card) => (
                 <Radio

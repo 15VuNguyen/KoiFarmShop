@@ -99,7 +99,6 @@ const OrderPage = () => {
     sendOrderDetails();
     console.log("Test" + maxQuantity);
   }, [selectedItem]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -628,61 +627,116 @@ const OrderPage = () => {
                         selectedItem.Status !== 4 &&
                         selectedItem.Status !== 1 &&
                         maxQuantity !== 0 && (
-                          <Paragraph
-                            style={{
-                              fontSize: "20px",
-                              textAlign: "left",
-                              color: "red",
-                              paddingTop: "10px",
-                            }}
-                          >
-                            <strong>Combo: </strong>
-                            <InputNumber
-                              style={{
-                                fontSize: "14px",
-                                color: "red",
-                                width: "48%",
-                              }}
-                              value={comboQuantity}
-                              onChange={(value) => {
-                                const newValue = Math.max(value, 1);
-                                setComboQuantity(newValue);
-                                setSelectedQuantity(newValue * 25);
-                              }}
-                              min={1}
-                            />
-                          </Paragraph>
+                          // <Paragraph
+                          //   style={{
+                          //     fontSize: "20px",
+                          //     textAlign: "left",
+                          //     color: "red",
+                          //     paddingTop: "10px",
+                          //   }}
+                          // >
+                          //   <strong>Combo: </strong>
+                          //   <InputNumber
+                          //     style={{
+                          //       fontSize: "14px",
+                          //       color: "red",
+                          //       width: "48%",
+                          //     }}
+                          //     value={comboQuantity}
+                          //     onChange={(value) => {
+                          //       const newValue = Math.max(value, 1);
+                          //       setComboQuantity(newValue);
+                          //       setSelectedQuantity(newValue * 25);
+                          //     }}
+                          //     min={1}
+                          //   />
+                          // </Paragraph>
+                          <div>
+                            {maxQuantity < 25 ? (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Hết hàng</strong>
+                              </Paragraph>
+                            ) : (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Combo: </strong>
+                                <InputNumber
+                                  type="number"
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "red",
+                                    width: "48%",
+                                  }}
+                                  value={comboQuantity}
+                                  onChange={(value) => {
+                                    const newValue = Math.max(value, 1);
+                                    setComboQuantity(newValue);
+                                    setSelectedQuantity(newValue * 25);
+                                  }}
+                                  min={1}
+                                />
+                              </Paragraph>
+                            )}
+                          </div>
                         )}
                       {selectedItem.Size >= 5 &&
                         selectedItem.Size <= 14 &&
                         selectedItem.Status !== 4 &&
                         selectedItem.Status !== 1 &&
                         maxQuantity !== 0 && (
-                          <Paragraph
-                            style={{
-                              fontSize: "20px",
-                              textAlign: "left",
-                              color: "red",
-                              paddingTop: "10px",
-                            }}
-                          >
-                            <strong>Combo: </strong>
-                            <InputNumber
-                              type="number"
-                              style={{
-                                fontSize: "14px",
-                                color: "red",
-                                width: "48%",
-                              }}
-                              value={comboQuantity}
-                              onChange={(e) => {
-                                const value = Math.max(e.target.value, 1);
-                                setComboQuantity(value);
-                                setSelectedQuantity(value * 39);
-                              }}
-                              min="1"
-                            />
-                          </Paragraph>
+                          <div>
+                            {maxQuantity < 39 ? (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Hết hàng</strong>
+                              </Paragraph>
+                            ) : (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Combo: </strong>
+                                <InputNumber
+                                  type="number"
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "red",
+                                    width: "48%",
+                                  }}
+                                  value={comboQuantity}
+                                  onChange={(value) => {
+                                    const newValue = Math.max(value, 1);
+                                    setComboQuantity(newValue);
+                                    setSelectedQuantity(newValue * 39);
+                                  }}
+                                  min={1}
+                                />
+                              </Paragraph>
+                            )}
+                          </div>
                         )}
                       {selectedItem.Size >= 18 &&
                         selectedItem.Size <= 20 &&
@@ -690,7 +744,7 @@ const OrderPage = () => {
                         selectedItem.Status !== 1 &&
                         maxQuantity !== 0 && (
                           <div>
-                            <Paragraph
+                            {/* <Paragraph
                               style={{
                                 fontSize: "20px",
                                 textAlign: "left",
@@ -714,7 +768,45 @@ const OrderPage = () => {
                                 }}
                                 min="1"
                               />
-                            </Paragraph>
+                            </Paragraph> */}
+                            {maxQuantity < 12 ? (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Hết hàng</strong>
+                              </Paragraph>
+                            ) : (
+                              <Paragraph
+                                style={{
+                                  fontSize: "20px",
+                                  textAlign: "left",
+                                  color: "red",
+                                  paddingTop: "10px",
+                                }}
+                              >
+                                <strong>Combo: </strong>
+                                <InputNumber
+                                  type="number"
+                                  style={{
+                                    fontSize: "14px",
+                                    color: "red",
+                                    width: "48%",
+                                  }}
+                                  value={comboQuantity}
+                                  onChange={(value) => {
+                                    const newValue = Math.max(value, 1);
+                                    setComboQuantity(newValue);
+                                    setSelectedQuantity(newValue * 12);
+                                  }}
+                                  min={1}
+                                />
+                              </Paragraph>
+                            )}
                           </div>
                         )}
                     </div>

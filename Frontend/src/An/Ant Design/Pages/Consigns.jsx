@@ -130,8 +130,10 @@ export default function Profiles() {
             key: '1',
             label: (
                 <>
+                <div className="tab tab-1">
                     Toàn Bộ  Ký Gửi
                     <Badge count={consigns.length} style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         },
@@ -139,8 +141,10 @@ export default function Profiles() {
             key: '2',
             label: (
                 <>
+                <div className="tab tab-2">
                     Yêu cầu ký gửi
                     <Badge count={consigns.filter(consign => consign.State == 1).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         },
@@ -148,8 +152,10 @@ export default function Profiles() {
             key: '3',
             label: (
                 <>
+                    <div className="tab tab-3">
                     Đang kiểm tra Koi
                     <Badge count={consigns.filter(consign => consign.State == 2).length} showZero style={{ marginLeft: 8 }} color='green' />
+                    </div>
                 </>
             ),
         },
@@ -157,24 +163,29 @@ export default function Profiles() {
             key: '4',
             label: (
                 <>
+                 <div className="tab tab-4">
                     Đang thương thảo hợp đồng
                     <Badge count={consigns.filter(consign => consign.State == 3).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }, {
             key: '5',
             label: (
-                <>
+                <>  <div className="tab tab-5">
                     Đang tìm người mua
                     <Badge count={consigns.filter(consign => consign.State == 4).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }, {
             key: '6',
             label: (
                 <>
+                <div className="tab tab-6">
                     Đã bán thành công
                     <Badge count={consigns.filter(consign => consign.State == 5).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }
@@ -220,11 +231,11 @@ export default function Profiles() {
     return (
         <Layout>
             <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý đơn ký gửi</Typography.Title>
+                <Typography.Title style={{ textAlign: 'center',marginBottom:'2rem' }} level={1}>Quản lý đơn ký gửi</Typography.Title>
             </Header>
-            <Content style={{ padding: '24px' }}>
-                <Row style={{ paddingLeft: '3rem' }} gutter={[24, 24]} >
-                    <Col style={{ padding: '0' }} span={10}>
+            <Content  style={{ padding: '24px' }}>
+                <Row className='at-small-no-padding'  gutter={[12]} >
+                    <Col style={{ padding: '0' }} md={10} xs={0} >
                         <Card bodyStyle={{ height: '340px' }} title={'Thống kê trạng thái'} >
                             {/* <Card.Grid hoverable={false} style={{ width: '60%', height: '100%' }}> */}
                                 <Doughnut data={doughnutData}
@@ -243,7 +254,7 @@ export default function Profiles() {
                             </Card.Grid> */}
                         </Card>
                     </Col>
-                    <Col span={14}>
+                    <Col xs={24} md={14}>
                         <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ký gửi theo thời gian'} >
                             <Line data={lineData}
                                 options={

@@ -212,11 +212,11 @@ export default function Kyguikoi() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.status === 200) {
-        // setTimeout(() => {
-        //   if (isLoggedIn) {
-        //     navigate("/donkyguipage");
-        //   }
-        // }, 3000);
+        setTimeout(() => {
+          if (isLoggedIn) {
+            navigate("/donkyguipage");
+          }
+        }, 3000);
         toast.success(response.data.message);
         setFormData({
           ...formData,
@@ -759,29 +759,26 @@ export default function Kyguikoi() {
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
                     <span style={{ color: "red" }}>* </span>
-                    Tuổi Koi của bạn
+                    Năm sinh koi của bạn
                   </label>
                   <Form.Item
                     name="Age"
                     rules={[
-                      { required: true, message: "Vui lòng nhập tuổi." },
                       {
-                        type: "string",
-                        min: 1,
-                        max: 50,
-                        message: "Tuổi phải từ 1 đến 50.",
+                        required: true,
+                        message: "Vui lòng nhập năm sinh koi của bạn.",
                       },
                       {
                         validator: (_, value) => {
                           const numericValue = Number(value); // Convert to a number
-                          if (numericValue < 1) {
+                          if (numericValue < 1900) {
                             return Promise.reject(
-                              new Error("Tuổi phải lớn hơn hoặc bằng 1.")
+                              new Error("Năm sinh phải lớn hơn 1900.")
                             );
                           }
-                          if (numericValue > 50) {
+                          if (numericValue > 2024) {
                             return Promise.reject(
-                              new Error("Tuổi phải nhỏ hơn bằng 50")
+                              new Error("Năm sinh phải nhỏ hơn 2024")
                             );
                           }
                           return Promise.resolve();
