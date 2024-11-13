@@ -58,7 +58,7 @@ function SignInForm() {
       }
     } catch (error) {
       console.error("Failed to login", error);
-      if (error.response.data.errors.email === "Email or password is incorrect") {
+      if (error.response.data.errors.email) {
         message.error('Email hoặc mật khẩu không chính xác');
         return;
       }

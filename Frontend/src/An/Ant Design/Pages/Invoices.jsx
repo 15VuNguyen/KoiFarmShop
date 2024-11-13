@@ -147,8 +147,10 @@ export default function Invoices() {
       key: '1',
       label: (
         <>
+        <div className='tab tab-1'>
           Toàn Bộ Hóa Đơn
           <Badge count={invoices.length} style={{ marginLeft: 8 }} showZero color='green' />
+          </div>
         </>
       ),
     },
@@ -156,16 +158,20 @@ export default function Invoices() {
       key: '2',
       label: (
         <>
+          <div className='tab tab-2'>
           Hóa Đơn Cho Đơn Hàng Đã Nhận
           <Badge count={invoices.filter(invoice => invoice.Status === 1).length} showZero style={{ marginLeft: 8 }} color='green' />
+          </div>
         </>
       ),
     }, {
       key: '3',
       label: (
         <>
+          <div className='tab tab-3'>
           Hóa Đơn Cho Đơn Hàng Đã Bán Hết
           <Badge count={invoices.filter(invoice => invoice.Status === 2).length} showZero style={{ marginLeft: 8 }} color='green' />
+          </div>
         </>
       ),
     },
@@ -579,13 +585,13 @@ export default function Invoices() {
       </Modal>
 
       <Header style={{ background: '#f5f5f5' }}></Header>
-      <Header style={{ background: '#f5f5f5' }}>
+      <Header style={{ background: '#f5f5f5',marginBottom:'2rem' }}>
         <Typography.Title style={{ textAlign: 'center' }} level={1}>Quản lý hóa đơn nhập khẩu cá KOI</Typography.Title>
       </Header>
 
       <Content className='fix-Table' style={{ padding: '24px' }}>
         <Row gutter={24}>
-          <Col span={6}>
+          <Col md={8} sm={12} xs={24}>
             <Card hoverable style={{ height: '100%' }} onClick={handleOpenUpChartModal}>
               <Statistic
                 title={<Typography.Title level={4}>Tổng số hóa đơn được tạo trong 7 ngày qua</Typography.Title>}
@@ -598,7 +604,7 @@ export default function Invoices() {
             </Card>
           </Col>
 
-          <Col span={6}>
+          <Col md={8} sm={12} xs={0}>
             <Card hoverable style={{ height: '100%' }}
             onClick={() => handleOpenUpChartModalWithStatus(1)}>  
             
@@ -616,7 +622,7 @@ export default function Invoices() {
               </Row>
             </Card>
           </Col>
-          <Col span={6}>
+          <Col md={8} sm={0} xs={0}>
             <Card hoverable style={{ height: '100%' }}
               onClick={() => handleOpenUpChartModalWithStatus(2)}
             >

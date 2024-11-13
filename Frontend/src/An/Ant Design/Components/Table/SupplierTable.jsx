@@ -8,46 +8,62 @@ import { initializeApp } from "firebase/app";
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import useAddress from "../useAddress";
 export default function SupplierTable({ data, showCreate, setCreate, ResetTable }) {
-  const [selectedColumns, setSelectedColumns] = React.useState({});
+  const [selectedColumns, setSelectedColumns] = React.useState([ '_id', 'SupplierName', 'SupplierImage', 'Address', 'Country', 'PhoneNumber', 'SupplierDescription', 'SupplierWebsite', 'action']);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [currentSupplier, setCurrentSupplier] = React.useState(null);
   const [currentCountry, setCurrentCountry] = React.useState(null);
-  const [selectedCity, setSelectedCity] = React.useState(null);
-  const [selectedDistrict, setSelectedDistrict] = React.useState(null);
-  const [selectedWard, setSelectedWard] = React.useState(null);
+  // const [selectedCity, setSelectedCity] = React.useState(null);
+  // const [selectedDistrict, setSelectedDistrict] = React.useState(null);
+  // const [selectedWard, setSelectedWard] = React.useState(null);
   const [form] = Form.useForm();
   const [uploading, setUploading] = React.useState(false);
   const { searchText, setSearchText, recommendations } = useAddress();
+  const [filteredData, setFilteredData] = React.useState(data);
   // const { allVietnameseAddress, getAllDistrictOfACity, getALLWardOfADistrict } = useAddress();
   // console.log(allVietnameseAddress);
   // console.log(getAllDistrictOfACity('Thành phố Hồ Chí Minh'));
-  const handleCityChange = (value) => {
-    setSelectedDistrict(null); 
-    setSelectedCity(value);
-    setSelectedDistrict(null); 
+  // const handleCityChange = (value) => {
+  //   setSelectedDistrict(null); 
+  //   setSelectedCity(value);
+  //   setSelectedDistrict(null); 
 
 
-  };
+  // };
+
+
+  React.useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
+React.useEffect(() => {
+    if (searchTerm) {
+      const filteredData = data.filter((item) => {
+        const searchFields = ['_id', 'SupplierName', 'Address', 'Country', 'PhoneNumber', 'SupplierWebsite'];
+        return searchFields.some(field =>
+          item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
+      setFilteredData(filteredData);
+    } else {
+      setFilteredData(data);
+    }
+  }, [searchTerm, data]);
 
 
 
 
+  // const handleDistrictChange = (value) => {
+  //   setSelectedDistrict(value);
+  //   setSelectedWard(null); 
+  //   form.setFieldsValue({ District: value, Ward: null });
 
+  // };
+  // const handleWardChange = (value) => {
+  //   setSelectedWard(value);
+  //   form.setFieldsValue({ Ward: value });
 
-
-
-  const handleDistrictChange = (value) => {
-    setSelectedDistrict(value);
-    setSelectedWard(null); 
-    form.setFieldsValue({ District: value, Ward: null });
-
-  };
-  const handleWardChange = (value) => {
-    setSelectedWard(value);
-    form.setFieldsValue({ Ward: value });
-
-  };
+  // };
 
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
@@ -146,9 +162,9 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
         await axiosInstance.post(`/manager/manage-supplier/create-new-supplier`, newSupplier);
         message.success(`Nhà cung cấp "${values.SupplierName}" đã được tạo.`);
         form.resetFields();
-        setSelectedCity(null);
-        setSelectedDistrict(null);
-        setSelectedWard(null);
+        // setSelectedCity(null);
+        // setSelectedDistrict(null);
+        // setSelectedWard(null);
         setIsModalVisible(false);
         ResetTable()
       } catch (error) {
@@ -179,25 +195,46 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
     message.success("ID đã được sao chép vào bộ nhớ tạm!");
   };
 
-  const handleColumnVisibility = (columnKey, isVisible) => {
-    setSelectedColumns((prevState) => ({
-      ...prevState,
-      [columnKey]: !isVisible
-    }));
+  const handleColumnVisibility = (key, isVisible) => {
+    setSelectedColumns((prev) =>
+      isVisible ? [...prev, key] : prev.filter((colKey) => colKey !== key)
+    );
   };
+  
 
   const resetColumns = () => {
     setSelectedColumns({});
   };
 
   const searchFunction = (item) => {
-    const searchFields = ['_id', 'SupplierName', 'Address', 'Country'];
+    const searchFields = ['_id', 'SupplierName', 'Address', 'Country', 'PhoneNumber', 'SupplierWebsite'];
     return searchFields.some(field =>
       item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
-
-  const filteredData = searchTerm ? data.filter(searchFunction) : data;
+  const handleDeleteSupplier = async (id) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa nhà cung cấp',
+      content: 'Bạn có chắc chắn muốn xóa nhà cung cấp này?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        try {
+          const reponse = await axiosInstance.delete(`/manager/manage-supplier/${id}`);
+          console.log(reponse);
+          if (reponse.status === 200) {
+            message.success('Xóa nhà cung cấp thành công');
+            ResetTable();
+          }
+        } catch (error) {
+          console.error(error);
+          message.error('Xóa nhà cung cấp thất bại');
+        }
+      },
+    });
+  };
+  const filteringFunction = searchTerm ? data.filter(searchFunction) : data;
 
   const columns = [
     {
@@ -205,15 +242,16 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
       dataIndex: '_id',
       key: '_id',
       render: (text) => (
-        <>
-          <Tag color="blue">{text}</Tag>
-          <Tooltip title="Sao chép ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-              onClick={() => copyToClipboard(text)}
-            />
-          </Tooltip>
-        </>
+        <Tooltip title="Sao chép ID">
+          <Tag
+            icon={<CopyOutlined />}
+            style={{ cursor: 'pointer' }}
+            onClick={() => copyToClipboard(text)}
+            color="blue"
+          >
+            {text}
+          </Tag>
+        </Tooltip>
       ),
     },
     {
@@ -274,7 +312,7 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
       title: 'Hành Động',
       key: 'action',
       render: (_, record) => (
-        <>
+        <Space>
           <Button
             type="primary"
             onClick={() => showUpdateModal(record)}
@@ -282,13 +320,31 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
           >
             Cập Nhật
           </Button>
-        </>
+          <Button type="primary" danger onClick={() => handleDeleteSupplier(record._id)}>
+            Xóa Nhà Cung Cấp
+          </Button>
+        </Space>
       ),
     },
-  ].map(col => ({ ...col, visible: !selectedColumns[col.key] }));
+  ].filter(col => selectedColumns.includes(col.key));
+  
 
+
+  const OPTIONS = [ 
+    { label: 'ID', value: '_id' },
+    { label: 'Tên Nhà Cung Cấp', value: 'SupplierName' },
+    { label: 'Hình Ảnh', value: 'SupplierImage' },
+    { label: 'Địa Chỉ', value: 'Address' },
+    { label: 'Quốc Gia', value: 'Country' },
+    { label: 'Số Điện Thoại', value: 'PhoneNumber' },
+    { label: 'Mô Tả', value: 'SupplierDescription' },
+    { label: 'Trang Web', value: 'SupplierWebsite' },
+  ];const filteredOptions = OPTIONS.filter(o => !selectedColumns.includes(o));
   const filteredColumns = columns.filter(col => col.visible);
-
+  const handleChange = selectedItems => {
+    const selectedValues = selectedItems.map(item => item.value); 
+    setSelectedColumns(selectedValues);
+};
   const columnSelectionMenu = (
     <Menu>
       {columns.map((col) => (
@@ -311,7 +367,41 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
 
   return (
     <>
-      <Table columns={columns} dataSource={data} rowKey="_id" />
+      <Space wrap size={"middle"} style={{marginBottom:'1rem'}}>
+        <Input
+          placeholder="Tìm kiếm nhà cung cấp"
+          value={searchTerm}
+
+
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ width: 300 }}
+        />
+        <Tooltip title="Chọn cột hiển thị">
+                <Select
+                    labelInValue
+                    allowClear
+                    mode="multiple"
+                    placeholder="Lựa chọn cột"
+                    value={selectedColumns.map(col => ({ value: col, label: OPTIONS.find(opt => opt.value === col)?.label }))}
+                    onChange={handleChange}
+                    style={{
+                       
+                        width: '100%',
+                        minWidth: 200
+                    }}
+                >
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item.value} value={item.value}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+                </Tooltip>
+      </Space>
+      <Table
+        size='small'
+        scroll={{ x: 1300, }}
+        columns={columns} dataSource={filteredData} rowKey="_id" />
 
       <Modal
         width={700}
@@ -449,19 +539,19 @@ export default function SupplierTable({ data, showCreate, setCreate, ResetTable 
               )}
             </Row> 
           </Form.Item> */}
-            <Form.Item label="Address"
-              name="Address"
-              rules={ [{ required: true, message: 'Vui lòng nhập địa chỉ' }] }
-            >
-                <AutoComplete
-                  allowClear
-                    value={searchText}
-                    onChange={setSearchText}
-                    options={recommendations.map(address => ({ value: address }))}
-                    placeholder= "Nhập địa chỉ"
-                    
-                />
-            </Form.Item>
+          <Form.Item label="Address"
+            name="Address"
+            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+          >
+            <AutoComplete
+              allowClear
+              value={searchText}
+              onChange={setSearchText}
+              options={recommendations.map(address => ({ value: address }))}
+              placeholder="Nhập địa chỉ"
+
+            />
+          </Form.Item>
           <Form.Item
             label="Số Điện Thoại"
             name="PhoneNumber"

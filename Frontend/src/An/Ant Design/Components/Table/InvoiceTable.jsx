@@ -29,12 +29,14 @@ export default function InvoiceTable({ data, actions }) {
       sorter: (a, b) => a._id.localeCompare(b._id),
       render: (text) => (
         <>
-          <Tag color="blue">{text}</Tag>
           <Tooltip title="Sao chép ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
+            <Tag
+              icon={<CopyOutlined />}
+              style={{ cursor: 'pointer' }}
               onClick={() => copyToClipboard(text)}
-            />
+              color="blue">{text}</Tag>
+
+
           </Tooltip>
         </>
       ),
@@ -46,12 +48,14 @@ export default function InvoiceTable({ data, actions }) {
       sorter: (a, b) => a.GroupKoiIDInvoice.localeCompare(b.GroupKoiIDInvoice),
       render: (text) => (
         <>
-          <Tag color="blue">{text}</Tag>
-          <Tooltip title="Sao chép ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-              onClick={() => copyToClipboard(text)}
-            />
+         <Tooltip title="Sao chép ID">
+          <Tag
+            icon={<CopyOutlined />}
+            style={{ cursor: 'pointer' }}
+            onClick={() => copyToClipboard(text)}
+          color="blue">{text}</Tag>
+         
+           
           </Tooltip>
         </>
       ),
@@ -143,11 +147,13 @@ export default function InvoiceTable({ data, actions }) {
         </Button>
       </Dropdown>
       <Table
+        scroll={{ x: 1300 }}
         columns={columns.filter(col => visibleColumns.includes(col.key))}
         dataSource={data}
         rowKey="_id"
         pagination={{ pageSize: 5 }}
         onChange={handleTableChange}
+        size='small'
       />
     </div>
   );

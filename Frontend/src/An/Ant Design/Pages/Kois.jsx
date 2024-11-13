@@ -292,13 +292,13 @@ export default function Kois() {
 
             <Modal width={800} title={isCreating ? "Tạo Koi Mới" : "Cập Nhật Koi"} visible={isModalVisible} onCancel={() => resetLeModal()} onOk={beforeSubmit} footer={null}>
                 <Form form={form} onFinish={handleModalSubmit} layout="vertical" autoComplete="off">
-                    <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
-                        {/* Image Section */}
+                    <div style={{ display: 'flex', gap: '1rem', marginBottom: '20px', alignItems: 'center', width: '100%' }}>
+
                         {modalKoi?.Image ? (
                             <Image
                                 hoverable
                                 src={modalKoi.Image}
-                                style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                style={{ flex: 1, height: '200px', objectFit: 'cover' }}
                             />
                         ) : (
                             <Upload
@@ -307,19 +307,19 @@ export default function Kois() {
                                 showUploadList={false}
                                 accept="image/*"
                                 fileList={imgList ? [imgList] : []}
+                                style={{ flex: 1, height: '200px' }}
                             >
-                                <div style={{ width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
+                                <div className='reponsive-skeleton' style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
                                     {isLoading ? <LoadingOutlined /> : <PlusOutlined />}
                                     <div>Nhấn để tải ảnh lên</div>
                                 </div>
                             </Upload>
                         )}
 
-                        {/* Video Section */}
-                        {modalKoi?.Video ? (
-                            <video style={{ display: 'block', maxWidth: '480px', height: '200px' }} controls>
-                                <source src={modalKoi.Video} type="video/mp4" />
 
+                        {modalKoi?.Video ? (
+                            <video style={{ flex: 1, height: '200px', width: 'clamp(300px, 50%, 600px)', objectFit: 'cover' }} controls>
+                                <source src={modalKoi.Video} type="video/mp4" />
                             </video>
                         ) : (
                             <Upload
@@ -328,14 +328,17 @@ export default function Kois() {
                                 accept="video/*"
                                 maxCount={1}
                                 fileList={videoList ? [videoList] : []}
+                                style={{ flex: 1, height: '200px', width: 'clamp(300px, 50%, 600px)' }}
                             >
-                                <div style={{ width: '480px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
+                                <div className='reponsive-skeleton' style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #d9d9d9' }}>
                                     {isLoading ? <LoadingOutlined /> : <PlusOutlined />}
-                                    <div>Nhấn để tải video lên </div>
+                                    <div>Nhấn để tải video lên</div>
                                 </div>
                             </Upload>
                         )}
                     </div>
+
+
 
 
                     {/* <Form.Item
@@ -358,7 +361,7 @@ export default function Kois() {
                         label="Tên Koi"
                         name="KoiName"
                         rules={[{ required: true, message: 'Hãy nhập tên Koi!' }]}>
-                        <Input placeholder="Koi Name" />
+                        <Input placeholder="Tên Koi" />
                     </Form.Item>
 
                     <Row gutter={16}>
@@ -375,27 +378,37 @@ export default function Kois() {
                             </Form.Item>
                         </Col> */}
                         <Col span={6}>
-                            <Form.Item
-                                label="Tuổi"
-                                name="Age"
-                                rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
-                                <InputNumber min={1} max={50} style={{ width: '100%' }} />
-                            </Form.Item>
+                            <Tooltip title="Năm Sinh của Koi Phải lớn hơn 1700 và nhỏ hơn năm hiện tại"
+
+                            >
+                                <Form.Item
+                                    label="Tuổi"
+                                    name="Age"
+                                    placeholder="Tuổi"
+                                    rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
+                                    <InputNumber placeholder='tuổi' min={1700} max={() => {
+                                        return new Date().getFullYear();
+                                    }} style={{ width: '100%' }} />
+                                </Form.Item>
+                            </Tooltip>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 label="Xuất Xứ"
                                 name="Origin"
+                                placeholder="Xuất Xứ"
                                 rules={[{ required: true, message: 'Hây nhập xuất xứ Koi!' }]}>
-                                <Input />
+                                <Input placeholder='Xuất Xứ Koi' />
                             </Form.Item>
                         </Col>
                         <Col span={6}>
                             <Form.Item
                                 label="Giới Tính"
                                 name="Gender"
+
                                 rules={[{ required: true, message: 'Hãy chọn giới tính Koi!' }]}>
-                                <Select>
+                                <Select
+                                    defaultValue="Male">
                                     <Select.Option value="Male">Đực</Select.Option>
                                     <Select.Option value="Female">Cái</Select.Option>
                                 </Select>
@@ -412,7 +425,10 @@ export default function Kois() {
                                 name="Size"
 
                                 rules={[{ required: true, message: 'Hãy Nhập Kích Thước Koi!', type: 'number', min: 0.00001, max: 200 }]}>
-                                <InputNumber min={0} max={200} style={{ width: '100%' }} suffix={'cm'} />
+                                <InputNumber
+                                    addonAfter="cm"
+
+                                    min={0} max={200} style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
@@ -443,7 +459,7 @@ export default function Kois() {
                                 name="DailyFoodAmount"
 
                                 rules={[{ required: true, message: 'lượng thức ăn hàng phải lớn 0 và nhỏ hơn 100', type: 'number', min: 0.001, max: 100 }]}>
-                                <InputNumber suffix="g/ngày" style={{ width: '100%' }} />
+                                <InputNumber addonAfter={'g/ngày'} style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                         <Col span={10}>
@@ -451,7 +467,7 @@ export default function Kois() {
                                 label="Nhập tỷ lệ lọc (%)"
                                 name="FilteringRatio"
                                 rules={[{ required: true, message: 'tỉ lệ sàn lọc phải lớn hơn 0 và nhỏ 100 ', type: 'number', min: 0.001, max: 100 }]}>
-                                <InputNumber suffix={'%'} style={{ width: '100%' }} />
+                                <InputNumber addonAfter={'%'} style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -471,7 +487,7 @@ export default function Kois() {
                                 name="Price"
                             >
                                 <InputNumber formatter={(value) => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} min={1000} style={{ width: '100%' }} suffix={"đ"} />
+                                    parser={(value) => value?.replace(/\$\s?|(,*)/g, '')} min={1000} style={{ width: '100%' }} addonAfter={"đ"} />
                             </Form.Item>
                         </Col>
                     </Row>
