@@ -46,8 +46,7 @@ export default function Locakoinhapkhau() {
       <Navbar />
       <div
         style={{
-          paddingTop: "150px",
-          padding: "50px 20px",
+          padding: "100px 20px",
           background: "#f4f4f4",
           textAlign: "center",
         }}
