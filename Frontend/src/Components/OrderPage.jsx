@@ -138,7 +138,7 @@ const OrderPage = () => {
       let requestData = {
         Quantity: parseInt(selectedQuantity),
       };
-      if (selectedItem.Status === 4 || selectedItem.Status === 1) {
+      if (selectedItem.Status === 4) {
         requestData.KoiID = selectedItem._id;
         requestData.Size = parseInt(selectedItem.Size);
         requestData.Breed = selectedItem.Breed;
@@ -178,7 +178,9 @@ const OrderPage = () => {
           return;
         }
       }
-      toast.success("Đã thêm vào giỏ hàng!");
+      toast.success(
+        `Đã thêm vào giỏ hàng ${selectedQuantity} con ${selectedItem.KoiName} có size ${selectedItem.Size} cm`
+      );
     } catch (error) {
       console.log(error);
       toast.error("Có lỗi xảy ra! " + (error.response?.data?.message || ""));
@@ -228,16 +230,19 @@ const OrderPage = () => {
         console.log(result);
         if (
           typeof result === "string" &&
-          result.includes("0 available in stock")
+          result.includes("Số lượng còn lại trong giỏ hàng (0)")
         ) {
-          setError(result); // Hiển thị thông điệp từ phản hồi
+          toast.error(result);
+          setError(result);
           setIsButtonDisabled(true);
           return;
         } else if (
           typeof result === "string" &&
-          result.includes("available in stock")
+          result.includes("Số lượng còn lại trong giỏ hàng (")
         ) {
-          setError(result); // Hiển thị thông điệp từ phản hồi
+          toast.error(result);
+          setError(result);
+          setIsButtonDisabled(true);
           return;
         }
         console.log("Add to cart successful: " + response.data.message);
@@ -389,6 +394,27 @@ const OrderPage = () => {
                         color: "red",
                       }}
                     >
+                      {maxQuantity == 0 && (
+                        <label>
+                          <strong>Số lượng: </strong>
+                          <InputNumber
+                            style={{
+                              fontSize: "14px",
+                              color: "red",
+                              width: "48%",
+                            }}
+                            type="number"
+                            value={0}
+                            disabled={maxQuantity === 0}
+                            onKeyPress={(e) => {
+                              // Ngăn nhập ký tự "e"
+                              if (e.key === "e" || e.key === "E") {
+                                e.preventDefault();
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
                       {selectedItem.Status === 1 && (
                         <label>
                           <strong>Số lượng: </strong>
