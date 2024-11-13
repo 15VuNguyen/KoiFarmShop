@@ -1,109 +1,243 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
+import Card from 'antd/es/card/Card';
+import { Radio, Switch,Tooltip } from 'antd';
+import axiosInstance from '../../Utils/axiosJS';
+import { BarChartOutlined,LineChartOutlined } from '@ant-design/icons';
+export default function RevenueChart( ) {
+    const [revenueData, setRevenueData] = useState([]);
+    const [profitData, setProfitData] = useState([]);
+    const [chartType, setChartType] = useState('bar');
+    const [dateRange, setDateRange] = useState('7d');
 
-export default function RevenueChart({ types,chartDATA, DATA }) {
-    const data = [
-        { "date": "2024-10-06", "value": 182664, "profit": 145000 },
-        { "date": "2024-10-07", "value": 1325963, "profit": 1250000 },
-        { "date": "2024-10-08", "value": 1373571, "profit": 1300000 },
-        { "date": "2024-10-09", "value": 1287479, "profit": 1200000 },
-        { "date": "2024-10-10", "value": 1295080, "profit": 1250000 },
-        { "date": "2024-10-11", "value": 1575260, "profit": 1500000 },
-        { "date": "2024-10-12", "value": 1388847, "profit": 1300000 },
-        { "date": "2024-10-13", "value": 1633423, "profit": 1600000 },
-        { "date": "2024-10-14", "value": 1852390, "profit": 1800000 },
-        { "date": "2024-10-15", "value": 415998, "profit": 390000 },
-        { "date": "2024-10-16", "value": 1530824, "profit": 1500000 },
-        { "date": "2024-10-17", "value": 475660, "profit": 450000 },
-        { "date": "2024-10-18", "value": 1983580, "profit": 1900000 },
-        { "date": "2024-10-19", "value": 1450355, "profit": 1400000 },
-        { "date": "2024-10-20", "value": 1543935, "profit": 1500000 },
-        { "date": "2024-10-21", "value": 1109348, "profit": 1050000 },
-        { "date": "2024-10-22", "value": 552198, "profit": 530000 },
-        { "date": "2024-10-23", "value": 252193, "profit": 1200000 }
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const revenueResponse = await axiosInstance.get('manager/getRevenue');
+                const profitResponse = await axiosInstance.get('manager/getProfit');
+                setRevenueData(revenueResponse.data);
+                setProfitData(profitResponse.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+    const filterDataByDateRange = (data) => {
+        const today = new Date();
+        let filteredData = data;
+
+        if (dateRange === '7d') {
+            const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
+            filteredData = data.filter(item => new Date(item.Date) >= sevenDaysAgo);
+        } else if (dateRange === 'month') {
+            const lastMonth = new Date(today.setMonth(today.getMonth() - 1));
+            filteredData = data.filter(item => new Date(item.Date) >= lastMonth);
+        } else if (dateRange === 'year') {
+            const lastYear = new Date(today.setFullYear(today.getFullYear() - 1));
+            filteredData = data.filter(item => new Date(item.Date) >= lastYear);
+        }
+
+        return filteredData;
+    };
+
+
+    const filteredRevenueData = filterDataByDateRange(revenueData);
+    const filteredProfitData = filterDataByDateRange(profitData);
 
     const chartData = {
-        labels: data.map(item => item.date),
+        labels: filteredRevenueData.map(item => item.Date),
         datasets: [
             {
-                label: 'Revenue',
-                data: data.map(item => item.value),
+                label: 'Doanh Thu',
+                data: filteredRevenueData.map(item => item.TotalPrice),
                 borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderWidth: 2,
-                fill: false
+                fill: true,
             },
             {
-                label: 'Profit',
-                data: data.map(item => item.profit),
+                label: 'Lợi Nhuận ',
+                data: filteredProfitData.map(item => item.TotalProfit),
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 2,
-                fill: false
+                fill: true,
             }
         ]
     };
-                        // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
 
+    // const chartOptions = {
+    //     maintainAspectRatio: true,
+    //     responsive: false,
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             title: {
+    //                 display: true,
+    //                 text: 'Amount (VND)',
+    //             },
+    //         },
+    //         x: {
+    //             title: {
+    //                 display: true,
+    //                 text: 'Date',
+    //             },
+    //         },
+    //     },
+    //     plugins: {
+    //         tooltip: {
+    //             callbacks: {
+    //                 label: function (tooltipItem) {
+    //                     const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+    //                     const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+    //                     const percentageChange = revenue
+    //                         ? ((profit - revenue) / revenue) * 100
+    //                         : 0;
+    //                     const changeLabel = percentageChange > 0 ? 'gain' : 'loss';
 
-    const chartOptions = {
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        },
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function (tooltipItem) {
-                        const revenue = tooltipItem.dataset.label === 'Revenue'
-                            ? tooltipItem.raw
-                            : DATA[tooltipItem.dataIndex].value;
-                        const profit = tooltipItem.dataset.label === 'Profit'
-                            ? tooltipItem.raw
-                            : DATA[tooltipItem.dataIndex].profit;
+    //                     return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
+    //                 },
+    //                 labelTextColor: function (tooltipItem) {
+    //                     const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+    //                     const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+    //                     const percentageChange = revenue
+    //                         ? ((profit - revenue) / revenue) * 100
+    //                         : 0;
 
-                        const percentageChange = ((profit - revenue) / revenue) * 100;
-                        const changeLabel = percentageChange > 0 ? 'gain' : 'loss';
-
-                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
-                    },
-                    labelTextColor: function(tooltipItem) {
-                        const revenue = tooltipItem.dataset.label === 'Revenue'
-                            ? tooltipItem.raw
-                            : DATA[tooltipItem.dataIndex].value;
-                        const profit = tooltipItem.dataset.label === 'Profit'
-                            ? tooltipItem.raw
-                            : DATA[tooltipItem.dataIndex].profit;
-        
-                        const percentageChange = ((profit - revenue) / revenue) * 100;
-        
-                        // https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
-                        return percentageChange > 0 ? 'rgba(205, 254, 194)' : 'rgba(254, 121, 104)';
-                    }
-                },
-                titleColor: function (tooltip) {
-                    const datasetLabel = tooltip.tooltipItems[0]?.dataset.label;
-                    if (datasetLabel === 'Revenue') {
-                        return 'rgba(75, 192, 192, 1)';
-                    } else {
-                        return 'rgba(255, 99, 132, 1)';
-                    }
-                }
-
-            }
-        }
-    };
+    //                     return percentageChange > 0 ? 'rgba(205, 254, 194)' : 'rgba(254, 121, 104)';
+    //                 }
+    //             }
+    //         }
+    //     }
+    // };
 
     return (
-        <div style={{ height: '50vh', width: '100%' }}>
-            {types === 'BarChart' ? (
-                <Bar data={chartDATA} options={chartOptions} height={400} width={600} />
+        <Card
+            bodyStyle={{ height: '500px' }}
+            style={{ width: '100%' }}
+            title="Biểu đồ Doanh thu và Lợi nhuận"
+        >
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <Radio.Group
+                    options={[
+                        { label: '7 Ngày', value: '7d' },
+                        { label: 'Tháng Trước', value: 'month' },
+                        { label: 'Năm Trước', value: 'year' },
+                    ]}
+                    onChange={(e) => setDateRange(e.target.value)}
+                    value={dateRange}
+                    optionType="button"
+                    buttonStyle="solid"
+                />
+                <Tooltip title="Chuyển đổi loại biểu đồ">
+                    <Switch
+                        checkedChildren={<BarChartOutlined />}
+                        unCheckedChildren={<LineChartOutlined />}
+                        onChange={(checked) => setChartType(checked ? 'line' : 'bar')}
+                    />
+                </Tooltip>
+            </div>
+        
+            {chartType === 'bar' ? (
+                <Bar
+                    data={chartData}
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Số tiền (đ)',
+                                },
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Ngày',
+                                },
+                            },
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (tooltipItem) {
+                                        const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+                                        const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+                                        const percentageChange = revenue
+                                            ? ((profit - revenue) / revenue) * 100
+                                            : 0;
+                                        const changeLabel = percentageChange > 0 ? 'lãi' : 'lỗ';
+        
+                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
+                                    },
+                                    labelTextColor: function (tooltipItem) {
+                                        const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+                                        const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+                                        const percentageChange = revenue
+                                            ? ((profit - revenue) / revenue) * 100
+                                            : 0;
+        
+                                        return percentageChange > 0 ? 'rgba(205, 254, 194)' : 'rgba(254, 121, 104)';
+                                    }
+                                }
+                            }
+                        },
+                    }}
+                />
             ) : (
-                <Line data={chartDATA} options={chartOptions} height={400} width={600} />
+                <Line
+                    data={chartData}
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Số tiền (đ)',
+                                },
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Ngày',
+                                },
+                            },
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (tooltipItem) {
+                                        const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+                                        const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+                                        const percentageChange = revenue
+                                            ? ((profit - revenue) / revenue) * 100
+                                            : 0;
+                                        const changeLabel = percentageChange > 0 ? 'lãi' : 'lỗ';
+        
+                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
+                                    },
+                                    labelTextColor: function (tooltipItem) {
+                                        const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
+                                        const profit = filteredProfitData[tooltipItem.dataIndex]?.TotalProfit || 0;
+                                        const percentageChange = revenue
+                                            ? ((profit - revenue) / revenue) * 100
+                                            : 0;
+        
+                                        return percentageChange > 0 ? 'rgba(205, 254, 194)' : 'rgba(254, 121, 104)';
+                                    }
+                                }
+                            }
+                        },
+                    }}
+                />
             )}
-        </div>
+        </Card>
     );
 }

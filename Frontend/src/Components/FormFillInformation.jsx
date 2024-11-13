@@ -13,6 +13,7 @@ import { createOrder, getOrderDetail } from "../services/orderService";
 import { AutoComplete } from "antd";
 import useAddress from "../An/Ant Design/Components/useAddress";
 import ShoppingCart from "./TableCartForShoppingCart";
+import TableCartForm from "./TableCartForm";
 export default function FormFillInformation() {
   const { searchText,
     setSearchText,
@@ -268,7 +269,7 @@ export default function FormFillInformation() {
           </div>
           <div className="common-css product-info">
             <h4 className="bb">Sản phẩm</h4>
-            <ShoppingCart onUpdateQuantity = {handleUpdateQuantity}/>
+            <TableCartForm onUpdateQuantity = {handleUpdateQuantity}/>
 
           </div>
           <div className="common-css voucher">
