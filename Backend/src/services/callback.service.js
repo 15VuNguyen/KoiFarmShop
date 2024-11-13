@@ -8,8 +8,7 @@ export const callback = async (req, res) => {
   console.log(req.body)
   try {
     const config = {
-      app_id: '554',
-      key2: 'uUfsWgfLkRLzq6W2uNXTCxrfxs51auny'
+      key2: 'trMrHtvjo6myautxDUiAcYsVtaeQ8nhf'
     }
 
     let dataStr = req.body.data
@@ -88,12 +87,11 @@ export const callback = async (req, res) => {
         result.returncode = -1
         result.returnmessage = 'No order data found in embed_data'
       } else {
-        console.log('db check')
         const result = await saveOrderToDatabase(reqOrderDetails, reqOrder, reqLoyaltyCard)
-        console.log('result db: ')
+        console.log('result db: ', result.order)
 
         await databaseService.order.findOneAndUpdate(
-          { _id: result.order.insertedId },
+          { _id: result.order._id },
           { $set: { Status: 2 } },
           { new: true }
         )

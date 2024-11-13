@@ -10,6 +10,17 @@ import { Typography } from "antd";
 import "../Css/koiStyle.css";
 import { Spin } from "antd"; // Import the Spin component
 const { Title, Text, Paragraph } = Typography;
+import img1 from "../../assets/Koi-Asagi/ca-koi-asagi.webp";
+import img2 from "../../assets/Koi-Asagi/ginrin-asagi.jpg";
+import img3 from "../../assets/Koi-Asagi/konjo-asagi.jpg";
+import img4 from "../../assets/Koi-Asagi/narumi-asagi.jpg";
+import img5 from "../../assets/Koi-Asagi/4789c7fd1367ba7ae35a271f1b912a8c.png";
+import img6 from "../../assets/Koi-Asagi/mizu-asagi.jpg";
+import img7 from "../../assets/Koi-Asagi/hi-asagi.jpg";
+import img8 from "../../assets/Koi-Asagi/ca-koi-asagi-1.webp";
+import img9 from "../../assets/Koi-Asagi/ca-koi-asagi-2.webp";
+import img10 from "../../assets/img_4.png";
+import img11 from "../../assets/img_5.png";
 export default function Asagi() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -235,60 +246,145 @@ export default function Asagi() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2 style={{ color: "red" }}>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về cá Koi Asagi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết Asagi Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách chọn mua Cá Asagi Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc cá Koi Asagi Doitsu
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Các dòng cá Asagi koi trên thị trường
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Giá cá koi Asagi bao nhiêu?
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll61} className="contentBox">
+                        <span
+                          onClick={handleScroll61}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           6.1 Giá cá koi Asagi F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll62} className="contentBox">
+                        <span
+                          onClick={handleScroll62}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           6.2 Giá cá koi Asagi Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll7} className="contentBox">
+                    <span
+                      onClick={handleScroll7}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       7. Tại sao nên mua cá Koi Asagi Doitsu tại IKoi
                     </span>
                   </li>
                 </ul>
               </div>
               <div>
-                <h2 style={{ color: "red", textAlign: "center" }}>
+                <h2
+                  style={{
+                    color: "red",
+                    textAlign: "center",
+                    paddingTop: "20px",
+                  }}
+                >
                   Nội dung chi tiết
                 </h2>
                 <Paragraph className="paragraph-Style">
@@ -301,7 +397,15 @@ export default function Asagi() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu về cá Koi Asagi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu về cá Koi Asagi
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Asagi là 1 trong những dòng cá Koi xuất hiện sớm nhất ở Nhật
                   Bản. Cái tên của nó bắt nguồn từ ngôi làng sinh ra toàn bộ
@@ -313,10 +417,7 @@ export default function Asagi() {
                   sản sinh ra toàn bộ giống Asagi).
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Asagi/ca-koi-asagi.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Hình ảnh cá Koi Asagi</Text>
                   </div>
@@ -329,7 +430,15 @@ export default function Asagi() {
               </div>
 
               <div id="detailed-content">
-                <h3 style={{ color: "red" }}>2. Cách nhận biết Asagi Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2. Cách nhận biết Asagi Koi
+                </h3>
 
                 <div>
                   <Paragraph className="paragraph-Style">
@@ -462,7 +571,15 @@ export default function Asagi() {
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn mua Cá Asagi Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn mua Cá Asagi Koi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Asagi Doitsu và cá koi ginrin được nhiều người quan
@@ -519,7 +636,13 @@ export default function Asagi() {
                 </ul>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách chăm sóc cá Koi Asagi Doitsu
                 </h3>
                 <div>
@@ -589,7 +712,13 @@ export default function Asagi() {
                 </div>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Các dòng cá Asagi koi trên thị trường
                 </h3>
                 <div>
@@ -607,10 +736,7 @@ export default function Asagi() {
                         nỗi bật nhất trong các dòng Asagi
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/ginrin-asagi.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img2} style={{ width: "30%" }} />
                         <div>
                           <Text className="text-Style">Ginrin Asagi</Text>
                         </div>
@@ -624,10 +750,7 @@ export default function Asagi() {
                         cam, tực rỡ, nổi bật, rõ các đường biên.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/konjo-asagi.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img3} style={{ width: "30%" }} />
                         <div className="text-Style">
                           <Text className="text-Style">Konjo Asagi</Text>
                         </div>
@@ -641,10 +764,7 @@ export default function Asagi() {
                         dần.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/narumi-asagi.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img4} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           {" "}
                           <Text className="text-Style">Narumi Asagi</Text>
@@ -658,10 +778,7 @@ export default function Asagi() {
                         Vảy màu vàng nhạt/ xám nhạt nhất của nhà Asagi.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/4789c7fd1367ba7ae35a271f1b912a8c.png"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img5} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text className="text-Style">Asaki Sanke</Text>
                         </div>
@@ -675,10 +792,7 @@ export default function Asagi() {
                         bụng trên có màu đỏ cam.{" "}
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/mizu-asagi.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img6} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text className="text-Style">Mizu Sanke</Text>/
                         </div>
@@ -692,10 +806,7 @@ export default function Asagi() {
                         đầu có thê toàn bộ là màu Hi đỏ cam
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img
-                          src="src/assets/Koi-Asagi/hi-asagi.jpg"
-                          style={{ width: "30%" }}
-                        />
+                        <img src={img7} style={{ width: "30%" }} />
                         <div style={{ textAlign: "center" }}>
                           <Text className="text-Style">Hi Asagi</Text>
                         </div>
@@ -705,7 +816,15 @@ export default function Asagi() {
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>6. Giá cá koi Asagi bao nhiêu?</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  6. Giá cá koi Asagi bao nhiêu?
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Hiện tại IKoi đang cung cấp dòng cá koi Asagi chuẩn từ cá
@@ -728,7 +847,7 @@ export default function Asagi() {
                         đóng băng để hạn chế ảnh hưởng cá phát triển.
                       </Paragraph>
                       <div style={{ textAlign: "center" }}>
-                        <img src="src/assets/Koi-Asagi/ca-koi-asagi-1.webp" />
+                        <img src={img8} />
                       </div>
                     </li>
                     <li>
@@ -747,15 +866,18 @@ export default function Asagi() {
                 </div>
               </div>
               <div id="7">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   7. Tại sao nên mua cá Koi Asagi Doitsu tại IKoi
                 </h3>
                 <div>
                   <div style={{ textAlign: "center" }}>
-                    <img
-                      src="src/assets/Koi-Asagi/ca-koi-asagi-2.webp"
-                      style={{ width: "50%" }}
-                    />
+                    <img src={img9} style={{ width: "50%" }} />
                   </div>
                   <Paragraph
                     className="paragraph-Style"
@@ -777,7 +899,7 @@ export default function Asagi() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img10} />
             </div>
             <div style={{ textAlign: "center" }}>
               <img

@@ -78,7 +78,14 @@ export default function Locakoinhapkhau() {
               key={groupId}
               hoverable
               cover={
-                <img alt={firstKoi.KoiName || "Koi"} src={firstKoi.Image} />
+                <img
+                  alt={firstKoi.KoiName || "Koi"}
+                  src={firstKoi.Image}
+                  style={{
+                    width: "100%",
+                    height: "300px",
+                  }}
+                />
               }
               style={{
                 borderRadius: "8px",

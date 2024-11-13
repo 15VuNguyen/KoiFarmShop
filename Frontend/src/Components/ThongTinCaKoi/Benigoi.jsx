@@ -9,6 +9,10 @@ import { Typography } from "antd";
 import "../Css/koiStyle.css";
 const { Title, Text, Paragraph } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi Benigoi/BENIGOI1.jpg";
+import img2 from "../../assets/Koi Benigoi/BENIGOI2.jpg";
+import img3 from "../..//assets/img_4.png";
+import img4 from "../../assets/img_5.png";
 export default function Benigoi() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -250,74 +254,174 @@ export default function Benigoi() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage ">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage "
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu cá Koi Benigoi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết cá Koi Benigoi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách nhận biết cá Koi Benigoi
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll31} className="contentBox">
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.1 Chọn Benigoi Koi qua hình dáng
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.2 Chọn Cá Koi Benigoi qua màu sắc
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.3 Chọn Benigoi Koi qua hoa văn
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.4 Chọn Cá Koi Benigoi qua dáng bơi
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc Benigoi Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Giá cá koi Benigoi bao nhiêu?
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll31} className="contentBox">
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.1 Giá cá koi Benigoi F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.2 Giá cá koi Benigoi Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Tại sao nên mua cá Koi Benigoi tại IKoi?
                     </span>
                   </li>
@@ -325,7 +429,9 @@ export default function Benigoi() {
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2 className="noidungchitiet" style={{ paddingTop: "20px" }}>
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style">
                   <span className="span-Style" style={{ color: "blue" }}>
                     Cá Koi Benigoi
@@ -339,7 +445,15 @@ export default function Benigoi() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu cá Koi Benigoi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu cá Koi Benigoi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cũng giống như dòng Chagoi Koi, Cá Koi Benigoi là dòng cá có
@@ -393,22 +507,33 @@ export default function Benigoi() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2. Cách nhận biết cá Koi Benigoi
                 </h3>
 
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi Benigoi/BENIGOI1.jpg"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Dòng cá Koi Benigoi</Text>
                   </div>
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn cá Koi Benigoi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn cá Koi Benigoi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Để lựa chọn được Benigoi Koi đẹp, bạn cần phải xét dựa trên
@@ -543,17 +668,22 @@ export default function Benigoi() {
                   </ul>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi Benigoi/BENIGOI2.jpg"
-                    style={{ width: "30%" }}
-                  />
+                  <img src={img2} style={{ width: "30%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Các dòng Cá Koi Benigoi</Text>
                   </div>
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chăm sóc Benigoi Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chăm sóc Benigoi Koi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Benigoi thực sự đẹp, không đơn thuần chỉ là chỉ hữu
@@ -611,7 +741,13 @@ export default function Benigoi() {
                 </div>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Giá cá koi Benigoi bao nhiêu?
                 </h3>
                 <div>
@@ -653,7 +789,13 @@ export default function Benigoi() {
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6.Tại sao nên mua cá Koi Benigoi tại IKoi?
                 </h3>
                 <div>
@@ -679,13 +821,10 @@ export default function Benigoi() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img3} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              <img src={img4} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>

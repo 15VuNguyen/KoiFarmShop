@@ -16,10 +16,43 @@ class InvoicesService {
     const quantity = payload.Quantity ?? 0
     const discount = payload.Discount ?? 0
 
+    const SupplierID = payload.SupplierID
+    const supplier = await databaseService.suppliers.findOne(
+      { _id: new ObjectId(SupplierID) },
+      { projection: { SupplierName: 1 } }
+    )
+    if (!supplier) {
+      throw new Error('Supplier not found')
+    }
+    const SupplierName = supplier.SupplierName
+    console.log('SupplierName:', SupplierName)
+
+    const GroupKoiCategoryID = payload.GroupKoiCategoryID
+    const category = await databaseService.category.findOne(
+      { _id: new ObjectId(GroupKoiCategoryID) },
+      { projection: { CategoryName: 1 } }
+    )
+    if (!category) {
+      throw new Error('Category not found')
+    }
+    const CategoryName = category.CategoryName
+    console.log('CategoryName:', CategoryName)
+
+    // lấy tháng
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    //lấy ngày cho hóa đơn
+    const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+
+    //lấy tháng cho koi name
+    const month = String(localTime.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
+
     const groupKoiPayLoad = {
       _id: group_koi_id,
-      SupplierID: payload.SupplierID,
-      GroupKoiCategoryID: payload.GroupKoiCategoryID,
+      SupplierID: SupplierID,
+      GroupKoiCategoryID: GroupKoiCategoryID,
       Dimension: payload.Dimension ?? 0,
       BreedGroupKoi: payload.BreedGroupKoi,
       PriceOneKoi: priceOneKoi,
@@ -36,7 +69,9 @@ class InvoicesService {
       const koiPayload = {
         _id: koi_id,
         GroupKoiID: GroupKoiID,
-        CategoryID: payload.GroupKoiCategoryID.toString(),
+        KoiName: `${CategoryName} ${SupplierName} Tháng ${month}`,
+        Origin: SupplierName,
+        CategoryID: GroupKoiCategoryID.toString(),
         Size: payload.Dimension ?? 0,
         Breed: payload.BreedGroupKoi,
         Status: 1,
@@ -44,17 +79,18 @@ class InvoicesService {
         Image: payload.GroupKoiImage,
         Video: payload.GroupKoiVideo
       }
+      // console.log('koiPayload:', koiPayload)
       koiArray.push(new KoiSchema(koiPayload))
     }
     const koiResult = await databaseService.kois.insertMany(koiArray)
 
     //tạo hóa đơn
     const InvoiceID = new ObjectId()
-    const currentDate = new Date();
-    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
-    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
 
-    const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+    // const currentDate = new Date()
+    // const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    // const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+    // const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
 
     const invoicePayload = {
       _id: InvoiceID,

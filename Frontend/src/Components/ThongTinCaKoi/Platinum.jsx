@@ -8,6 +8,12 @@ import { Layout, Typography } from "antd";
 import "../Css/koiStyle.css";
 const { Title, Text, Paragraph } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Ogon/ca-koi-platinum-3.webp";
+import img2 from "../../assets/Koi-Ogon/2.webp";
+import img3 from "../../assets/Koi-Ogon/3.webp";
+import img4 from "../../assets/Koi-Ogon/4.webp";
+import img5 from "../../assets/img_4.png";
+import img6 from "../../assets/img_5.png";
 export default function Platinum() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -219,50 +225,120 @@ export default function Platinum() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2 style={{ fontWeight: "bold", color: "red" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
                   Nội Dung Bài Viết
-                </h2>
-                <ul style={{ marginTop: "10px" }}>
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về cá Platinum Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết cá Koi Platinum
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách chọn cá Platinum Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc cá koi Platinum
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Giá cá koi Platinum bao nhiêu?
                     </span>
                     <ul>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll51} className="contentBox">
+                        <span
+                          onClick={handleScroll51}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.1 Giá cá koi Platinum F1
                         </span>
                       </li>
                       <li style={{ paddingTop: "10px" }}>
-                        <span onClick={handleScroll52} className="contentBox">
+                        <span
+                          onClick={handleScroll52}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.2 Giá cá koi Platinum Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Tại sao nên mua cá Platinum Koi tại IKoi?
                     </span>
                   </li>
@@ -271,30 +347,33 @@ export default function Platinum() {
               <div>
                 <h2 className="noidungchitiet">Nội dung chi tiết</h2>
                 <p style={{ fontSize: "15px", fontWeight: "400" }}>
-                  <span className="span-Style ">Cá Koi </span>
                   <Paragraph className="paragraph-Style">
+                    <span className="span-Style ">Cá Koi </span>
                     là giống cá được ưa chuộng để làm cảnh, trang trí không gian
                     sống trở lên hoàn hảo cho người đam mê cá cảnh. Với đa dạng
                     giống loài, màu sắc và kích thước nổi bật trong đó là dòng{" "}
                   </Paragraph>
-                  <span className="span-Style">Cá Platinum Koi </span>
                   <Paragraph className="paragraph-Style">
-                    à một trong những loài cá Koi được nhiều người yêu thích bởi
-                    vẻ ngoài đặc trưng của nó. Hãy cùng Siêu thị Cá Koi VN tìm
-                    hiểu rõ hơn về loài cá này ngay trong bài viết dưới đây.
+                    <span className="span-Style">Cá Platinum Koi </span>à một
+                    trong những loài cá Koi được nhiều người yêu thích bởi vẻ
+                    ngoài đặc trưng của nó. Hãy cùng Siêu thị Cá Koi VN tìm hiểu
+                    rõ hơn về loài cá này ngay trong bài viết dưới đây.
                   </Paragraph>
                 </p>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   {" "}
                   1. Giới thiệu về cá Platinum Koi
                 </h3>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon/ca-koi-platinum-3.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">
                       Giới thiệu về cá Platinum Koi
@@ -337,14 +416,17 @@ export default function Platinum() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2.Cách nhận biết cá Koi Platinum
                 </h3>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon/2.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img2} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">
                       Cách nhận biết cá Koi Platinum
@@ -367,12 +449,17 @@ export default function Platinum() {
                 </Paragraph>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn cá Platinum Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn cá Platinum Koi
+                </h3>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ogon/3.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img3} style={{ width: "50%" }} />
                 </div>
                 <Paragraph className="paragraph-Style">
                   Một trong những cách chọn cá koi bạch kim Platinum đẹp, đẳng
@@ -450,15 +537,18 @@ export default function Platinum() {
                 </Paragraph>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách chăm sóc cá koi Platinum
                 </h3>
                 <div>
                   <div style={{ textAlign: "center" }}>
-                    <img
-                      src="src/assets/Koi-Ogon/4.webp"
-                      style={{ width: "50%" }}
-                    />
+                    <img src={img4} style={{ width: "50%" }} />
                     <div style={{ textAlign: "center" }}>
                       <Text className="text-Style">
                         Cách chăm sóc cá koi Platinum Ogon
@@ -495,7 +585,13 @@ export default function Platinum() {
                 </ul>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Giá cá koi Platinum bao nhiêu?{" "}
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -531,7 +627,13 @@ export default function Platinum() {
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6. Tại sao nên mua cá Platinum Koi tại IKoi?
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -557,13 +659,10 @@ export default function Platinum() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img5} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              <img src={img6} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>

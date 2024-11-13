@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-
+import img1 from "../../assets/logo.png";
 export default function Navbar() {
   const [showDropdown1, setShowDropdown1] = useState(false);
   const [showDropdown2, setShowDropdown2] = useState(false);
@@ -64,7 +64,7 @@ export default function Navbar() {
       <div className="navbar-content">
         <a href="/">
           <img
-            src="src/assets/logo.png"
+            src={img1}
             alt="Logo"
             style={{ width: "100px", borderRadius: "50px", height: "100px" }}
           />
