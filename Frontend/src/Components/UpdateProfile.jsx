@@ -76,7 +76,7 @@ export default function UpdateProfile() {
         name: formData.name,
         address: formData.address,
         phone_number: formData.phone_number,
-        website: formData.website,
+        ...(formData.website && { website: formData.website }), // Conditionally add website
       };
       if (formData.username !== originalUserData.username) {
         dataToSend.username = formData.username;
@@ -359,13 +359,11 @@ export default function UpdateProfile() {
                     htmlFor="website"
                     style={{ fontWeight: "bold", fontSize: "15px" }}
                   >
-                    <span style={{ color: "red" }}>* </span>
                     Website
                   </label>
                   <Form.Item
                     name="website"
                     rules={[
-                      { required: true, message: "Vui lòng nhập website." },
                       {
                         type: "url",
                         message: "Website phải là link URL hợp lệ.",
