@@ -374,14 +374,29 @@ export default function DonKyGui() {
                           {consign.State !== -1 && (
                             <div>
                               <Button
-                                type="primary"
                                 style={{ marginLeft: "10px" }}
+                                type="default"
                                 onClick={() => {
-                                  navigate(`/`);
+                                  navigate(`/chitiet`, {
+                                    state: { consign },
+                                  });
                                 }}
                               >
-                                Chat ngay
+                                Chi tiết
                               </Button>
+                            </div>
+                          )}
+                          {consign.State === 1 && (
+                            <Button
+                              style={{ marginLeft: "10px", color: "red" }}
+                              type="danger" // This should apply the red color
+                              onClick={() => showModal(consign)}
+                            >
+                              Xóa đơn ký gửi
+                            </Button>
+                          )}
+                          {consign.State === -1 && (
+                            <div>
                               <Button
                                 style={{ marginLeft: "10px" }}
                                 type="default"
@@ -393,17 +408,6 @@ export default function DonKyGui() {
                               >
                                 Chi tiết
                               </Button>
-                              <Button
-                                style={{ marginLeft: "10px", color: "red" }}
-                                type="danger" // This should apply the red color
-                                onClick={() => showModal(consign)}
-                              >
-                                Xóa đơn ký gửi
-                              </Button>
-                            </div>
-                          )}
-                          {consign.State === -1 && (
-                            <div>
                               <Button
                                 style={{
                                   marginLeft: "10px",

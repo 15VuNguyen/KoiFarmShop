@@ -186,10 +186,10 @@
 }
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
   }
-
+  .img {
+    width: 1px;
+  }
   .navbar-content {
     flex-direction: column;
     width: 100%;
