@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+  import { useEffect, useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Typography, Modal, Empty } from "antd";
 import axiosInstance from "../An/Utils/axiosJS";
@@ -7,12 +7,13 @@ import { useNavigate } from "react-router-dom";
 const { Text } = Typography;
 import { message } from "antd";
 
-export default function ShoppingCart() {
+export default function ShoppingCart(props) {
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
   const [visible, setVisible] = useState(false); // Modal visibility state
   const [koiIdToDelete, setKoiIdToDelete] = useState(null); // Store the KoiID to delete
+  const {onUpdateQuantity} = props
   const navigate = useNavigate();
 
   const handlePayment = async () => {
@@ -22,7 +23,7 @@ export default function ShoppingCart() {
       });
 
       if (res.status === 200) {
-        navigate("/formfillinformation", { state: { totalPrice } });
+        navigate("/formfillinformation");
       }
     } catch (error) {
       if (error.response) {
@@ -92,6 +93,9 @@ export default function ShoppingCart() {
       );
 
       if (response.status === 200) {
+        if(onUpdateQuantity){
+          onUpdateQuantity()
+        }
         const { result } = response.data;
 
         if (
@@ -330,10 +334,10 @@ export default function ShoppingCart() {
             </div>
           </div>
           <div style={{ marginTop: "20px" }}>
-            <Button onClick={handlePayment} variant="danger">
-              Mua Hàng
-            </Button>
-          </div>
+          <Button onClick={handlePayment} variant="danger">
+            Mua Hàng
+          </Button>
+        </div>
         </>
       ) : (
         <Text style={{ color: "#FF6A00" }}>

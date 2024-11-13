@@ -4,7 +4,6 @@ import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useOrder } from "../Context/OrderContext";
-import TableCartForm from "./TableCartForm";
 import { toast } from "react-toastify";
 import "./FormFillInformation.css"
 import { useAuth } from "../Context/AuthContext";
@@ -13,8 +12,8 @@ import { checkDiscountPrice, getCard, getCardList } from "../services/loyaltyCar
 import { createOrder, getOrderDetail } from "../services/orderService";
 import { AutoComplete } from "antd";
 import useAddress from "../An/Ant Design/Components/useAddress";
+import ShoppingCart from "./TableCartForShoppingCart";
 export default function FormFillInformation() {
-  // const orderDetail = useOrder(); // Đảm bảo rằng hàm này trả về giá trị hợp lệ
   const { searchText,
     setSearchText,
     recommendations,
@@ -37,66 +36,18 @@ export default function FormFillInformation() {
   const [name, setName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
   const [address, setAddress] = useState("")
-  const [totalPrice, setTotalPrice] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [isShowPaymentMethod, setIsShowPaymentMethod] = useState(false);
+  const [isRefrest, setIsRefrest] = useState(false)
 
-
-  // const handleSubmit = async (values) => {
-  //   const dataToSend = {
-  //     ...values,
-  //   };
-
-  //   console.log(dataToSend); // Kiểm tra dữ liệu
-
-  //   try {
-  //     const response = await axiosInstance.post(`order/create/`, dataToSend, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       withCredentials: true,
-  //     });
-
-  //     if (response.status === 200) {
-  //       message.success(response.data.message);
-  //       toast.success("Đặt hàng thành công!");
-  //       navigate("/paymentmethod");
-  //     } else {
-  //       message.error(`Có lỗi xảy ra: ${response.data.message}`);
-  //     }
-  //   } catch (error) {
-  //     message.error("Có lỗi xảy ra khi gửi thông tin.");
-  //     console.error(error);
-  //   }
-  // };
-
-  // const fetchUserData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosInstance.get("/users/me");
-  //     if (response.data) {
-  //       setUserData(response.data.result);
-  //     } else {
-  //       console.error("Dữ liệu không hợp lệ:", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Có lỗi xảy ra khi lấy thông tin người dùng:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleOpenUpdateForm = () => {
     setIsShow(!isShow)
   }
 
-  // const handleClose = () => {
-  //   setIsShow(false)
-  // }
   const fetchCardInfo = async () => {
     setLoading(true);
     try {
       const { data } = await getCard()
-      console.log("API Response:", data);
 
       if (data && data.result) {
         setUserCard(data.result.loyaltyCard);
@@ -168,7 +119,7 @@ export default function FormFillInformation() {
 
   useEffect(() => {
     fetchOrderDetail()
-  }, [isApplyDiscount])
+  }, [isRefrest])
 
   useEffect(() => {
     handleApplyDiscount();
@@ -187,25 +138,11 @@ export default function FormFillInformation() {
   }, [currentUser]);
 
   const handleUpdateUserData = (field, value) => {
-    // Hàm này sẽ cập nhật dữ liệu người dùng trong state
     setUserData(prevState => ({
       ...prevState,
       [field]: value
     }));
   };
-
-  // Nếu muốn update thông tin user ở trang này và cả ở trong db thì xử lí ở đây
-  // const handleUpdate = async (e) => {
-  //   e.preventDefault()
-  //   try {
-  //     const updatedUserData = userData
-  //     if(updatedUserData){
-  //       console.log("updated user data: ", updatedUserData)
-  //     }
-  //   } catch (error) {
-  //     console.error({message: error.message})
-  //   }
-  // }
 
   const handlePayment = async (e) => {
     try {
@@ -235,6 +172,10 @@ export default function FormFillInformation() {
     }
   }
 
+  const handleUpdateQuantity = () => {
+    setIsRefrest(!isRefrest)
+  }
+
   return (
     <div>
       <Navbar />
@@ -259,7 +200,6 @@ export default function FormFillInformation() {
               </div>
             </div>
 
-            {/* {isShow && */}
             <div className={`update-form ${isShow ? 'show' : ''}`}>
               <Container>
                 <h2 className="mt-4 mb-4">Update Your Information</h2>
@@ -314,14 +254,6 @@ export default function FormFillInformation() {
                       Địa chỉ nhận hàng
                     </Form.Label>
                     <Col sm={9}>
-                      {/* <Form.Control 
-                        type="text" placeholder="Nhập địa chỉ nhận hàng"  required 
-                        value={userData?.address}
-                        onChange={(e) => {
-                          handleUpdateUserData('address', e.target.value)
-                          setAddress(e.target.value)
-                        }}
-                      />  */}
                       <AutoComplete style={{width:'100%'}} value={userData?.address} onChange={e=>{
                         handleUpdateUserData('address', e)
                         setAddress(e)
@@ -329,27 +261,19 @@ export default function FormFillInformation() {
                       }} options={recommendations.map((address) => ({ value: address }))} placeholder="Enter your shipping address" />
                     </Col>
                   </Form.Group>
-                  {/* <div className="text-center">
-                    <Button className="save-btn" variant="primary" type="submit" >
-                      Lưu
-                    </Button>
-                  </div> */}
-
                 </Form>
               </Container>
             </div>
-            {/* } */}
 
           </div>
           <div className="common-css product-info">
             <h4 className="bb">Sản phẩm</h4>
-            <TableCartForm setTotalPrice = {setTotalPrice} />
+            <ShoppingCart onUpdateQuantity = {handleUpdateQuantity}/>
 
           </div>
           <div className="common-css voucher">
             <div className="bb voucher-header d-flex justify-content-between">
               <h4 className=" d-flex align-items-center m-0">Mã giảm giá</h4>
-              {/* <span className="voucher-select d-flex align-items-center fs-6">Chọn voucher</span> */}
               <Button className="discount-btn" variant={`${isShowDiscount ? "danger" : "warning"}`} onClick={() => handleOpenVoucherList()}>{isShowDiscount ? "Đóng" : "Chọn Phiếu Giảm Giá"}</Button>
             </div>
             <div className={`voucher-info-form ${isShowDiscount ? 'show' : ''}`}>
@@ -365,7 +289,7 @@ export default function FormFillInformation() {
                             key={index}
                             onClick={() => {
                               if (card.name === userCard.RankName) {
-                                setIsApplyDiscount((prev) => !prev); // Cập nhật trạng thái
+                                setIsApplyDiscount((prev) => !prev); 
                               }
                             }}
 
@@ -443,12 +367,12 @@ export default function FormFillInformation() {
               <div className="total-detail">
                 <div className="total-product-price price-content">
                   <h5 className="price-title">Tổng tiền hàng</h5>
-                  <p className="price">₫{totalPrice.toLocaleString('vi-VN')}</p>
+                  <p className="price">₫{orderDetail?.TotalPrice.toLocaleString('vi-VN')}</p>
                 </div>
                 {discount && discount.totalDiscount > 0 && (
                   <div className="voucher price-content">
                     <h5 className="price-title">Tổng mã giảm</h5>
-                    <p className="price"><span className="discount-note">({userCard?.RankName + " thành viên " + userCard?.SalePercent}%)</span> -₫{discount.totalDiscount.toLocaleString("vi-VN")}</p>
+                    <p className="price"><span className="discount-note">({ " Thành viên " + userCard?.RankName + " " +userCard?.SalePercent}%)</span> -₫{discount.totalDiscount.toLocaleString("vi-VN")}</p>
                   </div>
                 )}
                 {orderDetail?.TotalPrice  && (
@@ -462,96 +386,7 @@ export default function FormFillInformation() {
             <div className="text-end">
               <button className="pay-btn" onClick={()=>handlePayment()} >Thanh Toán</button>
             </div>
-          </div>
-          {/* <div style={{ flex: 1, padding: "20px" }}>
-              <h4 style={{ textAlign: "center" }}>Đơn hàng của bạn</h4>
-            </div>
-            <div style={{ flex: 1, padding: "20px" }}>
-              <h4 style={{ textAlign: "center" }}>
-                Form điền thông tin người dùng
-              </h4>
-              {loading ? (
-                <Spin size="large" />
-              ) : (
-                <></>
-                // <Form
-                //   style={{ maxWidth: 600, margin: "auto" }}
-                //   onFinish={handleSubmit} // Thay đổi ở đây
-                //   initialValues={{
-                //     email: userData?.email || "",
-                //     name: userData?.name || "",
-                //     address: userData?.address || "",
-                //     phone_number: userData?.phone_number || "",
-                //     ShipAddress: userData?.address || "",
-                //   }}
-                // >
-                //   <Form.Item
-                //     name="email"
-                //     label="Email"
-                //     rules={[
-                //       {
-                //         required: true,
-                //         type: "email",
-                //         message: "Vui lòng nhập email hợp lệ.",
-                //       },
-                //     ]}
-                //   >
-                //     <Input placeholder="Nhập email" />
-                //   </Form.Item>
-
-                //   <Form.Item
-                //     name="name"
-                //     label="Họ và tên"
-                //     rules={[
-                //       { required: true, message: "Vui lòng nhập họ và tên." },
-                //     ]}
-                //   >
-                //     <Input placeholder="Nhập họ và tên" />
-                //   </Form.Item>
-
-                //   <Form.Item
-                //     name="address"
-                //     label="Địa chỉ"
-                //     rules={[
-                //       { required: true, message: "Vui lòng nhập địa chỉ." },
-                //     ]}
-                //   >
-                //     <Input placeholder="Nhập địa chỉ" />
-                //   </Form.Item>
-
-                //   <Form.Item
-                //     name="phone_number"
-                //     label="Số điện thoại"
-                //     rules={[
-                //       {
-                //         required: true,
-                //         message: "Vui lòng nhập số điện thoại.",
-                //       },
-                //     ]}
-                //   >
-                //     <Input placeholder="Nhập số điện thoại" />
-                //   </Form.Item>
-                //   <Form.Item
-                //     name="ShipAddress"
-                //     label="Địa chỉ giao hàng"
-                //     rules={[
-                //       {
-                //         required: true,
-                //         message: "Vui lòng nhập địa chỉ giao hàng.",
-                //       },
-                //     ]}
-                //   >
-                //     <Input placeholder="Nhập địa chỉ giao hàng" />
-                //   </Form.Item>
-
-                //   <Form.Item style={{ textAlign: "center" }}>
-                //     <Button type="primary" htmlType="submit">
-                //       Gửi
-                //     </Button>
-                //   </Form.Item>
-                // </Form>
-              )} 
-            </div> */}
+          </div>          
         </Container>
       </div>
 

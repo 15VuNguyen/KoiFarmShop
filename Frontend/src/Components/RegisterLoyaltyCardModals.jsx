@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button, Modal, InputGroup } from 'react-bootstrap'
 import "./RegisterLoyaltyCardModals.css"
 import { registerLoyaltyCard, sendOtpCode } from '../services/loyaltyCardService'
-import { toast } from 'react-toastify'
+import { message } from 'antd'
 
 const RegisterLoyaltyCardModals = (props) => {
     const { show, handleClose, setCard, onRegisterSuccess } = props
     const [phoneNumber, setPhoneNumeber] = useState("")
     const [otp, setOtp] = useState(new Array(6).fill(''));
-    const [otpCode, setOtpCode] = useState();
     const [isValidate, setIsValidate] = useState(false)
     
 
@@ -20,32 +19,31 @@ const RegisterLoyaltyCardModals = (props) => {
         try {
             const {data} = await sendOtpCode(phoneNumber)
             if(data.result && data.result.code){
-                console.log(data.result.code)
-                setOtpCode(data.result.code)
+                setOtp(data.result.code.split(''));
                 setIsValidate(true)
             }else{
-                console.log(data.message)
+                message.error(data.message)
             }
         } catch (error) {
-            console.error({ message: error.message })
+            message.error("Có lỗi xảy ra khi gửi mã OTP")
         }
     }
 
     const handleRegister = async () => {
         try {
-            const {data} = await registerLoyaltyCard(phoneNumber, otpCode)
+            const enteredOtpCode = otp.join('')
+            const {data} = await registerLoyaltyCard(phoneNumber, enteredOtpCode)
             if(data.result){
-                toast.success("Register successfully")
+                message.success(data.message || "Đăng kí thẻ thành công")
                 setCard(data.result)
                 if(onRegisterSuccess){
                     onRegisterSuccess()
                 }
             }else{
-                console.log({message: data.message})
+                message.error(data.message)
             }
         } catch (error) {
-            console.error({ message: error.message })
-
+            message.error("Có lỗi xảy ra khi đăng kí")
         }
     }
 

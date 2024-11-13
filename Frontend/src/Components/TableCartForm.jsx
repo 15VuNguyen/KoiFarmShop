@@ -5,11 +5,12 @@ import axiosInstance from "../An/Utils/axiosJS";
 import { useNavigate } from "react-router-dom";
 const { Text } = Typography;
 
-export default function TableCartForm() {
+export default function TableCartForm(props) {
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
   const navigate = useNavigate();
+  const {onUpdateQuantity} = props
   const handlePayment = () => {
     navigate("/formfillinformation");
   };
@@ -90,6 +91,9 @@ export default function TableCartForm() {
       );
 
       if (response.status === 200) {
+        if(onUpdateQuantity){
+          onUpdateQuantity()
+        }
         const { result } = response.data;
 
         // Kiểm tra nếu có thông báo về số lượng không đủ
