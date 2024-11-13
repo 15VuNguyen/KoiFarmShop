@@ -65,7 +65,7 @@ const FooterComponent = () => {
           <div
             style={{
               marginBottom: "20px",
-              paddingLeft: "290px",
+              paddingLeft: "390px",
               paddingTop: "20px",
             }}
           >

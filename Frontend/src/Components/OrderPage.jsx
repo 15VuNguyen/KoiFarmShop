@@ -99,7 +99,6 @@ const OrderPage = () => {
     sendOrderDetails();
     console.log("Test" + maxQuantity);
   }, [selectedItem]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

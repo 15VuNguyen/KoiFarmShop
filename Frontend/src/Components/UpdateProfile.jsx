@@ -125,6 +125,7 @@ export default function UpdateProfile() {
         const response = await axiosInstance.get("users/me");
         if (response.data) {
           setUserData(response.data.result);
+          console.log(userData);
           setOriginalUserData(response.data.result);
         } else {
           console.error("Dữ liệu không hợp lệ:", response.data);
@@ -137,7 +138,9 @@ export default function UpdateProfile() {
     };
     fetchUserData();
   }, []);
-
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
   const maskedEmail =
     userData && userData.email ? maskEmail(userData.email) : "";
 
