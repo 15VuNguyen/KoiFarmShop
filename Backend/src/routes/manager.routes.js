@@ -1,6 +1,7 @@
 import {
   createNewInvoiceGroupKoiController,
   createNewServiceController,
+  deleteSupplierController,
   getKoiAllController,
   getLoyalUserListController,
   getOrdeDetails,
@@ -69,8 +70,12 @@ managerRouter.get('/manage-ki-gui/get-all', accessTokenValidator, isAdminValidat
 
 managerRouter.get('/manage-ki-gui/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getConsignDetailController))
 
-managerRouter.get('/manage-loyalty-card/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getLoyalUserListController))
-
+managerRouter.get(
+  '/manage-loyalty-card/get-all',
+  accessTokenValidator,
+  isAdminValidator,
+  wrapAsync(getLoyalUserListController)
+)
 
 managerRouter.put(
   '/manage-ki-gui/:_id',
@@ -179,6 +184,13 @@ managerRouter.put('/manage-supplier/:_id', accessTokenValidator, isAdminValidato
 
 managerRouter.get('/manage-supplier/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getSupplierController))
 
+managerRouter.delete(
+  '/manage-supplier/:_id',
+  accessTokenValidator,
+  isAdminValidator,
+  wrapAsync(deleteSupplierController)
+)
+
 managerRouter.post(
   '/manage-invoice/create-new-invoice-group-koi',
   accessTokenValidator,
@@ -202,12 +214,6 @@ managerRouter.get('/manage-group-koi/:_id', accessTokenValidator, isAdminValidat
 
 managerRouter.get('/manage-order/get-order-detail/:orderID', getOrdeDetails)
 
-managerRouter.put(
-  '/manage-invoice/:_id',
-  accessTokenValidator,
-  isAdminValidator,
-  wrapAsync(updateInvoiceController)
-)
-
+managerRouter.put('/manage-invoice/:_id', accessTokenValidator, isAdminValidator, wrapAsync(updateInvoiceController))
 
 export default managerRouter

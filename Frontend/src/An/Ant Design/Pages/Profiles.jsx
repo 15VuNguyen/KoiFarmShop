@@ -137,7 +137,7 @@ export default function Profiles() {
         <Row gutter={24}>
 
          
- <Col span={6}>
+ <Col span={12}>
             <Card hoverable
               onClick={handleOpenUpChartModal}
             >
@@ -151,7 +151,7 @@ export default function Profiles() {
             </Card>
           </Col>
 
-          <Col span={6}>
+          <Col span={12}>
             <Card hoverable 
               style={{ height: "100%" }}
               onClick={handleOpenUpChartModalWithVerify}

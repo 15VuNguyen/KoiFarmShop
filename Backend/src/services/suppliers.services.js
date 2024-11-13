@@ -94,6 +94,19 @@ class SuplliersService {
     const suppliersWithoutId = _.omit(supplier, ['_id'])
     return suppliersWithoutId
   }
+
+  async deleteSupplier(supplierid) {
+    const supplierObjectID = new ObjectId(supplierid)
+    const supplierValue = await databaseService.suppliers.findOne({ _id: supplierObjectID })
+    if (supplierValue == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.SUPPLIER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const supplierDelete = await databaseService.suppliers.deleteOne({ _id: supplierObjectID })
+    return { supplierValue: supplierValue, supplierDelete: supplierDelete }
+  }
 }
 
 const suplliersService = new SuplliersService()

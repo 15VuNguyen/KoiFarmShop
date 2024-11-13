@@ -333,7 +333,7 @@ export const getProfitController = async (req, res) => {
 
     console.log(koiIds)
 
-    // Kiểm tra dữ liệu trong cơ sở dữ liệu
+    // Truy vấn thông tin cá Koi từ bảng koi
     const Kois = await databaseService.kois
       .find({
         _id: { $in: koiIds },
@@ -347,53 +347,27 @@ export const getProfitController = async (req, res) => {
 
     console.log(Kois)
 
-    // Kiểm tra và chuyển đổi GroupKoiID
-    const groupKoiIds = Kois.map((koi) => {
-      return new ObjectId(koi.GroupKoiID)
-      // if (ObjectId.isValid(koi.GroupKoiID)) {
-      //  return new ObjectId(koi.GroupKoiID)
-      // } else {
-      //   console.log(`Invalid GroupKoiID: ${koi.GroupKoiID}`)
-      //   return null
-      // }
-    }).filter((id) => id !== null)
-
-    const GroupKois = await databaseService.groupKois
-      .find({
-        _id: { $in: groupKoiIds }
-      })
-      .toArray()
-
-    // Kiểm tra và chuyển đổi ConsignID
-    const consignIds = Kois.map((koi) => {
-      if (ObjectId.isValid(koi.ConsignID)) {
-        return new ObjectId(koi.ConsignID)
-      } else {
-        console.log(`Invalid ConsignID: ${koi.ConsignID}`)
-        return null
-      }
-    }).filter((id) => id !== null)
-
+    // Truy vấn thông tin consign từ bảng consign
     const Consigns = await databaseService.consigns
       .find({
-        _id: { $in: consignIds }
+        KoiID: { $in: koiIds.map((id) => id.toString()) }
       })
       .toArray()
 
     const calculateProfit = (koi, detail) => {
-      switch (koi.Status) {
-        case 1: // Nhập khẩu Nhật
-          const groupKoi = GroupKois.find((gk) => gk._id.equals(koi.GroupKoiID))
-          return detail.Price - (groupKoi ? groupKoi.PriceOneKoi : 0)
-        case 2: // Cá koi F1
-        case 3: // Cá koi Việt
-          return detail.Price
-        case 4: // Cá kí gửi
-          const consign = Consigns.find((c) => c._id.equals(koi.ConsignID))
-          return detail.Price - (consign ? consign.TotalPrice : 0)
-        default:
-          return 0
+      // Kiểm tra nếu là groupKoi
+      if (koi.GroupKoiID && ObjectId.isValid(koi.GroupKoiID)) {
+        return 700000 // Lãi 700000 cho mỗi con groupKoi
       }
+
+      // Kiểm tra nếu là consign
+      const consign = Consigns.find((c) => c.KoiID === koi._id.toString())
+      if (consign) {
+        return detail.Price - (consign.TotalPrice || 0) // Lấy giá bán trừ đi totalprice của bảng consign
+      }
+
+      // Nếu không phải là groupKoi và không phải là consign
+      return detail.Price // Tiền lãi cũng chính là tiền bán
     }
 
     const dailyProfit = Orders.reduce((accumulator, order) => {
@@ -404,19 +378,24 @@ export const getProfitController = async (req, res) => {
         console.log(`OrderDetail not found for OrderDetailID: ${order.OrderDetailID}`)
         return accumulator
       }
-      const koi = Kois.find((k) => k._id.equals(new ObjectId(detail.Items[0].KoiID))) // Lấy KoiID từ Items
-      if (!koi) {
-        console.log(`Koi not found for KoiID: ${detail.Items[0].KoiID}`)
-        return accumulator
-      }
 
-      const profit = calculateProfit(koi, detail)
+      detail.Items.forEach((item) => {
+        const koi = Kois.find((k) => k._id.equals(new ObjectId(item.KoiID))) // Lấy KoiID từ Items
+        console.log('koi')
+        console.log(koi)
+        if (!koi) {
+          console.log(`Koi not found for KoiID: ${item.KoiID}`)
+          return
+        }
 
-      if (accumulator[orderDate]) {
-        accumulator[orderDate] += profit
-      } else {
-        accumulator[orderDate] = profit
-      }
+        const profit = calculateProfit(koi, detail)
+
+        if (accumulator[orderDate]) {
+          accumulator[orderDate] += profit
+        } else {
+          accumulator[orderDate] = profit
+        }
+      })
 
       return accumulator
     }, {})
@@ -434,7 +413,6 @@ export const getProfitController = async (req, res) => {
     return res.status(500).json({ error: error.message })
   }
 }
-
 // export const getProfitController = async (req, res) => {
 //   try {
 //     const orders = await databaseService.order.find({ Status: 5 }).toArray()
@@ -523,6 +501,19 @@ export const getSupplierController = async (req, res) => {
     const result = await suplliersService.getSupplier(_id)
     return res.json({
       message: MANAGER_MESSAGES.GET_SUPPLIER_SUCCESS,
+      result
+    })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
+  }
+}
+
+export const deleteSupplierController = async (req, res) => {
+  try {
+    const { _id } = req.params
+    const result = await suplliersService.deleteSupplier(_id)
+    return res.json({
+      message: MANAGER_MESSAGES.DELETE_SUPPLIER_SUCCESS,
       result
     })
   } catch (error) {

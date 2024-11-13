@@ -57,13 +57,17 @@ function SignInForm() {
         navigate(from, { state: { selectedItem } });
       }
     } catch (error) {
-      console.error("Failed to login", error.response);
+      console.error("Failed to login", error);
       if (error.response.data.errors.email === "Email or password is incorrect") {
         message.error('Email hoặc mật khẩu không chính xác');
         return;
       }
-      if (error.response.data.errors.email)
+      if (error.response.data.errors.email){
         message.error(error.response.data.errors.email);
+    }
+      else {
+        console.error("Failed to login", error);
+      }
     }
   };
 
