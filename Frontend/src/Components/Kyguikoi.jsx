@@ -303,9 +303,7 @@ export default function Kyguikoi() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/getAllKoi"
-        );
+        const response = await axiosInstance.get("/getAllKoi");
         if (Array.isArray(response.data.result)) {
           setCategoryData(response.data.categoryList);
         }
