@@ -1,12 +1,12 @@
 export const MESSAGES = {
-  CREATE_NEW_KOI_KI_GUI_SUCCESS: 'Create new koi ki gui success',
-  ADD_KOI_SUCCESS: 'Create koi success',
-  UPDATE_KOI_SUCCESS: 'Update koi success',
-  UPDATE_USER_SUCCESS: 'Update user success',
-  GET_ALL_SUPPLIER_SUCCESS: 'Get all supplier success',
-  GET_SUPPLIER_SUCCESS: 'Get supplier success',
-  GET_MANAGER_SUCCESS: 'Get manager success',
-  GET_USER_SUCCESS: 'Get user success',
-  FETCH_CHAT_SUCCESS: 'Fetch existed chats success',
-  NO_CHAT_FOUND: 'No existed chats found'
+  CREATE_NEW_KOI_KI_GUI_SUCCESS: 'Tạo cá Koi ký gửi mới thành công',
+  ADD_KOI_SUCCESS: 'Tạo cá Koi thành công',
+  UPDATE_KOI_SUCCESS: 'Cập nhật cá Koi thành công',
+  UPDATE_USER_SUCCESS: 'Cập nhật người dùng thành công',
+  GET_ALL_SUPPLIER_SUCCESS: 'Lấy tất cả nhà cung cấp thành công',
+  GET_SUPPLIER_SUCCESS: 'Lấy nhà cung cấp thành công',
+  GET_MANAGER_SUCCESS: 'Lấy quản lý thành công',
+  GET_USER_SUCCESS: 'Lấy người dùng thành công',
+  FETCH_CHAT_SUCCESS: 'Lấy cuộc trò chuyện hiện có thành công',
+  NO_CHAT_FOUND: 'Không tìm thấy cuộc trò chuyện nào'
 }
