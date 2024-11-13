@@ -51,7 +51,7 @@ export default function RevenueChart( ) {
         labels: filteredRevenueData.map(item => item.Date),
         datasets: [
             {
-                label: 'Doang Thu',
+                label: 'Doanh Thu',
                 data: filteredRevenueData.map(item => item.TotalPrice),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
