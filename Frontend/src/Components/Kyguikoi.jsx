@@ -764,7 +764,10 @@ export default function Kyguikoi() {
                   <Form.Item
                     name="Age"
                     rules={[
-                      { required: true, message: "Vui lòng nhập tuổi." },
+                      {
+                        required: true,
+                        message: "Vui lòng nhập năm sinh koi của bạn.",
+                      },
                       {
                         validator: (_, value) => {
                           const numericValue = Number(value); // Convert to a number

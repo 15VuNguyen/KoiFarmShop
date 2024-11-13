@@ -183,7 +183,7 @@ export default function DonKyGui() {
                                 fontSize: "16px",
                               }}
                             >
-                              Tuổi:{" "}
+                              Năm sinh của cá koi:{" "}
                             </span>
                             <span
                               style={{
@@ -191,7 +191,7 @@ export default function DonKyGui() {
                                 color: "black", // Màu đen cho giá trị Age
                               }}
                             >
-                              {koi?.Age ?? "N/A"} năm
+                              {koi?.Age ?? "N/A"}
                             </span>
                           </Text>
                           <div style={{ marginBottom: "8px" }}></div>
@@ -532,7 +532,7 @@ export default function DonKyGui() {
               })
             ) : (
               <Col span={24}>
-                <Text>No consign items available.</Text>
+                <Text>Bạn chưa có đơn ký gửi nào</Text>
               </Col>
             )}
           </Row>

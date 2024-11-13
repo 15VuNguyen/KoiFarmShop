@@ -260,7 +260,7 @@ const FooterComponent = () => {
           </div>
           <div style={{ marginBottom: "8px" }}>
             <a
-              href="/gioithieuvekoivietz  "
+              href="/gioithieuvekoiviet  "
               style={{ color: "white", textDecoration: "none" }}
             >
               Giới thiệu về Koi Việt

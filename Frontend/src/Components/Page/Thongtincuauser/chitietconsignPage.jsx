@@ -766,31 +766,26 @@ export default function Chitietconsignpage() {
                         style={{ fontWeight: "bold", fontSize: "15px" }}
                       >
                         <span style={{ color: "red" }}>* </span>
-                        Tuổi cá của bạn
+                        Năm sinh cá koi của bạn
                       </label>
                       <Form.Item
                         name="Age"
                         rules={[
-                          { required: true, message: "Vui lòng nhập tuổi." },
+                          {
+                            required: true,
+                            message: "Vui lòng nhập năm sinh.",
+                          },
                           {
                             validator: (_, value) => {
-                              if (!value) {
-                                return Promise.resolve();
-                              }
                               const numericValue = Number(value); // Convert to a number
-                              if (isNaN(numericValue)) {
+                              if (numericValue < 1900) {
                                 return Promise.reject(
-                                  new Error("Tuổi phải là một số.")
+                                  new Error("Năm sinh phải lớn hơn 1900.")
                                 );
                               }
-                              if (numericValue < 1) {
+                              if (numericValue > 2024) {
                                 return Promise.reject(
-                                  new Error("Tuổi phải lớn hơn hoặc bằng 1.")
-                                );
-                              }
-                              if (numericValue > 50) {
-                                return Promise.reject(
-                                  new Error("Tuổi phải nhỏ hơn hoặc bằng 50.")
+                                  new Error("Năm sinh phải nhỏ hơn 2024")
                                 );
                               }
                               return Promise.resolve();
@@ -857,10 +852,10 @@ export default function Chitietconsignpage() {
                           onChange={handleChange}
                         >
                           <Radio id="GenderMale" value="Male">
-                            Male
+                            Đực
                           </Radio>
                           <Radio id="GenderFemale" value="Female">
-                            Female
+                            Cái
                           </Radio>
                         </Radio.Group>
                       </Form.Item>
@@ -1112,6 +1107,7 @@ export default function Chitietconsignpage() {
                           // Add this line to bind the value to the Upload component
                           listType="picture"
                           fileList={imageFileList1}
+                          accept="image/*"
                         >
                           <Button icon={<UploadOutlined />}>Upload</Button>
                         </Upload>
@@ -1140,6 +1136,7 @@ export default function Chitietconsignpage() {
                           }
                           listType="video"
                           fileList={videoFileList1} // Add this line to bind the value to the Upload component
+                          accept="video/*"
                         >
                           <Button icon={<UploadOutlined />}>Upload</Button>
                         </Upload>

@@ -46,6 +46,7 @@ export default function Locakoinhapkhau() {
       <Navbar />
       <div
         style={{
+          paddingTop: "150px",
           padding: "50px 20px",
           background: "#f4f4f4",
           textAlign: "center",
@@ -189,6 +190,12 @@ export default function Locakoinhapkhau() {
         </div>
 
         <div style={{ textAlign: "center", marginTop: "50px" }}>
+          {Object.keys(koiData).length <= 0 && (
+            <div>
+              {" "}
+              <h2 style={{ color: "red" }}>Hết hàng</h2>
+            </div>
+          )}
           <Button
             type="primary"
             danger
