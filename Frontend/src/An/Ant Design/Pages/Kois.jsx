@@ -378,7 +378,7 @@ export default function Kois() {
                             </Form.Item>
                         </Col> */}
                         <Col span={6}>
-                            <Tooltip title="Năm Sinh của Koi Phải lớn hơn 1700 và nhỏ hơn năm hiện tại"
+                            <Tooltip title="Năm Sinh của Koi Phải lớn hơn 1900 và nhỏ hơn năm hiện tại"
 
                             >
                                 <Form.Item
@@ -386,7 +386,7 @@ export default function Kois() {
                                     name="Age"
                                     placeholder="Tuổi"
                                     rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
-                                    <InputNumber placeholder='tuổi' min={1700} max={() => {
+                                    <InputNumber placeholder='tuổi' min={1900} max={() => {
                                         return new Date().getFullYear();
                                     }} style={{ width: '100%' }} />
                                 </Form.Item>

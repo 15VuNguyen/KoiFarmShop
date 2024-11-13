@@ -480,10 +480,10 @@ export default function ConsignDetail({ consignID, reset }) {
                           ))}
                         </Select>
                       ) : inputType === 'selectAge' ? (
-                        <Tooltip title="Tuổi phải phải nằm từ năm 1700 đến năm hiện tại">
+                        <Tooltip title="Tuổi phải phải nằm từ năm 1900 đến năm hiện tại">
                         <InputNumber
                           
-                        min={1700} max={()=>{
+                        min={1900} max={()=>{
                           return new Date().getFullYear();
                         }} required value={editValue} onChange={(value) => setEditValue(value)} />
                         </Tooltip>
