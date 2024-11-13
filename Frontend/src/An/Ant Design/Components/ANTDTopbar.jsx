@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button, Tooltip } from "antd";
+import { Layout, Menu, Avatar, Typography, Dropdown, Space, Button, Tooltip, message } from "antd";
 import { RxAvatar } from "react-icons/rx";
 import { Link, Outlet, useNavigate,useLocation } from "react-router-dom";
 import { useAuth } from "../../../Context/AuthContext";
@@ -11,10 +11,12 @@ const { Header, Content } = Layout;
 const SelfCheckContext = React.createContext();
 
 export default function AnTopBar({ children, name, role }) {
-    const [isCheckingSelf, setIsCheckingSelf] = React.useState(false);
+
     const navigate = useNavigate();
     const location  = useLocation();
+
     const useAuthCheck = () => {
+       
         const navigate = useNavigate();
         const { checkRole } = useAuth();
 
@@ -23,14 +25,17 @@ export default function AnTopBar({ children, name, role }) {
                 try {
                     const role = await checkRole();
 
-                    if (role !== "Staff" && role !== "Manager") {
-                        navigate("/login", { replace: true });
+                    if (role !== "Manager") {
+                        navigate("/", { replace: true });
+                        message.error("Bạn không có quyền truy cập vào trang này!");
                     }
                 } catch (error) {
                     console.error("Error checking role:", error);
-                    navigate("/login", { replace: true });
+                    navigate("/", { replace: true });
+               
                 }
             };
+        
 
             fetchRole();
         }, [checkRole, navigate]);
@@ -139,7 +144,7 @@ export default function AnTopBar({ children, name, role }) {
     useAuthCheck();
 
     return (
-        <SelfCheckContext.Provider value={{ isCheckingSelf, setIsCheckingSelf }}>
+<>
             <Layout>
                 <Header className="topbar-header" style={{ background: "#001529", padding: "0 20px" }}>
                     <div className="logo" style={{ float: "left", color: "white", fontSize: "1.5rem" }}>
@@ -172,7 +177,7 @@ export default function AnTopBar({ children, name, role }) {
                 </Content>
             </Layout>
             <ManagerChat />
-        </SelfCheckContext.Provider>
+      </>
     );
 }
 

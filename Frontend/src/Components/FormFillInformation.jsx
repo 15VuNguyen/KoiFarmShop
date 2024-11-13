@@ -314,14 +314,14 @@ export default function FormFillInformation() {
                       Địa chỉ nhận hàng
                     </Form.Label>
                     <Col sm={9}>
-                      <Form.Control 
+                      {/* <Form.Control 
                         type="text" placeholder="Nhập địa chỉ nhận hàng"  required 
                         value={userData?.address}
                         onChange={(e) => {
                           handleUpdateUserData('address', e.target.value)
                           setAddress(e.target.value)
                         }}
-                      /> 
+                      />  */}
                       <AutoComplete style={{width:'100%'}} value={userData?.address} onChange={e=>{
                         handleUpdateUserData('address', e)
                         setAddress(e)
