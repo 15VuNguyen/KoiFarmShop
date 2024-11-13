@@ -104,6 +104,15 @@ const koiNameSchema = {
   }
 }
 
+const getCurrentYearInVietnam = () => {
+  const currentDate = new Date()
+  const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+  const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+  return localTime.getFullYear()
+}
+
+const currentYearInVietnam = getCurrentYearInVietnam()
+
 const koiAgeSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_AGE_IS_REQUIRED
@@ -112,8 +121,8 @@ const koiAgeSchema = {
     errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_NUMERIC
   },
   isInt: {
-    options: { min: 1, max: 50 },
-    errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_BETWEEN_1_AND_50
+    options: { min: 1900, max: currentYearInVietnam },
+    errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_BETWEEN_1900_AND_CURRENTYEAR
   }
 }
 
@@ -188,7 +197,7 @@ const koiFilteringRatioSchema = {
 const koiImageSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_IMAGE_IS_REQUIRED
-  } 
+  }
 }
 
 const koiVideoSchema = {
