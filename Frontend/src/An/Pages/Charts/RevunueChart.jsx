@@ -173,7 +173,7 @@ export default function RevenueChart( ) {
                                             : 0;
                                         const changeLabel = percentageChange > 0 ? 'lãi' : 'lỗ';
         
-                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
+                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} đ (${percentageChange.toFixed(2)}% ${changeLabel})`;
                                     },
                                     labelTextColor: function (tooltipItem) {
                                         const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;
@@ -181,7 +181,7 @@ export default function RevenueChart( ) {
                                         const percentageChange = revenue
                                             ? ((profit - revenue) / revenue) * 100
                                             : 0;
-        
+                                             //https://www.chartjs.org/docs/latest/configuration/tooltip.html#label-callback
                                         return percentageChange > 0 ? 'rgba(205, 254, 194)' : 'rgba(254, 121, 104)';
                                     }
                                 }
@@ -221,7 +221,7 @@ export default function RevenueChart( ) {
                                             : 0;
                                         const changeLabel = percentageChange > 0 ? 'lãi' : 'lỗ';
         
-                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} VND (${percentageChange.toFixed(2)}% ${changeLabel})`;
+                                        return `${tooltipItem.dataset.label}: ${tooltipItem.raw.toLocaleString('en-US')} đ (${percentageChange.toFixed(2)}% ${changeLabel})`;
                                     },
                                     labelTextColor: function (tooltipItem) {
                                         const revenue = filteredRevenueData[tooltipItem.dataIndex]?.TotalPrice || 0;

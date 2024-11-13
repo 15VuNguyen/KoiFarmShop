@@ -197,9 +197,9 @@ export default function Profiles() {
             setSelectedProfile(id);
             message.info(`Update action triggered for ID: ${id}`);
         } else if (actionType === 'disable') {
-            message.warning(`Disable action triggered for ID: ${id}`);
+            message.warning(`Đơn ký gửi đã bị hủy: ${id}`);
         } else if (actionType === 'View Consign Details') {
-            message.success(`Enable action triggered for ID: ${id}`);
+            message.success(` Xem chi tiết đơn ký gửi: ${id}`);
             setConsignDetail(id);
             setIsCheckingDetail(true);
         }
