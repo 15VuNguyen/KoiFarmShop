@@ -415,7 +415,7 @@ const OrderPage = () => {
                           />
                         </label>
                       )}
-                      {selectedItem.Status === 1 && (
+                      {selectedItem.Status === 1 && maxQuantity !== 0 && (
                         <label>
                           <strong>Số lượng: </strong>
                           <InputNumber
@@ -527,7 +527,8 @@ const OrderPage = () => {
 
                       {/* nếu là cá ký gửi */}
                       {selectedItem.Status === 4 &&
-                        selectedItem.Status !== 1 && (
+                        selectedItem.Status !== 1 &&
+                        maxQuantity !== 0 && (
                           <label>
                             <strong>Số lượng: </strong>
                             <InputNumber
@@ -625,7 +626,8 @@ const OrderPage = () => {
                       {selectedItem.Size >= 15 &&
                         selectedItem.Size <= 17 &&
                         selectedItem.Status !== 4 &&
-                        selectedItem.Status !== 1 && (
+                        selectedItem.Status !== 1 &&
+                        maxQuantity !== 0 && (
                           <Paragraph
                             style={{
                               fontSize: "20px",
@@ -654,7 +656,8 @@ const OrderPage = () => {
                       {selectedItem.Size >= 5 &&
                         selectedItem.Size <= 14 &&
                         selectedItem.Status !== 4 &&
-                        selectedItem.Status !== 1 && (
+                        selectedItem.Status !== 1 &&
+                        maxQuantity !== 0 && (
                           <Paragraph
                             style={{
                               fontSize: "20px",
@@ -684,7 +687,8 @@ const OrderPage = () => {
                       {selectedItem.Size >= 18 &&
                         selectedItem.Size <= 20 &&
                         selectedItem.Status !== 4 &&
-                        selectedItem.Status !== 1 && (
+                        selectedItem.Status !== 1 &&
+                        maxQuantity !== 0 && (
                           <div>
                             <Paragraph
                               style={{
