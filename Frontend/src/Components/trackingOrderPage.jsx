@@ -48,9 +48,7 @@ export default function TrackingOrderPage() {
 
       setLoading(true);
       try {
-        const response = await axiosInstance.get(
-          `http://localhost:4000/users/get-orders/${userId}`
-        );
+        const response = await axiosInstance.get(`/users/get-orders/${userId}`);
 
         console.log("API Response:", response); // Log the entire response
 
@@ -130,7 +128,13 @@ export default function TrackingOrderPage() {
                   </td>
                   <td>{new Date(order.OrderDate).toLocaleString()}</td>
                   <td>{order.TotalPrice.toLocaleString()} ₫</td>
-                  <td>{order.Status == 1 ? <span style={{color:"red"}}>Chưa Thanh Toán</span> : <span style={{color:"green"}}>Đã Thanh Toán</span>}</td>
+                  <td>
+                    {order.Status == 1 ? (
+                      <span style={{ color: "red" }}>Chưa Thanh Toán</span>
+                    ) : (
+                      <span style={{ color: "green" }}>Đã Thanh Toán</span>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (

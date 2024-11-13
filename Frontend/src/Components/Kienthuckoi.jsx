@@ -2,6 +2,7 @@ import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import { Container } from "react-bootstrap";
 import { Layout, Typography } from "antd";
+import img1 from "../assets/van-chuyen-ca-koi-tu-nhat-ve-viet-nam-uy-tin.jpg";
 const { Text, Paragraph } = Typography;
 export default function Kienthuckoi() {
   return (
@@ -27,10 +28,7 @@ export default function Kienthuckoi() {
                 cùng tham khảo nhé!
               </Paragraph>
               <div style={{ textAlign: "center" }}>
-                <img
-                  src="src/assets/van-chuyen-ca-koi-tu-nhat-ve-viet-nam-uy-tin.jpg"
-                  style={{ width: "50%" }}
-                />
+                <img src={img1} style={{ width: "50%" }} />
               </div>
             </div>
           </div>

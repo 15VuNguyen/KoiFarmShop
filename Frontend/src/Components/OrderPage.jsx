@@ -89,6 +89,7 @@ const OrderPage = () => {
             maxQty = response.data.result.CategoryName.Quantity; // Fallback for other sizes
             setSelectedQuantity(1); // Default to 1 for other sizes
             setMaxQuantity(maxQty); // Update maxQuantity
+            console.log("Max" + maxQty);
           }
         }
       } catch (error) {
@@ -102,9 +103,7 @@ const OrderPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/getAllKoi"
-        );
+        const response = await axiosInstance.get("/getAllKoi");
         if (Array.isArray(response.data.result)) {
           setCategoryData(response.data.categoryList);
           console.log("Card data fetched successfully." + categoryData);
@@ -127,7 +126,6 @@ const OrderPage = () => {
     console.log("categoryName" + categoryName);
   }, [selectedItem, categoryData]);
   // Hàm này dùng để kiểm tra coi số lượng cá trong kho còn không
-
   const handleAddToCart = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
@@ -135,15 +133,16 @@ const OrderPage = () => {
       return;
     }
     if (!selectedItem || loading) return;
-
     setCategoryName(selectedItem.CategoryName);
     try {
       let requestData = {
         Quantity: parseInt(selectedQuantity),
       };
-
       if (selectedItem.Status === 4 || selectedItem.Status === 1) {
         requestData.KoiID = selectedItem._id;
+        requestData.Size = parseInt(selectedItem.Size);
+        requestData.Breed = selectedItem.Breed;
+        requestData.CategoryID = selectedItem.CategoryID;
       } else {
         requestData.Size = parseInt(selectedItem.Size);
         requestData.Breed = selectedItem.Breed;
@@ -161,25 +160,24 @@ const OrderPage = () => {
         const { result } = response.data;
         console.log(result);
         setMaxQuantity(maxQuantity - selectedQuantity);
-
         if (
           typeof result === "string" &&
-          result.includes("0 available in stock")
+          result.includes("Số lượng còn lại trong giỏ hàng (0)")
         ) {
+          toast.error(result);
           setError(result);
           setIsButtonDisabled(true);
           return;
         } else if (
           typeof result === "string" &&
-          result.includes("available in stock")
+          result.includes("Số lượng còn lại trong giỏ hàng (")
         ) {
-          toast.success(result);
+          toast.error(result);
+          setError(result);
+          setIsButtonDisabled(true);
           return;
         }
-        console.log("Add to cart successful: " + response.data.message);
-        setMaxQuantity((prevMaxQuantity) => prevMaxQuantity - selectedQuantity);
       }
-
       toast.success("Đã thêm vào giỏ hàng!");
     } catch (error) {
       console.log(error);
@@ -206,6 +204,9 @@ const OrderPage = () => {
 
       if (selectedItem.Status === 4 || selectedItem.Status === 1) {
         requestData.KoiID = selectedItem._id;
+        requestData.Size = parseInt(selectedItem.Size);
+        requestData.Breed = selectedItem.Breed;
+        requestData.CategoryID = selectedItem.CategoryID;
       } else {
         requestData.Size = parseInt(selectedItem.Size);
         requestData.Breed = selectedItem.Breed;
@@ -388,11 +389,46 @@ const OrderPage = () => {
                         color: "red",
                       }}
                     >
+                      {selectedItem.Status === 1 && (
+                        <label>
+                          <strong>Số lượng: </strong>
+                          <InputNumber
+                            style={{
+                              fontSize: "14px",
+                              color: "red",
+                              width: "48%",
+                            }}
+                            type="number"
+                            min={1}
+                            value={selectedQuantity}
+                            onChange={(value) => {
+                              if (value >= 0) {
+                                if (value <= maxQuantity) {
+                                  setSelectedQuantity(value);
+                                  setIsButtonDisabled(false); // Enable buttons when value is valid
+                                } else {
+                                  toast.error(
+                                    `Hết hàng trong kho chỉ còn nhiêu đây con ${maxQuantity}`
+                                  );
+                                  setIsButtonDisabled(true); // Disable buttons when value is invalid
+                                }
+                              }
+                            }}
+                            onKeyPress={(e) => {
+                              // Ngăn nhập ký tự "e"
+                              if (e.key === "e" || e.key === "E") {
+                                e.preventDefault();
+                              }
+                            }}
+                          />
+                        </label>
+                      )}
                       {selectedItem.Size > 20 &&
                         selectedItem.Status !== 4 &&
+                        selectedItem.Status !== 1 &&
                         maxQuantity == 1 && (
                           <label>
-                            <strong>Quantity: </strong>
+                            <strong>Số lượng: </strong>
                             <InputNumber
                               style={{
                                 fontSize: "14px",
@@ -427,9 +463,10 @@ const OrderPage = () => {
                         )}
                       {selectedItem.Size > 20 &&
                         selectedItem.Status !== 4 &&
+                        selectedItem.Status !== 1 &&
                         maxQuantity > 1 && (
                           <label>
-                            <strong>Quantity: </strong>
+                            <strong>Số lượng: </strong>
                             <InputNumber
                               style={{
                                 fontSize: "14px",
@@ -461,11 +498,12 @@ const OrderPage = () => {
                             />
                           </label>
                         )}
+
                       {/* nếu là cá ký gửi */}
                       {selectedItem.Status === 4 &&
                         selectedItem.Status !== 1 && (
                           <label>
-                            <strong>Quantity: </strong>
+                            <strong>Số lượng: </strong>
                             <InputNumber
                               style={{
                                 fontSize: "14px",
@@ -515,9 +553,10 @@ const OrderPage = () => {
                       )} */}
                       {selectedItem.Size < 20 &&
                         selectedItem.Status !== 4 &&
+                        selectedItem.Status !== 1 &&
                         maxQuantity > 1 && (
                           <label>
-                            <strong>Quantity: </strong>
+                            <strong>Số lượng: </strong>
                             <InputNumber
                               style={{
                                 fontSize: "14px",
@@ -559,7 +598,8 @@ const OrderPage = () => {
                     >
                       {selectedItem.Size >= 15 &&
                         selectedItem.Size <= 17 &&
-                        selectedItem.Status !== 4 && (
+                        selectedItem.Status !== 4 &&
+                        selectedItem.Status !== 1 && (
                           <Paragraph
                             style={{
                               fontSize: "20px",
@@ -617,7 +657,8 @@ const OrderPage = () => {
                         )}
                       {selectedItem.Size >= 18 &&
                         selectedItem.Size <= 20 &&
-                        selectedItem.Status !== 4 && (
+                        selectedItem.Status !== 4 &&
+                        selectedItem.Status !== 1 && (
                           <div>
                             <Paragraph
                               style={{
@@ -646,15 +687,10 @@ const OrderPage = () => {
                             </Paragraph>
                           </div>
                         )}
-                      {maxQuantity < selectedQuantity && (
-                        <div>
-                          <span style={{ color: "red" }}>Hết hàng</span>
-                        </div>
-                      )}
                     </div>
                   </Paragraph>
                   <Paragraph style={{ fontSize: "20px", textAlign: "left" }}>
-                    <strong>Certificate ID: </strong>
+                    <strong>Chứng Chỉ: </strong>
                     <Text style={{ fontSize: "20px", color: "red" }}>
                       {selectedItem.CertificateID}
                     </Text>
@@ -699,7 +735,7 @@ const OrderPage = () => {
                         onClick={() => {
                           if (
                             !isAddedToCart &&
-                            selectedQuantity > maxQuantity &&
+                            selectedQuantity <= maxQuantity &&
                             !error &&
                             !isButtonDisabled
                           ) {
@@ -743,7 +779,7 @@ const OrderPage = () => {
                   fontSize: "25px",
                 }}
               >
-                CHI TIẾT SẢN PHẨM
+                Chi tiết sản phẩm
               </Text>
             </div>
             <Paragraph
@@ -764,7 +800,28 @@ const OrderPage = () => {
                   <span style={{ fontWeight: "normal", fontSize: "20px" }}>
                     Kích thước:{" "}
                   </span>
-                  {selectedItem.Size}
+                  <span style={{ fontWeight: "normal", fontSize: "20px" }}>
+                    {selectedItem.Size} cm
+                  </span>
+                </li>
+                <li
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    marginBottom: "8px",
+                  }}
+                ></li>
+                <li
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <span style={{ fontWeight: "normal", fontSize: "20px" }}>
+                    Lượng thức ăn / ngày: {selectedItem.DailyFoodAmount}{" "}
+                    (g/ngày)
+                  </span>
                 </li>
                 <li
                   style={{
@@ -774,9 +831,8 @@ const OrderPage = () => {
                   }}
                 >
                   <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Loài:{" "}
+                    Tỷ lệ lọc: {selectedItem.FilteringRatio} (%)
                   </span>
-                  {selectedItem.Breed}
                 </li>
                 <li
                   style={{
@@ -786,33 +842,8 @@ const OrderPage = () => {
                   }}
                 >
                   <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Lượng thức ăn / ngày:{" "}
+                    Chứng Chỉ: {selectedItem.CertificateID}
                   </span>
-                  {selectedItem.DailyFoodAmount}
-                </li>
-                <li
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "20px",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Tỷ lệ lọc:{" "}
-                  </span>
-                  {selectedItem.FilteringRatio}
-                </li>
-                <li
-                  style={{
-                    fontWeight: "bold",
-                    fontSize: "20px",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <span style={{ fontWeight: "normal", fontSize: "20px" }}>
-                    Chứng Chỉ:{" "}
-                  </span>
-                  {selectedItem.CertificateID}
                 </li>
                 <li
                   style={{
@@ -867,24 +898,8 @@ const OrderPage = () => {
               </Text>
             </div>
             <Paragraph style={{ fontSize: "20px", background: "whitesmoke" }}>
-              {selectedItem.Description}
+              Miêu tả về cá koi : {selectedItem.Description}
               <br />
-              <span style={{ fontWeight: "Bold", fontSize: "20px" }}>
-                CHÍNH SÁCH BẢO HÀNH:
-              </span>
-              <ul>
-                <li>
-                  Bảo hành 01 năm cho tất cả các lỗi về cá Koi chính hãng tại
-                  Ikoi.
-                </li>
-                <li>
-                  Đảm bảo sức khỏe và chất lượng cá trong suốt thời gian bảo
-                  hành.
-                </li>
-                <li>
-                  Hỗ trợ tư vấn miễn phí về cách chăm sóc và nuôi dưỡng cá Koi.
-                </li>
-              </ul>
             </Paragraph>
           </div>
         </Container>

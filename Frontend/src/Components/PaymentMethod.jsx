@@ -25,13 +25,13 @@ const PaymentMethod = () => {
       // Gửi yêu cầu thanh toán với số tiền từ localStorage
       if (method === "Zalo Pay") {
         response = await axios.post(
-          `http://localhost:4000/payment/paymentZalopay`,
+          `/payment/paymentZalopay`,
           { total: totalPrice }, // Gửi tổng giá trị từ localStorage
           { withCredentials: true }
         );
       } else if (method === "Momo Pay") {
         response = await axios.post(
-          `http://localhost:4000/payment/paymentMomo`,
+          `/payment/paymentMomo`,
           { total: totalPrice }, // Gửi tổng giá trị từ localStorage
           { withCredentials: true }
         );
@@ -56,20 +56,17 @@ const PaymentMethod = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/order/detail",
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await axiosInstance.get("/order/detail", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
         console.log(response);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
           const { Items, TotalPrice, salePercent } = orderDT;
-          const sale = salePercent ? salePercent : 0
+          const sale = salePercent ? salePercent : 0;
           const koiMap = new Map(koiList.map((koi) => [koi._id, koi]));
           const updatedKoiList = Items.map((item) => {
             const koi = koiMap.get(item.KoiID);
@@ -78,7 +75,7 @@ const PaymentMethod = () => {
           setKoiList(updatedKoiList);
           // Save to localStorage
           // localStorage.setItem("koiList", JSON.stringify(updatedKoiList));
-          setTotalPrice(Math.round(((100-sale)/100)*TotalPrice));
+          setTotalPrice(Math.round(((100 - sale) / 100) * TotalPrice));
           console.log("Order details fetched and stored in localStorage.");
         } else {
           console.error(`API request failed with status: ${response.status}`);
@@ -113,10 +110,10 @@ const PaymentMethod = () => {
 
     // return () => {
     //   removeOrderCookie();
-    //   window.onbeforeunload = null; 
+    //   window.onbeforeunload = null;
     // };
   }, []);
-  
+
   return (
     <>
       <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>

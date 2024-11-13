@@ -25,9 +25,7 @@ export default function Koidangban() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:4000/getAllKoi"
-        );
+        const response = await axiosInstance.get("/getAllKoi");
         if (Array.isArray(response.data.result)) {
           setCardData(response.data.result);
           // Initialize category count object
