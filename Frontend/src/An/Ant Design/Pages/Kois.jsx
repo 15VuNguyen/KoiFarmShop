@@ -145,10 +145,14 @@ export default function Kois() {
 
     const handleEditClick = (koi) => {
         // koi.Price = koi.Price.toLocaleString();
+        
+    
+      
         setModalKoi(koi);
         console.log(koi);
         setIsCreating(false);
         setIsModalVisible(true);
+
         form.setFieldsValue(koi);
     };
 
@@ -385,12 +389,12 @@ export default function Kois() {
                                     label="Tuổi"
                                     name="Age"
                                     placeholder="Tuổi"
-                                    initialValue={new Date().getFullYear() - form.getFieldValue('Age')}
-                                    rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
                                     
-                                    <InputNumber placeholder='tuổi' min={1900} max={() => {
-                                        return new Date().getFullYear();
-                                    }} style={{ width: '100%' }} />
+                                    rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
+                                    <InputNumber
+                                        placeholder='tuổi' min={1900} max={() => {
+                                            return new Date().getFullYear();
+                                        }} style={{ width: '100%' }} />
                                 </Form.Item>
                             </Tooltip>
                         </Col>
@@ -409,8 +413,7 @@ export default function Kois() {
                                 name="Gender"
 
                                 rules={[{ required: true, message: 'Hãy chọn giới tính Koi!' }]}>
-                                <Select
-                                    defaultValue="Male">
+                                <Select>
                                     <Select.Option value="Male">Đực</Select.Option>
                                     <Select.Option value="Female">Cái</Select.Option>
                                 </Select>
