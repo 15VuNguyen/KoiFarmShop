@@ -190,7 +190,8 @@ export const USERS_MESSAGES = {
     'Lượng thức ăn hàng ngày của cá Koi phải nằm trong khoảng từ 1 đến 100',
   KOI_FILTERING_RATIO_MUST_BE_NUMERIC: 'Tỷ lệ lọc của cá Koi phải là số',
   KOI_FILTERING_RATIO_MUST_BE_BETWEEN_1_AND_100: 'Tỷ lệ lọc của cá Koi phải nằm trong khoảng từ 1 đến 100',
-  CANCEL_CONSIGN_SUCCESS: 'Cancel consign success'
+  CANCEL_CONSIGN_SUCCESS: 'Cancel consign success',
+  KOI_AGE_MUST_BE_BETWEEN_1900_AND_CURRENTYEAR: 'Tuổi của cá Koi phải nằm trong khoảng từ 1 đến năm hiện tại'
 }
 export const ADMINS_MESSAGES = {
   ADD_KOI_SUCCESS: 'Add Fish success',
