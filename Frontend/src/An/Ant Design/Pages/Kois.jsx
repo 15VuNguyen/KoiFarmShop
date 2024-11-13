@@ -145,10 +145,14 @@ export default function Kois() {
 
     const handleEditClick = (koi) => {
         // koi.Price = koi.Price.toLocaleString();
+        
+    
+      
         setModalKoi(koi);
         console.log(koi);
         setIsCreating(false);
         setIsModalVisible(true);
+
         form.setFieldsValue(koi);
     };
 
@@ -378,17 +382,19 @@ export default function Kois() {
                             </Form.Item>
                         </Col> */}
                         <Col span={6}>
-                            <Tooltip title="Năm Sinh của Koi Phải lớn hơn 1700 và nhỏ hơn năm hiện tại"
+                            <Tooltip title="Năm Sinh của Koi Phải lớn hơn 1900 và nhỏ hơn năm hiện tại"
 
                             >
                                 <Form.Item
                                     label="Tuổi"
                                     name="Age"
                                     placeholder="Tuổi"
+                                    
                                     rules={[{ required: true, message: 'Hãy Nhập Tuổi!' }]}>
-                                    <InputNumber placeholder='tuổi' min={1700} max={() => {
-                                        return new Date().getFullYear();
-                                    }} style={{ width: '100%' }} />
+                                    <InputNumber
+                                        placeholder='tuổi' min={1900} max={() => {
+                                            return new Date().getFullYear();
+                                        }} style={{ width: '100%' }} />
                                 </Form.Item>
                             </Tooltip>
                         </Col>
@@ -407,8 +413,7 @@ export default function Kois() {
                                 name="Gender"
 
                                 rules={[{ required: true, message: 'Hãy chọn giới tính Koi!' }]}>
-                                <Select
-                                    defaultValue="Male">
+                                <Select>
                                     <Select.Option value="Male">Đực</Select.Option>
                                     <Select.Option value="Female">Cái</Select.Option>
                                 </Select>
@@ -477,7 +482,7 @@ export default function Kois() {
                             <Form.Item
                                 label=" ID Chứng Nhận"
                                 name="CertificateID"
-                                rules={[{ required: true, message: 'Please input the Certificate ID!' }]}>
+                                rules={[{ required: true, message: 'Hãy nhập ID Chứng Nhận!' }]}>
                                 <Input />
                             </Form.Item>
                         </Col>
