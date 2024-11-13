@@ -26,5 +26,7 @@ export const MANAGER_MESSAGES = {
   INVOICE_NOT_FOUND: 'Invoice not found',
   GROUP_KOI_NOT_FOUND: 'Group koi not found',
   KOIS_NOT_FOUND: 'Kois not found',
-  UPDATE_INVOICE_SUCCESS: 'Update invoice success'
+  UPDATE_INVOICE_SUCCESS: 'Update invoice success',
+  //delete supplier
+  DELETE_SUPPLIER_SUCCESS: 'Delete supplier success'
 }

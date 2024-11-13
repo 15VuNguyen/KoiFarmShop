@@ -310,28 +310,28 @@ export const getRevenueController = async (req, res) => {
 
 export const getProfitController = async (req, res) => {
   try {
-    const Orders = await databaseService.order.find({ Status: 2 }).toArray();
+    const Orders = await databaseService.order.find({ Status: 2 }).toArray()
     if (Orders.length === 0) {
-      return res.json('order rỗng' + []);
+      return res.json('order rỗng' + [])
     }
 
-    const orderDetailIds = Orders.map((order) => new ObjectId(order.OrderDetailID));
+    const orderDetailIds = Orders.map((order) => new ObjectId(order.OrderDetailID))
 
     const OrderDetails = await databaseService.orderDetail
       .find({
         _id: { $in: orderDetailIds }
       })
-      .toArray();
+      .toArray()
     if (OrderDetails.length === 0) {
-      return res.json('orderDetail rỗng' + []);
+      return res.json('orderDetail rỗng' + [])
     }
 
-    console.log(OrderDetails);
+    console.log(OrderDetails)
 
     // Lấy tất cả các KoiID từ tất cả các đối tượng trong Items
-    const koiIds = OrderDetails.flatMap((detail) => detail.Items.map((item) => new ObjectId(item.KoiID)));
+    const koiIds = OrderDetails.flatMap((detail) => detail.Items.map((item) => new ObjectId(item.KoiID)))
 
-    console.log(koiIds);
+    console.log(koiIds)
 
     // Truy vấn thông tin cá Koi từ bảng koi
     const Kois = await databaseService.kois
@@ -339,80 +339,80 @@ export const getProfitController = async (req, res) => {
         _id: { $in: koiIds },
         Status: 0
       })
-      .toArray();
+      .toArray()
     if (Kois.length === 0) {
-      console.log('Koi rỗng', koiIds);
-      return res.json('Koi rỗng' + []);
+      console.log('Koi rỗng', koiIds)
+      return res.json('Koi rỗng' + [])
     }
 
-    console.log(Kois);
+    console.log(Kois)
 
     // Truy vấn thông tin consign từ bảng consign
     const Consigns = await databaseService.consigns
       .find({
-        KoiID: { $in: koiIds.map(id => id.toString()) }
+        KoiID: { $in: koiIds.map((id) => id.toString()) }
       })
-      .toArray();
+      .toArray()
 
     const calculateProfit = (koi, detail) => {
       // Kiểm tra nếu là groupKoi
       if (koi.GroupKoiID && ObjectId.isValid(koi.GroupKoiID)) {
-        return 700000; // Lãi 700000 cho mỗi con groupKoi
+        return 700000 // Lãi 700000 cho mỗi con groupKoi
       }
 
       // Kiểm tra nếu là consign
-      const consign = Consigns.find((c) => c.KoiID === koi._id.toString());
+      const consign = Consigns.find((c) => c.KoiID === koi._id.toString())
       if (consign) {
-        return detail.Price - (consign.TotalPrice || 0); // Lấy giá bán trừ đi totalprice của bảng consign
+        return detail.Price - (consign.TotalPrice || 0) // Lấy giá bán trừ đi totalprice của bảng consign
       }
 
       // Nếu không phải là groupKoi và không phải là consign
-      return detail.Price; // Tiền lãi cũng chính là tiền bán
-    };
+      return detail.Price // Tiền lãi cũng chính là tiền bán
+    }
 
     const dailyProfit = Orders.reduce((accumulator, order) => {
-      const orderDate = new Date(order.OrderDate).toISOString().split('T')[0];
+      const orderDate = new Date(order.OrderDate).toISOString().split('T')[0]
 
-      const detail = OrderDetails.find((d) => d._id.equals(new ObjectId(order.OrderDetailID)));
+      const detail = OrderDetails.find((d) => d._id.equals(new ObjectId(order.OrderDetailID)))
       if (!detail) {
-        console.log(`OrderDetail not found for OrderDetailID: ${order.OrderDetailID}`);
-        return accumulator;
+        console.log(`OrderDetail not found for OrderDetailID: ${order.OrderDetailID}`)
+        return accumulator
       }
 
       detail.Items.forEach((item) => {
-        const koi = Kois.find((k) => k._id.equals(new ObjectId(item.KoiID))); // Lấy KoiID từ Items
+        const koi = Kois.find((k) => k._id.equals(new ObjectId(item.KoiID))) // Lấy KoiID từ Items
         console.log('koi')
         console.log(koi)
         if (!koi) {
-          console.log(`Koi not found for KoiID: ${item.KoiID}`);
-          return;
+          console.log(`Koi not found for KoiID: ${item.KoiID}`)
+          return
         }
 
-        const profit = calculateProfit(koi, detail);
+        const profit = calculateProfit(koi, detail)
 
         if (accumulator[orderDate]) {
-          accumulator[orderDate] += profit;
+          accumulator[orderDate] += profit
         } else {
-          accumulator[orderDate] = profit;
+          accumulator[orderDate] = profit
         }
-      });
+      })
 
-      return accumulator;
-    }, {});
+      return accumulator
+    }, {})
 
     const dailyProfitArray = Object.entries(dailyProfit).map(([Date, TotalProfit]) => ({
       Date,
       TotalProfit
-    }));
+    }))
 
-    console.log(dailyProfitArray);
+    console.log(dailyProfitArray)
 
-    return res.json(dailyProfitArray);
+    return res.json(dailyProfitArray)
   } catch (error) {
-    console.error('Có lỗi xảy ra:', error);
-    return res.status(500).json({ error: error.message });
+    console.error('Có lỗi xảy ra:', error)
+    return res.status(500).json({ error: error.message })
   }
-};
+}
 // export const getProfitController = async (req, res) => {
 //   try {
 //     const orders = await databaseService.order.find({ Status: 5 }).toArray()
@@ -501,6 +501,19 @@ export const getSupplierController = async (req, res) => {
     const result = await suplliersService.getSupplier(_id)
     return res.json({
       message: MANAGER_MESSAGES.GET_SUPPLIER_SUCCESS,
+      result
+    })
+  } catch (error) {
+    return res.status(500).json({ error: error.message })
+  }
+}
+
+export const deleteSupplierController = async (req, res) => {
+  try {
+    const { _id } = req.params
+    const result = await suplliersService.deleteSupplier(_id)
+    return res.json({
+      message: MANAGER_MESSAGES.DELETE_SUPPLIER_SUCCESS,
       result
     })
   } catch (error) {
