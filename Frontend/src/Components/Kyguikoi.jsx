@@ -212,11 +212,11 @@ export default function Kyguikoi() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.status === 200) {
-        // setTimeout(() => {
-        //   if (isLoggedIn) {
-        //     navigate("/donkyguipage");
-        //   }
-        // }, 3000);
+        setTimeout(() => {
+          if (isLoggedIn) {
+            navigate("/donkyguipage");
+          }
+        }, 3000);
         toast.success(response.data.message);
         setFormData({
           ...formData,

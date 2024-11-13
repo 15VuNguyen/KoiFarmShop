@@ -213,26 +213,31 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>{card.KoiName || "N/A"}</Text>
-                <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  Farm:{""}
-                  {card.Origin}
+                <Text strong style={{ color: "#920202" }}>
+                  {" "}
+                  {card.KoiName || "N/A"}
                 </Text>
-                <Text strong style={{ color: "#FF5722" }}>
-                  Size:{""}
+                <br />
+                <Text strong>
+                  Kích thước:{""}
                   {card.Size}
                 </Text>
                 <br />
                 <Text strong>Số lượng : 1</Text>
                 <br />
-                {card.Status === 4 && <Text> Cá Ký Gửi</Text>}
+                {card.Status === 4 && <Text strong> Cá Ký Gửi</Text>}
                 <br />
-                {card.Breed === "Viet" && <Text> Giống loài : {""}Việt</Text>}
-                {card.Breed === "F1" && <Text> Giống loài : {""}F1</Text>}
-                {card.Breed === "Nhat" && <Text> Giống loài : {""}Nhật</Text>}
+                {card.Breed === "Viet" && (
+                  <Text strong> Giống loài : {""}Việt</Text>
+                )}
+                {card.Breed === "F1" && (
+                  <Text strong> Giống loài : {""}F1</Text>
+                )}
+                {card.Breed === "Nhat" && (
+                  <Text strong> Giống loài : {""}Nhật</Text>
+                )}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
                   {card.Price
                     ? `Giá: ${new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -280,7 +285,7 @@ const CardGrid = ({ cardData }) => {
                 <Text strong>Số lượng : {count}</Text>
                 <br />
                 <Text strong style={{}}>
-                  Size : {card.Size} cm
+                  Kích thước : {card.Size} cm
                 </Text>
                 <br />
                 {card.Breed === "Nhat" && (
@@ -293,7 +298,7 @@ const CardGrid = ({ cardData }) => {
                   <Text strong> Giống loài : {""}F1</Text>
                 )}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
                   {card.Price
                     ? `Giá: ${new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -341,13 +346,13 @@ const CardGrid = ({ cardData }) => {
                 <Text strong>Số lượng {count}</Text>
                 <br />
                 <Text strong style={{}}>
-                  Size : {card.Size} cm
+                  Kích thước : {card.Size} cm
                 </Text>
                 <br />
                 <Text strong>Giống loài : </Text>
                 {card.Status === 1 && <Text strong>Nhật Nhập Khẩu</Text>}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
                   {card.Price
                     ? `Giá: ${new Intl.NumberFormat("vi-VN", {
                         style: "currency",
