@@ -108,24 +108,6 @@ export default function Locakoinhapkhau() {
                         color: "black",
                       }}
                     >
-                      <span
-                        style={{
-                          color: "red",
-                          fontWeight: "bold",
-                          fontSize: "20px",
-                        }}
-                      >
-                        Giới tính
-                      </span>{" "}
-                      {firstKoi.Gender || "Không xác định"}
-                    </p>
-                    <p
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                        color: "black",
-                      }}
-                    >
                       <span style={{ color: "red", fontWeight: "bold" }}>
                         Kích thươc
                       </span>{" "}

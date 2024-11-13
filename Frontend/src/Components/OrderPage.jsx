@@ -592,6 +592,7 @@ const OrderPage = () => {
                               type="number"
                               min={1}
                               value={selectedQuantity}
+                              readOnly
                               onChange={(value) => {
                                 if (value >= 0) {
                                   if (value <= maxQuantity) {
