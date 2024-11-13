@@ -3,7 +3,7 @@ import { Card, Col, Row, Input, Button, Badge, Space, Typography, Image, Empty, 
 import { useManageKoi } from '../../Hooks/useManageKoi';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-import { PlusOutlined, LoadingOutlined, UploadOutlined, CheckOutlined, PlusCircleOutlined, EditOutlined, StopOutlined } from '@ant-design/icons'
+import { PlusOutlined, LoadingOutlined, UploadOutlined, CheckOutlined, PlusCircleOutlined, EditOutlined, StopOutlined, PlusCircleFilled } from '@ant-design/icons'
 import axiosInstance from '../../Utils/axiosJS';
 export default function Kois() {
 
@@ -43,12 +43,6 @@ export default function Kois() {
         result,
         filteredCategories,
         handleDisableEnable,
-        handleEditToggle,
-        handleInputChange,
-        showCreateForm,
-        setShowCreateForm,
-        handleNewKoiCreation,
-        handleUpdate,
         Refreshing
     } = useManageKoi();
     const handleImageUpload = async ({ file }) => {
@@ -262,7 +256,7 @@ export default function Kois() {
                             </Col>
                             <Col>
                                 <Space>
-                                    <Button icon={<PlusCircleOutlined />} onClick={() => handleCreateClick(category)} style={{ borderColor: '#b7eb8f', color: '#389e0d' }}>Tạo Koi Mới</Button>
+                                    <Button icon={<PlusCircleFilled />} onClick={() => handleCreateClick(category)} style={{ borderColor: '#b7eb8f', color: '#389e0d' }}>Tạo Koi Mới</Button>
                                 </Space>
                             </Col>
                         </Row>
@@ -270,12 +264,12 @@ export default function Kois() {
                         <div style={{ display: 'flex', overflowX: 'auto', gap: '10px', paddingBottom: '10px' }}>
                             {koiItems.length > 0 ? (
                                 koiItems.map((koi) => (
-                                    <Card key={koi._id} hoverable style={{ minWidth: 320, background: '#fafafa' }} cover={<Image alt="Koi" src={koi.Image || 'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM='} style={{ maxHeight: '180px', objectFit: 'cover' }} />}>
+                                    <Card key={koi._id} hoverable style={{ minWidth: 360, background: '#fafafa' }} cover={<Image alt="Koi" src={koi.Image || 'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM='} style={{ maxHeight: '180px', objectFit: 'cover' }} />}>
                                         <Card.Meta title={koi.KoiName} description={` Trạng Thái : ${KoiStatusMap[koi.Status]}`} />
                                         <div style={{ marginTop: '10px' }}>
                                             <Button icon={<EditOutlined />} onClick={() => handleEditClick(koi)} style={{ marginRight: '8px' }}>Chỉnh Sửa</Button>
                                             {koi.Status === 0 ? (
-                                                <Button icon={<CheckOutlined />} onClick={() => handleDisableEnable(koi._id, 1)}>Enable</Button>
+                                                <Button icon={<CheckOutlined />} onClick={() => handleDisableEnable(koi._id, 1)}>Kích Hoạt</Button>
                                             ) : koi.Status === 2 || koi.Status === 3 ? (
                                                 <Tooltip title="Koi có nguồn gốc F1 hoặc thuần việt không thể cập nhật">
                                                     <Button danger icon={<StopOutlined />} disabled>Vô Hiệu Hóa</Button>
