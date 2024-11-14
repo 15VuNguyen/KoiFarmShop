@@ -5,8 +5,8 @@ export default class InvoiceSchema {
   GroupKoiIDInvoice = ''
   InvoiceDate = new Date()
   Status = ''
-  Discount = ''
-  TotalPrice = ''
+  Discount = 0
+  TotalPrice = 0
 
   constructor(invoice) {
     const date = new Date()
@@ -14,7 +14,7 @@ export default class InvoiceSchema {
     this.GroupKoiIDInvoice = invoice.GroupKoiIDInvoice || ''
     this.InvoiceDate = invoice.InvoiceDate || date
     this.Status = invoice.Status || ''
-    this.Discount = invoice.Discount || ''
-    this.TotalPrice = invoice.TotalPrice || ''
+    this.Discount = invoice.Discount || 0
+    this.TotalPrice = invoice.TotalPrice || 0
   }
 }

@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Footer from "./Footer";
-import Navbar from "./Navbar/Navbar";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import axios from "axios";
 import "./Css/supplierStyle.css";
+import { Typography } from "antd";
+import axiosInstance from "../An/Utils/axiosJS";
 
-import { Layout, Typography } from "antd";
-const { Title, Text, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 export default function NguonGocCuaIKoi() {
   const [error, setError] = useState(null);
@@ -15,8 +13,8 @@ export default function NguonGocCuaIKoi() {
   useEffect(() => {
     const fetchSupplierData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/manager/manage-supplier/get-all"
+        const response = await axiosInstance.get(
+          "/manager/manage-supplier/get-all"
         );
         if (response.status === 200) {
           setData(response.data.result);
@@ -24,7 +22,7 @@ export default function NguonGocCuaIKoi() {
           setError("Failed to fetch supplier details.");
         }
       } catch (error) {
-        setError("Error fetching supplier details.");
+        setError("Error fetching supplier details." + error);
       }
     };
     fetchSupplierData();
@@ -32,15 +30,16 @@ export default function NguonGocCuaIKoi() {
 
   return (
     <>
-      <Navbar />
-      <Container style={{ padding: "20px", paddingTop: "100px" }}>
-        <div>
+      <Container
+        style={{ padding: "20px", paddingTop: "100px", color: "#e4cfb1" }}
+      >
+        <div style={{ color: "white" }}>
           <div style={{ textAlign: "center" }}>
-            <h1 style={{ color: "red" }}>Nguồn Gốc Của IKoi</h1>
+            <h1 style={{ color: "#920202" }}>Nguồn Gốc Của IKoi</h1>
           </div>
           <div>
             <br />
-            <Paragraph className="paragraph-Style">
+            <Paragraph className="paragraph-Style" style={{}}>
               Cá Koi có nguồn gốc từ Trung Quốc, nơi có truyền thống lai tạo lâu
               đời. Tuy nhiên, cá Koi Nhật Bản lại được biết đến với những phẩm
               chất và giá trị nghệ thuật vượt trội hơn hẳn. Sự khác biệt này
@@ -53,7 +52,10 @@ export default function NguonGocCuaIKoi() {
             </Paragraph>
             <ul>
               <li>
-                <Paragraph className="paragraph-Style">
+                <Paragraph
+                  className="paragraph-Style"
+                  style={{ color: "black" }}
+                >
                   Thân hình thon gọn, khỏe mạnh với cấu trúc tốt, giúp cá có
                   tiềm năng phát triển lớn.
                 </Paragraph>
@@ -79,82 +81,82 @@ export default function NguonGocCuaIKoi() {
           </div>
         </div>
         <div>
-          <h1 style={{ color: "red" }}>
+          <h1
+            style={{
+              color: "#920202",
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
             Các Koi Farm Nhật Bản Chúng Tôi Tin Dùng
           </h1>
           <div>
-            <strong>Tại sao chúng tôi chọn Koi?</strong>
-            <br />
-            <Paragraph className="paragraph-Style">
-              Nhật Koi Farm là đối tác của nhiều Koi Farm nổi tiếng như
-              Dainichi, Omosako, và Marudo. Mỗi farm đều có thế mạnh riêng, giúp
-              chúng tôi cung cấp những con Koi đẹp nhất.
-            </Paragraph>
-            <br />
-            <Paragraph className="paragraph-Style">
-              Tất cả các farm này đều nằm tại Ojiya, Nhật Bản, được xem là trung
-              tâm của ngành nuôi cá Koi, nơi tập trung nhiều nhà lai tạo danh
-              tiếng.
-            </Paragraph>
+            <strong
+              style={{ fontSize: "20px", paddingTop: "20px", color: "black" }}
+            >
+              Tại sao chúng tôi chọn Koi?
+            </strong>
+            <div style={{ paddingTop: "20px" }}>
+              <Paragraph className="paragraph-Style">
+                IKoi là đối tác của nhiều Koi Farm nổi tiếng như Dainichi,
+                Omosako, và Marudo. Mỗi farm đều có thế mạnh riêng, giúp chúng
+                tôi cung cấp những con Koi đẹp nhất.
+              </Paragraph>
+              <Paragraph className="paragraph-Style" s>
+                Tất cả các farm này đều nằm tại Ojiya, Nhật Bản, được xem là
+                trung tâm của ngành nuôi cá Koi, nơi tập trung nhiều nhà lai tạo
+                danh tiếng.
+              </Paragraph>
+            </div>
           </div>
         </div>
         {error && <div className="error">{error}</div>}
-        <div className="supplier-list">
+        <hr />
+        <div>
           {data.map((supplier) => (
-            <div key={supplier._id} className="supplier-item">
+            <div key={supplier._id}>
               <Paragraph className="paragraph-Style">
-                <h3 style={{ color: "red" }}>{supplier.SupplierName}</h3>
-                <p className="text-Style">
-                  <strong style={{ color: "red" }}>Địa chỉ:</strong>{" "}
-                  {supplier.Address}
-                </p>
-                <p className="text-Style">
-                  <strong style={{ color: "red" }}>Quốc gia:</strong>{" "}
-                  {supplier.Country}
-                </p>
-                <p className="text-Style">
-                  <strong style={{ color: "red" }}>Điện thoại:</strong>{" "}
-                  {supplier.PhoneNumber}
-                </p>
+                <h3 style={{ color: "#920202" }}>{supplier.SupplierName}</h3>
                 <Paragraph className="text-Style">
-                  <strong style={{ color: "red" }}>Mô tả:</strong>{" "}
-                  {supplier.SupplierDescription}
+                  <strong style={{ color: "#920202" }}>Địa chỉ:</strong>{" "}
+                  <span style={{ fontSize: "20px" }}>{supplier.Address}</span>
                 </Paragraph>
                 <Paragraph className="text-Style">
-                  <strong style={{ color: "red" }}>Website:</strong>{" "}
-                  {supplier.Website}
+                  <strong style={{ color: "#920202" }}>Quốc gia:</strong>{" "}
+                  <span style={{ fontSize: "20px" }}>{supplier.Country}</span>
+                </Paragraph>
+                <Paragraph className="text-Style">
+                  <strong style={{ color: "#920202" }}>Điện thoại:</strong>{" "}
+                  <span style={{ fontSize: "20px" }}>
+                    {supplier.PhoneNumber}
+                  </span>
+                </Paragraph>
+                <Paragraph className="text-Style">
+                  <strong style={{ color: "#920202" }}>Mô tả:</strong>{" "}
+                  <span style={{ fontSize: "20px" }}>
+                    {supplier.SupplierDescription}
+                  </span>
+                </Paragraph>
+                <Paragraph className="text-Style">
+                  <strong style={{ color: "#920202" }}>Website:</strong>{" "}
+                  <span style={{ fontSize: "20px" }}>{supplier.Website}</span>
                 </Paragraph>
                 {supplier.SupplierImage && (
                   <img
                     src={supplier.SupplierImage}
                     alt={supplier.SupplierName}
-                    className="supplier-image"
+                    style={{
+                      textAlign: "center",
+                      width: "100%",
+                      height: "600px",
+                    }}
                   />
                 )}
               </Paragraph>
             </div>
           ))}
         </div>
-        <div style={{ display: "flex" }}>
-          <div style={{ width: "30%" }}>
-            <img src="src/assets/img_4.png" alt="Image 4" />
-          </div>
-          <div style={{ width: "70%" }}>
-            <img src="src/assets/img_5.png" alt="Image 5" />
-          </div>
-        </div>
       </Container>
-
-      <div
-        style={{
-          display: "flex",
-          backgroundImage: `url("src/assets/e.jpg")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh",
-        }}
-      ></div>
-      <Footer />
     </>
   );
 }

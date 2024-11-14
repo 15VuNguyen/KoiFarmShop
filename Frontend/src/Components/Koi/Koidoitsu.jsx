@@ -1,10 +1,8 @@
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer";
 import Layout from "antd/es/layout/layout";
-import { Typography } from "antd";
 import Doitsu from "../ThongTinCaKoi/Doitsu";
-
-const { Title, Text, Paragraph } = Typography;
+import CustomerChatButton from "../Chat/CustomerChat";
 export default function Koidoitsu() {
   return (
     <>
@@ -13,6 +11,7 @@ export default function Koidoitsu() {
         <div style={{ paddingTop: "100px" }}>
           <Doitsu />
         </div>
+        <CustomerChatButton />
         <Footer />
       </Layout>
     </>

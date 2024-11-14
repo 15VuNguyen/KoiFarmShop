@@ -26,14 +26,11 @@ const OrderingIKoi = () => {
       if (!selectedSize || !selectedBreed) return;
 
       try {
-        const response = await axios.post(
-          "http://localhost:4000/order/detail/price",
-          {
-            Size: selectedSize,
-            Breed: selectedBreed,
-            CategoryID: selectedItem.CategoryID,
-          }
-        );
+        const response = await axios.post("/order/detail/price", {
+          Size: selectedSize,
+          Breed: selectedBreed,
+          CategoryID: selectedItem.CategoryID,
+        });
 
         if (response.data?.result?.CategoryName) {
           setPrice(response.data.result.CategoryName.Price);

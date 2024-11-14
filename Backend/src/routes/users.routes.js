@@ -8,6 +8,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  updateConsignValidator,
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
@@ -17,6 +18,7 @@ import {
   emailVerifyTokenController,
   forgotPasswordController,
   getAllConsignFromUserController,
+  getConsignFromUserController,
   getMeController,
   getOrderController,
   getProfileController,
@@ -28,6 +30,8 @@ import {
   resendEmailVerifyController,
   resetPasswordController,
   updateMeController,
+  userCancelConsignController,
+  userUpdateConsignController,
   verifyForgotPasswordTokenController
 } from '../controllers/users.controllers.js'
 import { wrapAsync } from '../utils/handle.js'
@@ -78,8 +82,7 @@ usersRouter.get('/me', accessTokenValidator, wrapAsync(getMeController))
 usersRouter.patch(
   '/me',
   accessTokenValidator,
-  verifiedUserValidator,
-  filterMiddleware(['name', 'address', 'phone_number', 'website', 'username', 'avatar']), //lọc ra những key cần thiết để update
+  filterMiddleware(['name', 'address', 'phone_number', 'website', 'username', 'picture']), //lọc ra những key cần thiết để update
   updateMeValidator,
   wrapAsync(updateMeController)
 )
@@ -114,7 +117,39 @@ usersRouter.get('/oauth/google', wrapAsync(oAuthController))
 
 usersRouter.get('/tat-ca-don-ki-gui', accessTokenValidator, wrapAsync(getAllConsignFromUserController))
 
-usersRouter.get('/get-orders', wrapAsync(getOrderController))
+usersRouter.get('/get-orders/:userID', wrapAsync(getOrderController))
 
+usersRouter.get('/tat-ca-don-ki-gui/:_id', accessTokenValidator, wrapAsync(getConsignFromUserController))
+
+usersRouter.patch(
+  '/tat-ca-don-ki-gui/:_id',
+  accessTokenValidator,
+  filterMiddleware([
+    'PositionCare',
+    'Method',
+    'ShippedDate',
+    'ReceiptDate',
+    'Detail',
+    'AddressConsignKoi',
+    'PhoneNumberConsignKoi',
+    'CategoryID',
+    'KoiName',
+    'Age',
+    'Origin',
+    'Gender',
+    'Size',
+    'Breed',
+    'Description',
+    'DailyFoodAmount',
+    'FilteringRatio',
+    'CertificateID',
+    'Image',
+    'Video'
+  ]), //lọc ra những key cần thiết để update
+  updateConsignValidator,
+  wrapAsync(userUpdateConsignController)
+)
+
+usersRouter.patch('/huy-don-ki-gui/:_id', accessTokenValidator, filterMiddleware('State'), wrapAsync(userCancelConsignController))
 
 export default usersRouter

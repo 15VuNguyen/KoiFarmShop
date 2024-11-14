@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FaShoppingCart } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-
+import img1 from "../../assets/logo.png";
 export default function Navbar() {
   const [showDropdown1, setShowDropdown1] = useState(false);
   const [showDropdown2, setShowDropdown2] = useState(false);
@@ -35,6 +35,7 @@ export default function Navbar() {
     localStorage.clear();
     setIsLoggedIn(false);
     navigate("/", { state: { message: "Đăng Xuất Thành Công" } });
+    window.location.reload();
   };
 
   const handleStateSignIn = () => {
@@ -44,39 +45,6 @@ export default function Navbar() {
   const handleStateSignUp = () => {
     navigate("/Login", { state: { type: "signUp" } });
   };
-
-  const servicesMenu = useMemo(() => {
-    return (
-      <Dropdown.Menu className="custom-menu">
-        <Dropdown.Item
-          href="/kygui"
-          onMouseEnter={() => setActiveItem("/kygui")}
-          onMouseLeave={() => setActiveItem(null)}
-          className={activeItem === "/kygui" ? "active" : ""}
-        >
-          KOI KÝ GỬI
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item
-          href="/koikygui"
-          onMouseEnter={() => setActiveItem("/koikygui")}
-          onMouseLeave={() => setActiveItem(null)}
-          className={activeItem === "/koikygui" ? "active" : ""}
-        >
-          KOI ĐANG BÁN
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item
-          href="/lonhapkhau" // Thêm liên kết đến trang lô nhập khẩu
-          onMouseEnter={() => setActiveItem("/lonhapkhau")}
-          onMouseLeave={() => setActiveItem(null)}
-          className={activeItem === "/lonhapkhau" ? "active" : ""}
-        >
-          LÔ NHẬP KHẨU
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    );
-  }, [activeItem]);
 
   return (
     <div
@@ -94,15 +62,23 @@ export default function Navbar() {
         pauseOnHover
       />
       <div className="navbar-content">
-        <img
-          src="src/assets/logo.png"
-          alt="Logo"
-          style={{ width: "100px", borderRadius: "50px", height: "100px" }}
-        />
+        <a href="/">
+          <img
+            src={img1}
+            alt="Logo"
+            style={{ width: "100px", borderRadius: "50px", height: "100px" }}
+          />
+        </a>
         <div className="nav-links">
-          <Link to="/" className="nav-link">
-            TRANG CHỦ
-          </Link>
+          <Dropdown>
+            <Dropdown.Toggle
+              id="dropdown-basic"
+              className="nav-dropdown-toggle"
+              href="/"
+            >
+              Trang chủ
+            </Dropdown.Toggle>
+          </Dropdown>
 
           <Dropdown
             className="nav-dropdown"
@@ -113,10 +89,9 @@ export default function Navbar() {
             <Dropdown.Toggle
               id="dropdown-basic"
               className="nav-dropdown-toggle"
+              href="/gioithieu"
             >
-              <Link to="/gioithieu" className="nav-link">
-                GIỚI THIỆU
-              </Link>
+              Giới thiệu
             </Dropdown.Toggle>
             <CSSTransition
               in={showDropdown1}
@@ -132,7 +107,7 @@ export default function Navbar() {
                   onMouseLeave={() => setActiveItem(null)}
                   className={activeItem === "/nguongocIKoi" ? "active" : ""}
                 >
-                  NGUỒN GỐC CỦA IKOI
+                  Nguồn gốc của IKoi
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
@@ -141,7 +116,7 @@ export default function Navbar() {
                   onMouseLeave={() => setActiveItem(null)}
                   className={activeItem === "/gioithieuvekoif1" ? "active" : ""}
                 >
-                  GIỚI THIỆU VỀ CÁ KOI F1
+                  Giới thiệu về Koi F1
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
@@ -152,7 +127,7 @@ export default function Navbar() {
                     activeItem === "/gioithieuvekoiviet" ? "active" : ""
                   }
                 >
-                  GIỚI THIỆU VỀ CÁ KOI VIỆT
+                  Giới thiệu về Koi Việt
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
@@ -163,12 +138,11 @@ export default function Navbar() {
                     activeItem === "/gioithieuvekoinhat" ? "active" : ""
                   }
                 >
-                  GIỚI THIỆU VỀ CÁ KOI NHẬT
+                  Giới thiệu về Koi Nhật
                 </Dropdown.Item>
               </Dropdown.Menu>
             </CSSTransition>
           </Dropdown>
-
           <Dropdown
             className="nav-dropdown"
             onMouseEnter={() => setShowDropdown2(true)}
@@ -176,10 +150,11 @@ export default function Navbar() {
             show={showDropdown2}
           >
             <Dropdown.Toggle
+              href="/cakoinhat"
               id="dropdown-basic"
               className="nav-dropdown-toggle"
             >
-              Các Dòng Cá Koi
+              Các dòng cá Koi
             </Dropdown.Toggle>
             <CSSTransition
               in={showDropdown2}
@@ -188,20 +163,28 @@ export default function Navbar() {
               mountOnEnter
               unmountOnExit
             >
-              <Dropdown.Menu className="custom-menu">
+              <Dropdown.Menu
+                className="custom-menu"
+                style={{
+                  maxHeight: "200px", // Adjust the height as needed
+                  overflowY: "auto",
+                  msOverflowStyle: "none", // IE and Edge
+                  scrollbarWidth: "none", // Firefox
+                }}
+              >
                 {[
-                  "kohaku",
-                  "ogon",
-                  "showa",
-                  "tancho",
-                  "bekko",
-                  "doitsu",
-                  "ginrin",
-                  "goshiki",
-                  "benigoi",
-                  "asagi",
-                  "platinum",
-                  "shusui",
+                  "Kohaku",
+                  "Ogon",
+                  "Showa",
+                  "Tancho",
+                  "Bekko",
+                  "Doitsu",
+                  "Ginrin",
+                  "Goshiki",
+                  "Benigoi",
+                  "Asagi",
+                  "Platinum",
+                  "Shusui",
                 ].map((fish, index) => (
                   <React.Fragment key={fish}>
                     <Dropdown.Item
@@ -210,7 +193,7 @@ export default function Navbar() {
                       onMouseLeave={() => setActiveItem(null)}
                       className={activeItem === `/${fish}` ? "active" : ""}
                     >
-                      CÁ KOI {fish.toUpperCase()}
+                      Cá Koi {fish}
                     </Dropdown.Item>
                     {index < 11 && <Dropdown.Divider />}
                   </React.Fragment>
@@ -228,8 +211,9 @@ export default function Navbar() {
             <Dropdown.Toggle
               id="dropdown-basic"
               className="nav-dropdown-toggle"
+              href="/kienthuckoi"
             >
-              TIN TỨC
+              Tin tức
             </Dropdown.Toggle>
             <CSSTransition
               in={showDropdown3}
@@ -247,7 +231,7 @@ export default function Navbar() {
                       onMouseLeave={() => setActiveItem(null)}
                       className={activeItem === `/${news}` ? "active" : ""}
                     >
-                      {news === "kienthuckoi" ? "KIẾN THỨC KOI" : "OTHER VALUE"}{" "}
+                      {news === "kienthuckoi" ? "Kiến thức Koi" : "OTHER VALUE"}{" "}
                       {/* Replace "OTHER VALUE" with desired text */}
                     </Dropdown.Item>
                     {index < 2}
@@ -266,8 +250,9 @@ export default function Navbar() {
             <Dropdown.Toggle
               id="dropdown-basic"
               className="nav-dropdown-toggle"
+              href="/koidangban"
             >
-              DỊCH VỤ
+              Dịch vụ
             </Dropdown.Toggle>
             <CSSTransition
               in={showDropdown4}
@@ -276,18 +261,44 @@ export default function Navbar() {
               mountOnEnter
               unmountOnExit
             >
-              {servicesMenu}
+              <Dropdown.Menu className="custom-menu">
+                <Dropdown.Item
+                  href="/kygui"
+                  onMouseEnter={() => setActiveItem("/kygui")}
+                  onMouseLeave={() => setActiveItem(null)}
+                  className={activeItem === "/kygui" ? "active" : ""}
+                >
+                  Koi ký gửi
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  href="/koidangban"
+                  onMouseEnter={() => setActiveItem("/koidangban")}
+                  onMouseLeave={() => setActiveItem(null)}
+                  className={activeItem === "/koidangban" ? "active" : ""}
+                >
+                  Koi đang bán
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  href="/lonhapkhau" // Thêm liên kết đến trang lô nhập khẩu
+                  onMouseEnter={() => setActiveItem("/lonhapkhau")}
+                  onMouseLeave={() => setActiveItem(null)}
+                  className={activeItem === "/lonhapkhau" ? "active" : ""}
+                >
+                  Lô nhập khẩu
+                </Dropdown.Item>
+              </Dropdown.Menu>
             </CSSTransition>
           </Dropdown>
 
           <Dropdown>
             <Dropdown.Toggle
               id="dropdown-basic"
+              href="/lienhe"
               className="nav-dropdown-toggle"
             >
-              <Link to="/lienhe" className="nav-link">
-                LIÊN HỆ
-              </Link>
+              Liên hệ
             </Dropdown.Toggle>
           </Dropdown>
         </div>
@@ -308,21 +319,21 @@ export default function Navbar() {
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  href="/trackingorder"
+                  href="/trackingorderpage"
                   className="custom-dropdown-item"
                 >
                   Đơn hàng
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  href="/donkygui"
+                  href="/donkyguipage"
                   className="custom-dropdown-item"
                 >
                   Đơn ký gửi
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  href="/changepassword"
+                  href="/changepasswordpage"
                   className="custom-dropdown-item"
                 >
                   Thay đổi mật khẩu

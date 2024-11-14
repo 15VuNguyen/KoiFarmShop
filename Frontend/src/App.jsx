@@ -16,7 +16,7 @@ import Koishusui from "./Components/Koi/Koishusui";
 import Koiplatinum from "./Components/Koi/Koiplatinum";
 import Lienhe from "./Components/Lienhe";
 import Kienthuckoi from "./Components/Kienthuckoi";
-import Koikygui from "./Components/Koikygui";
+import Koidangban from "./Components/Koidangban";
 import Spinner from "./An/Components/Spinner";
 import DashBoard from "./An/Pages/DashBoard";
 import Home from "./Home";
@@ -34,6 +34,7 @@ import GioiThieuVeKoiF1 from "./Components/GioitThieuVeKoiF1";
 import OrderingIKoi from "./Components/OrderingIKoi";
 import OrderingJapanKoi from "./Components/OrderingJapanKoi";
 import changePassword from "./Components/ChangePassword";
+import Donkyguipage from "./Components/Page/Thongtincuauser/donkyguiPage";
 const Staff = lazy(() => import("../src/An/Pages/Staff"));
 const Manager = lazy(() => import("./An/Pages/Manager/Manager"));
 // const Profiles = lazy(() => import("../src/An/Pages/Staff/Profiles"));
@@ -46,7 +47,7 @@ import ManageKoi from "./An/Pages/Manager/ManageKoi";
 import ManageSupplier from "./An/Pages/Manager/ManageSupplier";
 import ChangePassword from "./Components/ChangePassword";
 import FormFillInformation from "./Components/FormFillInformation";
-import Chart from "./An/Pages/Charts/Charts";
+// import Chart from "./An/Pages/Charts/Charts";
 import PaymentMethod from "./Components/Paymentmethod";
 import ManageInvoices from "./An/Pages/Manager/ManageInvoices";
 import Profiles from "./An/Ant Design/Pages/Profiles";
@@ -55,7 +56,27 @@ import Locakoinhapkhau from "./Components/LoCaKoiNhapKhau";
 import Consigns from "./An/Ant Design/Pages/Consigns";
 import Invoices from "./An/Ant Design/Pages/Invoices";
 import Suppliers from "./An/Ant Design/Pages/Suppliers";
+import CaKoiNhat from "./Components/CaKoiNhat";
+import OrdersNext from "./An/Ant Design/Pages/Orders";
+import Kois from "./An/Ant Design/Pages/Kois";
+import Gioithieuvekoif1page from "./Components/Page/Gioithieu/gioithieuvekoif1";
+import NotFound from "./An/Ant Design/Components/NotFound";
+//AN
+import Chitietconsignpage from "./Components/Page/Thongtincuauser/chitietconsignPage";
+import Changepasswordpage from "./Components/Page/Thongtincuauser/changepasswordPage";
+import Trackingorderpage from "./Components/Page/Thongtincuauser/trackingorderPage";
+import Gioithieupage from "./Components/Page/Gioithieu/gioithieuPage";
+import ChinhSach from "./Components/ChinhSach/chinhSach";
+import Gioithieuvekoinhatpage from "./Components/Page/Gioithieu/gioithieuvekoinhat";
+import Gioithieuvekoivietpage from "./Components/Page/Gioithieu/gioithieuvekoiviet";
+import NguongoccuaikoiPage from "./Components/Page/Gioithieu/nguongoccuaikoiPage";
+import Profilepage from "./Components/Page/Thongtincuauser/profilePage";
+import Chart from "./An/Ant Design/Pages/Chart";
 const router = createBrowserRouter([
+  {
+    path: "*",
+    element: <NotFound />,
+  },
   {
     path: "/login/oauth",
     element: <Login />,
@@ -110,7 +131,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/gioithieu",
-    element: <Gioithieu />,
+    element: <Gioithieupage />,
   },
   {
     path: "/gioithieusankygui",
@@ -129,8 +150,8 @@ const router = createBrowserRouter([
     element: <Gioithieusankygui />,
   },
   {
-    path: "/koikygui",
-    element: <Koikygui />,
+    path: "/koidangban",
+    element: <Koidangban />,
   },
   {
     path: "/login",
@@ -154,27 +175,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />, // Home component
+    element: <Profilepage />, // Home component
   },
   {
     path: "/donkygui",
-    element: <DonKyGuiPage />, // Home component
+    element: <DonKyGuiPage />, // Home gcomponent
   },
   {
     path: "/nguongocIKoi",
-    element: <NguonGocCuaIKoi />, // Home component
+    element: <NguongoccuaikoiPage />, // Home component
   },
   {
     path: "/gioithieuvekoiviet",
-    element: <GioiThieuVeKoiViet />, // Home component
+    element: <Gioithieuvekoivietpage />, // Home component
   },
   {
     path: "/gioithieuvekoinhat",
-    element: <GioiThieuVeKoiNhat />, // Home component
+    element: <Gioithieuvekoinhatpage />, // Home component
   },
   {
     path: "/gioithieuvekoif1",
-    element: <GioiThieuVeKoiF1 />,
+    element: <Gioithieuvekoif1page />, // Home component
   },
   {
     path: "/gioithieuvekoiviet",
@@ -205,6 +226,31 @@ const router = createBrowserRouter([
     element: <PaymentMethod />,
   },
   {
+    path: "/cakoinhat",
+    element: <CaKoiNhat />,
+  },
+  {
+    path: "/donkyguipage",
+    element: <Donkyguipage />,
+  },
+  {
+    path: "/changepasswordpage",
+    element: <Changepasswordpage />,
+  },
+
+  {
+    path: "/trackingorderpage",
+    element: <Trackingorderpage />,
+  },
+  {
+    path: "/chitiet",
+    element: <Chitietconsignpage />,
+  },
+  {
+    path: "/chinhsach",
+    element: <ChinhSach />,
+  },
+  {
     path: "/NewDashboard",
     element: <AnTopBar />,
     children: [
@@ -224,6 +270,18 @@ const router = createBrowserRouter([
         path: "staff/Suppliers",
         element: <Suppliers />,
       },
+      {
+        path: "staff/Orders",
+        element: <OrdersNext />,
+      },
+      {
+        path: "staff/Kois",
+        element: <Kois />,
+      },
+      {
+        path: "staff/Report/",
+        element: <Chart />,
+      }
     ],
   },
   {
@@ -242,14 +300,14 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "staff/Report/:chartType",
-        element: (
-          <Suspense fallback={<Spinner />}>
-            <Chart />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "staff/Report/:chartType",
+      //   element: (
+      //     <Suspense fallback={<Spinner />}>
+      //       <Chart />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "manager/ManageInvoices",
         element: (
@@ -290,6 +348,9 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        
+      }
     ],
   },
 ]);

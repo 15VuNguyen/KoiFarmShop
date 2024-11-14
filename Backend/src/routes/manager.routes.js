@@ -1,8 +1,13 @@
 import {
   createNewInvoiceGroupKoiController,
   createNewServiceController,
+  deleteSupplierController,
+  getKoiAllController,
+  getLoyalUserListController,
+  getOrdeDetails,
   getProfitController,
   getRevenueController,
+  updateInvoiceController,
   updateOrderStatusController,
   updateServiceController
 } from '../controllers/manager.controllers.js'
@@ -65,6 +70,13 @@ managerRouter.get('/manage-ki-gui/get-all', accessTokenValidator, isAdminValidat
 
 managerRouter.get('/manage-ki-gui/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getConsignDetailController))
 
+managerRouter.get(
+  '/manage-loyalty-card/get-all',
+  accessTokenValidator,
+  isAdminValidator,
+  wrapAsync(getLoyalUserListController)
+)
+
 managerRouter.put(
   '/manage-ki-gui/:_id',
   accessTokenValidator,
@@ -73,12 +85,12 @@ managerRouter.put(
 )
 managerRouter.get('/manage-order/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getAllOrderController))
 
-managerRouter.get('/manage-koi/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getAllKoiController))
+managerRouter.get('/manage-koi/get-all', accessTokenValidator, isAdminValidator, wrapAsync(getKoiAllController))
 
 managerRouter.put(
   '/manage-koi/updateKoi/:KoiID',
-  accessTokenValidator,
-  isAdminValidator,
+  // accessTokenValidator,
+  // isAdminValidator,
   wrapAsync(updateKoiController)
 )
 
@@ -106,7 +118,7 @@ managerRouter.post(
 managerRouter.post(
   '/manage-user/disable-enable/:UserID',
   accessTokenValidator,
-  accessTokenValidator,
+  isAdminValidator,
   wrapAsync(updateStatusUserController)
 )
 
@@ -172,6 +184,13 @@ managerRouter.put('/manage-supplier/:_id', accessTokenValidator, isAdminValidato
 
 managerRouter.get('/manage-supplier/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getSupplierController))
 
+managerRouter.delete(
+  '/manage-supplier/:_id',
+  accessTokenValidator,
+  isAdminValidator,
+  wrapAsync(deleteSupplierController)
+)
+
 managerRouter.post(
   '/manage-invoice/create-new-invoice-group-koi',
   accessTokenValidator,
@@ -193,5 +212,8 @@ managerRouter.get('/manage-invoice/:_id', accessTokenValidator, isAdminValidator
 
 managerRouter.get('/manage-group-koi/:_id', accessTokenValidator, isAdminValidator, wrapAsync(getgroupKoiController))
 
+managerRouter.get('/manage-order/get-order-detail/:orderID', getOrdeDetails)
+
+managerRouter.put('/manage-invoice/:_id', accessTokenValidator, isAdminValidator, wrapAsync(updateInvoiceController))
 
 export default managerRouter

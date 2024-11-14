@@ -1,10 +1,12 @@
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
+import { v1 as uuidv1 } from 'uuid'
 import moment from 'moment'
 
 const zaloPayment = async (req, res) => {
   const reqOrderDTCookie = req.cookies && req.cookies.orderDT ? JSON.parse(req.cookies.orderDT) : {} // Lấy từ cookie orderDT
   const reqOrderCookie = req.cookies && req.cookies.order ? JSON.parse(req.cookies.order) : {} // Lấy từ cookie order
+  const reqDiscountCookie = req.cookies && req.cookies.loyaltyCard ? JSON.parse(req.cookies.loyaltyCard) : {} // Lấy từ cookie discount
 
   const config = {
     app_id: '2554',
@@ -14,9 +16,10 @@ const zaloPayment = async (req, res) => {
   }
 
   const embed_data = {
-    redirecturl: 'https://www.facebook.com/',
+    redirecturl: 'http://localhost:3000/',
     orderDetails: reqOrderDTCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
-    order: reqOrderCookie // Thêm thông tin đơn hàng từ cookie vào embed_data
+    order: reqOrderCookie, // Thêm thông tin đơn hàng từ cookie vào embed_data
+    loyaltyCard: reqDiscountCookie
   }
 
   const items = [{}]
@@ -31,7 +34,7 @@ const zaloPayment = async (req, res) => {
     amount: req.body.total,
     description: `KOI Shop - Payment for the order + ${Math.floor(100000 + Math.random() * 900000)}`,
     bank_code: '',
-    callback_url: 'https://fc82-2405-4802-811b-6c0-5403-8459-e157-e740.ngrok-free.app/payment/callback'
+    callback_url: 'https://koi-farm-shop.onrender.com/payment/callback'
   }
 
   // Tạo MAC cho yêu cầu

@@ -3,15 +3,13 @@ import Navbar from "./Navbar/Navbar";
 import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { Layout, Typography } from "antd";
-const { Title, Text, Paragraph } = Typography;
-import { Table } from "react-bootstrap";
+const { Paragraph } = Typography;
 export default function Gioithieu() {
   const [menu, setMenu] = useState("home");
   return (
     <>
       <Layout>
         <Navbar menu={menu} setMenu={setMenu} />
-
         <Container>
           <div>
             <div>
@@ -52,16 +50,17 @@ export default function Gioithieu() {
                     Koi là một loại cá chép đã được thuần hóa, lai tạo và được
                     nuôi khá phổ biến tại Nhật Bản để làm cảnh. Bên cạnh vẻ đẹp
                     mê hồn, Koi còn được biết đến là một loại cá phong thủy cực
-                    tốt, luôn mang lại may mắn cho người chơi. Siêu Thị Cá Koi
-                    VN chuyên cung cấp cho khách hàng trên cả nước các loại cá
-                    Koi chất lượng tốt với giá thành ưu đãi nhất.
+                    tốt, luôn mang lại may mắn cho người chơi. IKoi chuyên cung
+                    cấp cho khách hàng trên cả nước các loại cá Koi chất lượng
+                    tốt với giá thành ưu đãi nhất.
                   </Paragraph>
                   <Paragraph style={{ fontSize: "20px" }}>
-                    Với nhiều năm kinh nghiệm và tầm cỡ phát triển, Siêu Thị Cá
-                    Koi VN liên kết với các trang trại nổi tiếng của Nhật Bản
-                    như Marusei, Dainichi, Marudo, Sakai,… để trực tiếp lựa lọc
-                    ra những chú cá Koi chất lượng với đa dạng chủng loại, kích
-                    thước nhập khẩu về Việt Nam theo nhu cầu của khách hàng.
+                    Với nhiều năm kinh nghiệm và tầm cỡ phát triển, IKoiliên kết
+                    với các trang trại nổi tiếng của Nhật Bản như Marusei,
+                    Dainichi Koi Farm, Marudo Koi Farm, Takeda Koi Farm , Koi
+                    Farm Saka… để trực tiếp lựa lọc ra những chú cá Koi chất
+                    lượng với đa dạng chủng loại, kích thước nhập khẩu về Việt
+                    Nam theo nhu cầu của khách hàng.
                   </Paragraph>
                 </div>
               </div>
@@ -70,8 +69,8 @@ export default function Gioithieu() {
             <div style={{ paddingTop: "100px" }}>
               <Paragraph style={{ fontSize: "20px" }}>
                 Sở hữu nguồn hàng chất lượng và ổn định, cùng dịch vụ chăm sóc
-                tận tâm, chúng tôi tin: Siêu Thị Cá Koi VN đáp ứng được yêu cầu
-                của những vị khách khó tính nhất trong làng cá Koi nước ta.
+                tận tâm, chúng tôi tin: IKoi đáp ứng được yêu cầu của những vị
+                khách khó tính nhất trong làng cá Koi nước ta.
               </Paragraph>
               <ul>
                 <li>
@@ -157,7 +156,6 @@ export default function Gioithieu() {
             </div>
           </div>
         </Container>
-
         <Footer />
       </Layout>
     </>

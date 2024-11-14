@@ -120,7 +120,21 @@ class UsersService {
       to: payload.email, // Địa chỉ email của người nhận (người dùng đăng ký)
       subject: 'Xác nhận đăng ký',
       text: 'Nội dung email xác nhận đăng ký...', // Hoặc sử dụng `html` để tạo nội dung email dạng HTML
-      html: `<p>Nhấn vào <a href="${verifyURL}">đây</a> để xác nhận đăng ký.</p>` // Sử dụng HTML để tạo nội dung email
+      html: `
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+      <h2 style="text-align: center; color: #4CAF50;">Chào mừng bạn đến với IKOI FARM!</h2>
+      <p>Xin chào,</p>
+      <p>Cảm ơn bạn đã đăng ký tài khoản tại IKOI FARM. Vui lòng nhấn vào nút dưới đây để xác nhận email đăng ký của bạn:</p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${verifyURL}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Xác nhận đăng ký</a>
+      </div>
+      <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
+      <p>Trân trọng,</p>
+      <p>Đội ngũ IKOI FARM</p>
+    </div>
+  </div>
+` // Sử dụng HTML để tạo nội dung email
     }
 
     // Gửi email
@@ -226,7 +240,21 @@ class UsersService {
       to: email, // Địa chỉ email của người nhận (người dùng đăng ký)
       subject: 'Xác nhận đăng ký',
       text: 'Nội dung email xác nhận đăng ký...', // Hoặc sử dụng `html` để tạo nội dung email dạng HTML
-      html: `<p>Nhấn vào <a href="${verifyURL}">đây</a> để xác nhận đăng ký.</p>` // Sử dụng HTML để tạo nội dung email
+      html: `
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+      <h2 style="text-align: center; color: #4CAF50;">Chào mừng bạn đến với IKOI FARM!</h2>
+      <p>Xin chào,</p>
+      <p>Cảm ơn bạn đã đăng ký tài khoản tại IKOI FARM. Vui lòng nhấn vào nút dưới đây để xác nhận email đăng ký của bạn:</p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${verifyURL}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Xác nhận đăng ký</a>
+      </div>
+      <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
+      <p>Trân trọng,</p>
+      <p>Đội ngũ IKOI FARM</p>
+    </div>
+  </div>
+` // Sử dụng HTML để tạo nội dung email
     }
 
     // Gửi email
@@ -275,9 +303,23 @@ class UsersService {
     let mailOptions = {
       from: process.env.EMAIL_APP, // Thay thế bằng email của bạn
       to: email, // Địa chỉ email của người nhận (người dùng đăng ký)
-      subject: 'Xác nhận forgot password token',
+      subject: 'Xác nhận quên mật khẩu',
       text: 'Nội dung xác nhận forgot password token...', // Hoặc sử dụng `html` để tạo nội dung email dạng HTML
-      html: `<p>Nhấn vào <a href="${verifyURL}">đây</a> để xác nhận forgot password token.</p>` // Sử dụng HTML để tạo nội dung email
+      html: `
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+      <h2 style="text-align: center; color: #4CAF50;">Chào mừng bạn đến với IKOI FARM!</h2>
+      <p>Xin chào,</p>
+      <p>Cảm ơn bạn đã sử dụng dịch vụ tại IKOI FARM. Vui lòng nhấn vào nút dưới đây để xác nhận bạn quên mật khẩu:</p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${verifyURL}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Xác nhận quên mật khẩu</a>
+      </div>
+      <p>Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email này.</p>
+      <p>Trân trọng,</p>
+      <p>Đội ngũ IKOI FARM</p>
+    </div>
+  </div>
+` // Sử dụng HTML để tạo nội dung email
     }
 
     // Gửi email
@@ -324,19 +366,25 @@ class UsersService {
       }
     )
     return user
-  } 
+  }
 
   async updateMe(user_id, payload) {
     const _payload = payload
 
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    // const date = localTime.replace('Z', '+07:00')
     //cập nhật _payload lên db
+
     const user = await databaseService.users.findOneAndUpdate(
       { _id: new ObjectId(user_id) },
       [
         {
           $set: {
             ..._payload,
-            updated_at: '$$NOW'
+            updated_at: localTime
           }
         }
       ],
@@ -411,26 +459,26 @@ class UsersService {
   }
 
   //_getOAuthGoogleToken dùng code nhận đc để yêu cầu google tạo id_token
-    async _getOAuthGoogleToken(code) {
-      const body = {
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID, //khai báo trong .env bằng giá trị trong file json
-        client_secret: process.env.GOOGLE_CLIENT_SECRET, //khai báo trong .env bằng giá trị trong file json
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI, //khai báo trong .env bằng giá trị trong file json
-        grant_type: 'authorization_code'
-      }
-      //giờ ta gọi api của google, truyền body này lên để lấy id_token
-      //ta dùng axios để gọi api `npm i axios`
-      const { data } = await axios.post(`https://oauth2.googleapis.com/token`, body, {
-        headers: {
-          'Content-Type': 'application/json' //kiểu truyền lên là form
-        }
-      }) //nhận đc response nhưng đã rã ra lấy data
-      return {
-        access_token: data.access_token,
-        id_token: data.id_token
-      }
+  async _getOAuthGoogleToken(code) {
+    const body = {
+      code,
+      client_id: process.env.GOOGLE_CLIENT_ID, //khai báo trong .env bằng giá trị trong file json
+      client_secret: process.env.GOOGLE_CLIENT_SECRET, //khai báo trong .env bằng giá trị trong file json
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI, //khai báo trong .env bằng giá trị trong file json
+      grant_type: 'authorization_code'
     }
+    //giờ ta gọi api của google, truyền body này lên để lấy id_token
+    //ta dùng axios để gọi api `npm i axios`
+    const { data } = await axios.post(`https://oauth2.googleapis.com/token`, body, {
+      headers: {
+        'Content-Type': 'application/json' //kiểu truyền lên là form
+      }
+    }) //nhận đc response nhưng đã rã ra lấy data
+    return {
+      access_token: data.access_token,
+      id_token: data.id_token
+    }
+  }
 
   //dùng id_token để lấy thông tin của người dùng
   async _getGoogleUserInfo(access_token, id_token) {
@@ -515,8 +563,27 @@ class UsersService {
       throw error
     }
   }
-}
 
+  async getManagerInfoForChat() {
+    try {
+      const manager = await databaseService.users.findOne({ roleid: 3 })
+      return manager
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      throw error
+    }
+  }
+
+  async getUserInfoForChat(reqParams) {
+    try {
+      const user = await databaseService.users.findOne({ _id: new ObjectId(reqParams.userID) })
+      return user
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      throw error
+    }
+  }
+}
 
 const usersService = new UsersService()
 export default usersService

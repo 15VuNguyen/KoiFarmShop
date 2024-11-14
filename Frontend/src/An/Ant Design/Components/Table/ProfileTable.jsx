@@ -1,5 +1,5 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal,Input } from "antd";
-import { CopyOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Table, Avatar, Tag, Tooltip, message, Button, Checkbox, Modal, Input, Dropdown, Menu, Space,Select,Typography } from "antd";
+import { CopyOutlined, CloseCircleOutlined, DownOutlined } from "@ant-design/icons";
 import React from 'react';
 import moment from 'moment';
 import ProfileModal from "../Modal/ProfileModal";
@@ -9,10 +9,10 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   const [selectedColumns, setSelectedColumns] = React.useState({});
   const [showColumnSelector, setShowColumnSelector] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-  
+  const [visibleColumns, setVisibleColumns] = React.useState(['_id', 'name', 'address', 'created_at', 'verify', 'Status']);
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    message.success("ID copied to clipboard!");
+    message.success("ID đã được sao chép vào clipboard!");
   };
   
   const handleTableChange = (pagination, filters, sorter) => {
@@ -46,7 +46,7 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
   };
 
   const searchFunction = (item) => {
-    const searchFields = ['_id', 'name', 'email', 'address'];
+    const searchFields = ['_id', 'name', 'email', 'address', 'created_at', 'website'];
     return searchFields.some(field => 
       item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -71,44 +71,47 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       key: '_id',
       render: (text) => (
         <>
-          <Tag color="blue">{text}</Tag>
-          <Tooltip title="Copy ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-              onClick={() => copyToClipboard(text)}
-            />
+         <Tooltip title="Sao chép ID">
+          <Tag
+          onClick={() => copyToClipboard(text)}
+          style={{ cursor: 'pointer' }}
+            icon={<CopyOutlined />}
+          color="blue">{text}</Tag>
+         
+            
           </Tooltip>
         </>
       ),
     },
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: 'Avatar',
-      dataIndex: 'Image',
-      key: 'Image',
+      title: 'Ảnh đại diện',
+      dataIndex: 'picture',
+      key: 'picture',
       render: (url) => <Avatar src={url} />,
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      sorter: (a, b) => a.email.localeCompare(b.email),
+      sorter: (a, b) => (a.email || '').localeCompare(b.email || ''),
+      render: (text) => text || <Tag color="red">Không cung cấp</Tag>,
     },
     {
-      title: 'Date of Birth',
-      dataIndex: 'date_of_birth',
-      key: 'date_of_birth',
-      render: (text) => moment(text).format('YYYY-MM-DD'),
+      title: 'Ngày Tạo Hồ Sơ',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text) => moment(text).format('DD-MM-YYYY'),
       sorter: (a, b) => moment(a.date_of_birth).unix() - moment(b.date_of_birth).unix(),
       filters: [
-        { text: 'Last 7 Days', value: '7d' },
-        { text: 'Last Month', value: '1m' },
-        { text: 'Last Year', value: '1y' },
+        { text: '7 Ngày qua', value: '7d' },
+        { text: 'Tháng trước', value: '1m' },
+        { text: 'Năm trước', value: '1y' },
       ],
       onFilter: (value, record) => {
         const recordDate = moment(record.date_of_birth);
@@ -126,74 +129,161 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
       filterMultiple: false,
     },
     {
-      title: 'Address',
+      title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
-      render: (text) => text || <Tag color="red">Not Provided</Tag>,
-    },{
-      title: 'Email Verified',
+      render: (text) => text || <Tag color="red">Không cung cấp</Tag>,
+    },
+    {
+      title: 'website',
+      dataIndex: 'website',
+      key: 'website',
+      render: (text) =>  text ?<Tooltip
+        title={'Trang web của người dùng'}
+      > <Typography.Link href={text} target="_blank">{text}</Typography.Link></Tooltip> : <Tag color="red">Không cung cấp</Tag>,
+
+    },
+    {
+      title: 'Email đã xác minh',
       dataIndex: 'verify',
       key: 'verify',
-      render: (text) => text ? <Tag color="green">Verified</Tag> : <Tag color="red">Unverified</Tag>,
+      render: (text) => text ? <Tag color="green">Đã xác minh</Tag> : <Tag color="red">Chưa xác minh</Tag>,
       filters: [
-        { text: 'Verified', value: 1 },
-        { text: 'Unverified', value: 0 },
+        { text: 'Đã xác minh', value: 1 },
+        { text: 'Chưa xác minh', value: 0 },
       ],
       onFilter: (value, record) => record.verify === value,
       filterMultiple: false,
 
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Hành động',
+      key: 'Status',
       render: (_, record) => (
         <>
           <Button
             type="primary"
             style={{ marginRight: 8 }}
-            onClick={() => handleActionClick('update', record._id)}
+            onClick={() => handleActionClick('update', record.username)}
           >
-            Update
+            Cập nhật
           </Button>
-          <Button
-            danger
-            onClick={() => handleActionClick('disable', record._id)}
-          >
-            Disable
-          </Button>
+          {
+            record.StatusUser  ===  1 ? (
+              <Button
+                type="primary"
+                onClick={() => handleActionClick('disable/enable', record._id,'enable')}
+              >
+                Kích hoạt
+              </Button>
+            ) : (
+              <Button danger 
+                variant="solid"
+                onClick={() => handleActionClick('disable/enable', record._id,'disable')}
+              >
+                Vô hiệu hóa
+              </Button>
+          )
+          }
         </>
       ),
     },
-  ].map(col => ({...col, visible: !selectedColumns[col.key]}));
+  ].map(col => ({...col, visible: visibleColumns.includes(col.key)}));
 
   const filteredColumns = columns.filter(col => col.visible);
+  const handleColumnVisibility = (key, visible) => {
+    setVisibleColumns(prev =>
+      visible ? [...prev, key] : prev.filter(colKey => colKey !== key)
+    );
+  };
+  const columnSelectionMenu = (
+    <Menu>
+      {columns.map(col => (
+        <Menu.Item key={col.key}>
+          <Checkbox
+            checked={visibleColumns.includes(col.key)}
+            onChange={(e) => handleColumnVisibility(col.key, e.target.checked)}
+          >
+            {col.title}
+          </Checkbox>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+  const OPTIONS = [
+    { label: 'ID', value: '_id' },
+    { label: 'Tên', value: 'name' },
+    { label: 'Email', value: 'email' },
+    { label: 'Địa chỉ', value: 'address' },
+    { label: 'Ngày Tạo Hồ Sơ', value: 'created_at' },
+    { label: 'Email đã xác minh', value: 'verify' },
+    { label: 'Hành động', value: 'Status' },
+    { label: 'Ảnh đại diện', value: 'picture' },
+    { label: 'website', value: 'website' },
+  
+  ];
+  const handleChange = selectedItems => {
+    const selectedValues = selectedItems.map(item => item.value); 
+    setVisibleColumns(selectedValues);
+};
 
+
+const filteredOptions = OPTIONS.filter(o => !visibleColumns.includes(o));
   return (
     <div>
-      <p>
+      <Space size={"middle"} wrap>
         <Input
-          placeholder="Search..."
+          placeholder="Tìm kiếm..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ width: 200, marginBottom: 16 }}
         />
+         {/* 
         <Button onClick={() => setShowColumnSelector(true)}>Select Columns</Button>
-      </p>
-      
+      </p> */}
+      {/* <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
+        <Button style={{ marginBottom: 16 }}>
+          Chọn cột <DownOutlined />
+        </Button>
+      </Dropdown> */}
       {/* {activeFilters.map((filter, index) => (
         // <FilterTag key={index} filter={filter} onRemove={removeFilter} />
       ))} */}
-      
+       <Tooltip title="Chọn cột hiển thị">
+                <Select
+                    labelInValue
+                    allowClear
+                    mode="multiple"
+                    placeholder="Lựa chọn cột"
+                    value={visibleColumns.map(col => ({ value: col, label: OPTIONS.find(opt => opt.value === col)?.label }))}
+                    onChange={handleChange}
+                    style={{
+                        transform: "translateY(-8px)",
+                        width: '100%',
+                        minWidth: 200
+                    }}
+                >
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item.value} value={item.value}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+                </Tooltip>
+      </Space>
       <Table
+      scroll={{ x: 1300 }}
         columns={filteredColumns}
         dataSource={filteredData}
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         onChange={handleTableChange}
+        size='small'
+
       />
 
-      <Modal
-        title="Select Columns"
+      {/* <Modal
+        title="Chọn cột"
         visible={showColumnSelector}
         onCancel={() => setShowColumnSelector(false)}
         onOk={() => setShowColumnSelector(false)}
@@ -207,8 +297,8 @@ export default function ProfileTable({ data, handleActionClick, Search }) {
             {col.title}
           </Checkbox>
         ))}
-        <Button onClick={resetColumns}>Reset All</Button>
-      </Modal>
+        <Button onClick={resetColumns}>Đặt lại tất cả</Button>
+      </Modal> */}
     </div>
   );
 }

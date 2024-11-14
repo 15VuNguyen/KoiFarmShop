@@ -48,7 +48,34 @@ class AdminsService {
         return { success: false, message: error.details[0].message }
       }
 
-      const updateKoi = await databaseService.kois.findOneAndUpdate({ _id: new ObjectId(KoiID) }, { $set: payload })
+      const updatedPayload = { ...payload }
+      await databaseService.kois.findOne({ _id: new ObjectId(KoiID) })
+
+      if (updatedPayload.Breed === 'Nhat') {
+        updatedPayload.Status = 1
+      } else if (updatedPayload.Breed === 'Viet') {
+        updatedPayload.Status = 3
+      } else if (updatedPayload.Breed === 'F1') {
+        updatedPayload.Status = 2
+      }
+
+      const updateKoi = await databaseService.kois.findOneAndUpdate(
+        { _id: new ObjectId(KoiID) },
+        { $set: updatedPayload },
+        { new: true }
+      )
+
+      const updateKoiConsign = await databaseService.consigns.findOne({ KoiID: KoiID })
+
+      if (updateKoiConsign) {
+        const newPrice = payload.Price - (payload.Price * updateKoiConsign.Commission) / 100
+        await databaseService.consigns.findOneAndUpdate(
+          { KoiID: KoiID },
+          { $set: { TotalPrice: newPrice } },
+          { new: true }
+        )
+      }
+
       if (!updateKoi) {
         return { success: false, message: 'Koi not found' }
       }
@@ -60,28 +87,51 @@ class AdminsService {
 
   async updateStatusKoi(KoiIDInput) {
     try {
-      // check koi là nhập khẩu hay được ký gửi
       const checkKoi = await databaseService.consigns.find({ KoiID: KoiIDInput }).toArray()
-      if (checkKoi) {
-        await databaseService.kois.findOneAndUpdate(
-          { _id: new ObjectId(KoiIDInput) },
-          { $bit: { Status: { xor: 4 } } },
-          { new: true }
-        )
-      } else {
-        // nếu koi không phải là ký gửi vì không tồn tại trong collection consigns
-        // check xem nó có phải là nhập khẩu hay không vì origin là f1 hoặc việt thì không disable
-        checkKoi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput), Status: 1 })
-        if (checkKoi) {
+
+      if (checkKoi.length > 0) {
+        const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput) })
+        if (koi.Status === 4) {
+          console.log('status 4')
           await databaseService.kois.findOneAndUpdate(
             { _id: new ObjectId(KoiIDInput) },
-            { $bit: { Status: { xor: 1 } } },
+            { $set: { Status: 0 } },
             { new: true }
           )
-        } else if (!checkKoi) {
-          return { success: false, message: 'Koi not found' }
         } else {
-          return { success: true, message: 'Koi có nguồn gốc F1 hoặc thuần việt không thể update' }
+          await databaseService.kois.findOneAndUpdate(
+            { _id: new ObjectId(KoiIDInput) },
+            { $set: { Status: 4 } },
+            { new: true }
+          )
+        }
+      } else {
+        const koi = await databaseService.kois.findOne({ _id: new ObjectId(KoiIDInput) })
+
+        if (!koi) {
+          return { success: false, message: 'Koi not found' }
+        }
+
+        if (koi.Status === 2 || koi.Status === 3) {
+          return { success: false, message: 'Koi có nguồn gốc F1 hoặc thuần việt không thể update' }
+        }
+
+        if (koi.Status === 1) {
+          await databaseService.kois.findOneAndUpdate(
+            { _id: new ObjectId(KoiIDInput) },
+            { $set: { Status: 0 } },
+            { new: true }
+          )
+          return { success: true, message: 'Update successfully' }
+        } else if (koi.Status === 0) {
+          await databaseService.kois.findOneAndUpdate(
+            { _id: new ObjectId(KoiIDInput) },
+            { $set: { Status: 1 } },
+            { new: true }
+          )
+          return { success: true, message: 'Update successfully' }
+        } else {
+          return { success: true, message: 'Error' }
         }
       }
 
@@ -110,9 +160,17 @@ class AdminsService {
 
   async updateStatusUser(UserID) {
     try {
+      const user = await databaseService.users.findOne({ _id: new ObjectId(UserID) })
+
+      if (!user) {
+        return { success: false, message: 'User not found' }
+      }
+
+      const newStatus = user.StatusUser === 1 ? -1 : 1
+
       const result = await databaseService.users.findOneAndUpdate(
         { _id: new ObjectId(UserID) },
-        { $bit: { Status: { xor: 1 } } },
+        { $set: { StatusUser: newStatus } },
         { new: true }
       )
 
@@ -120,9 +178,10 @@ class AdminsService {
         return { success: false, message: 'User not found' }
       }
 
-      return { success: true, message: MESSAGES.UPDATE_USER_SUCCESS }
+      return { success: true, message: 'User status updated successfully' }
     } catch (error) {
-      return { success: false, message: 'User not found' }
+      console.error(error) 
+      return { success: false, message: 'An error occurred while updating user status' }
     }
   }
 
@@ -193,7 +252,7 @@ class AdminsService {
     try {
       await databaseService.order.findOneAndUpdate(
         { _id: new ObjectId(orderID) },
-        { $inc: { Status: 1 } },
+        { $set: { Status: 2 } },
         { new: true }
       )
 

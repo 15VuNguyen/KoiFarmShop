@@ -1,11 +1,13 @@
-import React from "react";
-import Footer from "./Footer";
-import Navbar from "./Navbar/Navbar";
 import { Container } from "react-bootstrap";
 import { Typography } from "antd";
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
-
+import img1 from "../../src/assets/GioiThieuKoiViet/1.jpg";
+import img2 from "../../src/assets/GioiThieuKoiViet/2.jpg";
+import img3 from "../../src/assets/GioiThieuKoiViet/3.jpg";
+import img4 from "../../src/assets/GioiThieuKoiViet/4.jpg";
+import img5 from "../../src/assets/GioiThieuKoiViet/5.jpg";
+import img6 from "../../src/assets/GioiThieuKoiViet/6.jpg";
 export default function GioiThieuVeKoiNhat() {
   const data = [
     {
@@ -39,19 +41,21 @@ export default function GioiThieuVeKoiNhat() {
       nhat: "Thân hình thanh thoát, thường dài hơn",
     },
   ];
-
   return (
     <>
-      <div>
-        <Navbar />
-      </div>
       <Container style={{ padding: "20px", paddingTop: "100px" }}>
-        <div style={{ textAlign: "center", color: "red" }}>
+        <div style={{ textAlign: "center", color: "#920202" }}>
           <h1>Giới thiệu về Koi Nhật</h1>
         </div>
         <div style={{ paddingTop: "50px" }}>
           <div style={{ textAlign: "center" }}>
-            <h3 style={{ fontWeight: "600", fontSize: "30px" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                fontSize: "30px",
+                color: "#920202",
+              }}
+            >
               Cá Koi Nhật Là Gì? Đặc Điểm, Cách Phân Biệt Với Cá Koi Việt
             </h3>
           </div>
@@ -65,7 +69,7 @@ export default function GioiThieuVeKoiNhat() {
             </Paragraph>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "#920202" }}>
               1. Cá Koi Nhật Là Gì?
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -74,12 +78,12 @@ export default function GioiThieuVeKoiNhat() {
               trong các hồ cảnh quan và là biểu tượng của sự thịnh vượng và may
               mắn trong văn hóa Nhật Bản.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuKoiViet/1.jpg" alt="Koi Nhat 1" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img1} alt="Koi Nhat 1" style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "#920202" }}>
               2. Quy trình nuôi cá Koi Nhật
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -87,12 +91,18 @@ export default function GioiThieuVeKoiNhat() {
               cho đến chăm sóc. Để đảm bảo chất lượng, cá bố mẹ phải được lựa
               chọn kỹ lưỡng và được chăm sóc trong điều kiện tốt nhất.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuKoiViet/2.jpg" alt="Koi Nhat 2" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img2} alt="Koi Nhat 2" style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                color: "#920202",
+                marginTop: "20px",
+              }}
+            >
               3. Hướng dẫn phân biệt cá Koi Nhật và cá Koi Việt
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -101,7 +111,7 @@ export default function GioiThieuVeKoiNhat() {
             </Paragraph>
             <ul>
               <li>
-                <span id="31" style={{ fontSize: "20px" }}>
+                <span id="31" style={{ fontSize: "20px", color: "#920202" }}>
                   3.1 Màu Sắc
                 </span>
                 <ul>
@@ -111,46 +121,83 @@ export default function GioiThieuVeKoiNhat() {
                       trong khi cá Koi Việt có thể có màu sắc nhạt hơn và không
                       rõ ràng như cá Koi Nhật.
                     </Paragraph>
-                    <div>
+                    <div style={{ textAlign: "center" }}>
                       <img
-                        src="src/assets/GioiThieuKoiViet/3.jpg"
+                        src={img3}
                         alt="Koi Nhat 3"
+                        style={{ width: "50%" }}
                       />
                     </div>
                   </li>
                 </ul>
               </li>
               <li>
-                <span id="32" style={{ fontSize: "20px" }}>
+                <span id="32" style={{ fontSize: "20px", color: "#920202" }}>
                   3.2 Hình Dáng
                 </span>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Tiêu Chí</th>
-                      <th>Cá Koi Thuần Chủng</th>
-                      <th>Cá Koi Nhật</th>
+                      <th
+                        style={{
+                          fontSize: "20px",
+                          color: "#920202",
+                        }}
+                      >
+                        Tiêu Chí
+                      </th>
+                      <th
+                        style={{
+                          fontSize: "20px",
+                          color: "#920202",
+                        }}
+                      >
+                        Cá Koi Thuần Chủng
+                      </th>
+                      <th
+                        style={{
+                          fontSize: "20px",
+                          color: "#920202",
+                        }}
+                      >
+                        Cá Koi Nhật
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.criteria}</td>
-                        <td>{item.purebred}</td>
-                        <td>{item.nhat}</td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.criteria}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.purebred}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.nhat}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                <div>
-                  <img
-                    src="src/assets/GioiThieuKoiViet/4.jpg"
-                    alt="Koi Nhat 4"
-                  />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img4} alt="Koi Nhat 4" style={{ width: "50%" }} />
                 </div>
               </li>
               <li>
-                <span id="33" style={{ fontSize: "20px" }}>
+                <span id="33" style={{ fontSize: "20px", color: "#920202" }}>
                   3.3 Chi phí của cá Koi
                 </span>
                 <Paragraph style={{ fontSize: "20px" }}>
@@ -158,17 +205,14 @@ export default function GioiThieuVeKoiNhat() {
                   điều này phản ánh sự chăm sóc và quá trình nuôi trồng rất kỹ
                   lưỡng từ các trại cá nổi tiếng.
                 </Paragraph>
-                <div>
-                  <img
-                    src="src/assets/GioiThieuKoiViet/5.jpg"
-                    alt="Koi Nhat 5"
-                  />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img5} alt="Koi Nhat 5" style={{ width: "50%" }} />
                 </div>
               </li>
             </ul>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "#920202" }}>
               4. Nên Mua Cá Koi Nhật Hay Cá Koi Việt
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -177,25 +221,12 @@ export default function GioiThieuVeKoiNhat() {
               cao hơn về mặt nghệ thuật và thẩm mỹ, trong khi cá Koi Việt lại có
               giá rẻ hơn và dễ chăm sóc hơn.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuKoiViet/6.jpg" alt="Koi Nhat 6" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img6} alt="Koi Nhat 6" style={{ width: "50%" }} />
             </div>
           </div>
         </div>
       </Container>
-
-      <div
-        style={{
-          display: "flex",
-          backgroundImage: `url("src/assets/e.jpg")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh",
-        }}
-      ></div>
-      <div>
-        <Footer />
-      </div>
     </>
   );
 }

@@ -95,14 +95,7 @@ const imageSchema = {
   isString: {
     errorMessage: USERS_MESSAGES.IMAGE_URL_MUST_BE_A_STRING
   },
-  trim: true,
-  isLength: {
-    options: {
-      min: 1,
-      max: 400
-    },
-    errorMessage: USERS_MESSAGES.IMAGE_URL_LENGTH_MUST_BE_FROM_1_TO_400
-  }
+  trim: true
 }
 
 const userIdSchema = {
@@ -138,14 +131,7 @@ const addressSchema = {
   isString: {
     errorMessage: USERS_MESSAGES.ADDRESS_MUST_BE_A_STRING
   },
-  trim: true,
-  isLength: {
-    options: {
-      min: 1,
-      max: 200
-    },
-    errorMessage: USERS_MESSAGES.ADDRESS_LENGTH_MUST_BE_FROM_1_TO_200
-  }
+  trim: true
 }
 
 const phoneNumberSchema = {
@@ -165,7 +151,170 @@ const phoneNumberSchema = {
   }
 }
 
+const addressConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_MUST_BE_A_STRING
+  },
+  trim: true
+}
 
+const phoneNumberConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_IS_REQUIRED
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 10,
+      max: 20
+    },
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_LENGTH_MUST_BE_FROM_10_TO_20
+  }
+}
+
+const positionCareSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.POSITION_CARE_IS_REQUIRED
+  }
+}
+
+const methodSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.METHOD_IS_REQUIRED
+  }
+}
+
+// const shippedDateSchema = {
+//   optional: true,
+// }
+
+// const receiptDateSchema = {
+//   optional: true,
+// }
+
+const detailSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.DETAIL_IS_REQUIRED
+  }
+}
+
+const categoryIDSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.CATEGORY_ID_IS_REQUIRED
+  }
+}
+
+const koiNameSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_NAME_IS_REQUIRED
+  }
+}
+
+const getCurrentYearInVietnam = () => {
+  const currentDate = new Date()
+  const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+  const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+  return localTime.getFullYear()
+}
+
+const currentYearInVietnam = getCurrentYearInVietnam()
+
+const ageSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_AGE_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_NUMERIC
+  },
+  isInt: {
+    options: { min: 1900, max: currentYearInVietnam },
+    errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_BETWEEN_1900_AND_CURRENTYEAR
+  }
+}
+
+const originSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_ORIGIN_IS_REQUIRED
+  }
+}
+
+const genderSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_GENDER_IS_REQUIRED
+  }
+}
+
+const sizeSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_SIZE_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_SIZE_MUST_BE_NUMERIC
+  },
+  isFloat: {
+    options: { min: Number.EPSILON, max: 200 },
+    errorMessage: USERS_MESSAGES.KOI_SIZE_MUST_BE_LARGER_THAN_0_AND_SMALLER_OR_EQUAL_TO_200
+  }
+}
+
+const breedSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_BREED_IS_REQUIRED
+  }
+}
+
+const descriptionSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_DESCRIPTION_IS_REQUIRED
+  }
+}
+
+const dailyFoodAmountSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_MUST_BE_NUMERIC
+  },
+  isFloat: {
+    options: { min: Number.EPSILON, max: 100 },
+    errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_MUST_BE_LARGER_THAN_0_AND_SMALLER_OR_EQUAL_TO_100
+  }
+}
+
+const filteringRatioSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_MUST_BE_NUMERIC
+  },
+  isFloat: {
+    options: { min: Number.EPSILON, max: 100 },
+    errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_MUST_BE_LARGER_THAN_0_AND_SMALLER_OR_EQUAL_TO_100
+  }
+}
+
+const certificateIDSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_CERTIFICATE_ID_IS_REQUIRED
+  }
+}
+
+const imageKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_IMAGE_IS_REQUIRED
+  }
+}
+
+const videoKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.KOI_VIDEO_IS_REQUIRED
+  }
+}
 
 export const loginValidator = validate(
   checkSchema(
@@ -264,7 +413,6 @@ export const accessTokenValidator = validate(
             //ta sẽ tách chuỗi đó ra để lấy access_token bằng cách split
             const accessToken = value.split(' ')[1]
 
-            
             //nếu nó có truyền lên , mà lại là chuỗi rỗng thì ta sẽ throw error
             if (!accessToken) {
               //throw new Error(USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED)  //này trả ra 422(k hay)
@@ -427,8 +575,6 @@ export const verifyForgotPasswordTokenValidator = validate(
               })
               //sau khi verify thành công ta đc payload của email_verify_token: decoded_email_verify_token
               req.decoded_forgot_password_token = decoded_forgot_password_token
-
-              
             } catch (error) {
               if (error instanceof JsonWebTokenError) {
                 //
@@ -479,12 +625,12 @@ export const updateMeValidator = validate(
         ...nameSchema, //phân rã nameSchema ra
         notEmpty: undefined //ghi đè lên notEmpty của nameSchema
       },
-      address:{
+      address: {
         optional: true,
         ...addressSchema,
         notEmpty: undefined
       },
-      phone_number:{
+      phone_number: {
         optional: true,
         ...phoneNumberSchema,
         notEmpty: undefined
@@ -529,7 +675,113 @@ export const updateMeValidator = validate(
           }
         }
       },
-      avatar: imageSchema,
+      picture: imageSchema
+    },
+    ['body']
+  )
+)
+
+export const updateConsignValidator = validate(
+  checkSchema(
+    {
+      AddressConsignKoi: {
+        optional: true, //đc phép có hoặc k
+        ...addressConsignKoiSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
+      PhoneNumberConsignKoi: {
+        optional: true, //đc phép có hoặc k
+        ...phoneNumberConsignKoiSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
+      PositionCare: {
+        optional: true, //đc phép có hoặc k
+        ...positionCareSchema, //phân rã nameSchema ra
+        notEmpty: undefined //ghi đè lên notEmpty của nameSchema
+      },
+      Method: {
+        optional: true,
+        ...methodSchema,
+        notEmpty: undefined
+      },
+      ShippedDate: {
+        optional: true,
+        notEmpty: undefined
+      },
+      ReceiptDate: {
+        optional: true,
+        notEmpty: undefined
+      },
+      Detail: {
+        optional: true,
+        ...detailSchema,
+        notEmpty: undefined
+      },
+      CategoryID: {
+        optional: true,
+        ...categoryIDSchema,
+        notEmpty: undefined
+      },
+      KoiName: {
+        optional: true,
+        ...koiNameSchema,
+        notEmpty: undefined
+      },
+      Age: {
+        optional: true,
+        ...ageSchema,
+        notEmpty: undefined
+      },
+      Origin: {
+        optional: true,
+        ...originSchema,
+        notEmpty: undefined
+      },
+      Gender: {
+        optional: true,
+        ...genderSchema,
+        notEmpty: undefined
+      },
+      Size: {
+        optional: true,
+        ...sizeSchema,
+        notEmpty: undefined
+      },
+      Breed: {
+        optional: true,
+        ...breedSchema,
+        notEmpty: undefined
+      },
+      Description: {
+        optional: true,
+        ...descriptionSchema,
+        notEmpty: undefined
+      },
+      DailyFoodAmount: {
+        optional: true,
+        ...dailyFoodAmountSchema,
+        notEmpty: undefined
+      },
+      FilteringRatio: {
+        optional: true,
+        ...filteringRatioSchema,
+        notEmpty: undefined
+      },
+      CertificateID: {
+        optional: true,
+        ...certificateIDSchema,
+        notEmpty: undefined
+      },
+      Image: {
+        optional: true,
+        ...imageKoiSchema,
+        notEmpty: undefined
+      },
+      Video: {
+        optional: true,
+        ...videoKoiSchema,
+        notEmpty: undefined
+      }
     },
     ['body']
   )

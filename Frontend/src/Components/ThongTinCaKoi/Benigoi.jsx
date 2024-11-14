@@ -9,6 +9,10 @@ import { Typography } from "antd";
 import "../Css/koiStyle.css";
 const { Title, Text, Paragraph } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi Benigoi/BENIGOI1.jpg";
+import img2 from "../../assets/Koi Benigoi/BENIGOI2.jpg";
+import img3 from "../..//assets/img_4.png";
+import img4 from "../../assets/img_5.png";
 export default function Benigoi() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -250,93 +254,206 @@ export default function Benigoi() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage ">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage "
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu cá Koi Benigoi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết cá Koi Benigoi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách nhận biết cá Koi Benigoi
                     </span>
                     <ul>
-                      <li>
-                        <span onClick={handleScroll31} className="contentBox">
+                      <li style={{ paddingTop: "10px" }}>
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.1 Chọn Benigoi Koi qua hình dáng
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.2 Chọn Cá Koi Benigoi qua màu sắc
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.3 Chọn Benigoi Koi qua hoa văn
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.4 Chọn Cá Koi Benigoi qua dáng bơi
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc Benigoi Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Giá cá koi Benigoi bao nhiêu?
                     </span>
                     <ul>
-                      <li>
-                        <span onClick={handleScroll31} className="contentBox">
+                      <li style={{ paddingTop: "10px" }}>
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.1 Giá cá koi Benigoi F1
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           5.2 Giá cá koi Benigoi Nhật chuẩn
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
-                      6. Tại sao nên mua cá Koi Benigoi tại Siêu thị Cá Koi VN?
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
+                      6. Tại sao nên mua cá Koi Benigoi tại IKoi?
                     </span>
                   </li>
                 </ul>
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2 className="noidungchitiet" style={{ paddingTop: "20px" }}>
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style">
-                  Cá Koi Benigoi là dòng cá phổ biến rất được ưa chuộng trong
-                  những năm gần đây bởi chúng sở hữu nhiều đặc điểm nổi bật. Đối
-                  với những người chuyên chơi cá Koi chắc hẳn không còn xa lạ gì
-                  đối với loại cá này. Bạn đã biết gì về loại cá này chưa? Hãy
-                  cùng Siêu thị Cá Koi VN tìm hiểu rõ hơn về loại cá này ngay
-                  trong bài viết dưới đây.
+                  <span className="span-Style" style={{ color: "blue" }}>
+                    Cá Koi Benigoi
+                  </span>{" "}
+                  là dòng cá phổ biến rất được ưa chuộng trong những năm gần đây
+                  bởi chúng sở hữu nhiều đặc điểm nổi bật. Đối với những người
+                  chuyên chơi cá Koi chắc hẳn không còn xa lạ gì đối với loại cá
+                  này. Bạn đã biết gì về loại cá này chưa? Hãy cùng Siêu thị Cá
+                  Koi VN tìm hiểu rõ hơn về loại cá này ngay trong bài viết dưới
+                  đây.
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu cá Koi Benigoi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu cá Koi Benigoi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cũng giống như dòng Chagoi Koi, Cá Koi Benigoi là dòng cá có
@@ -390,19 +507,33 @@ export default function Benigoi() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   2. Cách nhận biết cá Koi Benigoi
                 </h3>
 
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi Benigoi/BENIGOI1.jpg" />
+                  <img src={img1} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Dòng cá Koi Benigoi</Text>
                   </div>
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn cá Koi Benigoi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn cá Koi Benigoi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Để lựa chọn được Benigoi Koi đẹp, bạn cần phải xét dựa trên
@@ -410,7 +541,7 @@ export default function Benigoi() {
                   </Paragraph>
                   <ul style={{ fontSize: "15px", fontWeight: "400" }}>
                     <li>
-                      <span id="31" className="text-Style">
+                      <span id="31" className="span-Style">
                         3.1 Chọn Benigoi Koi qua hình dáng
                       </span>
                       <Paragraph className="paragraph-Style">
@@ -467,7 +598,7 @@ export default function Benigoi() {
                       </ul>
                     </li>
                     <li>
-                      <span id="32" className="text-Style">
+                      <span id="32" className="span-Style">
                         3.2 Chọn Cá Koi Benigoi qua màu sắc
                       </span>
                       <Paragraph className="paragraph-Style">
@@ -489,7 +620,7 @@ export default function Benigoi() {
                       </ul>
                     </li>
                     <li>
-                      <span id="33" className="text-Style">
+                      <span id="33" className="span-Style">
                         3.3 Chọn Benigoi Koi qua hoa văn
                       </span>
                       <Paragraph className="paragraph-Style">
@@ -517,7 +648,7 @@ export default function Benigoi() {
                       </ul>
                     </li>
                     <li>
-                      <span id="34" className="text-Style">
+                      <span id="34" className="span-Style">
                         3.4 Chọn Cá Koi Benigoi qua dáng bơi
                       </span>
                       <Paragraph className="paragraph-Style">
@@ -537,17 +668,22 @@ export default function Benigoi() {
                   </ul>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi Benigoi/BENIGOI2.jpg"
-                    style={{ width: "30%" }}
-                  />
+                  <img src={img2} style={{ width: "30%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Các dòng Cá Koi Benigoi</Text>
                   </div>
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chăm sóc Benigoi Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chăm sóc Benigoi Koi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Cá Koi Benigoi thực sự đẹp, không đơn thuần chỉ là chỉ hữu
@@ -605,81 +741,79 @@ export default function Benigoi() {
                 </div>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>5. Ý nghĩa đối với phong thủy </h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  5. Giá cá koi Benigoi bao nhiêu?
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
-                    Trong văn hóa Nhật Bản, Koi Goshiki được coi là mang lại sự
-                    mạnh mẽ, giàu có và sức khỏe cho gia đình chủ nhân. Được tạo
-                    ra bằng cách kết hợp giữa bố mẹ Koi Kohaku và Koi Asagi, Koi
-                    Goshiki có nền sumi đen và dải vảy màu đỏ trên nền trắng,
-                    mang nhiều ý nghĩa phong thủy. Màu sắc của Koi Goshiki bao
-                    gồm Hi đỏ (thuộc hành hỏa), Shiro trắng (thuộc hành Kim) và
-                    sumi đen (thuộc hành Thủy). Với sự kết hợp này, Koi Goshiki
-                    phù hợp với nhiều mệnh khác nhau và là lựa chọn lý tưởng cho
-                    những ai yêu thích nuôi cá Koi.
+                    Hiện tại IKoi đang cung cấp dòng cá koi Benigoi chuẩn từ cá
+                    nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói IKoi là một
+                    trong những đơn vị cung cấp cá koi với giá rẻ nhất thị
+                    trường, mà chất lượng cũng rất đảm bảo. Giá cá koi nhật và
+                    f1 như sau
+                  </Paragraph>
+                </div>
+                <div>
+                  <span id="51" className="span-Style">
+                    5.1 Giá cá koi Benigoi F1
+                  </span>
+                  <Paragraph className="paragraph-Style">
+                    Đối với những con Benigoi f1 có kích thước từ 18cm – 40cm,
+                    giá cá koi dao động từ 150.000 – 500.000 VNĐ tùy loại.
+                    <br />
+                    Cao cấp hơn là những con Benigoi f1 có kích thước từ 50cm –
+                    55cm, được chia làm loại 1, loại 2 và 3. Giá thành dao động
+                    từ 1.800.000 – 3.000.000 VNĐ tùy loại.
+                  </Paragraph>
+                </div>
+                <div>
+                  <span id="52" className="span-Style">
+                    5.2 Giá cá koi Benigoi Nhật chuẩn
+                  </span>
+                  <Paragraph className="paragraph-Style">
+                    Một con cá Koi trưởng thành Nhật Bản như Benigoi koi với
+                    kích thước từ 10-15cm sẽ có giá từ 600.000 –
+                    2.000.000VNĐ/con.
+                    <br />
+                    Ngoài ra còn có con Benigoi Koi thuần chủng … được xếp vào
+                    hàng hiếm có kích thước lớn thì giá cá koi lên đến vài nghìn
+                    đến hàng chục nghìn USD. Do đó nếu bạn muốn mua hãy liên hệ
+                    với chúng tôi để được tư vấn tận tình.
                   </Paragraph>
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
-                  6. Giá cá koi Goshiki bao nhiêu?{" "}
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  6.Tại sao nên mua cá Koi Benigoi tại IKoi?
                 </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
-                    Hiện tại IKoi đang cung cấp dòng cá koi Goshiki chuẩn từ cá
-                    nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói Siêu thị Cá
-                    Koi VN là một trong những đơn vị cung cấp cá koi với giá rẻ
-                    nhất thị trường, mà chất lượng cũng rất đảm bảo. Giá cá koi
-                    nhật và f1 như sau:
-                  </Paragraph>
-                  <ul style={{ fontSize: "15px", fontWeight: "400" }}>
-                    <li>
-                      <Paragraph className="paragraph-Style">
-                        Một con cá Koi trưởng thành Nhật Bản như Goshiki koi với
-                        kích thước từ 20-25cm sẽ có giá từ 1.600.000 –
-                        4.500.000VNĐ/con.
-                      </Paragraph>
-                    </li>
-                    <li>
-                      <Paragraph className="paragraph-Style">
-                        Ngoài ra còn có con Goshiki Koi thuần chủng … được xếp
-                        vào hàng hiếm có kích thước lớn thì giá cá koi lên đến
-                        vài nghìn đến hàng chục nghìn USD. Do đó nếu bạn muốn
-                        mua hãy liên hệ với chúng tôi để được tư vấn tận tình.
-                      </Paragraph>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div id="7">
-                <h3 style={{ color: "red" }}>
-                  7. Tại sao nên mua Goshiki Koi tại IKoi?
-                </h3>
-                <div>
-                  <Paragraph className="paragraph-Style">
-                    Cá Koi Goshiki và cá koi Karashi không chỉ là loài cá đẹp mà
-                    nó còn mang ý nghĩa đem đến sức mạnh, tiền bạc cho chủ nhân.
-                    Vì vậy Goshiki được rất nhiều người quan tâm để mua nuôi.
-                    Hiện nay có rất nhiều nơi cung cấp giống Goshiki nhưng đều
-                    chưa đem lại sự yên tâm cho khách hàng về chất lượng của cá.
+                    Hiện nay trên thị trường có rất nhiều đơn vị chuyên cung cấp
+                    cá Koi Benigoi với các mức giá và chất lượng khác nhau. Điều
+                    này khá khó khăn với khách hàng trong việc lựa chọn một đơn
+                    vị uy tín, chất lượng.
                     <br />
-                    IKoi là nơi cung cấp những chú cá koi Goshiki có chất lượng
-                    đẹp và đạt chuẩn. Với nhiều năm kinh nghiệm tiếp cận, cung
-                    cấp cho thị trường cá koi thì IKoi đang là địa điểm đáng tin
-                    cậy dành cho bạn.
-                    <br />
-                    Đến với IKoi quý khách hàng sẽ được tư vấn tận tình để lựa
-                    chọn những chú cá Goshiki có chất lượng đạt chuẩn, phù hợp
-                    và giá thành phải chăng. Bên cạnh đó sẽ là chính sách bảo
-                    hành cũng như chính sách đồng hành hỗ trợ trong lúc nuôi cá
-                    sẽ đem lại cho khách hàng sự yên tâm tuyệt đối.
-                    <br />
-                    Hy vọng với những thông tin trong bài viết đã giúp các bạn
-                    nhận biết được cá Goshiki Koi và các thông tin cơ bản về
-                    giống cá “ngũ sắc” này. Nếu cần tư vấn thêm bạn hãy liên hệ
-                    ngay IKoi để để được giải đáp thắc mắc một cách nhanh chóng.
-                    Chắc chắn rằng địa chỉ này sẽ mang đến cho bạn những trải
-                    nghiệm chất lượng và uy tín.
+                    IKoi là đơn vị chuyên cung cấp cá Koi được nhiều khách hàng
+                    lựa chọn trong những năm gần đây không chỉ bởi chất lượng cá
+                    tốt mà còn bởi giá thành hợp lý. IKoi chuyên cung cấp các
+                    loại cá chất lượng với giá thành cạnh tranh trên thị trường.
+                    Khách hàng khi mua sản phẩm tại đây không lo bị hét giá,
+                    khống giá như tại các đơn vị khác. Bên cạnh đó, khách hàng
+                    khi mua tại đây cũng được yêu thích bởi đội ngũ nhân viên
+                    nhiệt tình, có mặt 24/24 hỗ trợ giải đáp mọi thắc của khách
+                    hàng một cách nhanh chóng.
                   </Paragraph>
                 </div>
               </div>
@@ -687,13 +821,10 @@ export default function Benigoi() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img3} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              <img src={img4} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>

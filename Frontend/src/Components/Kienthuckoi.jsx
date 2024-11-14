@@ -2,6 +2,7 @@ import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
 import { Container } from "react-bootstrap";
 import { Layout, Typography } from "antd";
+import img1 from "../assets/van-chuyen-ca-koi-tu-nhat-ve-viet-nam-uy-tin.jpg";
 const { Text, Paragraph } = Typography;
 export default function Kienthuckoi() {
   return (
@@ -12,7 +13,7 @@ export default function Kienthuckoi() {
         </div>
         <Container style={{ paddingTop: "150px" }}>
           <div>
-            <h1 style={{ textAlign: "center", color: "red" }}>
+            <h1 style={{ textAlign: "center", color: "#920202" }}>
               Kiến thức nuôi cá Koi cơ bản cho người mới bắt đầu
             </h1>
             <div>
@@ -22,17 +23,20 @@ export default function Kienthuckoi() {
                 là dòng cá mới được du nhập vào Việt Nam trong khoảng thời gian
                 gần đây, những chú cá Koi với nhiều màu sắc đa dạng mang đến sự
                 thu hút cho những người yêu thích bộ môn này. Và để giúp bạn
-                hiểu rõ hơn về giống cá này, Cá Koi Biên Hòa xin giới thiệu đến
-                bạn những kiến thức nuôi cá Koi cơ bản cho người mới bắt đầu như
-                sau, hãy cùng tham khảo nhé!
+                hiểu rõ hơn về giống cá này, IKoi xin giới thiệu đến bạn những
+                kiến thức nuôi cá Koi cơ bản cho người mới bắt đầu như sau, hãy
+                cùng tham khảo nhé!
               </Paragraph>
               <div style={{ textAlign: "center" }}>
-                <img src="src/assets/van-chuyen-ca-koi-tu-nhat-ve-viet-nam-uy-tin.jpg" />
+                <img src={img1} style={{ width: "50%" }} />
               </div>
             </div>
           </div>
+
           <div>
-            <h2>Nguồn gốc cá Koi</h2>
+            <h2 style={{ color: "#920202", paddingTop: "20px" }}>
+              Nguồn gốc cá Koi
+            </h2>
             <Paragraph style={{ fontSize: "20px" }}>
               Cá Koi được bắt nguồn từ Nhật Bản, cụ thể tại Niigata mỗi dịp mùa
               đông đến nơi đây thường có lượng tuyết rơi rất dày và mọi thứ đều
@@ -51,7 +55,7 @@ export default function Kienthuckoi() {
             </Paragraph>
           </div>
           <div>
-            <h2>Tiêu chuẩn của hồ nuôi cá Koi</h2>
+            <h3 style={{ color: "#920202" }}>Tiêu chuẩn của hồ nuôi cá Koi</h3>
             <Paragraph style={{ fontSize: "20px" }}>
               Cá Koi được bắt nguồn từ Nhật Bản, cụ thể tại Niigata mỗi dịp mùa
               đông đến nơi đây thường có lượng tuyết rơi rất dày và mọi thứ đều
@@ -62,10 +66,14 @@ export default function Kienthuckoi() {
               trồng lúa, và đến mùa Thu họ bắt những chú cá này để muối và chỉ
               chừa lại vài con để duy trì giống nồi đến mùa xuân.
             </Paragraph>
-            <ul>
+            <ul style={{ listStyleType: "none" }}>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Bóng mát:{" "}
                 </span>
@@ -78,12 +86,16 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Hệ thống tạo Oxy:{" "}
                 </span>
                 <br />
-                <Paragraph>
+                <Paragraph style={{ fontSize: "20px" }}>
                   Cá Koi chính là loài cá khá đặc biệt vì chúng cần rất nhiều
                   oxy để phát triển tốt, vì vậy bạn cần lắp đặt hệ thống lọc
                   nước hoặc tạo nên sự luân chuyển của dòng nước để nguồn oxy
@@ -92,7 +104,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Thảm thực vật trong hồ:{" "}
                 </span>
@@ -107,7 +123,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Nguồn thức ăn:{" "}
                 </span>
@@ -124,7 +144,11 @@ export default function Kienthuckoi() {
               </li>
               <li>
                 <span
-                  style={{ fontWeight: "bold", fontSize: "25px", color: "red" }}
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "25px",
+                    color: "#920202",
+                  }}
                 >
                   Yếu tố mật độ:{" "}
                 </span>

@@ -3,6 +3,7 @@ import Footer from "../Footer";
 import { Layout } from "antd";
 import "../Css/koiStyle.css";
 import Platinum from "../ThongTinCaKoi/Platinum";
+import CustomerChatButton from "../Chat/CustomerChat";
 export default function Koiplatinum() {
   return (
     <>
@@ -11,6 +12,7 @@ export default function Koiplatinum() {
         <div style={{ paddingTop: "100px" }}>
           <Platinum />
         </div>
+        <CustomerChatButton />
         <Footer />
       </Layout>
     </>

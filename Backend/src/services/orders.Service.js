@@ -1,83 +1,201 @@
-import OrdersSchema from "../models/schemas/Order.schema.js"
-import OrderDetailSchema from "../models/schemas/OrderDetail.schema.js"
-import UserSchema from "../models/schemas/User.schema.js"
 import databaseService from "./database.service.js"
-import bcrypt from 'bcrypt'
+import { verifyOTPCode } from "../PhoneNumberValidate/phoneNumber.validate.js"
 import { ObjectId } from "mongodb"
+import { saveOrderToDatabase, updateCallBack } from "./callback.service.js"
 
 class OrdersService {
-    async createNewUser(payload) {
-        const password = Math.random().toString(36).slice(-8)
-        const hashedPassword = await bcrypt.hash(password, 10)
-
-        const user_id = new ObjectId()
-        const userPayload = {
-            _id: user_id,
-            email: payload.email,
-            name: payload.name,
-            address: payload.address,
-            phone_number: payload.phone_number,
-            password: hashedPassword,
-            username: `user${user_id.toString()}`,
-            roleid: 1
-        }
-        await databaseService.users.insertOne(new UserSchema(userPayload))
-        const newUser = await databaseService.users.findOne({ _id: user_id })
-        console.log("new User: ", newUser)
-        return newUser
-    }
-
-    async createOrder(payload, reqOrderDTCookie, reqOrderCookie) {
+    async createOrder(payload, reqOrderDTCookie, reqOrderCookie, reqOrderDiscount, user, applyDiscount, paymentMethod) {
         const orderDT = reqOrderDTCookie
-        const existedUser = await databaseService.users.findOne({ email: payload.email })
-
-        let user, user_id
-
-
-        if (existedUser) {
-            user_id = existedUser._id
-            user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
-        } else {
-            user = await this.createNewUser(payload)
-            user_id = user.insertedId
-        }
-
-
         reqOrderCookie = {
-            // _id: new ObjectId(),
             UserID: user._id,
             OrderDetailID: orderDT?._id,
-            ShipAddress: payload.ShipAddress,
-            Description: payload.Description,
+            ...payload.userData,
             OrderDate: new Date(),
             Status: 1,
         }
-
-
-        // newOrder = await databaseService.order.insertOne(new OrdersSchema(orderPayload))
-        // newOrder = await this.saveOrderToDatabase(orderPayload)
-        // const order = await databaseService.order.findOne({ _id: new ObjectId(newOrder.insertedId) })
-        // console.log("order detail id: ", orderDTID)
-        // const orderDetail = await databaseService.orderDetail.findOne({ _id: new ObjectId(orderDTID) })
         const koiList = await Promise.all(
             orderDT.Items.map(item => databaseService.kois.findOne({ _id: new ObjectId(item.KoiID) }))
         );
-
+        let salePercent = 0
+        if (applyDiscount) {
+            const loyaltyCardObject = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(user._id) })
+            if (!loyaltyCardObject) {
+                return { message: "Bạn chưa có tài khoản tích điểm" }
+            }
+            const totalPoint = Math.round(loyaltyCardObject.Point + (orderDT.TotalPrice / 1000))
+            const saleObject = this.getSaleObject(totalPoint)
+            salePercent = saleObject.percent || 0
+            const rankName = saleObject.rankName || "Bạc"
+            reqOrderDiscount = {
+                RankName: rankName,
+                Point: totalPoint,
+                SalePercent: salePercent
+            }
+        }
+        if(paymentMethod == "cash"){
+            return await Promise.all([
+                saveOrderToDatabase(reqOrderDTCookie, reqOrderCookie, reqOrderDiscount),
+                updateCallBack(reqOrderDTCookie)
+            ])
+        }
         return {
-            // user, order: {
-            //     _id: order._id,
-            //     UserID: order.UserID,
-            //     OrderDetail: orderDetail,
-            //     ShipAddress: order.ShipAddress,
-            //     Description: order.Description,
-            //     OrderDate: order.OrderDate,
-            //     Type: order.Type,
-            //     Status: order.Status
-            // }, koiList
-            user, order: reqOrderCookie, orderDetail: orderDT, koiList
+            user, order: reqOrderCookie,
+            orderDetail: {
+                ...orderDT,
+                salePercent: salePercent
+            },
+            loyaltyCard: reqOrderDiscount,
+            koiList
         }
     }
 
+    parsePointToRank(point) {
+        const ranks = [
+            { name: "Bạc", maxPoints: 10000 },
+            { name: "Vàng", maxPoints: 20000 },
+            { name: "Bạch Kim", maxPoints: 50000 },
+            { name: "Kim Cương", maxPoints: Infinity }
+        ];
+
+        const rank = ranks.find(r => point <= r.maxPoints);
+        return rank ? rank.name : "Invalid";
+    }
+
+    getSaleObject(point) {
+        const rank = this.parsePointToRank(point)
+        const salePercents = [
+            { rankName: "Bạc", percent: 5 },
+            { rankName: "Vàng", percent: 10 },
+            { rankName: "Bạch Kim", percent: 15 },
+            { rankName: "Kim Cương", percent: 20 },
+        ];
+
+        const salePercent = salePercents.find(s => s.rankName == rank)
+        return salePercent ? salePercent : {}
+    }
+
+    getNextRank(currentRank) {
+        const ranks = [
+            { name: "Bạc", salePercent: 5, maxPoints: 10000 },
+            { name: "Vàng", salePercent: 10, maxPoints: 20000 },
+            { name: "Bạch Kim", salePercent: 15, maxPoints: 50000 },
+            { name: "Kim Cương", salePercent: 20, maxPoints: Infinity }
+        ];
+        if(!currentRank){
+            return {
+                allRankAbove: ranks
+            }
+        }
+        const currentRankIndex = ranks.findIndex(rank => rank.name == currentRank.RankName)
+        if (currentRankIndex === -1) {
+            return { message: "Bạn chưa có thẻ tích điểm" }
+        }
+        if (currentRankIndex === ranks.length - 1) {
+            return { message: "Bạn hiện tại đang ở bậc cao nhất" }
+        }
+        const allRankAbove = ranks.slice(currentRankIndex, ranks.length)
+        return {
+            nextRank: ranks[currentRankIndex + 1],
+            maxPoint: ranks[currentRankIndex].maxPoints,
+            allRankAbove: allRankAbove
+        }
+    }
+
+
+    async registerLoyaltyCard(payload, user) {
+        if(!payload.OTPCode){
+            return {message: "Cần có mã OTP"}
+        }
+        const otpCheck = verifyOTPCode(payload.PhoneNumber, payload.OTPCode)
+        if (!otpCheck.valid) {
+            return { message: otpCheck.message }
+        }
+
+        const newLoyaltyCard = {
+            _id: new ObjectId(),
+            UserID: user._id,
+            RankName: 'Bạc',
+            Point: 0,
+            SalePercent: 5
+        }
+        const savedNew = await databaseService.loyaltyCard.insertOne(newLoyaltyCard)
+        newLoyaltyCard._id = savedNew.insertedId
+        return newLoyaltyCard
+    }
+    async getLoyaltyCard(user) {
+        const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(user._id) })
+        if (!loyaltyCard) {
+            return { message: "Bạn chưa có tài khoản tích điểm" }
+        }
+        const rankObject = this.getNextRank(loyaltyCard)
+        if (rankObject.message) {
+            return { message: rankObject.message }
+        }
+        return { loyaltyCard:{
+            ...loyaltyCard,
+            maxPoint: rankObject.maxPoint
+        }, nextRank: rankObject.nextRank}
+    }
+    
+
+
+    async checkOrderPrice(user, applyDiscount, reqOrderDTCookie) {
+        console.log(reqOrderDTCookie)
+        if(!reqOrderDTCookie){
+            return {message: "Không tìm thấy đơn hàng trong giỏ"}
+        }
+        if(reqOrderDTCookie && reqOrderDTCookie.Items){
+            let calPrice
+            const loyaltyCard = await databaseService.loyaltyCard.findOne({UserID: user._id})
+            if(!loyaltyCard){
+                return {message: "Bạn chưa có tài khoản tích điểm"}
+            }
+            if(applyDiscount === true){
+                calPrice = reqOrderDTCookie.TotalPrice * loyaltyCard.SalePercent / 100
+                return {
+                    loyaltyCard,
+                    salePercent: loyaltyCard.SalePercent,
+                    totalDiscount: Math.round(calPrice),
+                    totalPrice: reqOrderDTCookie.TotalPrice - Math.round(calPrice)
+                }
+            }else{
+                return{
+                    totalDiscount: 0,
+                    totalPrice: reqOrderDTCookie.TotalPrice,
+                }
+            }
+        }
+        
+    }
+    
+    async getAllRankAbove(user) {
+        const loyaltyCard = await databaseService.loyaltyCard.findOne({ UserID: new ObjectId(user._id) }) || {}
+        const rankObject = this.getNextRank(loyaltyCard)
+        if (rankObject.message) {
+            return { message: rankObject.message }
+        }
+        return {allRank: rankObject.allRankAbove}
+    }
+    async getLoyalUserList() {
+        const loyaltyCardList = await databaseService.loyaltyCard.find().toArray()
+        // const userList = await databaseService.users.find().toArray()
+        const memberList = await Promise.all(
+            loyaltyCardList.map(async (c) => {
+              const foundMember = await databaseService.users.findOne({ _id: c.UserID });
+              return {
+                user: foundMember,
+                card: c
+              }; // Trả về `foundMember` hoặc `null` nếu không tìm thấy
+            })
+          );
+          
+          // Lọc bỏ các giá trị `null` (nếu cần)
+          const filteredMemberList = memberList.filter(member => member !== null);
+          
+        console.log("member list: ", filteredMemberList)
+        return filteredMemberList
+    }
+    
     async getOrder(user) {
         const order = await databaseService.order.find({ UserID: new ObjectId(user._id) }).toArray()
         return order
@@ -86,7 +204,6 @@ class OrdersService {
     async updateOrderStatus(payload, reqParams) {
         const koi = await databaseService.kois.findOne({ _id: new ObjectId(payload.KoiID) })
         const order = await databaseService.orderDetail.findOne({ _id: new ObjectId(reqParams.orderID) })
-        console.log("order: ", order)
         let result
         if (order) {
             result = await databaseService.orderDetail.findOneAndUpdate(
@@ -114,6 +231,7 @@ class OrdersService {
 
         return result
     }
+    
 }
 
 

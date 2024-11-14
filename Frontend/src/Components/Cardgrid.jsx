@@ -1,17 +1,13 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Row, Col, Typography, Divider } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useOrder } from "../Context/OrderContext";
-import { Container } from "react-bootstrap";
 
 const { Text } = Typography;
 
 const CardGrid = ({ cardData }) => {
   const navigate = useNavigate();
   const [category, setCategory] = useState("All"); // State for category switch
-  const { addedKoiIds } = useOrder(); // Get added Koi IDs
-  console.log(addedKoiIds);
 
   const handleCategoryChange = (newCategory) => {
     setCategory(newCategory);
@@ -22,7 +18,7 @@ const CardGrid = ({ cardData }) => {
     return cardData
       .filter((card) => card.Status === status)
       .reduce((acc, card) => {
-        const key = `${card.Size}-${card.Breed}-${card.Status}`; // Create a unique key
+        const key = `${card.Size}-${card.Breed}-${card.Status}-${card.Price}`; // Include price in the unique key
         if (!acc[key]) {
           acc[key] = { count: 0, card }; // Initialize if key doesn't exist
         }
@@ -30,8 +26,12 @@ const CardGrid = ({ cardData }) => {
         return acc;
       }, {});
   };
+  const groupCards2 = (status) => {
+    return cardData.filter((card) => card.Status === status);
+  };
+  // const groupedKygui = groupCards(4); // Grouping for Cá Ký Gửi
+  const groupedKyGui = groupCards2(4);
 
-  const groupedKygui = groupCards(4); // Grouping for Cá Ký Gửi
   const groupedNhat = groupCards(1); // Grouping for Cá Koi Nhật
   const groupedIkoi = cardData
     .filter((card) => card.Status === 2 || card.Status === 3) // Include both statuses
@@ -46,26 +46,35 @@ const CardGrid = ({ cardData }) => {
   const groupAll = cardData
     .filter(
       (card) =>
+        card.Status === 1 ||
         card.Status === 2 ||
         card.Status === 3 ||
-        card.Status === 4 ||
-        card.Status === 1
-    ) // Include both statuses
+        card.Status === 4
+    )
     .reduce((acc, card) => {
-      const key = `${card.Size}-${card.Breed}-${card.Status}`; // Create a unique key
-      if (!acc[key]) {
-        acc[key] = { count: 0, card }; // Initialize if key doesn't exist
+      if (card.Status === 4) {
+        // Nếu Status là 4, thêm thẻ vào mảng riêng
+        acc.push({ card }); // Chỉ lưu thẻ mà không có count
+      } else {
+        // Nếu không phải Status 4, nhóm theo Size, Breed, Status
+        const key = `${card.Size}-${card.Breed}-${card.Status}`; // Tạo khóa duy nhất
+        if (!acc[key]) {
+          // Khởi tạo nếu khóa chưa tồn tại
+          acc[key] = { card, count: 0 }; // Khởi tạo với count = 0
+        }
+        acc[key].count += 1; // Tăng count cho nhóm
       }
-      acc[key].count += 1; // Increment count
       return acc;
-    }, {});
+    }, []);
   return (
     <div className="container" style={{ padding: "0" }}>
       <Divider
         orientation="left"
         style={{ margin: "0", marginBottom: "40px", cursor: "pointer" }}
       >
-        <Text style={{ fontSize: "24px", fontWeight: "bold" }}>
+        <Text
+          style={{ fontSize: "24px", fontWeight: "bold", color: "#920202" }}
+        >
           {category === "kygui"
             ? "Cá Ký Gửi"
             : category === "ikoi"
@@ -78,7 +87,7 @@ const CardGrid = ({ cardData }) => {
       <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#920202" }}
             onClick={() => handleCategoryChange("All")}
           >
             Tất cả
@@ -86,7 +95,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#920202" }}
             onClick={() => handleCategoryChange("kygui")}
           >
             Cá Ký Gửi
@@ -94,7 +103,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer", marginRight: "20px" }}
+            style={{ cursor: "pointer", marginRight: "20px", color: "#920202" }}
             onClick={() => handleCategoryChange("ikoi")}
           >
             Cá Ikoi
@@ -102,7 +111,7 @@ const CardGrid = ({ cardData }) => {
         </Col>
         <Col>
           <Text
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", color: "#920202" }}
             onClick={() => handleCategoryChange("nhat")}
           >
             Cá Koi Nhật
@@ -140,27 +149,43 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>{card.KoiName || "N/A"}</Text>
+                <Text strong style={{ color: "#920202" }}>
+                  {card.KoiName || "Cá Koi chưa được đặt tên"}
+                </Text>
                 <br />
-                <Text>Số Lượng : {count}</Text>
+                {card.Status === 1 && <Text strong>Số lượng : {count}</Text>}
+                {card.Status === 2 && <Text strong>Số lượng : {count}</Text>}
+                {card.Status === 3 && <Text strong>Số lượng : {count}</Text>}
+                {card.Status === 4 && <Text strong>Số lượng : 1 </Text>}
                 <br />
-                <Text>Size : {card.Size} cm</Text>
+                <Text strong>Kích thước : {card.Size} cm</Text>
                 <br />
-                {card.Status === 1 && <Text>Nhật Nhập Khẩu</Text>}
-                {card.Status === 2 && <Text>F1</Text>}
-                {card.Status === 3 && <Text>Việt</Text>}
-                {card.Status === 4 && <Text>Ký Gửi</Text>}
+                <Text strong> Giống loài : {""}</Text>
+                {card.Status === 1 && <Text strong>Nhật Nhập Khẩu</Text>}
+                {card.Status === 2 && <Text strong>F1</Text>}
+                {card.Status === 3 && <Text strong>Việt</Text>}
+                {card.Status === 4 && <Text strong>Ký Gửi</Text>}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "red",
+                      fontSize: "16px",
+                    }}
+                  ></span>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
           ))}
         {category === "kygui" &&
-          Object.values(groupedKygui).map(({ count, card }) => (
+          Object.values(groupedKyGui).map((card) => (
             <Col
               key={card._id}
               xs={12}
@@ -188,14 +213,37 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "N/A"} ({count})
+                <Text strong style={{ color: "#920202" }}>
+                  {" "}
+                  {card.KoiName || "N/A"}
                 </Text>
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong>
+                  Kích thước:{""}
+                  {card.Size}
+                </Text>
+                <br />
+                <Text strong>Số lượng : 1</Text>
+                <br />
+                {card.Status === 4 && <Text strong> Cá Ký Gửi</Text>}
+                <br />
+                {card.Breed === "Viet" && (
+                  <Text strong> Giống loài : {""}Việt</Text>
+                )}
+                {card.Breed === "F1" && (
+                  <Text strong> Giống loài : {""}F1</Text>
+                )}
+                {card.Breed === "Nhat" && (
+                  <Text strong> Giống loài : {""}Nhật</Text>
+                )}
+                <br />
+                <Text strong style={{ color: "red" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
@@ -230,22 +278,33 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "N/A"} ({count})
+                <Text strong style={{ color: "#920202" }}>
+                  {card.KoiName || "Cá Koi chưa được đặt tên"}
                 </Text>
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  {card.Origin}
+                <Text strong>Số lượng : {count}</Text>
+                <br />
+                <Text strong style={{}}>
+                  Kích thước : {card.Size} cm
                 </Text>
                 <br />
-                {card.Status === 2 && <Text>F1</Text>}
-                {card.Status === 3 && <Text>Việt</Text>}
-
+                {card.Breed === "Nhat" && (
+                  <Text strong> Giống loài : {""}Nhật</Text>
+                )}
+                {card.Breed === "Viet" && (
+                  <Text strong> Giống loài : {""}Việt</Text>
+                )}
+                {card.Breed === "F1" && (
+                  <Text strong> Giống loài : {""}F1</Text>
+                )}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>
@@ -280,21 +339,26 @@ const CardGrid = ({ cardData }) => {
                   navigate("/order", { state: { selectedItem: card } })
                 }
               >
-                <Text strong>
-                  {card.KoiName || "N/A"} ({count})
+                <Text strong style={{ color: "#920202" }}>
+                  {card.KoiName || "Cá Koi chưa được đặt tên"}
                 </Text>
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
-                  {card.Origin}
+                <Text strong>Số lượng {count}</Text>
+                <br />
+                <Text strong style={{}}>
+                  Kích thước : {card.Size} cm
                 </Text>
                 <br />
-                {card.Status === 1 && <Text>Nhật</Text>}
-
+                <Text strong>Giống loài : </Text>
+                {card.Status === 1 && <Text strong>Nhật Nhập Khẩu</Text>}
                 <br />
-                <Text strong style={{ color: "#FF5722" }}>
+                <Text strong style={{ color: "red" }}>
                   {card.Price
-                    ? `${card.Price.toLocaleString()} VND`
-                    : "Liên Hệ"}
+                    ? `Giá: ${new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(card.Price)}`
+                    : "Liên hệ"}
                 </Text>
               </Card>
             </Col>

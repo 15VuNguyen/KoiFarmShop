@@ -1,120 +1,122 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ResetPasswordModal } from "../Pages/ResetPasswordPage ";
+import "../Css/SignUp.css";
+import { Tooltip, Typography } from "antd";
+import { message } from "antd";
 function SignInForm() {
-  const [showResetPasswordModal, setShowResetPasswordModal] = React.useState(false);
-  const { googleAuthUrl, login, checkRole } = useAuth();
-  const [state, setState] = React.useState({
-    email: "",
-    password: "",
-  });
+  const location = useLocation();
   const navigate = useNavigate();
-  const handleChange = (evt) => {
-    const value = evt.target.value;
-    setState({
-      ...state,
-      [evt.target.name]: value,
-    });
-  };
-  useEffect(() => {
-    const token = localStorage.getItem('forgot_password_secrect_token'); 
-    if (token) {
-        console.log(token)
-        setShowResetPasswordModal(true)
-        return
-    }
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const { googleAuthUrl, login, checkRole } = useAuth();
+  const [state, setState] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: "", password: "" });
 
-}, [])
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setState({ ...state, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("forgot_password_secrect_token");
+    if (token) {
+      setShowResetPasswordModal(true);
+    }
+  }, []);
+
   const handleOnSubmit = async (evt) => {
     evt.preventDefault();
-
     const { email, password } = state;
 
+    const newErrors = {
+      email: email ? "" : "Email là bắt buộc",
+      password: password ? "" : "Mật khẩu là bắt buộc",
+    };
+    setErrors(newErrors);
 
-    // Perform the login and navigate after a successful login
-    
+    if (!email || !password) return;
+
     try {
-      const reponse = await login(email, password);
-
-      if (reponse) {
-        checkRole().then(result => {
-          if (result === "Staff") {
-            toast.success("Login successfully");
-            navigate("/DashBoard/staff/Profiles");
-          }
-          else if (result === "Manager") {
-            toast.success("Login successfully");
-            navigate("/NewDashBoard/staff/Profiles");
-          }
-        })
-      navigate('/')
-      toast.success("Login successfully");
+      const response = await login(email, password);
+      if (response) {
+        const from = location.state?.from?.pathname || "/";
+        const selectedItem = location.state?.selectedItem || null;
+        checkRole().then((result) => {
+          const redirectPath =
+            result === "Manager"
+              ? "/NewDashBoard/staff/Profiles"
+              : "/profile";
+          message.success("Đăng nhập thành công");
+          navigate(redirectPath);
+        });
+        navigate(from, { state: { selectedItem } });
       }
     } catch (error) {
-      console.error("Failed to login", error.data);
-      if (error.response.data.message === "Validation error") {
-        toast.error("Password or Email is required");
+      console.error("Failed to login", error);
+      if (error.response.data.errors.email) {
+        message.error('Email hoặc mật khẩu không chính xác');
+        return;
       }
+      if (error.response.data.errors.email){
+        message.error(error.response.data.errors.email);
     }
-
-
-
-    // Clear the input fields
-    setState({ email: "", password: "" });
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: "",
-      });
+      else {
+        console.error("Failed to login", error);
+      }
     }
   };
 
   return (
-    
     <div className="form-container sign-in-container">
-      <ResetPasswordModal show={showResetPasswordModal} handleClose={()=>{setShowResetPasswordModal(false)}} signInLink="/login" buttonLink="/login" />
+      <ResetPasswordModal
+        show={showResetPasswordModal}
+        handleClose={() => setShowResetPasswordModal(false)}
+        signInLink="/login"
+        buttonLink="/login"
+      />
       <form onSubmit={handleOnSubmit}>
-        <h1>Sign in</h1>
+        <h1>Đăng nhập</h1>
+
         <div className="social-container">
-          <Link to={googleAuthUrl} className="social">
-            <FaGoogle />
-          </Link>
+          <Tooltip title="đăng nhập bằng google">
+            <Link to={googleAuthUrl} className="social">
+
+              <FaGoogle />
+
+            </Link>
+          </Tooltip>
         </div>
-        <span>or use your account</span>
+
         <input
           type="email"
-          placeholder="Email"
           name="email"
           value={state.email}
           onChange={handleChange}
+          placeholder={errors.email ? errors.email : "Email"}
+          className={`input-field ${errors.email ? "error-input" : ""}`}
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={state.password}
           onChange={handleChange}
+          placeholder={errors.password ? errors.password : "Mật khẩu"}
+          className={`input-field ${errors.password ? "error-input" : ""}`}
         />
-        <p onClick={()=>{setShowResetPasswordModal(true)}}>
-          forgot your password?
-        </p>
-        <button>Sign In</button>
+        <Typography.Link onClick={() => setShowResetPasswordModal(true)}>
+          <Tooltip title="Ấn vào đây để đặt lại mật khẩu">
+
+            Quên mật khẩu?
+          </Tooltip>
+        </Typography.Link>
+        <button>Đăng nhập</button>
       </form>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      
     </div>
   );
 }

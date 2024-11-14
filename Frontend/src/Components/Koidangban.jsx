@@ -5,12 +5,13 @@ import Footer from "./Footer";
 import CardGrid from "./Cardgrid";
 import axios from "axios";
 import "./Koikygui.css";
+import axiosInstance from "../An/Utils/axiosJS";
 import { Container } from "react-bootstrap";
 
 const { Content } = Layout;
 const { Title } = Typography;
 
-export default function Koikygui() {
+export default function Koidangban() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,15 +20,14 @@ export default function Koikygui() {
   const [selectedSize, setSelectedSize] = useState("All");
   const [minPrice, setMinPrice] = useState("0");
   const [categoryCounts, setCategoryCounts] = useState([]);
-  const [maxPrice, setMaxPrice] = useState("20000000");
+  const [maxPrice, setMaxPrice] = useState("100000000");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/getAllKoi");
+        const response = await axiosInstance.get("/getAllKoi");
         if (Array.isArray(response.data.result)) {
           setCardData(response.data.result);
-
           // Initialize category count object
           const categoryCounts = {};
           response.data.result.forEach((card) => {
@@ -37,8 +37,6 @@ export default function Koikygui() {
               categoryCounts[card.CategoryID] = 1;
             }
           });
-
-          // Update categoryData with counts
           const categoryData = response.data.categoryList.map((category) => ({
             ...category,
             count: categoryCounts[category._id] || 0,
@@ -54,11 +52,12 @@ export default function Koikygui() {
 
     fetchData();
   }, []);
-  useEffect(() => {
-    console.log(categoryData);
-  }, []);
+
   const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
-  const handleSizeChange = (value) => setSelectedSize(value);
+  const handleSizeChange = (e) => {
+    const value = e.target.value || "All";
+    setSelectedSize(value);
+  };
   const handleMinPriceChange = (e) => setMinPrice(e.target.value);
   const handleMaxPriceChange = (e) => setMaxPrice(e.target.value);
 
@@ -123,7 +122,7 @@ export default function Koikygui() {
                 value="All"
                 style={{ display: "block", marginBottom: "10px" }}
               >
-                All ({cardData.length})
+                Tất cả ({cardData.length})
               </Radio>
               {categoryData.map((card) => (
                 <Radio
@@ -155,19 +154,8 @@ export default function Koikygui() {
           </div>
 
           <div className="size-filter" style={{ marginTop: "20px" }}>
-            <Title level={5}>CHỌN KÍCH THƯỚC</Title>
-            <Select
-              value={selectedSize}
-              onChange={handleSizeChange}
-              style={{ width: "100%" }}
-            >
-              <Select.Option value="All">All Sizes</Select.Option>
-              {[20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75].map((size) => (
-                <Select.Option key={size} value={size}>
-                  {size} cm
-                </Select.Option>
-              ))}
-            </Select>
+            <Title level={5}>Chọn kích thước</Title>
+            <Input placeholder="Chọn kích thước" onChange={handleSizeChange} />
           </div>
         </div>
 

@@ -4,12 +4,13 @@ import '../Css/GeneralPurpose.css'
 import useFetchConsigns from '../../Ant Design/Hooks/useFetchConsigns';
 import ConsignDetail from '../Components/ConsignDetail';
 import ConsignTable from '../Components/Table/ConsignTable';
-
+import 'chart.js/auto';
+import { Doughnut, Line } from 'react-chartjs-2';
 export default function Profiles() {
     const { Header, Content } = Layout;
     const [activeTab, setActiveTab] = React.useState('1');
 
-    const consigns = useFetchConsigns();
+    const {consigns,Refresher} = useFetchConsigns();
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [selectedProfile, setSelectedProfile] = React.useState(null);
     const [isCheckingDetail, setIsCheckingDetail] = React.useState(false);
@@ -33,6 +34,94 @@ export default function Profiles() {
                 return consigns;
         }
     };
+    const doughnutData = {
+        labels: [ "Đã Hủy", "Yêu Cầu Ký Gửi", "Đang kiểm tra Koi", "Đang thương thảo hợp đồng", "Đang tìm người mua", "Đã bán"],
+        datasets: [{
+            data: [
+                consigns.filter(consign => consign.State === -1).length,
+                consigns.filter(consign => consign.State === 1).length,
+                consigns.filter(consign => consign.State === 2).length,
+                consigns.filter(consign => consign.State === 3).length,
+                consigns.filter(consign => consign.State === 4).length,
+                consigns.filter(consign => consign.State === 5).length,
+            ],
+            backgroundColor: ["#ff0000", "#91caff", "#b7eb8f", "#ffd591", "#d3adf7", "#ffa39e"],
+            hoverOffset: 4,
+        }]
+    };
+    const howManyStateCorpondeToEachDATES = (acc, cur) => {
+        const date = new Date(cur.ConsignCreateDate).toLocaleDateString();
+        const state = cur.State;
+
+      
+        if (!acc[date]) {
+            acc[date] = {};
+        }
+
+    
+        acc[date][state] = (acc[date][state] || 0) + 1;
+
+        return acc;
+    }
+
+
+    const aggregatedData = consigns.reduce(howManyStateCorpondeToEachDATES, {});
+    console.log(aggregatedData);
+    const sortedDates = Object.keys(aggregatedData)
+        .map(dateStr => new Date(dateStr))
+        .sort((a, b) => a - b)
+        .map(dateObj => dateObj.toLocaleDateString());
+
+    
+    const lineData = {
+        labels: sortedDates, 
+        datasets: [
+            {
+                label:"Đã Hủy",
+                data: sortedDates.map(date => aggregatedData[date]?.[-1] || 0),
+                borderColor: "#ff0000",
+                fill: false,
+                tension: 0.3,
+
+
+            },
+            {
+                label: 'Yêu Cầu Ký Gửi',
+                data: sortedDates.map(date => aggregatedData[date]?.[1] || 0),
+                borderColor: "#91caff",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Kiểm Tra Koi',
+                data: sortedDates.map(date => aggregatedData[date]?.[2] || 0),
+                borderColor: "#b7eb8f",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Thương Thảo Hơp Đồng',
+                data: sortedDates.map(date => aggregatedData[date]?.[3] || 0),
+                borderColor: "#ffd591",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đang Tìm Người Mua',    
+                data: sortedDates.map(date => aggregatedData[date]?.[4] || 0),
+                borderColor: "#d3adf7",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: 'Đã Bán Thành Công',
+                data: sortedDates.map(date => aggregatedData[date]?.[5] || 0),
+                borderColor: "#ffa39e",
+                fill: false,
+                tension: 0.3,
+            },
+        ]
+    };
 
     const filteredConsignes = getFilteredConsign();
 
@@ -41,8 +130,10 @@ export default function Profiles() {
             key: '1',
             label: (
                 <>
+                <div className="tab tab-1">
                     Toàn Bộ  Ký Gửi
                     <Badge count={consigns.length} style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         },
@@ -50,8 +141,10 @@ export default function Profiles() {
             key: '2',
             label: (
                 <>
+                <div className="tab tab-2">
                     Yêu cầu ký gửi
-                    <Badge count={consigns.filter(consign => consign.State == 1).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 1).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         },
@@ -59,8 +152,10 @@ export default function Profiles() {
             key: '3',
             label: (
                 <>
+                    <div className="tab tab-3">
                     Đang kiểm tra Koi
-                    <Badge count={consigns.filter(consign => consign.State == 2).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 2).length} showZero style={{ marginLeft: 8 }} color='green' />
+                    </div>
                 </>
             ),
         },
@@ -68,24 +163,29 @@ export default function Profiles() {
             key: '4',
             label: (
                 <>
+                 <div className="tab tab-4">
                     Đang thương thảo hợp đồng
-                    <Badge count={consigns.filter(consign => consign.State == 3).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 3).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }, {
             key: '5',
             label: (
-                <>
+                <>  <div className="tab tab-5">
                     Đang tìm người mua
-                    <Badge count={consigns.filter(consign => consign.State == 4).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 4).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }, {
             key: '6',
             label: (
                 <>
+                <div className="tab tab-6">
                     Đã bán thành công
-                    <Badge count={consigns.filter(consign => consign.State == 5).length} style={{ marginLeft: 8 }} color='green' />
+                    <Badge count={consigns.filter(consign => consign.State == 5).length} showZero style={{ marginLeft: 8 }} color='green' />
+                </div>
                 </>
             ),
         }
@@ -97,97 +197,95 @@ export default function Profiles() {
             setSelectedProfile(id);
             message.info(`Update action triggered for ID: ${id}`);
         } else if (actionType === 'disable') {
-            message.warning(`Disable action triggered for ID: ${id}`);
+            message.warning(`Đơn ký gửi đã bị hủy: ${id}`);
         } else if (actionType === 'View Consign Details') {
-            message.success(`Enable action triggered for ID: ${id}`);
+            message.success(` Xem chi tiết đơn ký gửi: ${id}`);
             setConsignDetail(id);
             setIsCheckingDetail(true);
         }
     };
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                
+                labels: {
+                    boxWidth: 12,
+                    padding: 10,
+                },
+            },
+            tooltip: {
+                callbacks: {
+                    label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw}`,
+                },
+            },
+        },
+        layout: {
+            padding: 20,
+        },
+    };
+
+
 
     return (
         <Layout>
             <Header style={{ background: '#f5f5f5' }}>
-                <Typography.Title style={{ textAlign: 'center' }} level={1}>Profile Dashboard</Typography.Title>
+                <Typography.Title style={{ textAlign: 'center',marginBottom:'2rem' }} level={1}>Quản lý đơn ký gửi</Typography.Title>
             </Header>
-            <Content style={{ padding: '24px' }}>
-                <Row gutter={24}>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>  Tổng số ký gửi</Typography.Title>}
-                                value={consigns.length}
-                                precision={0}
-                            />
+            <Content  style={{ padding: '24px' }}>
+                <Row className='at-small-no-padding'  gutter={[12]} >
+                    <Col style={{ padding: '0' }} md={10} xs={0} >
+                        <Card bodyStyle={{ height: '340px' }} title={'Thống kê trạng thái'} >
+                            {/* <Card.Grid hoverable={false} style={{ width: '60%', height: '100%' }}> */}
+                                <Doughnut data={doughnutData}
+                                    options={chartOptions}
+                                />
+                            {/* </Card.Grid> */}
+                            {/* <Card.Grid hoverable={false} style={{ width: '40%', height: '100%', overflowY: 'auto' }}>
+                                <Space size={'large'} direction='vertical' style={{ overflow: 'hidden' }} >
+                                    <Statistic title='Tổng số ký gửi' value={consigns.length} />
+                                    <Statistic title='Đang chờ' value={consigns.filter(consign => consign.State === 1).length} />
+                                    <Statistic title='Đang kiểm tra' value={consigns.filter(consign => consign.State === 2).length} />
+                                    <Statistic title='Đang thương thảo' value={consigns.filter(consign => consign.State === 3).length} />
+                                    <Statistic title='Đang tìm mua' value={consigns.filter(consign => consign.State === 4).length} />
+                                    <Statistic title='Đã bán' value={consigns.filter(consign => consign.State === 5).length} />
+                                </Space>
+                            </Card.Grid> */}
                         </Card>
                     </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số yêu cầu ký gửi</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 1).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang kiểm tra</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 2).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang thương thảo hợp đồng</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 3).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đang tìm người mua</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 4).length}
-                                precision={0}
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={4}>
-                        <Card hoverable style={{ height: "100%" }}>
-                            <Statistic
-                                title={<Typography.Title level={4}>Tổng số ký gửi đã bán thành công</Typography.Title>}
-                                value={consigns.filter(consign => consign.State == 5).length}
-                                precision={0}
+                    <Col xs={24} md={14}>
+                        <Card bodyStyle={{ height: '340px',width:'100%' }} title={'Trạng thái đơn ký gửi theo thời gian'} >
+                            <Line data={lineData}
+                                options={
+                                    {
+                                        responsive: true,
+                                        maintainAspectRatio: false
+                                    }
+                                }
                             />
                         </Card>
                     </Col>
                 </Row>
-                <Row gutter={6} style={{ marginTop: '2rem' }} className='Black-Strip'>
-                    <Col span={12}>
-                        <Space align='center' style={{ paddingLeft: '3rem' }} wrap='true' >
-                            {
-                                isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Go Back</Button> : <Tabs
-                                    defaultActiveKey="1"
-                                    items={Tab}
-                                    size='small'
-                                    tabBarGutter={78}
-                                    onChange={key => setActiveTab(key)}
-                                />
-                            }
-                        </Space>
-                    </Col>
+                <Row gutter={24}>
+                    <Space align='center' style={{ paddingLeft: '3rem', marginTop: '3rem', marginBottom:'1rem' }} wrap='true' >
+                        {
+                            isCheckingDetail ? <Button type='primary' onClick={() => setIsCheckingDetail(false)}>Quay Trở Lại</Button> : <Tabs
+                                defaultActiveKey="1"
+                                items={Tab}
+                                size='small'
+                                tabBarGutter={42}
+                                onChange={key => setActiveTab(key)}
+                            />
+                        }
+                    </Space>
                 </Row>
                 <Layout style={{ background: '#f0f0f0', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 12px 8px rgba(0, 0, 0, 0.1)' }}>
                     <Header style={{ background: '#f5f5f5', borderBottom: '1px solid #d9d9d9', padding: '20px', borderRadius: '12px 12px 0 0', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', border: '1px #bfbfbf solid ' }}>
                     </Header>
                     <Content className='fix-Table' style={{ border: '1px #bfbfbf solid ', padding: '20px', background: '#fff', borderRadius: '0 0 12px 12px' }}>
                         {isCheckingDetail ?
-                            <ConsignDetail consignID={consignDetail} /> : <ConsignTable data={filteredConsignes} handleActionClick={handleActionClick} />
+                            <ConsignDetail reset={Refresher} consignID={consignDetail} /> : <ConsignTable data={filteredConsignes} handleActionClick={handleActionClick} />
                         }
                     </Content>
                 </Layout>

@@ -1,10 +1,13 @@
-import React from "react";
-import Footer from "./Footer";
-import Navbar from "./Navbar/Navbar";
 import { Container } from "react-bootstrap";
-import { Layout, Typography } from "antd";
-const { Title, Text, Paragraph } = Typography;
+import { Typography } from "antd";
+const { Paragraph } = Typography;
 import { Table } from "react-bootstrap";
+import img1 from "../../src/assets/GioiThieuF1/1.jpg";
+import img2 from "../../src/assets/GioiThieuF1/2.jpg";
+import img3 from "../../src/assets/GioiThieuF1/3.webp";
+import img4 from "../../src/assets/GioiThieuF1/4.webp";
+import img5 from "../../src/assets/GioiThieuF1/5.webp";
+import img6 from "../../src/assets/GioiThieuF1/6.webp";
 export default function GioiThieuVeKoiF1() {
   const data = [
     {
@@ -40,21 +43,24 @@ export default function GioiThieuVeKoiF1() {
   ];
   return (
     <>
-      <div>
-        <Navbar />
-      </div>
       <Container
         style={{
           padding: "20px",
           paddingTop: "100px",
         }}
       >
-        <div style={{ textAlign: "center", color: "red" }}>
+        <div style={{ textAlign: "center", color: "#920202" }}>
           <h1>Giới thiệu về Koi F1</h1>
         </div>
         <div style={{ paddingTop: "50px" }}>
           <div style={{ textAlign: "center" }}>
-            <h3 style={{ fontWeight: "600", fontSize: "30px" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                fontSize: "30px",
+                color: "#920202",
+              }}
+            >
               Cá Koi F1 Là Gì? Đặc Điểm, Cách Phân Biệt Với Cá Koi Nhật Bản
             </h3>
           </div>
@@ -71,7 +77,12 @@ export default function GioiThieuVeKoiF1() {
             </Paragraph>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                color: "#920202",
+              }}
+            >
               1. Cá Koi F1 Là Gì ?
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -86,12 +97,18 @@ export default function GioiThieuVeKoiF1() {
               dạng cơ thể, do cá đã phải thích nghi với môi trường mới để tồn
               tại và phát triển tốt nhất.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuF1/1.jpg" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img1} style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                color: "#920202",
+                paddingTop: "20px",
+              }}
+            >
               2.Quy trình tạo ra cá Koi F1 theo phong cách Nhật Bản tại Việt Nam
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -116,12 +133,18 @@ export default function GioiThieuVeKoiF1() {
               cần thiết, chúng sẽ sẵn sàng để được chuyển đến các ao cá, tiểu
               cảnh, sông, hồ, và tiếp tục phát triển.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuF1/2.jpg" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img2} style={{ width: "50%" }} />
             </div>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3
+              style={{
+                fontWeight: "600",
+                color: "#920202",
+                paddingTop: "20px",
+              }}
+            >
               3.Hướng dẫn phân biệt cá koi F1 và cá koi thuần chủng
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -133,7 +156,7 @@ export default function GioiThieuVeKoiF1() {
             </Paragraph>
             <ul>
               <li>
-                <span id="31" style={{ fontSize: "20px" }}>
+                <span id="31" style={{ fontSize: "20px", color: "#920202" }}>
                   3.1 Màu Sắc
                 </span>
                 <ul>
@@ -146,8 +169,8 @@ export default function GioiThieuVeKoiF1() {
                       lờ mờ hay nhạt màu. Đối với cá Koi trắng và vàng, màu sắc
                       hiện lên với ánh bạc bắt mắt.
                     </Paragraph>
-                    <div>
-                      <img src="src/assets/GioiThieuF1/3.webp" />
+                    <div style={{ textAlign: "center" }}>
+                      <img src={img3} style={{ width: "50%" }} />
                     </div>
                   </li>
                   <li>
@@ -165,34 +188,70 @@ export default function GioiThieuVeKoiF1() {
               </li>
               <li>
                 {" "}
-                <span id="32" style={{ fontSize: "20px" }}>
+                <span id="32" style={{ fontSize: "20px", color: "#920202" }}>
                   3.2 Hình Dáng
                 </span>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Tiêu Chí</th>
-                      <th>Cá Koi Thuần Chủng</th>
-                      <th>Cá Koi F1</th>
+                      <th
+                        style={{
+                          color: "#920202",
+                        }}
+                      >
+                        Tiêu Chí
+                      </th>
+                      <th
+                        style={{
+                          color: "#920202",
+                        }}
+                      >
+                        Cá Koi Thuần Chủng
+                      </th>
+                      <th
+                        style={{
+                          color: "#920202",
+                        }}
+                      >
+                        Cá Koi F1
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {data.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.criteria}</td>
-                        <td>{item.purebred}</td>
-                        <td>{item.f1}</td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.criteria}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.purebred}
+                        </td>
+                        <td
+                          style={{
+                            fontSize: "20px",
+                          }}
+                        >
+                          {item.f1}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
-                <div>
-                  <img src="src/assets/GioiThieuF1/4.webp" />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img4} style={{ width: "50%" }} />
                 </div>
               </li>
               <li>
                 {" "}
-                <span id="33" style={{ fontSize: "20px" }}>
+                <span id="33" style={{ fontSize: "20px", color: "#920202" }}>
                   3.3 Chi phí của cá Koi
                 </span>
                 <Paragraph style={{ fontSize: "20px" }}>
@@ -209,14 +268,14 @@ export default function GioiThieuVeKoiF1() {
                   chuyên nghiệp là quan trọng để đảm bảo mua được sản phẩm phù
                   hợp với ngân sách của bạn.
                 </Paragraph>
-                <div>
-                  <img src="src/assets/GioiThieuF1/5.webp" />
+                <div style={{ textAlign: "center" }}>
+                  <img src={img5} style={{ width: "50%" }} />
                 </div>
               </li>
             </ul>
           </div>
           <div>
-            <h3 style={{ fontWeight: "600", color: "red" }}>
+            <h3 style={{ fontWeight: "600", color: "#920202" }}>
               4.Nên Mua Cá Koi Nhật Hay Cá Koi F1
             </h3>
             <Paragraph style={{ fontSize: "20px" }}>
@@ -234,25 +293,12 @@ export default function GioiThieuVeKoiF1() {
               thể chọn lựa theo sở thích và điều kiện kinh tế của mình. Đừng
               ngần ngại liên hệ để được tư vấn và lựa chọn chú cá phù hợp.
             </Paragraph>
-            <div>
-              <img src="src/assets/GioiThieuF1/6.webp" />
+            <div style={{ textAlign: "center" }}>
+              <img src={img6} style={{ width: "50%" }} />
             </div>
           </div>
         </div>
       </Container>
-
-      <div
-        style={{
-          display: "flex",
-          backgroundImage: `url("src/assets/e.jpg")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh", // Đảm bảo chiều cao đủ để chiếm toàn bộ không gian
-        }}
-      ></div>
-      <div>
-        <Footer />
-      </div>
     </>
   );
 }

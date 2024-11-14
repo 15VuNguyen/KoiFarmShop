@@ -1,15 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
-import TableCart from "./TableCart";
+import TableCart from "./TableCartForShoppingCart";
+import { useEffect, useState } from "react";
+import axiosInstance from "../An/Utils/axiosJS";
 
-import { Form, Button, Spinner, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 export default function ShoppingCart() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const handlePayment = () => {
+    navigate("/formfillinformation");
+  };
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    setIsLoggedIn(!!accessToken);
+    if (!accessToken) {
+      navigate("/login");
+    }
+  }, [isLoggedIn]);
+  useEffect(() => {
+    const clearData = async () => {
+      try {
+        console.log("hello");
+        await axiosInstance.post(
+          "/clear-coookies",
+          { Credential: true },
+          { withCredentials: true }
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    clearData();
+  }, []);
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
       <Navbar />
-      <Container style={{ flex: "1", paddingTop: "130px", textAlign: "center" }}>
-        <h4 style={{ fontSize: "24px", fontWeight: "bold" }}>Giỏ hàng của bạn</h4>
+      <Container
+        style={{ flex: "1", paddingTop: "130px", textAlign: "center" }}
+      >
+        <h4 style={{ fontSize: "24px", fontWeight: "bold" }}>
+          Giỏ hàng của bạn
+        </h4>
         <TableCart />
       </Container>
       <Footer />

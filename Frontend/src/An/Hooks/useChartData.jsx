@@ -12,19 +12,24 @@ export default function useChartData() {
         labels: [],
         datasets: [],
     });
-    const [unFilteredProfileChartData, setUnFilteredProfileChartData] = React.useState(null);
+    const [consignData, setConsignData] = React.useState({
+        labels: [],
+        datasets: [],
+    });
     const [orderData, setOrderData] = React.useState({
         labels: [],
         datasets: [],
     });
     const [unFilteredorderData, setUnFilteredDorderData] = React.useState(null);
-
+    const [unFilteredProfileChartData, setUnFilteredProfileChartData] = React.useState(null);
+    const [unFilteredConsignData, setUnFilteredConsignData] = React.useState(null);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [userResponse, orderResponse] = await Promise.all([
+                const [userResponse, orderResponse,consignResponse] = await Promise.all([
                     axiosInstance.get('/manager/manage-user/get-all'),
                     axiosInstance.get('/manager/manage-order/get-all'),
+                    axiosInstance.get("manager/manage-ki-gui/get-all")
                 ]);
                 const data = [
                     { "date": "2024-10-06", "value": 182664, "profit": 145000 },
@@ -71,7 +76,70 @@ export default function useChartData() {
                 setRevuenueData(chartData);
                 setUnFilteredProfileChartData(userResponse.data.result);
                 setUnFilteredDorderData(orderResponse.data.result);
-
+                
+                const howManyStateCorpondeToEachDATES = (acc, cur) => {
+                    const date = new Date(cur.ConsignCreateDate).toLocaleDateString();
+                    const state = cur.State;
+            
+                  
+                    if (!acc[date]) {
+                        acc[date] = {};
+                    }
+            
+                
+                    acc[date][state] = (acc[date][state] || 0) + 1;
+            
+                    return acc;
+                }
+            
+                const aggregatedData = consignResponse.data.result.reduce(howManyStateCorpondeToEachDATES, {}); 
+            
+                console.log(aggregatedData);
+                const sortedDates = Object.keys(aggregatedData)
+                    .map(dateStr => new Date(dateStr))
+                    .sort((a, b) => a - b)
+                    .map(dateObj => dateObj.toLocaleDateString());
+                       setUnFilteredConsignData(sortedDates); 
+                setConsignData({
+                    labels: sortedDates,
+                    datasets: [
+                        {
+                            label: 'Yêu Cầu Ký Gửi',
+                            data: sortedDates.map(date => aggregatedData[date]?.[1] || 0),
+                            borderColor: "#91caff",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            label: 'Đang Kiểm Tra Koi',
+                            data: sortedDates.map(date => aggregatedData[date]?.[2] || 0),
+                            borderColor: "#b7eb8f",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            label: 'Đang Thương Thảo Hơp Đồng',
+                            data: sortedDates.map(date => aggregatedData[date]?.[3] || 0),
+                            borderColor: "#ffd591",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            label: 'Đang Tìm Người Mua',    
+                            data: sortedDates.map(date => aggregatedData[date]?.[4] || 0),
+                            borderColor: "#d3adf7",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            label: 'Đã Bán Thành Công',
+                            data: sortedDates.map(date => aggregatedData[date]?.[5] || 0),
+                            borderColor: "#ffa39e",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                    ]
+                });
                 const users = userResponse.data.result;
                 const userDateCounts = {};
                 users.forEach(user => {
@@ -200,16 +268,21 @@ export default function useChartData() {
     const filterOrderData = (timeRange) => filterDataByTimeRange(timeRange, orderData);
     const filterCombinedData = (timeRange) => filterDataByTimeRange(timeRange, combineData());
     const filterRevuenueData = (timeRange) => filterDataByTimeRange(timeRange, RevuenueData);
+    const filterConsignData = (timeRange) => filterDataByTimeRange(timeRange, consignData);
+
     return {
         profileChartData,
         orderData,
         combineData,
         unFilteredProfileChartData,
         unFilteredorderData,
+        unFilteredConsignData,
+        consignData,
         filterProfileData,
         filterOrderData,
         filterCombinedData,
         filterRevuenueData,
+        filterConsignData,
         RevuenueData,
         RevenuedataSet
     };

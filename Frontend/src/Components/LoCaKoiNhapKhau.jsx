@@ -1,27 +1,35 @@
 import { useState, useEffect } from "react";
-import { Button, Container, Card } from "react-bootstrap";
-import axios from "axios";
-import Layout from "antd/es/layout/layout";
-import { Typography } from "antd";
-import Navbar from "../components/Navbar/Navbar.jsx";
+import { Button, Card } from "antd";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../An/Utils/axiosJS.js";
+import CustomerChatButton from "./Chat/CustomerChat.jsx";
 import Footer from "./Footer.jsx";
+import Navbar from "../components/Navbar/Navbar.jsx";
 import "./Css/locakoiStyle.css";
-import { Navigate, useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-const { Title } = Typography;
-
+import Text from "antd/lib/typography/Text";
+// Card layout đẹp mắt với grid
 export default function Locakoinhapkhau() {
   const [koiData, setKoiData] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:4000/get-kois-groupKoiID"
-        );
+        const response = await axiosInstance.get("/get-kois-groupKoiID");
+
         if (response.status === 200) {
-          console.log("Data fetched successfully:", response.data[0].result);
-          setKoiData(response.data[0].result || []); // Ensure koiData is an array
+          const groupedData = response.data.reduce((acc, group) => {
+            const firstKoi = group.result[0];
+            const koiCount = group.result.filter(
+              (koi) => koi.Status === 1
+            ).length;
+            acc[group.groupId] = {
+              firstKoi,
+              koiCount,
+            };
+            return acc;
+          }, {});
+          setKoiData(groupedData);
         } else {
           console.error("Unexpected response status:", response.status);
         }
@@ -33,95 +41,155 @@ export default function Locakoinhapkhau() {
     fetchData();
   }, []);
 
-  // Log koiData whenever it updates
-  useEffect(() => {
-    console.log("koiData updated:", koiData);
-  }, [koiData]);
-
-  // This useEffect logs koiData whenever it updates
-  useEffect(() => {
-    if (koiData) {
-      console.log("koiData updated:", koiData);
-    } else {
-      console.log("koiData is still null or undefined.");
-    }
-  }, [koiData]);
-
   return (
     <>
-      <Layout>
-        <Navbar />
-        <Container>
-          <div style={{ paddingTop: "100px" }}>
-            <h2>Lô Cá Koi Nhập Khẩu</h2>
-            <div style={{ textAlign: "center" }}>
-              <Button variant="danger">
-                Lô Cá Nhập Khẩu Cuối Năm Vip 2024
-              </Button>
-            </div>
-            <div className="listPrBlock active">
-              {koiData.map((koi) => (
-                <div className="wrapWidth" key={koi._id}>
-                  <Card
-                    style={{
-                      width: "100%",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <div style={{ marginTop: "0px" }}>
-                      <img
-                        src={koi.Image}
-                        alt={koi.KoiName}
-                        className="image"
-                        onClick={() =>
-                          navigate("/order", {
-                            state: { selectedItem: koi },
-                          })
-                        }
-                        style={{ cursor: "pointer" }} // Optional: change cursor to pointer for better UX
-                      />
-                    </div>
+      <Navbar />
+      <div
+        style={{
+          padding: "100px 20px",
+          background: "#f4f4f4",
+          textAlign: "center",
+        }}
+      >
+        <h2>Lô Cá Koi Nhập Khẩu</h2>
+        <Button
+          type="primary"
+          danger
+          size="large"
+          style={{ marginBottom: "50px" }}
+        >
+          Lô Cá Nhập Khẩu Cuối Năm Vip 2024
+        </Button>
 
-                    <Card.Body>
-                      <Card.Title className="namePr">{koi.KoiName}</Card.Title>
-                      <Card.Text>
-                        <p className="desText">Giới Tính: {koi.Gender}</p>
-                        <p className="desText">Kích Thước: {koi.Zize}</p>
-                        <p className="desText">Giống: {koi.Breed}</p>
-                        <p className="desText">Nguồn Gốc: {koi.Origin}</p>
-                      </Card.Text>
-                      <div style={{ textAlign: "center" }}>
-                        <Button
-                          variant="danger"
-                          className="btnType_1"
-                          onClick={() =>
-                            navigate("/order", {
-                              state: { selectedItem: koi },
-                            })
-                          }
-                        >
-                          Giá {new Intl.NumberFormat("vi-VN").format(koi.Price)}{" "}
-                          VND
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <Button
-              variant="danger"
-              className="btnType_1"
-              onClick={() => navigate("/koikygui", {})}
+        {/* Hiển thị các koi theo grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gap: "20px",
+            justifyItems: "center",
+            padding: "0 20px",
+          }}
+        >
+          {Object.entries(koiData).map(([groupId, { firstKoi, koiCount }]) => (
+            <Card
+              key={groupId}
+              hoverable
+              cover={
+                <img
+                  alt={firstKoi.KoiName || "Koi"}
+                  src={firstKoi.Image}
+                  style={{
+                    width: "100%",
+                    height: "300px",
+                  }}
+                />
+              }
+              style={{
+                borderRadius: "8px",
+                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "#fff",
+                transition: "transform 0.3s ease",
+              }}
+              onClick={() =>
+                navigate("/order", { state: { selectedItem: firstKoi } })
+              }
             >
-              Xem thêm
-            </Button>
-          </div>
-        </Container>
-        <Footer />
-      </Layout>
+              <Card.Meta
+                description={
+                  <div style={{ textAlign: "left" }}>
+                    <h5 style={{ color: "red" }}>
+                      {firstKoi.KoiName || "Koi không tên"}
+                    </h5>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Kích thươc
+                      </span>{" "}
+                      {firstKoi.Size || "Không xác định"} cm
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Giống:
+                      </span>{" "}
+                      {firstKoi.Breed || "Không xác định"}
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Nguồn gốc
+                      </span>{" "}
+                      {firstKoi.Origin || "Không xác định"}
+                    </p>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Số lượng
+                      </span>{" "}
+                      {koiCount} con
+                    </p>
+                  </div>
+                }
+              />
+              <div style={{ marginTop: "20px", textAlign: "center" }}>
+                <Button
+                  type="primary"
+                  danger
+                  size="large"
+                  style={{ width: "100%" }}
+                  onClick={() =>
+                    navigate("/order", { state: { selectedItem: firstKoi } })
+                  }
+                >
+                  Giá {new Intl.NumberFormat("vi-VN").format(firstKoi.Price)}{" "}
+                  VND
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          {Object.keys(koiData).length <= 0 && (
+            <div>
+              {" "}
+              <h2 style={{ color: "red" }}>Hết hàng</h2>
+            </div>
+          )}
+          <Button
+            type="primary"
+            danger
+            size="large"
+            onClick={() => navigate("/koidangban")}
+          >
+            Xem thêm
+          </Button>
+        </div>
+      </div>
+
+      <CustomerChatButton />
+      <Footer />
     </>
   );
 }

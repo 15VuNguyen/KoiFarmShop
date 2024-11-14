@@ -1,45 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useOrder } from "../Context/OrderContext";
-import axios from "axios";
-import { Empty } from "antd"; // Import only Empty from Ant Design
-import Cookies from "js-cookie";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Typography } from "antd";
+import axiosInstance from "../An/Utils/axiosJS";
 const { Text } = Typography;
 
 export default function ShoppingCart() {
-  const orderDetail = useOrder();
   const [koiList, setKoiList] = useState([]);
   const [error, setError] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0); // Initialize to 0
-  const navigate = useNavigate();
-  const handlePayment = () => {
-    navigate("/formfillinformation");
-  };
-
-  // useEffect(() => {
-  //   const storedKoiList = JSON.parse(localStorage.getItem("koiList")) || [];
-  //   const storedTotalPrice =
-  //     parseFloat(localStorage.getItem("totalPrice")) || 0;
-
-  //   const updatedKoiList = storedKoiList.map((koi) => ({
-  //     ...koi,
-  //     quantity: koi.quantity || 1,
-  //   }));
-
-  //   setKoiList(updatedKoiList);
-  //   setTotalPrice(storedTotalPrice);
-
-  //   // Check if the koi list is empty and orderId is available
-  //   if (updatedKoiList.length === 0 && orderDetail?.orderId) {
-  //     fetchOrderDetails(orderDetail.orderId);
-  //   }
-  // }, [orderDetail]);
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/order/detail", {
+        const response = await axiosInstance.get("/order/detail", {
           headers: {
             "Content-Type": "application/json",
           },
@@ -83,8 +55,8 @@ export default function ShoppingCart() {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:4000/order/detail/edit",
+      const response = await axiosInstance.post(
+        "/order/detail/edit",
         {
           KoiID: koiId,
           Quantity: quantity,
@@ -96,6 +68,8 @@ export default function ShoppingCart() {
 
       if (response.status === 200) {
         const { result } = response.data;
+
+        console.log("res: ", response);
 
         // Kiểm tra nếu có thông báo về số lượng không đủ
         if (
@@ -128,8 +102,8 @@ export default function ShoppingCart() {
   const handleDeleteKoi = async (koiId) => {
     console.log(`Deleting Koi with ID: ${koiId}`);
     try {
-      const response = await axios.post(
-        "http://localhost:4000/order/detail/remove",
+      const response = await axiosInstance.post(
+        "/order/detail/remove",
         { KoiID: koiId.toString() },
         {
           withCredentials: true,
@@ -171,7 +145,7 @@ export default function ShoppingCart() {
                       alignItems: "center",
                       fontFamily: "Roboto, sans-serif",
                       fontSize: "15px",
-                      padding: "10px 0", // Thêm khoảng cách cho hàng
+                      padding: "10px 0",
                     }}
                   >
                     <img
@@ -268,20 +242,6 @@ export default function ShoppingCart() {
                 VND
               </span>
             </h3>
-            <button
-              onClick={handlePayment}
-              style={{
-                padding: "10px 20px",
-                fontSize: "16px",
-                backgroundColor: "#FF6F61", // Màu chủ đạo
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-            >
-              Mua Hàng
-            </button>
           </div>
         </>
       ) : (

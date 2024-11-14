@@ -1,0 +1,245 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, 文泉驛正黑, "WenQuanYi Zen Hei", "Hiragino Sans GB", "儷黑 Pro", "LiHei Pro", "Heiti TC", 微軟正黑體, "Microsoft JhengHei UI", "Microsoft JhengHei", sans-serif;
+}
+.common-css{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 100%;
+    padding: 20px;
+    margin: 10px 0;
+}
+.title{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding: 20px;
+    width: 100%;
+    margin: 0;
+    h2{
+    text-align: start;
+    }
+}
+.white-board{
+    background-color: transparent;
+    /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+    padding: 0;
+}
+.user-info{
+    gap:40px;
+    h4{
+
+    }
+    .u-content{
+        gap: 15px;
+        display: flex;
+        .header-content{
+            display: flex;
+            gap: 15px;
+        }
+    }
+}
+.user-info-form{
+    gap:100px;
+    display: flex;
+}
+.update-form {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: max-height 0.2s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .update-form.show {
+    max-height: 1000px; 
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .change-btn{
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    span{
+        font-size: 12px;
+        padding: 5px;
+        font-family: inherit;
+        font-weight: bold;
+    }
+  }
+.product-info{
+
+}
+.voucher{   
+    .voucher-container{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        padding: 20px 0;
+    }
+    .voucher-info-form{
+        
+        max-height: 0;
+        transform: translateY(-20px);
+        opacity: 0;
+        transition: max-height 0.5s ease-in-out, transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+    .voucher-info-form.show{
+        max-height: 500px;
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .voucher-title{
+        font-size: 20px;
+    }
+    .voucher-list{
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 20px;
+    }
+    .discount-btn{
+        padding: 15px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .voucher-detail{
+        /* border: 1px solid #ccc;
+        height: 80px;
+        width: 175px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px; 
+        cursor: pointer; */
+        display: flex;
+  justify-content: space-between; /* Để chia đều không gian giữa các phần tử */
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+    }
+    .voucher-detail.active {
+        background-color: #ffbe6e;
+        .rank-name, .discount{
+            opacity: 1;
+        }
+      }
+    .voucher-detail:hover {
+        background-color: #ffbe6e;
+        .rank-name, .discount{
+            opacity: 0.5;
+        }
+      }
+    .voucher-detail.disable{
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .voucher-detail.disable:hover{
+        background-color: #f8f9fa;
+        .rank-name, .discount{
+            opacity: 1;
+        }
+    }
+    .rank-name, .discount{
+        height: 40px;
+        font-size: large;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .rank-name{
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+    }
+    .discount{
+        font-size: 14px;
+        color: #28a745;
+    }
+}
+.bb{
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+}
+.total{
+    .payment-method{
+        width: 100%;
+        display: grid;
+        grid-template-columns: 65% 35%;
+        .payment-detail{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .payment-selector{
+            display: grid;
+            grid-template-columns: 100% 53%;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(0);
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out; 
+            .selector{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .selector p{
+                padding: 10px;
+                border-radius: 2px;
+            }
+            .selector p:hover{
+                background-color: #ffbe6e;
+            }
+            .selector .active{
+                border: 1px solid orange;
+                background-color: orange;
+            }
+        }
+        .payment-selector.show{
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(20px);
+            .selector p{
+               cursor: pointer;
+            }
+        }
+    }
+    .total-info-form{
+        display: grid;
+        grid-template-columns: 60% 40%;
+        padding-top: 20px;  
+        .total-detail{
+            .price-content{
+                display: grid;
+                grid-template-columns: 40% 60%;
+                padding: 10px 0;
+            }
+            .price-title{
+                font-weight: 500;
+                opacity: 0.5;
+        
+            }
+            .totalPrice{
+                font-size: 50px;
+                color: #FF6A00;
+            }
+            .price{
+                text-align: end;
+                margin: 0;
+            }
+            .discount-note{
+                font-size: 15px;
+                opacity: 0.6;
+            }
+        }
+    }
+}
+.pay-btn{
+    border-radius: 2px;
+
+}
+.pay-btn:hover{
+    background-color: rgba(247, 73, 42,0.7);
+    border-color: rgba(247, 73, 42,0.7);
+}

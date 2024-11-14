@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Table, Tag, Dropdown, Button, Checkbox, Menu } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { Table, Tag, Dropdown, Button, Checkbox, Menu, Upload, message, Tooltip } from 'antd';
+import { DownOutlined, EditOutlined, CopyOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import useFetchInvoices from '../../Hooks/useFetchInvoices';
+import { func } from 'prop-types';
 
-export default function InvoiceTable({ data }) {
+export default function InvoiceTable({ data, actions }) {
   const invoices = useFetchInvoices();
-  const [visibleColumns, setVisibleColumns] = useState(['_id', 'GroupKoiIDInvoice', 'InvoiceDate', 'Status', 'Discount', 'TotalPrice']);
+  const [visibleColumns, setVisibleColumns] = useState(['_id', 'GroupKoiIDInvoice', 'InvoiceDate', 'Status', 'Discount', 'TotalPrice,', 'action']);
   const [activeFilters, setActiveFilters] = useState([]);
   const [filteredData, setFilteredData] = useState(data);
 
@@ -16,58 +17,94 @@ export default function InvoiceTable({ data }) {
       currency: 'VND',
     }).format(value);
   };
-
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+    message.success("Đã sao chép ID vào clipboard!");
+  }
   const columns = [
     {
-      title: 'ID',
+      title: 'Mã số',
       dataIndex: '_id',
       key: '_id',
       sorter: (a, b) => a._id.localeCompare(b._id),
+      render: (text) => (
+        <>
+          <Tooltip title="Sao chép ID">
+            <Tag
+              icon={<CopyOutlined />}
+              style={{ cursor: 'pointer' }}
+              onClick={() => copyToClipboard(text)}
+              color="blue">{text}</Tag>
+
+
+          </Tooltip>
+        </>
+      ),
     },
     {
-      title: 'Group Invoice ID',
+      title: 'Mã lô cá koi',
       dataIndex: 'GroupKoiIDInvoice',
       key: 'GroupKoiIDInvoice',
       sorter: (a, b) => a.GroupKoiIDInvoice.localeCompare(b.GroupKoiIDInvoice),
+      render: (text) => (
+        <>
+         <Tooltip title="Sao chép ID">
+          <Tag
+            icon={<CopyOutlined />}
+            style={{ cursor: 'pointer' }}
+            onClick={() => copyToClipboard(text)}
+          color="blue">{text}</Tag>
+         
+           
+          </Tooltip>
+        </>
+      ),
     },
     {
-      title: 'Invoice Date',
+      title: 'Ngày tạo hóa đơn',
       dataIndex: 'InvoiceDate',
       key: 'InvoiceDate',
       sorter: (a, b) => moment(a.InvoiceDate).unix() - moment(b.InvoiceDate).unix(),
       render: (date) => moment(date).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
-      title: 'Status',
+      title: 'Trạng thái',
       dataIndex: 'Status',
       key: 'Status',
       sorter: (a, b) => a.Status - b.Status,
       filters: [
-        { text: 'Received', value: 1 },
-        { text: 'Sold out', value: 2 },
+        { text: 'Đã nhận', value: 1 },
+        { text: 'Hết hàng', value: 2 },
       ],
       filterMultiple: false,
       onFilter: (value, record) => record.Status === value,
       render: (status) => {
         let color = status === 1 ? 'green' : 'volcano';
-        let text = status === 1 ? 'Received' : 'Sold out';
+        let text = status === 1 ? 'Đã nhận' : 'Hết hàng';
         return <Tag color={color} key={status}>{text}</Tag>;
       }
     },
     {
-      title: 'Discount (%)',
+      title: 'Giảm giá (%)',
       dataIndex: 'Discount',
       key: 'Discount',
       sorter: (a, b) => a.Discount - b.Discount,
       render: (discount) => `${discount}%`,
     },
     {
-      title: 'Total Price',
+      title: 'Tổng giá',
       dataIndex: 'TotalPrice',
       key: 'TotalPrice',
       sorter: (a, b) => a.TotalPrice - b.TotalPrice,
       render: (price) => formatCurrency(price),
     },
+    {
+      title: 'Hành động',
+      key: 'action',
+      render: (text, record) => (
+        <Button icon={<EditOutlined />} type="primary" onClick={() => actions(record)}>Chỉnh sửa</Button>
+      ),
+    }
   ];
 
   const columnSelectionMenu = (
@@ -106,15 +143,17 @@ export default function InvoiceTable({ data }) {
     <div>
       <Dropdown overlay={columnSelectionMenu} trigger={['click']} >
         <Button style={{ marginBottom: 16 }}>
-          Choose Columns <DownOutlined />
+          Chọn cột <DownOutlined />
         </Button>
       </Dropdown>
       <Table
+        scroll={{ x: 1300 }}
         columns={columns.filter(col => visibleColumns.includes(col.key))}
         dataSource={data}
         rowKey="_id"
         pagination={{ pageSize: 5 }}
         onChange={handleTableChange}
+        size='small'
       />
     </div>
   );

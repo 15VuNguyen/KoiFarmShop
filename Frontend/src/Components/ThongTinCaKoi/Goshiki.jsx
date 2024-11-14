@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer";
 import axios from "axios";
 import CardGrid from "../Cardgrid";
 import { Layout, Typography } from "antd";
-const { Title, Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 import "../Css/koiStyle.css";
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Goshiki/ca-koi-goshiki-3 (1).webp";
+import img2 from "../../assets/Koi-Goshiki/ca-koi-goshiki-2.webp";
+import img3 from "../../assets/Koi-Goshiki/ca-koi-goshiki-1.webp";
+import img4 from "../../assets/img_4.png";
+import img5 from "../../assets/img_5.png";
 export default function Goshiki() {
-  const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -251,60 +253,146 @@ export default function Goshiki() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage ">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage "
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về cá koi Goshiki
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết Goshiki Koi
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách chọn Goshiki Koi
                     </span>
                     <ul>
-                      <li>
-                        <span onClick={handleScroll31} className="contentBox">
+                      <li style={{ paddingTop: "10px" }}>
+                        <span
+                          onClick={handleScroll31}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.1 Hình dáng
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll32} className="contentBox">
+                        <span
+                          onClick={handleScroll32}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.2 Màu sắc
                         </span>
                       </li>
-                      <li>
+                      <li style={{ paddingTop: "10px" }}>
                         {" "}
-                        <span onClick={handleScroll33} className="contentBox">
+                        <span
+                          onClick={handleScroll33}
+                          className="contentBox"
+                          style={{
+                            cursor: "pointer",
+                            color: "#920202",
+                          }}
+                        >
                           3.3 Tiêu chí để chọn koi Goshiki nhỏ
                         </span>
                       </li>
                     </ul>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc Cá Koi Goshiki
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Ý nghĩa đối với phong thủy
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Giá cá koi Goshiki bao nhiêu?
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll7} className="contentBox">
+                    <span
+                      onClick={handleScroll7}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       7. Tại sao nên mua Goshiki Koi tại IKoi?
                     </span>
                   </li>
@@ -312,7 +400,9 @@ export default function Goshiki() {
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2 className="noidungchitiet" style={{ paddingTop: "20px" }}>
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style">
                   Xuất xứ từ Nhật với vẻ đẹp thuần khiết và những ưu điểm nổi
                   trội, Cá Koi Goshiki đảm bảo sẽ đem đến cho các bạn những trải
@@ -323,7 +413,13 @@ export default function Goshiki() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   1. Giới thiệu về cá koi Goshiki{" "}
                 </h3>
                 <div>
@@ -373,21 +469,17 @@ export default function Goshiki() {
                     </li>
                   </ul>
                 </div>
+                <Paragraph className="paragraph-Style">
+                  Ginrin Goshiki được tạo ra thông qua việc phối giống giữa một
+                  con Ginrin Kohaku và một con Goishiki. Chogoroun là một nhà
+                  nhân giống nổi tiếng nhưng chỉ sản xuất được ít con lai đẹp.
+                  Loại cá này chỉ thật sự thu hút khi đến 2 tuổi. Goshiki Sanke
+                  được tạo ra thông qua việc phối giống giữa một con Asagi và
+                  một con Sanke.
+                </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <p style={{ fontSize: "15px", fontWeight: "400" }}>
-                    <Paragraph className="paragraph-Style">
-                      Ginrin Goshiki được tạo ra thông qua việc phối giống giữa
-                      một con Ginrin Kohaku và một con Goishiki. Chogoroun là
-                      một nhà nhân giống nổi tiếng nhưng chỉ sản xuất được ít
-                      con lai đẹp. Loại cá này chỉ thật sự thu hút khi đến 2
-                      tuổi. Goshiki Sanke được tạo ra thông qua việc phối giống
-                      giữa một con Asagi và một con Sanke.
-                    </Paragraph>
-                  </p>
-                  <img
-                    src="src/assets/Koi-Goshiki/ca-koi-goshiki-3 (1).webp"
-                    style={{ width: "50%" }}
-                  />
+                  <p style={{ fontSize: "15px", fontWeight: "400" }}></p>
+                  <img src={img1} style={{ width: "50%" }} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">
                       Cá Koi Goshiki vô cùng nổi bật
@@ -397,7 +489,15 @@ export default function Goshiki() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>2. Cách nhận biết Goshiki Koi</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2. Cách nhận biết Goshiki Koi
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Để trở thành một con cá koi Goshiki đẹp, nó cần phải có nét
@@ -431,14 +531,22 @@ export default function Goshiki() {
                   </ul>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-Goshiki/ca-koi-goshiki-2.webp" />
+                  <img src={img2} />
                   <Paragraph className="paragraph-Style">
                     Dòng cá Koi Kuro Goshiki
                   </Paragraph>
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn mua cá Koi Ginrin</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn mua cá Koi Ginrin
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Những người đã có kinh nghiệm với việc nuôi và chơi Koi sẽ
@@ -500,14 +608,20 @@ export default function Goshiki() {
                   </ul>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img src="src/assets/Koi-Goshiki/ca-koi-goshiki-1.webp" />
+                  <img src={img3} />
                   <div style={{ textAlign: "center" }}>
                     <Text className="text-Style">Các dòng Cá Koi Goshiki</Text>
                   </div>
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách chăm sóc Cá Koi Goshiki
                 </h3>
                 <div>
@@ -574,7 +688,15 @@ export default function Goshiki() {
                 </div>
               </div>
               <div id="5">
-                <h3 style={{ color: "red" }}>5. Ý nghĩa đối với phong thủy </h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  5. Ý nghĩa đối với phong thủy{" "}
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Trong văn hóa Nhật Bản, Koi Goshiki được coi là mang lại sự
@@ -590,7 +712,13 @@ export default function Goshiki() {
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6. Giá cá koi Goshiki bao nhiêu?{" "}
                 </h3>
                 <div>
@@ -621,7 +749,13 @@ export default function Goshiki() {
                 </div>
               </div>
               <div id="7">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   7. Tại sao nên mua Goshiki Koi tại IKoi?
                 </h3>
                 <div>
@@ -656,13 +790,10 @@ export default function Goshiki() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img4} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <img
-                src="src/assets/img_5.png"
-                style={{ objectFit: "cover", width: "100%" }}
-              />
+              <img src={img5} style={{ objectFit: "cover", width: "100%" }} />
             </div>
           </div>
         </Container>

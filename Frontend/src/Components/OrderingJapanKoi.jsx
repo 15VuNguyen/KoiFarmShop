@@ -30,14 +30,11 @@ export default function OrderingJapanKoi() {
       console.log(selectedSize);
       console.log(selectedBreed);
       try {
-        const response = await axios.post(
-          "http://localhost:4000/order/detail/price/minmax",
-          {
-            Size: selectedSize,
-            Breed: selectedBreed,
-            CategoryID: selectedItem.CategoryID,
-          }
-        );
+        const response = await axios.post("/order/detail/price/minmax", {
+          Size: selectedSize,
+          Breed: selectedBreed,
+          CategoryID: selectedItem.CategoryID,
+        });
         console.log(response.data);
         setMin(response.data.result.min);
         setMax(response.data.result.max);

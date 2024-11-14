@@ -5,6 +5,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import Footer from "./Footer";
+import { toast } from "react-toastify";
+import axiosInstance from "../An/Utils/axiosJS";
 
 const { Title } = Typography;
 
@@ -23,14 +25,14 @@ const PaymentMethod = () => {
 
       // Gửi yêu cầu thanh toán với số tiền từ localStorage
       if (method === "Zalo Pay") {
-        response = await axios.post(
-          `http://localhost:4000/payment/paymentZalopay`,
+        response = await axiosInstance.post(
+          `/payment/paymentZalopay`,
           { total: totalPrice }, // Gửi tổng giá trị từ localStorage
           { withCredentials: true }
         );
       } else if (method === "Momo Pay") {
         response = await axios.post(
-          `http://localhost:4000/payment/paymentMomo`,
+          `/payment/paymentMomo`,
           { total: totalPrice }, // Gửi tổng giá trị từ localStorage
           { withCredentials: true }
         );
@@ -49,13 +51,13 @@ const PaymentMethod = () => {
       }
     } catch (error) {
       console.error("Error during payment processing:", error);
-      message.error("Payment processing failed. Please try again.");
+      toast.error("Thanh toán thất bại. Vui lòng thử lại sau.");
     }
   };
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/order/detail", {
+        const response = await axiosInstance.get("/order/detail", {
           headers: {
             "Content-Type": "application/json",
           },
@@ -64,7 +66,8 @@ const PaymentMethod = () => {
         console.log(response);
         if (response.status === 200) {
           const { koiList, orderDT } = response.data.result;
-          const { Items, TotalPrice } = orderDT;
+          const { Items, TotalPrice, salePercent } = orderDT;
+          const sale = salePercent ? salePercent : 0;
           const koiMap = new Map(koiList.map((koi) => [koi._id, koi]));
           const updatedKoiList = Items.map((item) => {
             const koi = koiMap.get(item.KoiID);
@@ -73,7 +76,7 @@ const PaymentMethod = () => {
           setKoiList(updatedKoiList);
           // Save to localStorage
           // localStorage.setItem("koiList", JSON.stringify(updatedKoiList));
-          setTotalPrice(TotalPrice);
+          setTotalPrice(Math.round(((100 - sale) / 100) * TotalPrice));
           console.log("Order details fetched and stored in localStorage.");
         } else {
           console.error(`API request failed with status: ${response.status}`);
@@ -90,7 +93,28 @@ const PaymentMethod = () => {
     };
 
     fetchOrderDetails();
+
+    // const removeOrderCookie = async () => {
+    //   try {
+    //     await axiosInstance.get("http://localhost:4000/order/cookie/remove", {
+    //       withCredentials: true,
+    //     });
+    //     console.log("Order cookie successfully removed");
+    //   } catch (error) {
+    //     console.error("Error removing order cookie:", { message: error.message });
+    //   }
+    // };
+
+    // window.onbeforeunload = () => {
+    //   removeOrderCookie();
+    // };
+
+    // return () => {
+    //   removeOrderCookie();
+    //   window.onbeforeunload = null;
+    // };
   }, []);
+
   return (
     <>
       <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
@@ -100,38 +124,17 @@ const PaymentMethod = () => {
             Chọn Phương Thức Thanh Toán
           </Title>
           <Space direction="vertical" size="large" style={{ width: "100%" }}>
-            <Button
-              type="primary"
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease",
-              }}
-              onClick={() => handlePaymentMethodSelect("Zalo Pay")}
-            >
-              Zalo Pay
-            </Button>
-            <Button
-              type="primary"
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                transition: "background-color 0.3s ease",
-              }}
-              onClick={() => handlePaymentMethodSelect("Momo Pay")}
-            >
-              Momo Pay
-            </Button>
+            <div onClick={() => handlePaymentMethodSelect("Zalo Pay")}>
+              <img
+                src="src/assets/logozalopay.jpg"
+                alt="Zalo Pay"
+                style={{ width: "15%" }}
+              />
+            </div>
           </Space>
           <div style={{ marginTop: "20px", fontSize: "16px", color: "#555" }}>
             <p>
-              Tổng Giá: <strong>{totalPrice} VND</strong>
+              Tổng Giá: <strong>{totalPrice.toLocaleString()} ₫</strong>
             </p>
           </div>
         </div>

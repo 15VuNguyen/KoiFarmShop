@@ -12,14 +12,51 @@ class InvoicesService {
     let group_koi_id = new ObjectId()
     const GroupKoiID = group_koi_id.toString()
 
+    const priceOneKoi = payload.PriceOneKoi ?? 0
+    const quantity = payload.Quantity ?? 0
+    const discount = payload.Discount ?? 0
+
+    const SupplierID = payload.SupplierID
+    const supplier = await databaseService.suppliers.findOne(
+      { _id: new ObjectId(SupplierID) },
+      { projection: { SupplierName: 1 } }
+    )
+    if (!supplier) {
+      throw new Error('Supplier not found')
+    }
+    const SupplierName = supplier.SupplierName
+    console.log('SupplierName:', SupplierName)
+
+    const GroupKoiCategoryID = payload.GroupKoiCategoryID
+    const category = await databaseService.category.findOne(
+      { _id: new ObjectId(GroupKoiCategoryID) },
+      { projection: { CategoryName: 1 } }
+    )
+    if (!category) {
+      throw new Error('Category not found')
+    }
+    const CategoryName = category.CategoryName
+    console.log('CategoryName:', CategoryName)
+
+    // lấy tháng
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    //lấy ngày cho hóa đơn
+    const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+
+    //lấy tháng cho koi name
+    const month = String(localTime.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
+
     const groupKoiPayLoad = {
       _id: group_koi_id,
-      SupplierID: payload.SupplierID,
-      GroupKoiCategoryID: payload.GroupKoiCategoryID,
-      Dimension: payload.Dimension,
+      SupplierID: SupplierID,
+      GroupKoiCategoryID: GroupKoiCategoryID,
+      Dimension: payload.Dimension ?? 0,
       BreedGroupKoi: payload.BreedGroupKoi,
-      PriceOneKoi: payload.PriceOneKoi,
-      Quantity: payload.Quantity,
+      PriceOneKoi: priceOneKoi,
+      Quantity: quantity,
       GroupKoiImage: payload.GroupKoiImage,
       GroupKoiVideo: payload.GroupKoiVideo
     }
@@ -32,28 +69,36 @@ class InvoicesService {
       const koiPayload = {
         _id: koi_id,
         GroupKoiID: GroupKoiID,
-        CategoryID: payload.GroupKoiCategoryID.toString(),
-        Size: payload.Dimension,
+        KoiName: `${CategoryName} ${SupplierName} Tháng ${month}`,
+        Origin: SupplierName,
+        CategoryID: GroupKoiCategoryID.toString(),
+        Size: payload.Dimension ?? 0,
         Breed: payload.BreedGroupKoi,
         Status: 1,
-        Price: payload.PriceOneKoi + 700000,
+        Price: priceOneKoi + 700000,
         Image: payload.GroupKoiImage,
         Video: payload.GroupKoiVideo
       }
+      // console.log('koiPayload:', koiPayload)
       koiArray.push(new KoiSchema(koiPayload))
     }
     const koiResult = await databaseService.kois.insertMany(koiArray)
 
     //tạo hóa đơn
     const InvoiceID = new ObjectId()
+
+    // const currentDate = new Date()
+    // const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    // const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+    // const invoiceDateTime = localTime.toISOString().replace('Z', '+07:00')
+
     const invoicePayload = {
       _id: InvoiceID,
       GroupKoiIDInvoice: GroupKoiID,
-      InvoiceDate: new Date(),
+      InvoiceDate: invoiceDateTime,
       Status: 1,
-      Discount: payload.Discount,
-      TotalPrice:
-        payload.Quantity * payload.PriceOneKoi - payload.Quantity * payload.PriceOneKoi * (payload.Discount / 100)
+      Discount: discount,
+      TotalPrice: quantity * priceOneKoi - quantity * priceOneKoi * (discount / 100)
     }
     const invoiceResult = await databaseService.invoices.insertOne(new InvoiceSchema(invoicePayload))
 
@@ -84,6 +129,117 @@ class InvoicesService {
       })
     }
     return invoice
+  }
+
+  async updateInvoice(invoiceID, payload) {
+    //tìm consign dựa vào consignID
+    const invoiceObjectID = new ObjectId(invoiceID)
+    const invoice = await databaseService.invoices.findOne({ _id: invoiceObjectID })
+    if (invoice == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.INVOICE_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const groupKoiObjectID = new ObjectId(invoice.GroupKoiIDInvoice)
+    const groupKoi = await databaseService.groupKois.findOne({ _id: groupKoiObjectID })
+    if (groupKoi == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.GROUP_KOI_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const groupKoiString = groupKoiObjectID.toString()
+    const kois = await databaseService.kois.find({ GroupKoiID: groupKoiString }).toArray()
+    console.log(kois)
+    if (kois == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.KOIS_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const quantityGroupKoi = payload.Quantity ?? groupKoi.Quantity ?? 0
+    const priceOneKoiGroupKoi = payload.PriceOneKoi ?? groupKoi.PriceOneKoi ?? 0
+    const discountInvoice = payload.Discount ?? invoice.Discount ?? 0
+    // cập nhật lại các thông tin invoice
+    const invoiceUpdate = await databaseService.invoices.updateOne({ _id: new ObjectId(invoice._id) }, [
+      {
+        $set: {
+          InvoiceDate: payload.InvoiceDate || invoice.InvoiceDate || '',
+          Status: payload.Status || invoice.Status || '',
+          Discount: discountInvoice,
+          TotalPrice:
+            quantityGroupKoi * priceOneKoiGroupKoi - quantityGroupKoi * priceOneKoiGroupKoi * (discountInvoice / 100) ??
+            invoice.TotalPrice ??
+            0
+        }
+      }
+    ])
+    //cập nhật lại thông tin GroupKoi, nếu có thay đổi thì cập nhật cái mới, không thì giữ nguyên
+    const groupKoiUpdate = await databaseService.groupKois.updateOne({ _id: new ObjectId(groupKoi._id) }, [
+      {
+        $set: {
+          SupplierID: payload.SupplierID || groupKoi.SupplierID || '',
+          GroupKoiCategoryID: payload.GroupKoiCategoryID || groupKoi.GroupKoiCategoryID || '',
+          Dimension: payload.Dimension ?? groupKoi.Dimension ?? 0,
+          BreedGroupKoi: payload.BreedGroupKoi || groupKoi.BreedGroupKoi || '',
+          PriceOneKoi: priceOneKoiGroupKoi,
+          Quantity: quantityGroupKoi,
+          GroupKoiImage: payload.GroupKoiImage || groupKoi.GroupKoiImage || '',
+          GroupKoiVideo: payload.GroupKoiVideo || groupKoi.GroupKoiVideo || ''
+        }
+      }
+    ])
+
+    // Cập nhật mảng các con Koi liên quan đến GroupKoiID
+    const koiUpdatePayload = {
+      CategoryID: payload.GroupKoiCategoryID || groupKoi.GroupKoiCategoryID,
+      Size: payload.Dimension ?? groupKoi.Dimension ?? 0,
+      Breed: payload.BreedGroupKoi || groupKoi.BreedGroupKoi,
+      Price: priceOneKoiGroupKoi + 700000 || groupKoi.PriceOneKoi,
+      Image: payload.GroupKoiImage || groupKoi.GroupKoiImage,
+      Video: payload.GroupKoiVideo || groupKoi.GroupKoiVideo
+    }
+
+    const koiUpdateResult = await databaseService.kois.updateMany(
+      { GroupKoiID: groupKoiString },
+      { $set: koiUpdatePayload }
+    )
+
+    const currentQuantity = kois.length
+    const newQuantity = payload.Quantity || groupKoi.Quantity
+
+    if (newQuantity > currentQuantity) {
+      // Tạo thêm các con Koi mới
+      const koiArray = []
+      for (let i = 0; i < newQuantity - currentQuantity; i++) {
+        let koi_id = new ObjectId()
+        const koiPayload = {
+          _id: koi_id,
+          GroupKoiID: groupKoiString,
+          CategoryID: payload.GroupKoiCategoryID || groupKoi.GroupKoiCategoryID,
+          Size: payload.Dimension ?? groupKoi.Dimension ?? 0,
+          Breed: payload.BreedGroupKoi || groupKoi.BreedGroupKoi,
+          Status: 1,
+          Price: priceOneKoiGroupKoi + 700000 || groupKoi.PriceOneKoi,
+          Image: payload.GroupKoiImage || groupKoi.GroupKoiImage,
+          Video: payload.GroupKoiVideo || groupKoi.GroupKoiVideo
+        }
+        koiArray.push(new KoiSchema(koiPayload))
+      }
+      await databaseService.kois.insertMany(koiArray)
+    } else if (newQuantity < currentQuantity) {
+      // Xóa bớt các con Koi hiện có
+      const koiIdsToDelete = kois.slice(newQuantity).map((koi) => koi._id)
+      console.log(koiIdsToDelete)
+      await databaseService.kois.deleteMany({ _id: { $in: koiIdsToDelete } })
+    }
+
+    return {
+      invoice: invoiceUpdate,
+      groupKoi: groupKoiUpdate,
+      kois: koiUpdateResult
+    }
   }
 }
 

@@ -8,6 +8,11 @@ import Layout from "antd/es/layout/layout";
 import { Typography } from "antd";
 const { Title, Text, Paragraph } = Typography;
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Doitsu/doitsui.webp";
+import img2 from "../../assets/Koi-Doitsu/ca-koi-doitsu-2.webp";
+import img3 from "../../assets/Koi-Doitsu/ca-koi-doitsu-1.webp";
+import img4 from "../../assets/img_4.png";
+import img5 from "../../assets/img_5.png";
 export default function Doitsu() {
   const [cardData, setCardData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -198,42 +203,107 @@ export default function Doitsu() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage ">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage "
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về Cá Koi Doitsu
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết cá Koi Doitsu
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Các dòng koi doitsu đẹp trên thị trường
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chọn mua Doitsu Koi đẹp, chất lượng
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Cách chăm sóc Cá Koi Doitsu
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Giá cá koi Doitsu bao nhiêu?
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll7} className="contentBox">
-                      7. Tại sao nên mua Showa Koi tại siêu thị cá Koi VN:
+                    <span
+                      onClick={handleScroll7}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
+                      7. Tại sao nên mua Doitsu Koi tại IKoi:
                     </span>
                   </li>
                 </ul>
@@ -250,7 +320,15 @@ export default function Doitsu() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu về Cá Koi Doitsu</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu về Cá Koi Doitsu
+                </h3>
                 <Paragraph className="paragraph-Style">
                   Cá Koi Doitsu ra đời vào những năm 1904, với hình dáng độc
                   đáo, là sự kết hợp lai giữa hai dòng cá Koi Nhật Bản và cá da
@@ -261,10 +339,7 @@ export default function Doitsu() {
                   giống cá chép Nhật.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Doitsu/doitsui.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <p style={{ fontSize: "15px", fontWeight: "400" }}>
                     Dòng cá Koi Doitsu
                   </p>
@@ -312,7 +387,15 @@ export default function Doitsu() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>2.Cách nhận biết cá Koi Doitsu</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2.Cách nhận biết cá Koi Doitsu
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Để nhận biết cá Koi Doitsu giữa các loại cá Koi khác như
@@ -341,7 +424,13 @@ export default function Doitsu() {
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   3. Các dòng koi doitsu đẹp trên thị trường
                 </h3>
                 <div>
@@ -424,12 +513,18 @@ export default function Doitsu() {
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   4. Cách chọn mua Doitsu Koi đẹp, chất lượng
                 </h3>
                 <div>
                   <div style={{ textAlign: "center" }}>
-                    <img src="src/assets/Koi-Doitsu" style={{ width: "50%" }} />
+                    <img src={img2} style={{ width: "50%" }} />
                     <p style={{ fontSize: "15px", fontWeight: "400" }}>
                       Doitsu Koi đẹp
                     </p>
@@ -439,9 +534,18 @@ export default function Doitsu() {
                   Để mua được chú cá Koi Doitsu khỏe mạnh, chất lượng tốt bạn
                   cần có những tiêu chí hàng đầu để đánh giá cá sau:
                 </Paragraph>
-                <ul style={{ fontSize: "15px", fontWeight: "400" }}>
+                <ul
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "400",
+                    listStyleType: "none",
+                  }}
+                >
                   <li>
-                    <span className="span-Style"> Vảy </span>
+                    <span className="span-Style" style={{ color: "#920202" }}>
+                      {" "}
+                      Vảy{" "}
+                    </span>
                     <Paragraph className="paragraph-Style">
                       Koi Doitsu là dòng cá không có vảy hoặc có ít vảy, và nếu
                       có vảy thì phải ở vị trí đẹp tạo được sự độc đáo riêng cho
@@ -450,7 +554,9 @@ export default function Doitsu() {
                     </Paragraph>
                   </li>
                   <li>
-                    <span className="span-Style">Màu sắc của cá</span>
+                    <span className="span-Style" style={{ color: "#920202" }}>
+                      Màu sắc của cá
+                    </span>
                     <Paragraph className="paragraph-Style">
                       Tránh chọn cá có dáng bơi lắc lư lay động, râu hở, râu
                       không đều, miệng méo, phần cuối thân của cá bị cong hoặc
@@ -458,7 +564,9 @@ export default function Doitsu() {
                     </Paragraph>
                   </li>
                   <li>
-                    <span className="span-Style">Hình dáng của cá</span>
+                    <span className="span-Style" style={{ color: "#920202" }}>
+                      Hình dáng của cá
+                    </span>
                     <Paragraph className="paragraph-Style">
                       Cá Doitsu có hình thể, có hình dáng giống như một chiếc
                       tàu ngầm, bụng cá không được quá phệ. Nên chọn cá có thân
@@ -467,7 +575,9 @@ export default function Doitsu() {
                     </Paragraph>
                   </li>
                   <li>
-                    <span className="span-Style">Dáng bơi</span>
+                    <span className="span-Style" style={{ color: "#920202" }}>
+                      Dáng bơi
+                    </span>
                     <Paragraph className="paragraph-Style">
                       Cũng là yếu tố khi mua Koi Doitsu cần quan tâm với dáng
                       bơi uốn lượn, khả năng di chuyển hài hòa, nét người khỏe
@@ -478,7 +588,13 @@ export default function Doitsu() {
               </div>
 
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Cách chăm sóc Cá Koi Doitsu:
                 </h3>
                 <Paragraph className="paragraph-Style">
@@ -487,10 +603,7 @@ export default function Doitsu() {
                   có thể trong quá trình nuôi dưỡng cá dễ mắc bệnh.
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Doitsu/ca-koi-doitsu-1.webp"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img3} style={{ width: "50%" }} />
                 </div>
                 <Paragraph className="paragraph-Style">
                   Khi chăm sóc cá Doitsu Koi cũng như Matsuba koi tốt cần lưu ý:
@@ -532,15 +645,21 @@ export default function Doitsu() {
                 </ul>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   6. Giá cá koi Doitsu bao nhiêu?
                 </h3>
                 <Paragraph className="paragraph-Style">
-                  Hiện tại Siêu thị Cá Koi Vn đang cung cấp dòng cá koi Doitsu
-                  chuẩn từ cá nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói
-                  Siêu thị Cá Koi VN là một trong những đơn vị cung cấp cá koi
-                  với giá rẻ nhất thị trường, mà chất lượng cũng rất đảm bảo.
-                  Giá cá koi nhật và f1 như sau:
+                  Hiện tại IKoi đang cung cấp dòng cá koi Doitsu chuẩn từ cá
+                  nhật đến cá F1 với giá cực kỳ ưu đãi. Có thể nói Siêu thị Cá
+                  Koi VN là một trong những đơn vị cung cấp cá koi với giá rẻ
+                  nhất thị trường, mà chất lượng cũng rất đảm bảo. Giá cá koi
+                  nhật và f1 như sau:
                 </Paragraph>
                 <ul style={{ fontSize: "15px", fontWeight: "400" }}>
                   <li>
@@ -559,19 +678,25 @@ export default function Doitsu() {
                 </ul>
               </div>
               <div id="7">
-                <h3 style={{ color: "red" }}>
-                  7. Tại sao nên mua Showa Koi tại siêu thị cá Koi VN:
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  7. Tại sao nên mua Showa Koi tại IKoi:
                 </h3>
                 <Paragraph className="paragraph-Style">
                   Tự hào là đơn vị chuyên cung cấp cá Doitsu Koi khỏe mạnh, chất
-                  lượng và uy tín hàng đầu hiện nay, siêu thị cá Koi VN sẽ bạn
-                  lựa chọn được loại cá phù hợp với không gian sống của bạn.
-                  Chúng tôi sẽ hỗ trợ tư vấn, hướng dẫn quá trình chăm sóc hồ cá
-                  Koi thủy sinh an toàn, đảm bảo chất lượng với chi phí phù hợp
-                  nhất. Đến với Siêu thị Cá Koi VN các bạn thoải mái chiêm
-                  ngưỡng vẻ đẹp của những chú cá Koi Nhật tuyệt vời nhất. Nếu có
-                  thắc mắc hay cần hỗ trợ tư vấn mua cá Koi Doitsu hãy liên hệ
-                  ngay với siêu thị cá Koi VN để được phục vụ tốt nhất.
+                  lượng và uy tín hàng đầu hiện nay, IKoi sẽ bạn lựa chọn được
+                  loại cá phù hợp với không gian sống của bạn. Chúng tôi sẽ hỗ
+                  trợ tư vấn, hướng dẫn quá trình chăm sóc hồ cá Koi thủy sinh
+                  an toàn, đảm bảo chất lượng với chi phí phù hợp nhất. Đến với
+                  IKoi các bạn thoải mái chiêm ngưỡng vẻ đẹp của những chú cá
+                  Koi Nhật tuyệt vời nhất. Nếu có thắc mắc hay cần hỗ trợ tư vấn
+                  mua cá Koi Doitsu hãy liên hệ ngay với IKoi để được phục vụ
+                  tốt nhất.
                 </Paragraph>
               </div>
             </div>
@@ -579,14 +704,18 @@ export default function Doitsu() {
         </Container>
         <div style={{ display: "flex" }}>
           <div>
-            <img src="src/assets/img_4.png" />
+            <img src={img4} />
           </div>
           <div style={{ textAlign: "center" }}>
-            <img src="src/assets/img_5.png" />
+            <img src={img5} />
           </div>
         </div>
         <div>
-          <CardGrid cardData={filteredCards} />
+          {filteredCards && filteredCards.length > 0 ? (
+            <CardGrid cardData={filteredCards} />
+          ) : (
+            <p></p> // Replace with any message or component you want to show
+          )}
         </div>
       </Layout>
     </>

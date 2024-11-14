@@ -8,7 +8,15 @@ import _ from 'lodash'
 class SuplliersService {
   async createNewSupplier(payload) {
     const SupllierID = new ObjectId()
-    const result = await databaseService.suppliers.insertOne(new SupplierSchema({ ...payload, _id: SupllierID }))
+    const currentDate = new Date()
+    const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+    const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+
+    const supplierCreateDate = localTime.toISOString().replace('Z', '+07:00')
+
+    const result = await databaseService.suppliers.insertOne(
+      new SupplierSchema({ ...payload, _id: SupllierID, SupplierCreateDate: supplierCreateDate })
+    )
     console.log(payload)
     console.log(result)
     return result
@@ -36,14 +44,15 @@ class SuplliersService {
     const supplierUpdate = await databaseService.suppliers.updateOne({ _id: supplierObjectID }, [
       {
         $set: {
-          SupplierName: payload.SupplierName,
-          Address: payload.Address,
-          Country: payload.Country,
-          PhoneNumber: payload.PhoneNumber,
-          SupplierDescription: payload.SupplierDescription,
-          SupplierImage: payload.SupplierImage,
-          SupplierVideo: payload.SupplierVideo,
-          SupplierWebsite: payload.SupplierWebsite
+          SupplierName: payload.SupplierName || supplier.SupplierName,
+          Address: payload.Address || supplier.Address,
+          Country: payload.Country || supplier.Country,
+          PhoneNumber: payload.PhoneNumber || supplier.PhoneNumber,
+          SupplierDescription: payload.SupplierDescription || supplier.SupplierDescription,
+          SupplierImage: payload.SupplierImage || supplier.SupplierImage,
+          SupplierVideo: payload.SupplierVideo || supplier.SupplierVideo,
+          SupplierWebsite: payload.SupplierWebsite || supplier.SupplierWebsite,
+          SupplierCreateDate: payload.SupplierCreateDate || supplier.SupplierCreateDate
         }
       }
     ])
@@ -84,6 +93,19 @@ class SuplliersService {
     }
     const suppliersWithoutId = _.omit(supplier, ['_id'])
     return suppliersWithoutId
+  }
+
+  async deleteSupplier(supplierid) {
+    const supplierObjectID = new ObjectId(supplierid)
+    const supplierValue = await databaseService.suppliers.findOne({ _id: supplierObjectID })
+    if (supplierValue == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.SUPPLIER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const supplierDelete = await databaseService.suppliers.deleteOne({ _id: supplierObjectID })
+    return { supplierValue: supplierValue, supplierDelete: supplierDelete }
   }
 }
 

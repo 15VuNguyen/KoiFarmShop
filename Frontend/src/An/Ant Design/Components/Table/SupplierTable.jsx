@@ -1,18 +1,70 @@
-import { Table, Avatar, Tag, Tooltip, message, Button, Dropdown, Menu, Checkbox, Input, Modal, Form, Select, Image, Upload } from "antd";
+import { Table, Avatar, Tag, Tooltip, message, Button, Dropdown, Menu, Checkbox, Input, Modal, Form, Select, Image, Upload, Space, Result, Col, Row, AutoComplete } from "antd";
 import { CopyOutlined, DownOutlined } from "@ant-design/icons";
-import React from 'react';
+import React, { useEffect } from 'react';
 import axiosInstance from "../../../Utils/axiosJS";
 import moment from 'moment';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
-
-export default function SupplierTable({ data, handleActionClick, Search }) {
-  const [selectedColumns, setSelectedColumns] = React.useState({});
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import useAddress from "../useAddress";
+export default function SupplierTable({ data, showCreate, setCreate, ResetTable }) {
+  const [selectedColumns, setSelectedColumns] = React.useState([ '_id', 'SupplierName', 'SupplierImage', 'Address', 'Country', 'PhoneNumber', 'SupplierDescription', 'SupplierWebsite', 'action']);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [currentSupplier, setCurrentSupplier] = React.useState(null);
+  const [currentCountry, setCurrentCountry] = React.useState(null);
+  // const [selectedCity, setSelectedCity] = React.useState(null);
+  // const [selectedDistrict, setSelectedDistrict] = React.useState(null);
+  // const [selectedWard, setSelectedWard] = React.useState(null);
   const [form] = Form.useForm();
   const [uploading, setUploading] = React.useState(false);
+  const { searchText, setSearchText, recommendations } = useAddress();
+  const [filteredData, setFilteredData] = React.useState(data);
+  // const { allVietnameseAddress, getAllDistrictOfACity, getALLWardOfADistrict } = useAddress();
+  // console.log(allVietnameseAddress);
+  // console.log(getAllDistrictOfACity('Thành phố Hồ Chí Minh'));
+  // const handleCityChange = (value) => {
+  //   setSelectedDistrict(null); 
+  //   setSelectedCity(value);
+  //   setSelectedDistrict(null); 
+
+
+  // };
+
+
+  React.useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
+React.useEffect(() => {
+    if (searchTerm) {
+      const filteredData = data.filter((item) => {
+        const searchFields = ['_id', 'SupplierName', 'Address', 'Country', 'PhoneNumber', 'SupplierWebsite'];
+        return searchFields.some(field =>
+          item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
+      setFilteredData(filteredData);
+    } else {
+      setFilteredData(data);
+    }
+  }, [searchTerm, data]);
+
+
+
+
+  // const handleDistrictChange = (value) => {
+  //   setSelectedDistrict(value);
+  //   setSelectedWard(null); 
+  //   form.setFieldsValue({ District: value, Ward: null });
+
+  // };
+  // const handleWardChange = (value) => {
+  //   setSelectedWard(value);
+  //   form.setFieldsValue({ Ward: value });
+
+  // };
+
   const firebaseConfig = {
     apiKey: import.meta.env.VITE_API_KEY,
     authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -21,36 +73,112 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
     messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_APP_ID,
   };
-
+  useEffect(() => {
+    console.log(currentCountry)
+  }, [currentCountry])
+  useEffect(() => {
+    if (showCreate) {
+      console.log("showCreate", showCreate);
+      showCreateModal();
+    }
+  }, [showCreate]);
   const app = initializeApp(firebaseConfig);
   const storage = getStorage(app);
   const showUpdateModal = (supplier) => {
+    setCreate(false);
+    form.resetFields();
     setCurrentSupplier(supplier);
+    console.log("supplier", supplier);
     setIsModalVisible(true);
     form.setFieldsValue(supplier);
+    console.log("form", form.getFieldValue());
   };
+  const handleSetContry = (value) => {
+    setCurrentCountry(value);
+  }
+  const showCreateModal = () => {
+    setCurrentSupplier(null);
+    setIsModalVisible(true);
+  }
   const handleUpdate = async (values) => {
-    try {
-      const updatedData = { ...currentSupplier, ...values };
-      if (values.SupplierImage) {
-        const imageFile = values.SupplierImage;
-        const imageRef = ref(storage, `images/${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        const downloadURL = await getDownloadURL(imageRef);
-        updatedData.SupplierImage = downloadURL;
+
+    setUploading(true);
+    if (showCreate == false) {
+      try {
+        const updatedData = { ...currentSupplier, ...values };
+        if (values.SupplierImage && typeof values.SupplierImage === 'object' && values.SupplierImage.name) {
+          const imageFile = values.SupplierImage;
+          const imageRef = ref(storage, `images/${imageFile.name}`);
+          await uploadBytes(imageRef, imageFile);
+          const downloadURL = await getDownloadURL(imageRef);
+          updatedData.SupplierImage = downloadURL;
+        }
+        if (values.SupplierVideo) {
+          const videoFile = values.SupplierVideo;
+          console.log("videoFile", videoFile);
+          const videoRef = ref(storage, `videos/${videoFile.name}`);
+          await uploadBytes(videoRef, videoFile);
+          const downloadURL = await getDownloadURL(videoRef);
+          console.log("downloadURL", downloadURL);
+          updatedData.SupplierVideo = downloadURL;
+        }
+        console.log("updatedData", updatedData);
+        // updatedData.Address = `${selectedWard}, ${selectedDistrict}, ${selectedCity}`;
+        await axiosInstance.put(`/manager/manage-supplier/${currentSupplier._id}`, updatedData);
+        message.success(`Nhà cung cấp "${values.SupplierName}" đã được cập nhật.`);
+        ResetTable()
+        setIsModalVisible(false);
+        setCreate(false);
+        form.resetFields();
+      } catch (error) {
+        console.error(error);
+        message.error("Cập nhật thất bại. Vui lòng thử lại.");
+      } finally {
+        setUploading(false);
+        ResetTable(),
+          form.resetFields();
       }
-      await axiosInstance.put(`/manager/manage-supplier/${currentSupplier._id}`, updatedData);
-      message.success(`Supplier "${values.SupplierName}" has been updated.`);
-      setIsModalVisible(false);
-    } catch (error) {
-      console.error(error);
-      message.error("Update failed. Please try again.");
     }
-  };
+    else {
+      try {
+        const newSupplier = { ...values };
+        if (values.SupplierImage) {
+          const imageFile = values.SupplierImage;
+          const imageRef = ref(storage, `images/${imageFile.name}`);
+          await uploadBytes(imageRef, imageFile);
+          const downloadURL = await getDownloadURL(imageRef);
+          newSupplier.SupplierImage = downloadURL;
+        }
+        if (values.SupplierVideo) {
+          const videoFile = values.SupplierVideo;
+          console.log("videoFile", videoFile);
+          const videoRef = ref(storage, `videos/${videoFile.name}`);
+          await uploadBytes(videoRef, videoFile);
+          const downloadURL = await getDownloadURL(videoRef);
+          console.log("downloadURL", downloadURL);
+          newSupplier.SupplierVideo = downloadURL;
+        }
+        //  
+        await axiosInstance.post(`/manager/manage-supplier/create-new-supplier`, newSupplier);
+        message.success(`Nhà cung cấp "${values.SupplierName}" đã được tạo.`);
+        form.resetFields();
+        // setSelectedCity(null);
+        // setSelectedDistrict(null);
+        // setSelectedWard(null);
+        setIsModalVisible(false);
+        ResetTable()
+      } catch (error) {
+        console.error(error);
+        message.error("Tạo mới thất bại. Vui lòng thử lại.");
+      } finally {
+        setUploading(false);
+      }
+    }
+  }
   const handleFileUpload = (file) => {
     const isSupportedFormat = ["image/jpeg", "image/png"].includes(file.type);
     if (!isSupportedFormat) {
-      message.error("Only JPEG and PNG files are supported!");
+      message.error("Chỉ hỗ trợ tệp JPEG và PNG!");
       return Upload.LIST_IGNORE;
     }
     return true;
@@ -59,32 +187,54 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
+    setCreate(false);
   };
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    message.success("ID copied to clipboard!");
+    message.success("ID đã được sao chép vào bộ nhớ tạm!");
   };
 
-  const handleColumnVisibility = (columnKey, isVisible) => {
-    setSelectedColumns((prevState) => ({
-      ...prevState,
-      [columnKey]: !isVisible
-    }));
+  const handleColumnVisibility = (key, isVisible) => {
+    setSelectedColumns((prev) =>
+      isVisible ? [...prev, key] : prev.filter((colKey) => colKey !== key)
+    );
   };
+  
 
   const resetColumns = () => {
     setSelectedColumns({});
   };
 
   const searchFunction = (item) => {
-    const searchFields = ['_id', 'SupplierName', 'Address', 'Country'];
+    const searchFields = ['_id', 'SupplierName', 'Address', 'Country', 'PhoneNumber', 'SupplierWebsite'];
     return searchFields.some(field =>
       item[field]?.toString()?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
-
-  const filteredData = searchTerm ? data.filter(searchFunction) : data;
+  const handleDeleteSupplier = async (id) => {
+    Modal.confirm({
+      title: 'Xác nhận xóa nhà cung cấp',
+      content: 'Bạn có chắc chắn muốn xóa nhà cung cấp này?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk: async () => {
+        try {
+          const reponse = await axiosInstance.delete(`/manager/manage-supplier/${id}`);
+          console.log(reponse);
+          if (reponse.status === 200) {
+            message.success('Xóa nhà cung cấp thành công');
+            ResetTable();
+          }
+        } catch (error) {
+          console.error(error);
+          message.error('Xóa nhà cung cấp thất bại');
+        }
+      },
+    });
+  };
+  const filteringFunction = searchTerm ? data.filter(searchFunction) : data;
 
   const columns = [
     {
@@ -92,54 +242,54 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
       dataIndex: '_id',
       key: '_id',
       render: (text) => (
-        <>
-          <Tag color="blue">{text}</Tag>
-          <Tooltip title="Copy ID">
-            <CopyOutlined
-              style={{ marginLeft: 8, cursor: 'pointer', float: 'right' }}
-              onClick={() => copyToClipboard(text)}
-            />
-          </Tooltip>
-        </>
+        <Tooltip title="Sao chép ID">
+          <Tag
+            icon={<CopyOutlined />}
+            style={{ cursor: 'pointer' }}
+            onClick={() => copyToClipboard(text)}
+            color="blue"
+          >
+            {text}
+          </Tag>
+        </Tooltip>
       ),
     },
     {
-      title: 'Supplier Name',
+      title: 'Tên Nhà Cung Cấp',
       dataIndex: 'SupplierName',
       key: 'SupplierName',
       sorter: (a, b) => a.SupplierName.localeCompare(b.SupplierName),
     },
     {
-      title: 'Image',
+      title: 'Hình Ảnh',
       dataIndex: 'SupplierImage',
       key: 'SupplierImage',
       render: (url) => <Avatar src={url} />,
     },
     {
-      title: 'Address',
+      title: 'Địa Chỉ',
       dataIndex: 'Address',
       key: 'Address',
-      render: (text) => text || <Tag color="red">Not Provided</Tag>,
+      render: (text) => text || <Tag color="red">Không Cung Cấp</Tag>,
     },
     {
-      title: 'Country',
+      title: 'Quốc Gia',
       dataIndex: 'Country',
       key: 'Country',
       filters: [
         { text: 'Nhật', value: 'Nhật' },
-        { text: 'Trung Quốc', value: 'Trung Quốc' },
         { text: 'Việt Nam', value: 'Việt Nam' },
       ],
       onFilter: (value, record) => record.Country === value,
       filterMultiple: false,
     },
     {
-      title: 'Phone Number',
+      title: 'Số Điện Thoại',
       dataIndex: 'PhoneNumber',
       key: 'PhoneNumber',
     },
     {
-      title: 'Description',
+      title: 'Mô Tả',
       dataIndex: 'SupplierDescription',
       key: 'SupplierDescription',
       render: (text) => (
@@ -149,9 +299,9 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
       ),
     },
     {
-      title: 'Website',
-      dataIndex: 'Website',
-      key: 'Website',
+      title: 'Trang Web',
+      dataIndex: 'SupplierWebsite',
+      key: 'SupplierWebsite',
       render: (url) => (
         <a href={url} target="_blank" rel="noopener noreferrer">
           {url}
@@ -159,24 +309,42 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
       ),
     },
     {
-      title: 'Action',
+      title: 'Hành Động',
       key: 'action',
       render: (_, record) => (
-        <>
+        <Space>
           <Button
             type="primary"
             onClick={() => showUpdateModal(record)}
             style={{ marginRight: 8 }}
           >
-            Update
+            Cập Nhật
           </Button>
-        </>
+          <Button type="primary" danger onClick={() => handleDeleteSupplier(record._id)}>
+            Xóa Nhà Cung Cấp
+          </Button>
+        </Space>
       ),
     },
-  ].map(col => ({ ...col, visible: !selectedColumns[col.key] }));
+  ].filter(col => selectedColumns.includes(col.key));
+  
 
+
+  const OPTIONS = [ 
+    { label: 'ID', value: '_id' },
+    { label: 'Tên Nhà Cung Cấp', value: 'SupplierName' },
+    { label: 'Hình Ảnh', value: 'SupplierImage' },
+    { label: 'Địa Chỉ', value: 'Address' },
+    { label: 'Quốc Gia', value: 'Country' },
+    { label: 'Số Điện Thoại', value: 'PhoneNumber' },
+    { label: 'Mô Tả', value: 'SupplierDescription' },
+    { label: 'Trang Web', value: 'SupplierWebsite' },
+  ];const filteredOptions = OPTIONS.filter(o => !selectedColumns.includes(o));
   const filteredColumns = columns.filter(col => col.visible);
-
+  const handleChange = selectedItems => {
+    const selectedValues = selectedItems.map(item => item.value); 
+    setSelectedColumns(selectedValues);
+};
   const columnSelectionMenu = (
     <Menu>
       {columns.map((col) => (
@@ -191,7 +359,7 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
       ))}
       <Menu.Item>
         <Button type="link" onClick={resetColumns}>
-          Reset All
+          Đặt Lại Tất Cả
         </Button>
       </Menu.Item>
     </Menu>
@@ -199,62 +367,227 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
 
   return (
     <>
-      <Table columns={columns} dataSource={data} rowKey="_id" />
+      <Space wrap size={"middle"} style={{marginBottom:'1rem'}}>
+        <Input
+          placeholder="Tìm kiếm nhà cung cấp"
+          value={searchTerm}
+
+
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ width: 300 }}
+        />
+        <Tooltip title="Chọn cột hiển thị">
+                <Select
+                    labelInValue
+                    allowClear
+                    mode="multiple"
+                    placeholder="Lựa chọn cột"
+                    value={selectedColumns.map(col => ({ value: col, label: OPTIONS.find(opt => opt.value === col)?.label }))}
+                    onChange={handleChange}
+                    style={{
+                       
+                        width: '100%',
+                        minWidth: 200
+                    }}
+                >
+                    {filteredOptions.map(item => (
+                        <Select.Option key={item.value} value={item.value}>
+                            {item.label}
+                        </Select.Option>
+                    ))}
+                </Select>
+                </Tooltip>
+      </Space>
+      <Table
+        size='small'
+        scroll={{ x: 1300, }}
+        columns={columns} dataSource={filteredData} rowKey="_id" />
 
       <Modal
-        title={`Update Supplier: ${currentSupplier?.SupplierName}`}
-        visible={isModalVisible}
+        width={700}
+        title={
+          showCreate ? "Tạo Nhà Cung Cấp Mới" : `Cập Nhật Nhà Cung Cấp: ${currentSupplier?.SupplierName}`
+        }
+        open={isModalVisible}
         onCancel={handleCancel}
         footer={[
           <Button key="cancel" onClick={handleCancel}>
-            Cancel
+            Hủy
           </Button>,
-          <Button key="update" type="primary" onClick={() => form.submit()}>
-            Update
-          </Button>,
+          showCreate ? (
+            <Button key="create" type="primary" onClick={() => form.submit()} loading={uploading}>
+              {uploading ? "Đang Tạo..." : "Tạo"}
+            </Button>
+          ) : (
+            <Button key="update" type="primary" onClick={() => form.submit()} loading={uploading}>
+              {uploading ? "Đang Cập Nhật..." : "Cập Nhật"}
+            </Button>
+          )
+
         ]}
       >
-        <Image src={currentSupplier?.SupplierImage} alt="Supplier Image" />
+        {
+          showCreate ? null : (
+            <Space>
+              <Image
+                width={300}
+                src={currentSupplier?.SupplierImage}
+                fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOq3QdDFcvjV3jOD1boQVTPQrgSkktTgbSf4A4LbmgqISBgTEFyFYuLykAsTuAbJEioKOA7DkgdjqEvQHEToKwj4DVhAQ5A9k3gGyB5IxEoBmML4BsnSQk8XQkNtReEOBxcfXxUQg1Mjc0dyHgXNJBSWpFCYh2zi+oLMpMzyhRcASGUqqCZ16yno6CkYGRAQMDKMwhqj/fAIcloxgHQqxAjIHBEugw5sUIsSQpBobtQPdLciLEVJYzMPBHMDBsayhILEqEO4DxG0txmrERhM29nYGBddr//5/DGRjYNRkY/l7////39v///y4Dmn+LgeHANwDrkl1AuO+pmgAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAwqADAAQAAAABAAAAwwAAAAD9b/HnAAAHlklEQVR4Ae3dP3PTWBSGcbGzM6GCKqlIBRV0dHRJFarQ0eUT8LH4BnRU0NHR0UEFVdIlFRV7TzRksomPY8uykTk/zewQfKw/9znv4yvJynLv4uLiV2dBoDiBf4qP3/ARuCRABEFAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghggQAQZQKAnYEaQBAQaASKIAQJEkAEEegJmBElAoBEgghgg0Aj8i0JO4OzsrPv69Wv+hi2qPHr0qNvf39+iI97soRIh4f3z58/u7du3SXX7Xt7Z2enevHmzfQe+oSN2apSAPj09TSrb+XKI/f379+08+A0cNRE2ANkupk+ACNPvkSPcAAEibACyXUyfABGm3yNHuAECRNgAZLuYPgEirKlHu7u7XdyytGwHAd8jjNyng4OD7vnz51dbPT8/7z58+NB9+/bt6jU/TI+AGWHEnrx48eJ/EsSmHzx40L18+fLyzxF3ZVMjEyDCiEDjMYZZS5wiPXnyZFbJaxMhQIQRGzHvWR7XCyOCXsOmiDAi1HmPMMQjDpbpEiDCiL358eNHurW/5SnWdIBbXiDCiA38/Pnzrce2YyZ4//59F3ePLNMl4PbpiL2J0L979+7yDtHDhw8vtzzvdGnEXdvUigSIsCLAWavHp/+qM0BcXMd/q25n1vF57TYBp0a3mUzilePj4+7k5KSLb6gt6ydAhPUzXnoPR0dHl79WGTNCfBnn1uvSCJdegQhLI1vvCk+fPu2ePXt2tZOYEV6/fn31dz+shwAR1sP1cqvLntbEN9MxA9xcY jsx0TyjF_GLISODks8)"
+              />
+              <video width="300" controls>
+                <source src={currentSupplier?.SupplierVideo} type="video/mp4" />
+                Trình duyệt của bạn không hỗ trợ thẻ video.
+              </video>
+            </Space>
+          )
+        }
 
         <Form form={form} layout="vertical" onFinish={handleUpdate}>
           <Form.Item
-            label="Supplier Name"
+            label="Tên Nhà Cung Cấp"
             name="SupplierName"
-            rules={[{ required: true, message: 'Please enter the supplier name' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập tên nhà cung cấp' }]}
           >
             <Input />
           </Form.Item>
 
-          <Form.Item
-            label="Address"
-            name="Address"
-            rules={[{ required: true, message: 'Please enter the address' }]}
-          >
-            <Input />
-          </Form.Item>
+
 
           <Form.Item
-            label="Country"
+            label="Quốc Gia"
             name="Country"
-            rules={[{ required: true, message: 'Please enter the country' }]}
+            rules={[{ required: true, message: 'Vui lòng nhập quốc gia' }]}
+            initialValue={"Việt Nam"}
+
           >
-            <Select>
-              <Select.Option value="Japan">Japan</Select.Option>
-              <Select.Option value="USA">USA</Select.Option>
-              <Select.Option value="Germany">Germany</Select.Option>
+            <Select
+              onChange={handleSetContry}
+              placeholder="Chọn Quốc Gia"
+            >
+              <Select.Option value="Nhật Bản">Nhật Bản</Select.Option>
+              <Select.Option value="Việt Nam">Việt Nam</Select.Option>
+
             </Select>
           </Form.Item>
+          {/* <Form.Item
+            label="Địa Chỉ"
+            name="Address"
+            rules={[
+              {
+                required: true,
+                // validator: (_, value) => {
+                //   if (!selectedCity) {
+                //     return Promise.reject('Vui lòng chọn Tỉnh/Thành Phố.');
+                //   }
+                //   if (!selectedDistrict) {
+                //     return Promise.reject('Vui lòng chọn Quận/Huyện.');
+                //   }
+                //   if (!selectedWard) {
+                //     return Promise.reject('Vui lòng chọn Phường/Xã.');
+                //   }
+                //   return Promise.resolve();
+                // }
+              }
+            ]}
+          >
+            <Input />
+            {/* <Row gutter={16}>
+              <Col span={8}>
+                <Select
+                  value={selectedCity}
+                  placeholder="Chọn Tỉnh/Thành Phố"
+                  onChange={handleCityChange}
+                >
+                  {allVietnameseAddress.map((city) => (
+                    <Select.Option key={city.name} value={city.name}>
+                      {city.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Col>
 
+              {selectedCity && (
+                <Col span={8}>
+                  <Select
+                    value={selectedDistrict}
+                    placeholder="Chọn Quận/Huyện"
+                    onChange={handleDistrictChange}
+                  >
+                    {getAllDistrictOfACity(selectedCity)?.map((district) => (
+                      <Select.Option key={district.name} value={district.name}>
+                        {district.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Col>
+              )}
+
+              {selectedDistrict && (
+                <Col span={8}>
+                  <Select
+                    value={selectedWard}
+                    placeholder="Chọn Phường/Xã"
+                    onChange={handleWardChange}
+                  >
+                    {getALLWardOfADistrict(selectedCity, selectedDistrict)?.map((ward) => (
+                      <Select.Option key={ward.name} value={ward.name}>
+                        {ward.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Col>
+              )}
+            </Row> 
+          </Form.Item> */}
+          <Form.Item label="Address"
+            name="Address"
+            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+          >
+            <AutoComplete
+              allowClear
+              value={searchText}
+              onChange={setSearchText}
+              options={recommendations.map(address => ({ value: address }))}
+              placeholder="Nhập địa chỉ"
+
+            />
+          </Form.Item>
           <Form.Item
-            label="Phone Number"
+            label="Số Điện Thoại"
             name="PhoneNumber"
-            rules={[{ required: true, message: 'Please enter the phone number' }]}
+            rules={[
+
+              () => ({
+                validator(_, value) {
+                  if (typeof value === 'undefined' || value === '') {
+                    return Promise.reject('Số điện thoại không được để trống');
+                  }
+
+                  if (typeof value === 'string') {
+                    const attepmtToParseInt = parseInt(value);
+                    if (isNaN(attepmtToParseInt)) {
+                      return Promise.reject('Số điện thoại không được chứa chữ cái');
+                    }
+                  }
+
+
+                  // const phoneNumberVN = parsePhoneNumberFromString(value, 'VN');
+                  // const phoneNumberJP = parsePhoneNumberFromString(value, 'JP');
+
+                  // if ((!phoneNumberVN || !phoneNumberVN.isValid()) && (!phoneNumberJP || !phoneNumberJP.isValid())) {
+                  //   return Promise.reject('Số điện thoại phải là số điện thoại Nhật hoặc Việt');
+                  // }
+
+                  return Promise.resolve();
+                },
+              }),
+            ]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Description"
+            label="Mô Tả"
             name="SupplierDescription"
             rules={[{ required: false }]}
           >
@@ -262,15 +595,20 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
           </Form.Item>
 
           <Form.Item
-            label="Website"
-            name="Website"
-            rules={[{ required: false }]}
+            label="Trang Web"
+            name="SupplierWebsite"
+            rules={[{
+              required: false,
+              type: 'url',
+              message: 'Vui lòng nhập URL hợp lệ',
+              pattern: "^(https?|ftp):\/\/[^\s\/$.?#]+(?:\/[^/\s]*)*(?:\?[^#\s]*)?(?:#[^\s]*)?$"
+            }]}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            label="Supplier Image"
+            label="Hình Ảnh Nhà Cung Cấp"
             name="SupplierImage"
             valuePropName="file"
             getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList ? e.fileList[0].originFileObj : null)}
@@ -280,7 +618,21 @@ export default function SupplierTable({ data, handleActionClick, Search }) {
               beforeUpload={() => false}
               maxCount={1}
             >
-              <Button>Click to Upload</Button>
+              <Button>Click để Tải Lên</Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item
+            label="Video Nhà Cung Cấp"
+            name="SupplierVideo"
+            valuePropName="file"
+            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList ? e.fileList[0].originFileObj : null)}
+          >
+            <Upload
+
+              beforeUpload={() => false}
+              maxCount={1}
+            >
+              <Button>Click để Tải Lên</Button>
             </Upload>
           </Form.Item>
         </Form>

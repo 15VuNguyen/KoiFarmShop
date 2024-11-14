@@ -33,7 +33,7 @@ h2 {
   text-align: center;
 }
 
-p {
+.p {
   font-size: 14px;
   font-weight: 100;
   line-height: 20px;
@@ -41,7 +41,7 @@ p {
   margin: 20px 0 30px;
 }
 
-span {
+.span {
   font-size: 12px;
 }
 
@@ -254,7 +254,7 @@ input {
   width: 40px;
 }
 
-footer {
+.footer {
   background-color: #222;
   color: #fff;
   font-size: 14px;
@@ -266,15 +266,15 @@ footer {
   z-index: 999;
 }
 
-footer p {
+.footer p {
   margin: 10px 0;
 }
 
-footer i {
+.footer i {
   color: red;
 }
 
-footer a {
+.footer a {
   color: #3c97bf;
   text-decoration: none;
 }

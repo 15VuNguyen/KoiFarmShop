@@ -28,14 +28,17 @@ const addressSchema = {
   isString: {
     errorMessage: USERS_MESSAGES.ADDRESS_MUST_BE_A_STRING
   },
-  trim: true,
-  isLength: {
-    options: {
-      min: 1,
-      max: 200
-    },
-    errorMessage: USERS_MESSAGES.ADDRESS_LENGTH_MUST_BE_FROM_1_TO_200
-  }
+  trim: true
+}
+
+const addressConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: USERS_MESSAGES.ADDRESS_CONSIGN_KOI_MUST_BE_A_STRING
+  },
+  trim: true
 }
 
 const phoneNumberSchema = {
@@ -45,13 +48,24 @@ const phoneNumberSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 1,
+      min: 10,
       max: 20
     },
-    errorMessage: USERS_MESSAGES.PHONE_NUMBER_LENGTH_MUST_BE_FROM_1_TO_20
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_LENGTH_MUST_BE_FROM_10_TO_20
+  }
+}
+
+const phoneNumberConsignKoiSchema = {
+  notEmpty: {
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_IS_REQUIRED
   },
-  isNumeric: {
-    errorMessage: USERS_MESSAGES.PHONE_NUMBER_MUST_BE_NUMERIC
+  trim: true,
+  isLength: {
+    options: {
+      min: 10,
+      max: 20
+    },
+    errorMessage: USERS_MESSAGES.PHONE_NUMBER_CONSIGN_KOI_LENGTH_MUST_BE_FROM_10_TO_20
   }
 }
 
@@ -90,12 +104,25 @@ const koiNameSchema = {
   }
 }
 
+const getCurrentYearInVietnam = () => {
+  const currentDate = new Date()
+  const vietnamTimezoneOffset = 7 * 60 // UTC+7 in minutes
+  const localTime = new Date(currentDate.getTime() + vietnamTimezoneOffset * 60 * 1000)
+  return localTime.getFullYear()
+}
+
+const currentYearInVietnam = getCurrentYearInVietnam()
+
 const koiAgeSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_AGE_IS_REQUIRED
   },
   isNumeric: {
     errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_NUMERIC
+  },
+  isInt: {
+    options: { min: 1900, max: currentYearInVietnam },
+    errorMessage: USERS_MESSAGES.KOI_AGE_MUST_BE_BETWEEN_1900_AND_CURRENTYEAR
   }
 }
 
@@ -125,6 +152,13 @@ const koiGenderSchema = {
 const koiSizeSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_SIZE_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_SIZE_MUST_BE_NUMERIC
+  },
+  isInt: {
+    options: { min: 5, max: 200 },
+    errorMessage: USERS_MESSAGES.KOI_SIZE_MUST_BE_BETWEEN_5_AND_200
   }
 }
 
@@ -137,12 +171,26 @@ const koiBreedSchema = {
 const koiDailyFoodAmountSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_MUST_BE_NUMERIC
+  },
+  isInt: {
+    options: { min: 1, max: 100 },
+    errorMessage: USERS_MESSAGES.KOI_DAILY_FOOD_AMOUNT_MUST_BE_BETWEEN_1_AND_100
   }
 }
 
 const koiFilteringRatioSchema = {
   notEmpty: {
     errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_IS_REQUIRED
+  },
+  isNumeric: {
+    errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_MUST_BE_NUMERIC
+  },
+  isInt: {
+    options: { min: 1, max: 100 },
+    errorMessage: USERS_MESSAGES.KOI_FILTERING_RATIO_MUST_BE_BETWEEN_1_AND_100
   }
 }
 
@@ -178,6 +226,8 @@ export const createNewKoiKiGuiValidator = validate(
       name: nameSchema,
       address: addressSchema,
       phone_number: phoneNumberSchema,
+      AddressConsignKoi: addressConsignKoiSchema,
+      PhoneNumberConsignKoi: phoneNumberConsignKoiSchema,
       PositionCare: PositionCareSchema,
       Method: methodSchema,
       CategoryID: categoryIDSchema,

@@ -49,6 +49,30 @@ class DatabaseService {
       throw error
     }
   }
+  get chats() {
+    try {
+      return this._db.collection('chats')
+    } catch (error) {
+      console.log(error + 'lỗi ở database service - get chats')
+      throw error
+    }
+  }
+  get messages() {
+    try {
+      return this._db.collection('messages')
+    } catch (error) {
+      console.log(error + 'lỗi ở database service - get messages')
+      throw error
+    }
+  }
+  get loyaltyCard(){
+    try {
+      return this._db.collection('loyalty_card')
+    } catch (error) {
+      console.log(error + 'lỗi ở database service - get loyalty_card')
+      throw error
+    }
+  }
   get kois() {
     try {
       return this._db.collection('kois')
@@ -131,13 +155,13 @@ class DatabaseService {
     }
   }
 
-  get invoice(){
-    try {
-      return this._db.collection(DB_INVOICES_COLLECTION)
-    } catch (error) {
-      console.log(error + 'lỗi ở database service - get invoice')
-    }
-  }
+  // get invoice(){
+  //   try {
+  //     return this._db.collection(DB_INVOICES_COLLECTION)
+  //   } catch (error) {
+  //     console.log(error + 'lỗi ở database service - get invoice')
+  //   }
+  // }
 }
 
 const databaseService = new DatabaseService()

@@ -43,8 +43,8 @@ h5 {
     color: #6c757d; 
 }
 .modal-30w{
-    width: 100vw !important; 
-    max-width: 20vw !important;
+    min-width: 600px !important;
+    
 }
 .modal-50w{
     width: 100vw !important; 

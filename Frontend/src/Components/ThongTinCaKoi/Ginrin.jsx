@@ -9,6 +9,10 @@ import { Typography } from "antd";
 const { Title, Text, Paragraph } = Typography;
 import "../Css/koiStyle.css";
 import { Spin } from "antd"; // Import the Spin component
+import img1 from "../../assets/Koi-Ginrin/Cá koi Ginrin Showa 4.jpg";
+import img2 from "../../assets/Koi-Ginrin/ginrin-asagi.jpg";
+import img3 from "../../assets/img_4.png";
+import img4 from "../../assets/img_5.png";
 export default function Ginrin() {
   const [menu, setMenu] = useState("home");
   const [cardData, setCardData] = useState([]);
@@ -200,36 +204,94 @@ export default function Ginrin() {
         <Container>
           <div>
             <div>
-              <div className="body_StyleKoiOfPage">
-                <h2>Nội Dung Bài Viết</h2>
-                <ul style={{ marginTop: "10px" }}>
+              <div
+                className="body_StyleKoiOfPage"
+                style={{ backgroundColor: "#ead8c8" }}
+              >
+                <Title
+                  level={2}
+                  style={{ color: "#920202", backgroundColor: "#ead8c8" }}
+                >
+                  Nội Dung Bài Viết
+                </Title>
+                <ul
+                  style={{
+                    marginTop: "10px",
+                    backgroundColor: "#ead8c8",
+                    paddingTop: "10px",
+                    textDecoration: "none",
+                    listStyleType: "none",
+                  }}
+                >
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll1} className="contentBox">
+                    <span
+                      onClick={handleScroll1}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       1. Giới thiệu về cá Koi Ginrin
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll2} className="contentBox">
+                    <span
+                      onClick={handleScroll2}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       2. Cách nhận biết cá Koi Ginrin
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll3} className="contentBox">
+                    <span
+                      onClick={handleScroll3}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       3. Cách chọn mua cá Koi Ginrin
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll4} className="contentBox">
+                    <span
+                      onClick={handleScroll4}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       4. Cách chăm sóc Koi Ginrin
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll5} className="contentBox">
+                    <span
+                      onClick={handleScroll5}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       5. Giá cá koi Ginrin bao nhiêu?
                     </span>
                   </li>
                   <li style={{ paddingTop: "10px" }}>
-                    <span onClick={handleScroll6} className="contentBox">
+                    <span
+                      onClick={handleScroll6}
+                      className="contentBox"
+                      style={{
+                        cursor: "pointer",
+                        color: "#920202",
+                      }}
+                    >
                       6. Tại sao nên mua cá Koi Ginrin tại IKoi
                     </span>
                   </li>
@@ -237,7 +299,9 @@ export default function Ginrin() {
               </div>
 
               <div>
-                <h2 className="noidungchitiet">Nội dung chi tiết</h2>
+                <h2 className="noidungchitiet" style={{ paddingTop: "20px" }}>
+                  Nội dung chi tiết
+                </h2>
                 <Paragraph className="paragraph-Style ">
                   Cá Koi Ginrin nổi bật với chiếc vảy phản chiếu màu bạc lấp
                   lánh thu hút người chơi ngay lần đầu tiên. Bài viết này chúng
@@ -247,7 +311,15 @@ export default function Ginrin() {
                 </Paragraph>
               </div>
               <div id="1">
-                <h3 style={{ color: "red" }}>1. Giới thiệu về cá Koi Ginrin</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  1. Giới thiệu về cá Koi Ginrin
+                </h3>
                 <Paragraph className="paragraph-Style ">
                   Cá Koi Ginrin có nguồn gốc chủ yếu từ Nhật Bản và được lai tạo
                   bởi một nhà bác học tên Eizaburo Hoshino vào khoảng năm 1929.
@@ -259,10 +331,7 @@ export default function Ginrin() {
                   thể guanine. cá Koi Ginrin
                 </Paragraph>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="src/assets/Koi-Ginrin/Cá koi Ginrin Showa 4.jpg"
-                    style={{ width: "50%" }}
-                  />
+                  <img src={img1} style={{ width: "50%" }} />
                   <p style={{ fontSize: "15px", fontWeight: "400" }}>
                     Hình ảnh cá Koi Ginrin
                   </p>
@@ -270,7 +339,15 @@ export default function Ginrin() {
               </div>
 
               <div id="2">
-                <h3 style={{ color: "red" }}>2.Cách nhận biết cá Koi Ginrin</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  2.Cách nhận biết cá Koi Ginrin
+                </h3>
                 <div>
                   <ul style={{ fontSize: "15px", fontWeight: "400" }}>
                     <li>
@@ -323,7 +400,15 @@ export default function Ginrin() {
                 </div>
               </div>
               <div id="3">
-                <h3 style={{ color: "red" }}>3. Cách chọn mua cá Koi Ginrin</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  3. Cách chọn mua cá Koi Ginrin
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Với sự lấp lánh kiêu sa của những chú cá Koi Ginrin đẹp mắt
@@ -335,10 +420,7 @@ export default function Ginrin() {
                   </Paragraph>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <img
-                    src="Frontend/src/assets/Koi-Ginrin/ginrin-asagi.jpg"
-                    style={{ width: "30%" }}
-                  />
+                  <img src={img2} style={{ width: "30%" }} />
                   <div>
                     <Text className="text-Style">KOI GINRIN</Text>
                   </div>
@@ -383,7 +465,15 @@ export default function Ginrin() {
                 </div>
               </div>
               <div id="4">
-                <h3 style={{ color: "red" }}>4. Cách chăm sóc Koi Ginrin</h3>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  4. Cách chăm sóc Koi Ginrin
+                </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
                     Để chăm sóc cá Koi Ginrin phát triển khỏe mạnh và toàn diện
@@ -444,7 +534,13 @@ export default function Ginrin() {
               </div>
 
               <div id="5">
-                <h3 style={{ color: "red" }}>
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
                   5. Giá cá koi Ginrin bao nhiêu?
                 </h3>
                 <div>
@@ -466,8 +562,14 @@ export default function Ginrin() {
                 </div>
               </div>
               <div id="6">
-                <h3 style={{ color: "red" }}>
-                  Tại sao nên mua cá Koi Ginrin tại IKoi
+                <h3
+                  style={{
+                    color: "rgb(146, 2, 2)",
+                    padding: "10px",
+                    backgroundColor: "#ead8c8",
+                  }}
+                >
+                  6.Tại sao nên mua cá Koi Ginrin tại IKoi
                 </h3>
                 <div>
                   <Paragraph className="paragraph-Style">
@@ -490,10 +592,10 @@ export default function Ginrin() {
           </div>
           <div style={{ display: "flex" }}>
             <div>
-              <img src="src/assets/img_4.png" />
+              <img src={img3} />
             </div>
             <div style={{ objectFit: "cover", width: "100%" }}>
-              <img src="src/assets/img_5.png" />
+              <img src={img4} />
             </div>
           </div>
         </Container>

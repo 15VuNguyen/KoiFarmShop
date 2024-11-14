@@ -1,8 +1,11 @@
-import { ObjectId } from 'mongodb'
+import { Int32, ObjectId } from 'mongodb'
 import HTTP_STATUS from '../constants/httpStatus.js'
 import { MANAGER_MESSAGES } from '../constants/managerMessage.js'
 import { ErrorWithStatus } from '../models/Errors.js'
 import databaseService from './database.service.js'
+import { USERS_MESSAGES } from '../constants/userMessages.js'
+import koisService from './kois.services.js'
+import nodemailer from 'nodemailer'
 
 class ConsignsService {
   async getAllConsign() {
@@ -45,7 +48,7 @@ class ConsignsService {
     )
     if (user == null) {
       throw new ErrorWithStatus({
-        message: MANAGER_MESSAGES.KOI_NOT_FOUND,
+        message: MANAGER_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND
       })
     }
@@ -87,7 +90,7 @@ class ConsignsService {
     )
     if (user == null) {
       throw new ErrorWithStatus({
-        message: MANAGER_MESSAGES.KOI_NOT_FOUND,
+        message: MANAGER_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND
       })
     }
@@ -132,7 +135,10 @@ class ConsignsService {
         $set: {
           ShippedDate: payload.ShippedDate || consign.ShippedDate || '',
           ReceiptDate: payload.ReceiptDate || consign.ReceiptDate || '',
-          Description: payload.Description || consign.Description || '',
+          ConsignCreateDate: payload.ConsignCreateDate || consign.ConsignCreateDate || '',
+          AddressConsignKoi: payload.AddressConsignKoi || consign.AddressConsignKoi || '',
+          PhoneNumberConsignKoi: payload.PhoneNumberConsignKoi || consign.PhoneNumberConsignKoi || '',
+          Detail: payload.Detail || consign.Detail || '',
           State: payload.State || consign.State || '',
           Method: payload.Method || consign.Method || '',
           PositionCare: payload.PositionCare || consign.PositionCare || '',
@@ -141,6 +147,41 @@ class ConsignsService {
         }
       }
     ])
+
+    if (koiUpdate.modifiedCount > 0 || consignUpdate.modifiedCount > 0 || userUpdate.modifiedCount > 0) {
+      const consign = await databaseService.consigns.findOne({ _id: new ObjectId(consignID) })
+      const user = await databaseService.users.findOne({ _id: new ObjectId(consign.UserID) })
+      const koi = await databaseService.kois.findOne({ _id: new ObjectId(consign.KoiID) })
+
+      const titleEmail = 'Thông báo cập nhật thông tin Koi từ quản lý'
+
+      const emailContent = await koisService.generateConsignUpdateInformation(user, koi, consign, titleEmail)
+
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_APP,
+          pass: process.env.EMAIL_PASSWORD_APP
+        }
+      })
+
+      let mailOptions = {
+        from: process.env.EMAIL_APP,
+        to: user.email, // Địa chỉ email của người dùng
+        bcc: process.env.EMAIL_APP, // Địa chỉ email của manager
+        subject: 'Thông tin ký gửi Koi đã được cập nhật từ quản lý',
+        html: emailContent
+      }
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      })
+    }
+
     return {
       user: userUpdate,
       consign: consignUpdate,
@@ -172,6 +213,176 @@ class ConsignsService {
 
     return {
       data
+    }
+  }
+
+  async getConsignFromUser(consignID) {
+    //tìm consign dựa vào consignID
+    const consignObjectID = new ObjectId(consignID)
+    const consign = await databaseService.consigns.findOne({ _id: consignObjectID })
+    if (consign == null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.CONSIGN_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const koiObjectID = new ObjectId(consign.KoiID)
+    const koi = await databaseService.kois.findOne({ _id: koiObjectID })
+    if (koi == null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.KOI_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const userObjectID = new ObjectId(consign.UserID)
+    const user = await databaseService.users.findOne(
+      { _id: userObjectID },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    if (user == null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return {
+      user: user,
+      consign: consign,
+      koi: koi
+    }
+  }
+
+  async userCancelConsign(consignID) {
+    //tìm consign dựa vào consignID
+    const consignObjectID = new ObjectId(consignID)
+    const consign = await databaseService.consigns.findOne({ _id: consignObjectID })
+    if (consign == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.CONSIGN_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    const consignUpdate = await databaseService.consigns.updateOne({ _id: new ObjectId(consign._id) }, [
+      {
+        $set: {
+          ShippedDate: consign.ShippedDate || '',
+          ReceiptDate: consign.ReceiptDate || '',
+          ConsignCreateDate: consign.ConsignCreateDate || '',
+          AddressConsignKoi: consign.AddressConsignKoi || '',
+          PhoneNumberConsignKoi: consign.PhoneNumberConsignKoi || '',
+          Detail: consign.Detail || '',
+          Method: consign.Method || '',
+          PositionCare: consign.PositionCare || '',
+          State: -1
+        }
+      }
+    ])
+    return { consign: consign, consignUpdate: consignUpdate }
+  }
+
+  async userUpdateConsign(consignID, payload) {
+    //tìm consign dựa vào consignID
+    const consignObjectID = new ObjectId(consignID)
+    const consign = await databaseService.consigns.findOne({ _id: consignObjectID })
+    if (consign == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.CONSIGN_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    //tìm koi
+    const koiObjectID = new ObjectId(consign.KoiID)
+    const koi = await databaseService.kois.findOne({ _id: koiObjectID })
+    if (koi == null) {
+      throw new ErrorWithStatus({
+        message: MANAGER_MESSAGES.KOI_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+
+    //update koi
+    const koiUpdate = await databaseService.kois.updateOne({ _id: new ObjectId(koi._id) }, [
+      {
+        $set: {
+          CategoryID: payload.CategoryID || koi.CategoryID || '',
+          KoiName: payload.KoiName || koi.KoiName || '',
+          Age: parseInt(payload.Age) || koi.Age || '',
+          Origin: payload.Origin || koi.Origin || '',
+          Gender: payload.Gender || koi.Gender || '',
+          Size: parseInt(payload.Size) || koi.Size || '',
+          Breed: payload.Breed || koi.Breed || '',
+          Description: payload.Description || koi.Description || '',
+          DailyFoodAmount: parseInt(payload.DailyFoodAmount) || koi.DailyFoodAmount || '',
+          FilteringRatio: parseInt(payload.FilteringRatio) || koi.FilteringRatio || '',
+          CertificateID: payload.CertificateID || koi.CertificateID || '',
+          Image: payload.Image || koi.Image || '',
+          Video: payload.Video || koi.Video || '',
+          Status: parseInt(payload.Status) || koi.Status || ''
+        }
+      }
+    ])
+
+    //cập nhật lại thông tin kí gửi, nếu có thay đổi thì cập nhật cái mới, không thì giữ nguyên
+    const consignUpdate = await databaseService.consigns.updateOne({ _id: new ObjectId(consign._id) }, [
+      {
+        $set: {
+          ShippedDate: payload.ShippedDate || consign.ShippedDate || '',
+          ReceiptDate: payload.ReceiptDate || consign.ReceiptDate || '',
+          ConsignCreateDate: payload.ConsignCreateDate || consign.ConsignCreateDate || '',
+          AddressConsignKoi: payload.AddressConsignKoi || consign.AddressConsignKoi || '',
+          PhoneNumberConsignKoi: payload.PhoneNumberConsignKoi || consign.PhoneNumberConsignKoi || '',
+          Detail: payload.Detail || consign.Detail || '',
+          Method: payload.Method || consign.Method || '',
+          PositionCare: payload.PositionCare || consign.PositionCare || '',
+          State: consign.State || ''
+        }
+      }
+    ])
+
+    if (koiUpdate.modifiedCount > 0 || consignUpdate.modifiedCount > 0) {
+      const consign = await databaseService.consigns.findOne({ _id: new ObjectId(consignID) })
+      const user = await databaseService.users.findOne({ _id: new ObjectId(consign.UserID) })
+      const koi = await databaseService.kois.findOne({ _id: new ObjectId(consign.KoiID) })
+
+      const titleEmail = 'Thông báo cập nhật thông tin Koi từ khách hàng'
+
+      const emailContent = await koisService.generateConsignUpdateInformation(user, koi, consign, titleEmail)
+
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_APP,
+          pass: process.env.EMAIL_PASSWORD_APP
+        }
+      })
+
+      let mailOptions = {
+        from: process.env.EMAIL_APP,
+        to: user.email, // Địa chỉ email của người dùng
+        bcc: process.env.EMAIL_APP, // Địa chỉ email của manager
+        subject: 'Thông tin ký gửi Koi đã được cập nhật từ khách hàng',
+        html: emailContent
+      }
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log('Email sent: ' + info.response)
+        }
+      })
+    }
+
+    return {
+      consign: consignUpdate,
+      koi: koiUpdate
     }
   }
 }
