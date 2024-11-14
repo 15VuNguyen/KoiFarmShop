@@ -26,18 +26,21 @@ export default function RevenueChart( ) {
 
 
     const filterDataByDateRange = (data) => {
+        if (!data) return [];
+        if (data.length === 0) return [];
+        if (data === 'Koi rỗng') return [];
         const today = new Date();
         let filteredData = data;
 
         if (dateRange === '7d') {
             const sevenDaysAgo = new Date(today.setDate(today.getDate() - 7));
-            filteredData = data.filter(item => new Date(item.Date) >= sevenDaysAgo);
+            filteredData = data.filter(item => item.Date && new Date(item.Date) >= sevenDaysAgo);
         } else if (dateRange === 'month') {
             const lastMonth = new Date(today.setMonth(today.getMonth() - 1));
-            filteredData = data.filter(item => new Date(item.Date) >= lastMonth);
+            filteredData = data.filter(item => item.Date && new Date(item.Date) >= lastMonth);
         } else if (dateRange === 'year') {
             const lastYear = new Date(today.setFullYear(today.getFullYear() - 1));
-            filteredData = data.filter(item => new Date(item.Date) >= lastYear);
+            filteredData = data.filter(item => item.Date && new Date(item.Date) >= lastYear);
         }
 
         return filteredData;
